@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// 모든 동적UI에 대한 부모가 될 추상 클래스
+/// </summary>
 public abstract class BaseUI : MonoBehaviour
 {
     /// <summary>

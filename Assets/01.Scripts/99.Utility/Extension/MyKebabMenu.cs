@@ -7,7 +7,10 @@ using UnityEngine.UI;
 
 public class MyKebabMenu
 {
-    // Button 컴포넌트의 케밥 메뉴(︙)에 항목 추가
+    /// <summary>
+    /// 버튼에 케밥메뉴 생성에 대한 간단한 예시
+    /// </summary>
+    /// <param name="command"></param>
     [MenuItem("CONTEXT/Button/⚡ 버튼 커스텀 액션")]
     private static void CustomButtonAction(MenuCommand command)
     {

@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System;
 using TMPro;
 
+/// <summary>
+/// 제목, 설명, 확인, 취소 버튼이 있는 팝업UI
+/// </summary>
 public class PopupUI : BaseUI
 {
     [SerializeField] private TextMeshProUGUI titleText;
@@ -40,6 +43,10 @@ public class PopupUI : BaseUI
 
         onConfirm = onConfirmAction;
         onCancel = onCancelAction;
+
+        // 만약 취소버튼이 없다면 자동으로 취소 버튼을 숨긴 뒤 확인버튼만 활성화 됨
+        if (onCancel == null)
+            cancelButton.gameObject.SetActive(false);
     }
 
     /// <summary>

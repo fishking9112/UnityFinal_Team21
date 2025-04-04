@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 모든 동적UI 생성 관리를 위한 Manager
+/// </summary>
 public class UIManager : MonoSingleton<UIManager>
 {
     private const string UIPrefabPath = "UI/";
