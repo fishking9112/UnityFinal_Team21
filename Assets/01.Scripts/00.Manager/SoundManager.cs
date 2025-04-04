@@ -14,7 +14,9 @@ public class SoundManager : MonoSingleton<SoundManager>
     private Queue<AudioSource> audioSourcePool; // 오브젝트 풀
 
     private float bgmVolume = 1f;
-    private float sfxVolume = 1f;
+    private float sfxVolume = 1f; 
+    public float BGMVolume => bgmVolume;
+    public float SFXVolume => sfxVolume;
 
     private Dictionary<string, AudioClip> soundDict; // SFX와 BGM 저장용 Dictionary
     private AudioSource bgmPlayer; // BGM 재생용 AudioSource

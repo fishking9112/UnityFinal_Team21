@@ -3,7 +3,7 @@ using UnityEngine;
 public class UGSManager : MonoSingleton<UGSManager>
 {
     public UGSAuth Auth { get; private set; }
-    public UGSSave Save { get; private set; }
+    public UGSSaveLoad SaveLoad { get; private set; }
     public UGSLeaderboard Leaderboard { get; private set; }
 
     protected override void Awake()
@@ -11,12 +11,13 @@ public class UGSManager : MonoSingleton<UGSManager>
         base.Awake();
 
         Auth = GetComponentInChildren<UGSAuth>();
-        Save = GetComponentInChildren<UGSSave>();
+        SaveLoad = GetComponentInChildren<UGSSaveLoad>();
         Leaderboard = GetComponentInChildren<UGSLeaderboard>();
 
-        if (Auth == null || Save == null || Leaderboard == null)
+        if (Auth == null || SaveLoad == null || Leaderboard == null)
         {
             Debug.LogError("UGS 관련 스크립트 누락");
         }
     }
+
 }
