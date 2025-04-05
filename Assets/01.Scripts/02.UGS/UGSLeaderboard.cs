@@ -8,6 +8,10 @@ public class UGSLeaderboard : MonoBehaviour
     private const string LeaderboardId = "TestBoard"; // Dashboard에서 설정한 ID
 
 
+    /// <summary>
+    /// 플레이어 점수 업로드
+    /// </summary>
+    /// <param name="score">점수</param>
     public async Task UploadScoreAsync(int score)
     {
         try
@@ -21,7 +25,9 @@ public class UGSLeaderboard : MonoBehaviour
         }
     }
 
-    // top10 순위 가져오기
+    /// <summary>
+    /// top10 순위 가져오기
+    /// </summary>
     public async Task GetTop10ScoresAsync()
     {
         try
@@ -42,7 +48,9 @@ public class UGSLeaderboard : MonoBehaviour
         }
     }
 
-    // 내 순위 가져오기
+    /// <summary>
+    /// 플레이어 점수 가져오기
+    /// </summary>
     public async Task GetMyRankAsync()
     {
         try

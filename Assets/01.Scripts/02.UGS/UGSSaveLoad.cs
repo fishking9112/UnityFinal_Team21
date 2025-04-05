@@ -11,7 +11,9 @@ public class UGSSaveLoad : MonoBehaviour
 
     #region 저장
 
-    // 저장
+    /// <summary>
+    /// 저장
+    /// </summary>
     public async Task SaveAsync()
     {
         var saveData = Collect();
@@ -26,6 +28,10 @@ public class UGSSaveLoad : MonoBehaviour
         await CloudSaveService.Instance.Data.Player.SaveAsync(saveDict);
         Debug.Log("저장 완료");
     }
+
+    /// <summary>
+    /// 저장할 변수를 SaveData에 입력
+    /// </summary>
     private SaveData Collect()
     {
         SaveData data = new SaveData
@@ -36,7 +42,6 @@ public class UGSSaveLoad : MonoBehaviour
 
         return data;
     }
-
     private PlayerData CollectPlayerData()
     {
         return new PlayerData
@@ -46,7 +51,6 @@ public class UGSSaveLoad : MonoBehaviour
             coin = 500
         };
     }
-
     private SettingsData CollectSettingsData()
     {
         return new SettingsData
@@ -61,7 +65,9 @@ public class UGSSaveLoad : MonoBehaviour
 
     #region 불러오기
 
-    // 불러오기
+    /// <summary>
+    /// 저장된 내용 불러오기
+    /// </summary>
     public async Task LoadAsync()
     {
         try
@@ -85,6 +91,9 @@ public class UGSSaveLoad : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 불러온 내용 실제 적용 시키는 함수
+    /// </summary>
     private void OnLoadComplete(SaveData saveData)
     {
         SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
