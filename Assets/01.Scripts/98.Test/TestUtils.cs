@@ -16,6 +16,19 @@ public class TestUtils : MonoBehaviour
 
         ts = Utils.GetMMSSTime(time);
         Utils.Log(ts);
+
+
+        Utils.DelayedTimeAction(A, 5);
+        Utils.DelayedTimeAction(B, 3);
+    }
+
+    private void A()
+    {
+        Utils.Log("timer");
+    }
+    private void B()
+    {
+        Utils.Log("test");
     }
 
 }

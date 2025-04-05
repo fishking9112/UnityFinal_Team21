@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,4 +30,23 @@ public class Utils
         Debug.Log(message);
 #endif
     }
+
+
+  
+    /// <summary>
+    /// delayedTime초 후에 action 실행. 호출부에 using Unitask 필요 없음
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="delayTime"></param>
+    public static void DelayedTimeAction(Action action, float delayTime)
+    {
+        DelayedAction(action,delayTime).Forget();
+    }
+    private static async UniTaskVoid DelayedAction(Action action, float delayTime)
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(delayTime));
+        action?.Invoke();
+    }
+
+
 }
