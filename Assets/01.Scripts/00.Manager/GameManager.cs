@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Windows;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -7,9 +6,25 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Update()
     {
+        if (UnityEngine.Input.GetKeyDown(KeyCode.A))
+        {
+            //_ = UGSManager.Instance.SaveLoad.LoadAsync();
+            _ = UGSManager.Instance.Leaderboard.UploadScoreAsync(50);
+        }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.S))
+        {
+            //_ = UGSManager.Instance.SaveLoad.LoadAsync();
+            _ = UGSManager.Instance.Leaderboard.UploadScoreAsync(100);
+        }
         if (UnityEngine.Input.GetKeyDown(KeyCode.G))
         {
-            _ = UGSManager.Instance.SaveLoad.LoadAsync();
+            //_ = UGSManager.Instance.SaveLoad.LoadAsync();
+            _ = UGSManager.Instance.Leaderboard.GetMyRankAsync();
+        }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.T))
+        {
+            //_ = UGSManager.Instance.SaveLoad.LoadAsync();
+            _ = UGSManager.Instance.Leaderboard.GetTop10ScoresAsync();
         }
     }
 
