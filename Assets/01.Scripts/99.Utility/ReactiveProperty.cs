@@ -17,6 +17,10 @@ public class ReactiveProperty<T> where T : struct
         }
         set
         {
+            if(Equals(this.value,value))
+            {
+                return;
+            }
             this.value = value;
             actions?.Invoke(this.value);   
         }
