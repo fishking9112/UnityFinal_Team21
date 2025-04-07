@@ -6,17 +6,20 @@ public class PoolTest : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            ObjectPoolManager.Instance.GetObject(0, new Vector3(0, 0, 0), Quaternion.identity);
+            print(1);
+            ObjectPoolManager.Instance.GetObject("Circle", new Vector3(0, 0, 0), Quaternion.identity);
         }
 
         if (Input.GetKeyDown(KeyCode.S))
         {
-            ObjectPoolManager.Instance.GetObject(1, new Vector3(0, 0, 0), Quaternion.identity);
+            print(2);
+            ObjectPoolManager.Instance.GetObject("Capsule", new Vector3(0, 0, 0), Quaternion.identity);
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            ObjectPoolManager.Instance.GetObject(2, new Vector3(0, 0, 0), Quaternion.identity);
+            print(3);
+            ObjectPoolManager.Instance.GetObject("Hexagon Flat-Top", new Vector3(0, 0, 0), Quaternion.identity);
         }
     }
 }

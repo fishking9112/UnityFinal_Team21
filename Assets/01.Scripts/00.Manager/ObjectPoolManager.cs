@@ -30,13 +30,21 @@ public interface IPoolable
     void OnDespawn();
 }
 
+[Serializable]
+public class PoolPrefab
+{
+    public string key;
+    public GameObject prefab;
+    public int initPoolSize;
+}
+
 public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
 {
-    [SerializeField] private GameObject[] prefabs;
-    private Dictionary<int, Stack<GameObject>> pools = new Dictionary<int, Stack<GameObject>>();
-    private Dictionary<int, GameObject> parentPools= new Dictionary<int, GameObject>();
+    [SerializeField] private PoolPrefab[] poolPrefabs;
 
-    [SerializeField] private int initPoolSize = 10;
+    private Dictionary<string, Stack<GameObject>> pools = new Dictionary<string, Stack<GameObject>>();
+    private Dictionary<string, GameObject> parentPools= new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> prefabList = new Dictionary<string, GameObject>();
 
     protected override void Awake()
     {
@@ -48,26 +56,30 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     // 지정해둔 프리팹 초기 풀 생성
     private void InitPools()
     {
-        for (int i = 0; i < prefabs.Length; i++)
+        foreach(var prefab in poolPrefabs)
         {
-            pools[i] = new Stack<GameObject>();
+            pools[prefab.key] = new Stack<GameObject>();
 
-            GameObject parentPool = new GameObject($"Pool_{prefabs[i].name}");
+            GameObject parentPool = new GameObject($"Pool_{prefab.key}");
             parentPool.transform.SetParent(this.transform);
-            parentPools[i] = parentPool;
+            parentPools[prefab.key] = parentPool;
+            prefabList[prefab.key] = prefab.prefab;
 
-            int cloneIndex = i;
-
-            for(int j=0;j< initPoolSize; j++)
+            for(int i = 0; i < prefab.initPoolSize; i++)
             {
-                GameObject obj = Instantiate(prefabs[i], parentPool.transform);
+                GameObject obj = CreatePool(prefab.key);
                 obj.SetActive(false);
-                obj.GetComponent<IPoolable>()?.Init(o => ReturnObject(cloneIndex, o));
-                pools[i].Push(obj);
+                pools[prefab.key].Push(obj);
             }
         }
     }
 
+    private GameObject CreatePool(string key)
+    {
+        GameObject obj = Instantiate(prefabList[key], parentPools[key].transform);
+        obj.GetComponent<IPoolable>()?.Init(o => ReturnObject(key, o));
+        return obj;
+    }
 
     /// <summary>
     /// 풀에서 오브젝트를 가져옴
@@ -76,21 +88,18 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     /// <param name="position"> 가져올 position </param>
     /// <param name="rotation"> 가져올 rotation </param>
     /// <returns></returns>
-    public GameObject GetObject(int index, Vector3 position, Quaternion rotation)
+    public GameObject GetObject(string key, Vector3 position, Quaternion rotation)
     {
-        if (!pools.ContainsKey(index))
+        if (!pools.ContainsKey(key))
         {
-            Debug.Log($"{index}번째 프리팹에 대한 풀이 존재하지 않습니다.");
-
             return null;
         }
 
         GameObject obj;
 
-        if (!(pools[index].TryPop(out obj)))
+        if (!(pools[key].TryPop(out obj)))
         {
-            obj = Instantiate(prefabs[index], parentPools[index].transform);
-            obj.GetComponent<IPoolable>()?.Init(o => ReturnObject(index, o));
+            obj = CreatePool(key);
         }
         obj.transform.SetPositionAndRotation(position, rotation);
         obj.SetActive(true);
@@ -104,17 +113,40 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     /// </summary>
     /// <param name="index"> 반환할 프리팹 인덱스 </param>
     /// <param name="obj"> 반환할 오브젝트 </param>
-    public void ReturnObject(int index, GameObject obj)
+    public void ReturnObject(string key, GameObject obj)
     {
-        if (!pools.ContainsKey(index))
+        if (!pools.ContainsKey(key))
         {
-            Debug.Log($"{index}번째 프리팹에 대한 풀이 존재하지 않습니다.");
-
             Destroy(obj);
             return;
         }
 
         obj.SetActive(false);
-        pools[index].Push(obj);
+        pools[key].Push(obj);
+    }
+
+    // key값에 대한 풀 초기화
+    public void ClearPool(string key)
+    {
+        if (!pools.ContainsKey(key))
+        {
+            return;
+        }
+
+        while (pools[key].Count > 0)
+        {
+            Destroy(pools[key].Pop());
+        }
+
+        pools[key].Clear();
+    }
+
+    // 모든 풀 초기화
+    public void ClearAllPools()
+    {
+        foreach(var key in pools.Keys)
+        {
+            ClearPool(key);
+        }
     }
 }
