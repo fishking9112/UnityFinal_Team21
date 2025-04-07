@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-
+    public Queen queen;
 
     private void Update()
     {
