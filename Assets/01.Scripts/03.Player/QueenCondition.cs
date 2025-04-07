@@ -29,7 +29,7 @@ public class QueenCondition : MonoBehaviour
     /// <summary>
     /// condition 수치를 조정하는 함수들
     /// </summary>
-    /// <param name="amount"> 얼만큼 조정할 것인지(양수 음수 다 가능) </param>
+    /// <param name="amount"> 얼만큼 조정할 것인지(양수,음수 둘 다 가능) </param>
 
     public void AdjustCurMagicGauge(float amount)
     {
