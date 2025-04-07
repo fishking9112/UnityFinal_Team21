@@ -14,7 +14,5 @@ public static class MyExtensionMethod
         var component=gameObject.GetComponent<T>();
         if(component == null) gameObject.AddComponent<T>();
         return component;
-
-        //return gameObject.GetComponent<T>() ?? gameObject.AddComponent<T>();
     }
 }
