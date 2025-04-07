@@ -221,6 +221,7 @@ namespace GoogleSheetsToUnity.ThirdPary
             lastUpdateTime = DateTime.Now;
         }
 
+#pragma warning disable CS0618
         public void Tick()
         {
             if (coroutine != null)
@@ -373,6 +374,7 @@ namespace GoogleSheetsToUnity.ThirdPary
                 }
             }
         }
+#pragma warning restore CS0618
 
         private void Stop()
         {
