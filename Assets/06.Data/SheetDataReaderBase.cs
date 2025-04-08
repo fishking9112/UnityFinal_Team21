@@ -1,6 +1,8 @@
+using GoogleSheetsToUnity;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class SheetDataReaderBase : ScriptableObject
+public abstract class SheetDataReaderBase : ScriptableObject
 {
     [Header("Sheet URL")]
     public string sheetURL;
@@ -10,6 +12,9 @@ public class SheetDataReaderBase : ScriptableObject
 
     [Header("Start Row Index")]
     public int startRowIndex;
+
     [Header("End Row Index")]
     public int endRowIndex;
+
+    public abstract void UpdateStat(List<GSTU_Cell> list);
 }
