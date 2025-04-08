@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Queen : MonoBehaviour
 {
-    private QueenCondition condition;
-    private QueenController controller;
+    public QueenCondition condition;
+    public QueenController controller;
 
     private void Awake()
     {

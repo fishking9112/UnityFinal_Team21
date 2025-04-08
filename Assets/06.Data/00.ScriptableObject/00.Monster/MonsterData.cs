@@ -36,6 +36,10 @@ public class MonsterData : SheetDataReaderBase
 
     private MonsterInfo monsterInfo;
 
+    /// <summary>
+    /// 구글 시트에 저장된 데이터를 읽어옴
+    /// </summary>
+    /// <param name="list"> 구글 시트 cell 리스트 </param>
     public override void UpdateStat(List<GSTU_Cell> list)
     {
         monsterInfo = new MonsterInfo();

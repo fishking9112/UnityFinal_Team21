@@ -20,6 +20,7 @@ public class DataReaderEditorWindow : EditorWindow
         Addressables.LoadAssetAsync<MonsterData>("MonsterData").Completed += OnLoaded;
     }
 
+    // Addressable을 이용하여 mosterData를 불러옴
     private void OnLoaded(AsyncOperationHandle<MonsterData> handle)
     {
         if (handle.Status == AsyncOperationStatus.Succeeded)
@@ -28,6 +29,8 @@ public class DataReaderEditorWindow : EditorWindow
         }
     }
 
+
+    // 커스텀 윈도우 창에 띄워질 UI
     private void OnGUI()
     {
         GUILayout.Label("데이터 읽어오기", EditorStyles.boldLabel);
