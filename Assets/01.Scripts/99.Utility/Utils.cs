@@ -31,8 +31,24 @@ public class Utils
 #endif
     }
 
+    // 정 디버그.로그를 쓰고싶다면 이걸로
+    public static void LogError(string message)
+    {
+#if UNITY_EDITOR
+        Debug.LogError(message);
+#endif
+    }
 
-  
+    // 정 디버그.로그를 쓰고싶다면 이걸로
+    public static void LogWarning(string message)
+    {
+#if UNITY_EDITOR
+        Debug.LogWarning(message);
+#endif
+    }
+
+
+
     /// <summary>
     /// delayedTime초 후에 action 실행. 호출부에 using Unitask 필요 없음
     /// </summary>
@@ -40,7 +56,7 @@ public class Utils
     /// <param name="delayTime"></param>
     public static void DelayedTimeAction(Action action, float delayTime)
     {
-        DelayedAction(action,delayTime).Forget();
+        DelayedAction(action, delayTime).Forget();
     }
     private static async UniTaskVoid DelayedAction(Action action, float delayTime)
     {

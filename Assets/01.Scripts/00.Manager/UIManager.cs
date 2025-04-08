@@ -7,7 +7,6 @@ using UnityEngine;
 /// </summary>
 public class UIManager : MonoSingleton<UIManager>
 {
-    private const string UIPrefabPath = "UI/";
     private Dictionary<string, BaseUI> activeUIs = new Dictionary<string, BaseUI>();
 
     /// <summary>
@@ -17,6 +16,12 @@ public class UIManager : MonoSingleton<UIManager>
     /// <returns>로드된 UI</returns>
     public T ShowUI<T>() where T : BaseUI
     {
+        if (!AddressableManager.Instance.isInitDownload)
+        {
+            Utils.LogWarning($"아직 AddressableManager의 Init이 다운로드 되지 않았습니다");
+            return null;
+        }
+
         string uiName = typeof(T).Name;
 
         // 이미 활성화된 UI가 있다면 반환
@@ -27,10 +32,12 @@ public class UIManager : MonoSingleton<UIManager>
         }
 
         // 프리팹 로드
-        GameObject uiPrefab = Resources.Load<GameObject>($"{UIPrefabPath}{uiName}");
+        // GameObject uiPrefab = Resources.Load<GameObject>($"{UIPrefabPath}{uiName}");
+        GameObject uiPrefab = AddressableManager.Instance.LoadAsset<GameObject>($"{uiName}.prefab", ResourcePath.UI);
+
         if (uiPrefab == null)
         {
-            Debug.LogError($"UIManager: {uiName} 프리팹을 찾을 수 없습니다.");
+            Utils.LogWarning($"UIManager: {uiName} 프리팹을 찾을 수 없습니다.");
             return null;
         }
 
@@ -39,7 +46,7 @@ public class UIManager : MonoSingleton<UIManager>
         T uiComponent = uiInstance.GetComponent<T>();
         if (uiComponent == null)
         {
-            Debug.LogError($"UIManager: {uiName}에 {typeof(T).Name} 컴포넌트가 없습니다.");
+            Utils.LogWarning($"UIManager: {uiName}에 {typeof(T).Name} 컴포넌트가 없습니다.");
             Destroy(uiInstance);
             return null;
         }
@@ -65,7 +72,7 @@ public class UIManager : MonoSingleton<UIManager>
         }
         else
         {
-            Debug.LogWarning($"UIManager: {uiName} UI가 활성화 상태가 아닙니다.");
+            Utils.LogWarning($"UIManager: {uiName} UI가 활성화 상태가 아닙니다.");
         }
     }
 
@@ -96,7 +103,7 @@ public class UIManager : MonoSingleton<UIManager>
         }
         else
         {
-            Debug.LogWarning($"UIManager: {uiName} UI가 활성화 상태가 아닙니다.");
+            Utils.LogWarning($"UIManager: {uiName} UI가 활성화 상태가 아닙니다.");
         }
     }
 
