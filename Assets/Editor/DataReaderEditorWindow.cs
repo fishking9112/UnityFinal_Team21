@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public class DataReaderEditorWindow : EditorWindow
 {
     private MonsterData monsterData;
+    private QueenAbilityData queenAbilityData;
 
     [MenuItem("Window/Google Sheet Reader")]
     public static void ShowWindow()
@@ -17,15 +18,23 @@ public class DataReaderEditorWindow : EditorWindow
 
     private void OnEnable()
     {
-        Addressables.LoadAssetAsync<MonsterData>("MonsterData").Completed += OnLoaded;
+        Addressables.LoadAssetAsync<MonsterData>("MonsterData").Completed += OnLoaded<MonsterData>;
+        Addressables.LoadAssetAsync<QueenAbilityData>("QueenAbilityData").Completed += OnLoaded<QueenAbilityData>;
     }
 
     // Addressable을 이용하여 mosterData를 불러옴
-    private void OnLoaded(AsyncOperationHandle<MonsterData> handle)
+    private void OnLoaded<T>(AsyncOperationHandle<T> handle) where T : ScriptableObject
     {
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            monsterData = handle.Result;
+            if(typeof(T) == typeof(MonsterData))
+            {
+                monsterData = handle.Result as MonsterData;
+            }
+            else if(typeof(T) == typeof(QueenAbilityData))
+            {
+                queenAbilityData = handle.Result as QueenAbilityData;
+            }
         }
     }
 
@@ -40,6 +49,12 @@ public class DataReaderEditorWindow : EditorWindow
         {
             ReadSheet((sheet) => UpdateData(sheet, monsterData), monsterData);
             monsterData.infoList.Clear();
+        }
+
+        if(GUILayout.Button("퀸 어빌리티 데이터"))
+        {
+            ReadSheet((sheet) => UpdateData(sheet, queenAbilityData), queenAbilityData);
+            queenAbilityData.infoList.Clear();
         }
 
     }
