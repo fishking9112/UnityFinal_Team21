@@ -3,6 +3,7 @@ using UnityEngine;
 public class GameManager : MonoSingleton<GameManager>
 {
     public Queen queen;
+    public Hero hero;
 
     private void Update()
     {
