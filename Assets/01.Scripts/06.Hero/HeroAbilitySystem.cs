@@ -19,8 +19,6 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         AutoAction().Forget();
     }
 
-    public abstract void Init();
-
 
     /// <summary>
     /// delayTime간격으로 ActionAbility 호출
@@ -47,6 +45,6 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     /// </summary>
     protected abstract void ActionAbility();
 
-
+    public abstract void AbilityLevelUp(int nowLv);
 
 }

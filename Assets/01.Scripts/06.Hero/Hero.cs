@@ -18,5 +18,6 @@ public class Hero : MonoBehaviour
             var a= gameObject.GetOrAddComponent<HeroAbilityMissile>();
             a.Init();
         }
+
     }
 }
