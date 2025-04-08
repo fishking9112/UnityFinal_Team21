@@ -88,7 +88,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     /// <param name="position"> 가져올 position </param>
     /// <param name="rotation"> 가져올 rotation </param>
     /// <returns></returns>
-    public GameObject GetObject(string key, Vector3 position, Quaternion rotation)
+    public GameObject GetObject(string key, Vector2 position)
     {
         if (!pools.ContainsKey(key))
         {
@@ -101,7 +101,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
         {
             obj = CreatePool(key);
         }
-        obj.transform.SetPositionAndRotation(position, rotation);
+        obj.transform.position = position;
         obj.SetActive(true);
         obj.GetComponent<IPoolable>()?.OnSpawn();
 

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Threading.Tasks;
 using Unity.Services.Leaderboards;
@@ -12,23 +13,23 @@ public class UGSLeaderboard : MonoBehaviour
     /// 플레이어 점수 업로드
     /// </summary>
     /// <param name="score">점수</param>
-    public async Task UploadScoreAsync(int score)
+    public async UniTask UploadScoreAsync(int score)
     {
         try
         {
             var response = await LeaderboardsService.Instance.AddPlayerScoreAsync(LeaderboardId, score);
-            Debug.Log($"점수 업로드: {response.Score}");
+            Utils.Log($"점수 업로드: {response.Score}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"점수 업로드 실패: {e.Message}");
+            Utils.Log($"점수 업로드 실패: {e.Message}");
         }
     }
 
     /// <summary>
     /// top10 순위 가져오기
     /// </summary>
-    public async Task GetTop10ScoresAsync()
+    public async UniTask GetTop10ScoresAsync()
     {
         try
         {
@@ -39,28 +40,31 @@ public class UGSLeaderboard : MonoBehaviour
 
             foreach (var entry in scores.Results)
             {
-                Debug.Log($"{entry.Rank}. {entry.PlayerName} : {entry.Score}");
+                string nickname = await UGSManager.Instance.Auth.LoadPublicDataByPlayerId(entry.PlayerId);
+                Utils.Log($"{entry.Rank}. {nickname} : {entry.Score}");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"리더보드 불러오기 실패: {e.Message}");
+            Utils.Log($"리더보드 불러오기 실패: {e.Message}");
         }
     }
 
     /// <summary>
     /// 플레이어 점수 가져오기
     /// </summary>
-    public async Task GetMyRankAsync()
+    public async UniTask GetMyRankAsync()
     {
         try
         {
             var entry = await LeaderboardsService.Instance.GetPlayerScoreAsync(LeaderboardId);
-            Debug.Log($"내 순위: {entry.Rank}, 점수: {entry.Score}");
+            string nickname = await UGSManager.Instance.Auth.LoadPublicDataByPlayerId(entry.PlayerId);
+
+            Utils.Log($"내 순위: {entry.Rank}, 점수: {entry.Score}, 닉네임: {nickname}");
         }
         catch (Exception e)
         {
-            Debug.LogWarning("랭킹 없음 또는 오류: " + e.Message);
+            Utils.Log("랭킹 없음 또는 오류: " + e.Message);
         }
     }
 }
