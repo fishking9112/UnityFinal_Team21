@@ -1,12 +1,26 @@
 using UnityEngine;
 
+public enum CursorState
+{
+    CONFINED,
+    NONE,
+}
+
 public class GameManager : MonoSingleton<GameManager>
 {
     public Queen queen;
+    private CursorState curCursorState;
     public Hero hero;
+
+    protected override void Awake()
+    {
+        curCursorState = CursorState.CONFINED;
+    }
 
     private void Update()
     {
+        ApplyCursorState();
+
         if (UnityEngine.Input.GetKeyDown(KeyCode.A))
         {
             _ = UGSManager.Instance.Leaderboard.UploadScoreAsync(50);
@@ -23,6 +37,19 @@ public class GameManager : MonoSingleton<GameManager>
         if (UnityEngine.Input.GetKeyDown(KeyCode.T))
         {
             _ = UGSManager.Instance.Leaderboard.GetTop10ScoresAsync();
+        }
+    }
+
+    private void ApplyCursorState()
+    {
+        switch (curCursorState)
+        {
+            case CursorState.CONFINED:
+                Cursor.lockState = CursorLockMode.Confined;
+                break;
+            case CursorState.NONE:
+                Cursor.lockState = CursorLockMode.None;
+                break;
         }
     }
 

@@ -1,32 +1,38 @@
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Services.CloudSave;
+using Unity.Services.CloudSave.Models;
+using Unity.Services.CloudSave.Models.Data.Player;
 using UnityEngine;
 
 public class UGSSaveLoad : MonoBehaviour
 {
     private const string SaveKey = "PlayerSaveData";
 
+
     #region 저장
 
     /// <summary>
     /// 저장
     /// </summary>
-    public async Task SaveAsync()
+    public async UniTask SaveAsync()
     {
-        var saveData = Collect();
-
-        var saveJson = JsonConvert.SerializeObject(saveData);
-
-        var saveDict = new Dictionary<string, object>
+        try
         {
-            { SaveKey, saveJson }
-        };
+            var saveData = Collect();
+            var saveJson = JsonConvert.SerializeObject(saveData);
+            var saveDict = new Dictionary<string, object> { { SaveKey, saveJson } };
 
-        await CloudSaveService.Instance.Data.Player.SaveAsync(saveDict);
-        Debug.Log("저장 완료");
+            await CloudSaveService.Instance.Data.Player.SaveAsync(saveDict, new Unity.Services.CloudSave.Models.Data.Player.SaveOptions(new PublicWriteAccessClassOptions()));
+            Utils.Log("저장 완료");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"저장 실패: {e.Message}");
+        }
     }
 
     /// <summary>
@@ -46,6 +52,7 @@ public class UGSSaveLoad : MonoBehaviour
     {
         return new PlayerData
         {
+            // TODO: 실제 저장 내용 넣기
             nickName = "GameManager.instance.playerName",
             level = 151,
             coin = 500
@@ -68,12 +75,13 @@ public class UGSSaveLoad : MonoBehaviour
     /// <summary>
     /// 저장된 내용 불러오기
     /// </summary>
-    public async Task LoadAsync()
+    public async UniTask LoadAsync()
     {
         try
         {
-            var result = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { SaveKey });
-            if (result.TryGetValue(SaveKey, out var savedValue))
+            var playerData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { SaveKey }, new LoadOptions(new PublicReadAccessClassOptions()));
+
+            if (playerData.TryGetValue(SaveKey, out var savedValue))
             {
                 var json = savedValue.Value.GetAsString();
                 var saveData = JsonConvert.DeserializeObject<SaveData>(json);
@@ -82,12 +90,12 @@ public class UGSSaveLoad : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("저장된 데이터가 없음.");
+                Utils.Log("저장된 데이터가 없음.");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"로드 실패: {e.Message}");
+            Utils.Log($"로드 실패: {e.Message}");
         }
     }
 

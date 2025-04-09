@@ -8,7 +8,7 @@ public class QueenCondition : MonoBehaviour
         get => curMagicGauge;
     }
 
-    [SerializeField] private float maxMagicGauge;
+    [SerializeField] private float maxMagicGauge = 100f;
     public float MaxMagicGauge
     {
         get => maxMagicGauge;
@@ -20,7 +20,7 @@ public class QueenCondition : MonoBehaviour
         get => curSummonGauge;
     }
 
-    [SerializeField] private float maxSummonGauge;
+    [SerializeField] private float maxSummonGauge = 100f;
     public float MaxSummonGauge
     {
         get => maxSummonGauge;
@@ -44,7 +44,7 @@ public class QueenCondition : MonoBehaviour
 
     public void AdjustCurSummonGauge(float amount)
     {
-        curSummonGauge = AdjustValue(curSummonGauge, amount, curSummonGauge);
+        curSummonGauge = AdjustValue(curSummonGauge, amount, maxSummonGauge);
     }
 
     public void AdjustMaxSummonGauge(float amount)
