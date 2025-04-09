@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class SoundManager : MonoSingleton<SoundManager>
 {
@@ -32,12 +33,13 @@ public class SoundManager : MonoSingleton<SoundManager>
     /// </summary>
     private void InitSoundManager()
     {
+        // Addressables 사용으로 임시 주석 처리
         // Dictionary 초기화
         soundDict = new Dictionary<string, AudioClip>();
-        foreach (var clip in audioClips)
-        {
-            soundDict[clip.name] = clip;
-        }
+        // foreach (var clip in audioClips)
+        // {
+        //     soundDict[clip.name] = clip;
+        // }
 
         // BGM 플레이어 초기화
         bgmPlayer = gameObject.AddComponent<AudioSource>();
@@ -46,6 +48,25 @@ public class SoundManager : MonoSingleton<SoundManager>
 
         // 오브젝트 풀 초기화
         InitPool();
+    }
+
+    /// <summary>
+    /// Addressables를 통해 지정된 라벨의 AudioClip 에셋들을 비동기 로드
+    /// </summary>
+    /// <param name="label">로드할 AudioClip들의 Addressables 라벨</param>
+    public async UniTask LoadAudioClipsAsync(string label)
+    {
+        // 기존 클립을 유지한 채, 새로 로드한 클립만 추가
+        await Addressables.LoadAssetsAsync<AudioClip>(label, clip =>
+        {
+            if (!soundDict.ContainsKey(clip.name))
+            {
+                soundDict[clip.name] = clip;
+            }
+
+        }).ToUniTask();
+
+        Utils.Log($"사운드 클립 로딩 완료 (label: {label})");
     }
 
     /// <summary>
@@ -82,7 +103,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
         else
         {
-            Debug.LogWarning($"SFX {soundName} not found");
+            Utils.LogWarning($"SFX {soundName} not found");
         }
     }
 
@@ -139,7 +160,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
         else
         {
-            Debug.LogWarning($"BGM {bgmName} not found");
+            Utils.LogWarning($"BGM {bgmName} not found");
         }
     }
 
@@ -161,7 +182,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
         else
         {
-            Debug.LogWarning($"BGM '{newBgmName}' not found");
+            Utils.LogWarning($"BGM '{newBgmName}' not found");
         }
     }
 
