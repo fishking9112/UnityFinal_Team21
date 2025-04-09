@@ -14,6 +14,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
 
     [SerializeField] HeroBullet bullet;
 
+    private ObjectPoolManager objectPoolManager;
 
     /// <summary>
     /// 선언과 동시에 호출하기. 값 입력
@@ -21,8 +22,11 @@ public class HeroAbilityMissile : HeroAbilitySystem
     public void Init()
     {
         //hero=GameManager.Instance.hero;
+        hero = GameObject.Find("Hero").GetComponent<Hero>();
         bulletCount = 1;
         damage = 5;
+        objectPoolManager = ObjectPoolManager.Instance;
+        target = GameObject.Find("enemy");
         AddAbility();
     }
 
@@ -43,8 +47,10 @@ public class HeroAbilityMissile : HeroAbilitySystem
     /// </summary>
     protected override void ActionAbility()
     {
-        var a= Instantiate<HeroBullet>(bullet);
-        a.Init(Vector2.left, 3, 1, 1);
+        var bullet = objectPoolManager.GetObject("bullet", hero.transform.position);
+        float angle= Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
+            target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
+        bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
 
 
