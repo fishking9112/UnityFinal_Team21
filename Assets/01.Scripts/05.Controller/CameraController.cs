@@ -114,11 +114,11 @@ public class CameraController : MonoBehaviour
         Bounds bounds = cameraLimitCollider.bounds;
 
         Vector3 camPos = cameraTransform.position;
-        float camHeight = virtualCamera.m_Lens.OrthographicSize;
-        float camWidth = camHeight * Screen.width / Screen.height;
+        float cameraHeight = virtualCamera.m_Lens.OrthographicSize;
+        float cameraWidth = cameraHeight * (Screen.width / Screen.height);
 
-        camPos.x = Mathf.Clamp(camPos.x, bounds.min.x + camWidth, bounds.max.x - camWidth);
-        camPos.y = Mathf.Clamp(camPos.y, bounds.min.y + camHeight, bounds.max.y - camHeight);
+        camPos.x = Mathf.Clamp(camPos.x, bounds.min.x + cameraWidth, bounds.max.x - cameraWidth);
+        camPos.y = Mathf.Clamp(camPos.y, bounds.min.y + cameraHeight, bounds.max.y - cameraHeight);
 
         cameraTransform.position = camPos;
     }

@@ -31,9 +31,9 @@ public class QueenAbilityData : SheetDataReaderBase
     {
         queenAbilityInfo = new QueenAbilityInfo();
 
-        foreach(var cell in list)
+        foreach (var cell in list)
         {
-            
+
             switch (cell.columnId)
             {
                 case "id":
@@ -48,7 +48,7 @@ public class QueenAbilityData : SheetDataReaderBase
                 case "maxLevel":
                     queenAbilityInfo.maxLevel = int.Parse(cell.value);
                     queenAbilityInfo.levelInfo = new LevelInfo[queenAbilityInfo.maxLevel];
-                    for(int i = 0; i < queenAbilityInfo.maxLevel; i++)
+                    for (int i = 0; i < queenAbilityInfo.maxLevel; i++)
                     {
                         queenAbilityInfo.levelInfo[i] = new LevelInfo();
                     }
@@ -61,10 +61,7 @@ public class QueenAbilityData : SheetDataReaderBase
                     int levelIndex = int.Parse(cell.columnId.Split('_')[1]) - 1;
                     if (levelIndex < queenAbilityInfo.maxLevel)
                     {
-                        if (int.TryParse(cell.value, out int costValue))
-                        {
-                            queenAbilityInfo.levelInfo[levelIndex].cost = costValue;
-                        }
+                        queenAbilityInfo.levelInfo[levelIndex].cost = int.Parse(cell.value);
                     }
                     break;
                 case "eff_1":
@@ -75,10 +72,7 @@ public class QueenAbilityData : SheetDataReaderBase
                     levelIndex = int.Parse(cell.columnId.Split('_')[1]) - 1;
                     if (levelIndex < queenAbilityInfo.maxLevel)
                     {
-                        if (int.TryParse(cell.value, out int effValue))
-                        {
-                            queenAbilityInfo.levelInfo[levelIndex].eff = effValue;
-                        }
+                        queenAbilityInfo.levelInfo[levelIndex].eff = int.Parse(cell.value);
                     }
                     break;
             }
