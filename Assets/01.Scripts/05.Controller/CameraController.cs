@@ -1,12 +1,20 @@
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
+    [Header("용사")]
+    public GameObject Hero;
+
+    [Header("버츄얼 카메라")]
+    public CinemachineVirtualCamera virtualCamera;
+    public Collider2D cameraLimitCollider;
+
     [Header("카메라 이동")]
-    public float moveSpeed;
     public float cameraEdge;
-    public float moveSmoothValue;
+    public float acceleration;
+    public float maxMoveSpeed;
 
     [Header("카메라 줌")]
     public float zoomSpeed;
@@ -15,20 +23,21 @@ public class CameraController : MonoBehaviour
     public float zoomSmoothValue;
 
     private float targetZoom;
-    private float zoomVelocity = 0f;
-    private Vector3 moveVelocity = Vector3.zero;
-    private Camera mainCamera;
+    private float zoomVelocity;
+    private Vector3 curSpeed;
+    private Transform cameraTransform;
 
     private void Start()
     {
-        mainCamera = Camera.main;
-        targetZoom = mainCamera.orthographicSize;
+        cameraTransform = virtualCamera.transform;
+        targetZoom = virtualCamera.m_Lens.OrthographicSize;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         MoveCamera();
         ZoomCamera();
+        ClampCameraPosition();
     }
 
     // 마우스의 위치에 따라 카메라가 움직임
@@ -55,19 +64,27 @@ public class CameraController : MonoBehaviour
             moveDir.y = 1;
         }
 
-        Vector3 targetPos = mainCamera.transform.position + moveDir.normalized * moveSpeed;
+        if (moveDir != Vector3.zero)
+        {
+            curSpeed += moveDir.normalized * acceleration * Time.deltaTime;
+            curSpeed = Vector3.ClampMagnitude(curSpeed, maxMoveSpeed);
+        }
+        else
+        {
+            curSpeed = Vector3.zero;
+        }
 
-        mainCamera.transform.position = Vector3.SmoothDamp(mainCamera.transform.position, targetPos, ref moveVelocity, moveSmoothValue);
+        cameraTransform.position += curSpeed * Time.deltaTime;
     }
 
     public void OnZoomCamera(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        Vector2 scrollValue = context.ReadValue<Vector2>();
+
+        if (scrollValue.y == 0)
         {
             return;
         }
-
-        Vector2 scrollValue = context.ReadValue<Vector2>();
 
         targetZoom -= scrollValue.y * zoomSpeed;
         targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
@@ -76,6 +93,33 @@ public class CameraController : MonoBehaviour
     // 마우스 휠로 카메라 줌
     private void ZoomCamera()
     {
-        mainCamera.orthographicSize = Mathf.SmoothDamp(mainCamera.orthographicSize, targetZoom, ref zoomVelocity, zoomSmoothValue);
+        virtualCamera.m_Lens.OrthographicSize = Mathf.SmoothDamp(virtualCamera.m_Lens.OrthographicSize,
+                                                        targetZoom,
+                                                        ref zoomVelocity,
+                                                        zoomSmoothValue);
+    }
+
+    public void OnFixCamera(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Started)
+        {
+            cameraTransform.position = Hero.transform.position;
+            cameraTransform.position += new Vector3(0, 0, -10);
+        }
+    }
+
+    // 카메라 범위 제한
+    private void ClampCameraPosition()
+    {
+        Bounds bounds = cameraLimitCollider.bounds;
+
+        Vector3 camPos = cameraTransform.position;
+        float camHeight = virtualCamera.m_Lens.OrthographicSize;
+        float camWidth = camHeight * Screen.width / Screen.height;
+
+        camPos.x = Mathf.Clamp(camPos.x, bounds.min.x + camWidth, bounds.max.x - camWidth);
+        camPos.y = Mathf.Clamp(camPos.y, bounds.min.y + camHeight, bounds.max.y - camHeight);
+
+        cameraTransform.position = camPos;
     }
 }
