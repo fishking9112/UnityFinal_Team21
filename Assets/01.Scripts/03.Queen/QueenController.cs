@@ -1,22 +1,34 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+
+public enum QueenSlot
+{
+    MONSTER,
+    MAGIC,
+}
 
 public class QueenController : MonoBehaviour
 {
     private QueenCondition condition;
     private ObjectPoolManager objectPoolManager;
-    
+
     private Vector3 worldMousePos;
     private List<string> monsterSlot = new List<string>();
-    private Dictionary<string, GameObject> monsterPrefabs = new Dictionary<string, GameObject>();
-    private string selectedMonsterName;
-    private GameObject selectedMonsterPrefab;
+    private Dictionary<string, Sprite> monsterSlotIcon = new Dictionary<string, Sprite>();
+
+    private string selectedSlotName;
 
     [SerializeField] private float summonGaugeRecoverySpeed = 10f;
     [SerializeField] private float magicGaugeRecoverySpeed = 5f;
 
-    public GameObject[] test;
+    public GameObject cursorIcon;
+
+    public QueenSlot slot = QueenSlot.MONSTER;
+
+    public Sprite[] test;
+
 
     private void Start()
     {
@@ -30,22 +42,26 @@ public class QueenController : MonoBehaviour
 
     private void Update()
     {
-        SelectedMonsterCursor();
-        SummonMonster();
+        switch (slot)
+        {
+            case QueenSlot.MONSTER:
+                SummonMonster();
+                break;
+            case QueenSlot.MAGIC:
+                break;
+        }
+        ImageFollowCursor();
         RecoveryGauge();
     }
 
-    // 선택한 슬롯의 몬스터를 마우스커서에 붙힘
-    private void SelectedMonsterCursor()
+    // 선택한 슬롯의 이미지를 마우스커서에 붙힘
+    private void ImageFollowCursor()
     {
         Vector2 mousePos = Pointer.current.position.ReadValue();
         worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
         worldMousePos.z = 0f;
 
-        if (selectedMonsterPrefab != null)
-        {
-            selectedMonsterPrefab.transform.position = worldMousePos;
-        }
+        cursorIcon.transform.position = worldMousePos;
     }
 
     /// <summary>
@@ -56,16 +72,22 @@ public class QueenController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            int key = Mathf.RoundToInt(context.ReadValue<float>());
-
-            if (key > monsterSlot.Count)
+            if (slot == QueenSlot.MONSTER)
             {
-                return;
-            }
+                int key = Mathf.RoundToInt(context.ReadValue<float>());
 
-            selectedMonsterName = monsterSlot[key - 1];
-            Destroy(selectedMonsterPrefab);
-            selectedMonsterPrefab = Instantiate(monsterPrefabs[monsterSlot[key - 1]]);
+                if (key > monsterSlot.Count)
+                {
+                    return;
+                }
+
+                selectedSlotName = monsterSlot[key - 1];
+                cursorIcon.GetComponent<SpriteRenderer>().sprite = monsterSlotIcon[monsterSlot[key - 1]];
+            }
+            else if (slot == QueenSlot.MAGIC)
+            {
+
+            }
         }
     }
 
@@ -74,24 +96,29 @@ public class QueenController : MonoBehaviour
     {
         if (Pointer.current.press.isPressed)
         {
-            if(selectedMonsterName == null)
+            if (selectedSlotName == null)
+            {
+                return;
+            }
+
+            if (EventSystem.current.IsPointerOverGameObject())
             {
                 return;
             }
 
             float monsterRadius = 0.5f;
 
-            int layerMask = ~(1<<(LayerMask.NameToLayer("CameraLimit")));
+            int layerMask = ~(1 << (LayerMask.NameToLayer("CameraLimit")));
 
 
             Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius, layerMask);
 
-            if(hit != null)
+            if (hit != null)
             {
                 return;
             }
 
-            objectPoolManager.GetObject(selectedMonsterName, worldMousePos);
+            objectPoolManager.GetObject(selectedSlotName, worldMousePos);
         }
     }
 
@@ -108,17 +135,17 @@ public class QueenController : MonoBehaviour
     //}
 
     // 슬롯에 몬스터 추가
-    public void AddMonsterToSlot(string key, GameObject obj)
+    public void AddMonsterToSlot(string key, Sprite sprite)
     {
         monsterSlot.Add(key);
-        monsterPrefabs.Add(key, obj);
+        monsterSlotIcon.Add(key, sprite);
     }
 
     // 슬롯에서 몬스터 제거
     public void RemoveMonsterFromSlot(string key)
     {
         monsterSlot.Remove(key);
-        monsterPrefabs.Remove(key);
+        monsterSlotIcon.Remove(key);
     }
 
     // 자동 게이지 회복
@@ -126,5 +153,17 @@ public class QueenController : MonoBehaviour
     {
         condition.AdjustCurMagicGauge(magicGaugeRecoverySpeed * Time.deltaTime);
         condition.AdjustCurSummonGauge(summonGaugeRecoverySpeed * Time.deltaTime);
+    }
+
+
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+        return results.Count > 0;
     }
 }

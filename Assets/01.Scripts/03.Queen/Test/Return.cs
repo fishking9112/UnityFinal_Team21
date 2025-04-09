@@ -2,15 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Return : MonoBehaviour,IPoolable
+public class Return : MonoBehaviour, IPoolable
 {
     private Action<GameObject> returnToPool;
-
-    private void Start()
-    {
-        StartCoroutine(ReturnToPool());
-    }
-
     private IEnumerator ReturnToPool()
     {
         yield return new WaitForSeconds(2.0f);
@@ -24,6 +18,7 @@ public class Return : MonoBehaviour,IPoolable
 
     public void OnSpawn()
     {
+        StartCoroutine(ReturnToPool());
         //GameManger.Instacnce.MonsterMap.Add(this.gameObject,this);
     }
 
