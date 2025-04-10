@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5796722060532569848
+--- !u!1 &3824875947164058982
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,44 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3684730120694706115}
-  - component: {fileID: 8161107454925081147}
+  - component: {fileID: 1396114762475936405}
+  - component: {fileID: 5983565835398682398}
   m_Layer: 0
-  m_Name: ObjectPoolManager
+  m_Name: QueenAbilityUpgradeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3684730120694706115
+--- !u!4 &1396114762475936405
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5796722060532569848}
+  m_GameObject: {fileID: 3824875947164058982}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 874.5031, y: 516.6936, z: 3.6456475}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8161107454925081147
+--- !u!114 &5983565835398682398
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5796722060532569848}
+  m_GameObject: {fileID: 3824875947164058982}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 970b2097009f21349868c7655f0c011c, type: 3}
+  m_Script: {fileID: 11500000, guid: 352eb555b9ab94f43b605aefe4df1639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDontDestroy: 0
-  poolPrefabs:
-  - key: Orc_Warrior
-    prefab: {fileID: 8529290159072828397, guid: 30a48ab96f5e18e4b9a72af19c266246, type: 3}
-    initPoolSize: 3
+  isDontDestroy: 1
+  abilityData: {fileID: 11400000, guid: c739d23711d99e649a58a882d3550219, type: 2}
+  abilityItemPrefab: {fileID: 7982715258803939118, guid: 6dfc38dd720e5014a884843d4d69a38a, type: 3}
