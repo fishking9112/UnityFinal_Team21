@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970b2097009f21349868c7655f0c011c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDonDestroy: 0
-  prefabs:
-  - {fileID: 6381410122005758026, guid: f6b3452cc8d87cb429791979d3d5545f, type: 3}
-  - {fileID: 831631215581374756, guid: 7d0f7b38acc29df42b6ec81f2d997251, type: 3}
-  initPoolSize: 10
+  isDontDestroy: 0
+  poolPrefabs:
+  - key: Orc_Warrior
+    prefab: {fileID: 8529290159072828397, guid: 30a48ab96f5e18e4b9a72af19c266246, type: 3}
+    initPoolSize: 3

@@ -43,8 +43,8 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     [SerializeField] private PoolPrefab[] poolPrefabs;
 
     private Dictionary<string, Stack<GameObject>> pools = new Dictionary<string, Stack<GameObject>>();
-    private Dictionary<string, GameObject> parentPools= new Dictionary<string, GameObject>();
-    private Dictionary<string, GameObject> prefabList = new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> parentMap= new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> prefabMap = new Dictionary<string, GameObject>();
 
     protected override void Awake()
     {
@@ -62,8 +62,8 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
 
             GameObject parentPool = new GameObject($"Pool_{prefab.key}");
             parentPool.transform.SetParent(this.transform);
-            parentPools[prefab.key] = parentPool;
-            prefabList[prefab.key] = prefab.prefab;
+            parentMap[prefab.key] = parentPool;
+            prefabMap[prefab.key] = prefab.prefab;
 
             for(int i = 0; i < prefab.initPoolSize; i++)
             {
@@ -76,7 +76,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
 
     private GameObject CreatePool(string key)
     {
-        GameObject obj = Instantiate(prefabList[key], parentPools[key].transform);
+        GameObject obj = Instantiate(prefabMap[key], parentMap[key].transform);
         obj.GetComponent<IPoolable>()?.Init(o => ReturnObject(key, o));
         return obj;
     }

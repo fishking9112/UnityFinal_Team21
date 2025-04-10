@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-interface IHPHandler
-{
-    float CurrentHP { get; set; }
-    float maxHP { get; set; }
-    public void SetHP();
-}
-
 public class BaseController : MonoBehaviour
 {
-    private string name;
     private NavMeshAgent navMesh;
     private GameObject target;
+
+
+    protected HealthHandler healthHandler;
 
     private float attack;
     public float Attack
@@ -44,14 +39,14 @@ public class BaseController : MonoBehaviour
         private set { attackDelay = value; }
     }
 
-    protected void DetectEnemy() { }
+    protected virtual void DetectTarget() { }
 
-    protected void AttackTarget() { }
+    protected virtual void AttackTarget() { }
 
-    protected void OnDamaged() { }
+    protected virtual void OnDamaged() { }
 
-    protected void Move() { }
+    protected virtual void Move() { }
 
-    protected void Die() { }
+    protected virtual void Die() { }
 
 }

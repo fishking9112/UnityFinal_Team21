@@ -80,7 +80,11 @@ public class QueenController : MonoBehaviour
             }
 
             float monsterRadius = 0.5f;
-            Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius);
+
+            int layerMask = ~(1<<(LayerMask.NameToLayer("CameraLimit")));
+
+
+            Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius, layerMask);
 
             if(hit != null)
             {
