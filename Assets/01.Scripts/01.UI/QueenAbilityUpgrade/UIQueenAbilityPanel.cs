@@ -58,7 +58,7 @@ public class UIQueenAbilityPanel : MonoBehaviour
         QueenAbilityUpgradeManager.Instance.SetUIQueenAbility(this);
         resetButton.onClick.RemoveAllListeners();
         resetButton.onClick.AddListener(OnClickResetButton);
-        gameObject.SetActive(false);
+        gameObject.SetActive(true);
         uiQueenAbilityPanelRoot.SetActive(true);
         descriptionPopupUI.gameObject.SetActive(false);
     }
