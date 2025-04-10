@@ -1,51 +1,80 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+
+[Serializable]
+public class TestMonster
+{
+    public int id;
+    public string name;
+    public float cost;
+    public Sprite icon;
+    public GameObject prefabs;
+}
+
+public enum QueenSlot
+{
+    MONSTER,
+    MAGIC,
+}
 
 public class QueenController : MonoBehaviour
 {
     private QueenCondition condition;
     private ObjectPoolManager objectPoolManager;
-    
+
     private Vector3 worldMousePos;
-    private List<string> monsterSlot = new List<string>();
-    private Dictionary<string, GameObject> monsterPrefabs = new Dictionary<string, GameObject>();
-    private string selectedMonsterName;
-    private GameObject selectedMonsterPrefab;
+
+    [SerializeField] private MonsterSlotUI monsterSlotUI;
+    [SerializeField] private MagicSlotUI magicSlotUI;
 
     [SerializeField] private float summonGaugeRecoverySpeed = 10f;
     [SerializeField] private float magicGaugeRecoverySpeed = 5f;
 
-    public GameObject[] test;
+    public TestMonster selectedMonster;
+    public GameObject cursorIcon;
+    public QueenSlot curSlot = QueenSlot.MONSTER;
+
+    public TestMonster[] testMonster;
+
 
     private void Start()
     {
         condition = GameManager.Instance.queen.condition;
         objectPoolManager = ObjectPoolManager.Instance;
 
-        AddMonsterToSlot("Circle", test[0]);
-        AddMonsterToSlot("Capsule", test[1]);
-        AddMonsterToSlot("Hexagon Flat-Top", test[2]);
+        // 테스트용 몬스터 추가
+        foreach (var monster in testMonster)
+        {
+            monsterSlotUI.AddSlot(monster);
+        }
     }
 
     private void Update()
     {
-        SelectedMonsterCursor();
-        SummonMonster();
+        switch (curSlot)
+        {
+            case QueenSlot.MONSTER:
+                SummonMonster();
+                break;
+            case QueenSlot.MAGIC:
+                UseMagic();
+                break;
+        }
+
+        ImageFollowCursor();
         RecoveryGauge();
     }
 
-    // 선택한 슬롯의 몬스터를 마우스커서에 붙힘
-    private void SelectedMonsterCursor()
+    // 선택한 슬롯의 이미지를 마우스커서에 붙힘
+    private void ImageFollowCursor()
     {
         Vector2 mousePos = Pointer.current.position.ReadValue();
         worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
         worldMousePos.z = 0f;
 
-        if (selectedMonsterPrefab != null)
-        {
-            selectedMonsterPrefab.transform.position = worldMousePos;
-        }
+        cursorIcon.transform.position = worldMousePos;
     }
 
     /// <summary>
@@ -54,71 +83,76 @@ public class QueenController : MonoBehaviour
     /// <param name="context"> 1,2,3,4,5,6번 키 </param>
     public void OnPressSlotNumber(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started)
+        if (context.phase != InputActionPhase.Started)
         {
-            int key = Mathf.RoundToInt(context.ReadValue<float>());
-
-            if (key > monsterSlot.Count)
-            {
-                return;
-            }
-
-            selectedMonsterName = monsterSlot[key - 1];
-            Destroy(selectedMonsterPrefab);
-            selectedMonsterPrefab = Instantiate(monsterPrefabs[monsterSlot[key - 1]]);
+            return;
         }
+
+        int index = Mathf.RoundToInt(context.ReadValue<float>()) - 1;
+
+        BaseSlotUI curBaseSlotUI = curSlot == QueenSlot.MONSTER ? monsterSlotUI : magicSlotUI;
+        TestMonster monster = curBaseSlotUI.GetMonster(index);
+
+        if (monster == null)
+        {
+            return;
+        }
+        selectedMonster = monster;
+        cursorIcon.GetComponent<SpriteRenderer>().sprite = selectedMonster.icon;
     }
 
     // 마우스의 월드좌표를 계산해서 해당 위치에 몬스터를 소환함
     private void SummonMonster()
     {
-        if (Pointer.current.press.isPressed)
+        if (!Pointer.current.press.isPressed)
         {
-            if(selectedMonsterName == null)
-            {
-                return;
-            }
-
-            float monsterRadius = 0.5f;
-
-            int layerMask = ~(1<<(LayerMask.NameToLayer("CameraLimit")));
-
-
-            Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius, layerMask);
-
-            if(hit != null)
-            {
-                return;
-            }
-
-            objectPoolManager.GetObject(selectedMonsterName, worldMousePos);
+            return;
         }
+        if (selectedMonster == null)
+        {
+            return;
+        }
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+        if (condition.CurSummonGauge.Value < selectedMonster.cost)
+        {
+            return;
+        }
+
+        float monsterRadius = 0.5f;
+        // CameraLimit 레이어만 제외하고 충돌 하도록 함
+        int layerMask = ~(1 << (LayerMask.NameToLayer("CameraLimit")));
+
+        Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius, layerMask);
+
+        if (hit != null)
+        {
+            return;
+        }
+
+        condition.AdjustCurSummonGauge(-selectedMonster.cost);
+        objectPoolManager.GetObject(selectedMonster.name, worldMousePos);
     }
 
-    //public void AddMonsterToSlot(Monster monster)
-    //{
-    //    monsterSlot.Add(monster.monsterData.name);
-    //    monsterPrefabs.Add(monster.monsterData.name, monster.monsterData.outfit);
-    //}
 
-    //public void RemoveMonsterFromSlot(Monster monster)
-    //{
-    //    monsterSlot.Remove(monster.monsterData.name);
-    //    monsterPrefabs.Remove(monster.monsterData.name);
-    //}
-
-    // 슬롯에 몬스터 추가
-    public void AddMonsterToSlot(string key, GameObject obj)
+    private void UseMagic()
     {
-        monsterSlot.Add(key);
-        monsterPrefabs.Add(key, obj);
-    }
+        if (!Pointer.current.press.isPressed)
+        {
+            return;
+        }
+        //if (selectedMagic == null)
+        //{
+        //    return;
+        //}
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
 
-    // 슬롯에서 몬스터 제거
-    public void RemoveMonsterFromSlot(string key)
-    {
-        monsterSlot.Remove(key);
-        monsterPrefabs.Remove(key);
+        // 슬롯에 따라 다른 권능 구현
     }
 
     // 자동 게이지 회복

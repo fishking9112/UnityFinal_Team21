@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 /// <summary>
@@ -43,7 +44,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     [SerializeField] private PoolPrefab[] poolPrefabs;
 
     private Dictionary<string, Stack<GameObject>> pools = new Dictionary<string, Stack<GameObject>>();
-    private Dictionary<string, GameObject> parentMap= new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> parentMap = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> prefabMap = new Dictionary<string, GameObject>();
 
     protected override void Awake()
@@ -56,7 +57,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     // 지정해둔 프리팹 초기 풀 생성
     private void InitPools()
     {
-        foreach(var prefab in poolPrefabs)
+        foreach (var prefab in poolPrefabs)
         {
             pools[prefab.key] = new Stack<GameObject>();
 
@@ -65,7 +66,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
             parentMap[prefab.key] = parentPool;
             prefabMap[prefab.key] = prefab.prefab;
 
-            for(int i = 0; i < prefab.initPoolSize; i++)
+            for (int i = 0; i < prefab.initPoolSize; i++)
             {
                 GameObject obj = CreatePool(prefab.key);
                 obj.SetActive(false);
@@ -111,9 +112,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     /// <summary>
     /// 풀에 오브젝트를 반환함
     /// </summary>
-    /// <param name="index"> 반환할 프리팹 인덱스 </param>
-    /// <param name="obj"> 반환할 오브젝트 </param>
-    public void ReturnObject(string key, GameObject obj)
+    private void ReturnObject(string key, GameObject obj)
     {
         if (!pools.ContainsKey(key))
         {
@@ -144,7 +143,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     // 모든 풀 초기화
     public void ClearAllPools()
     {
-        foreach(var key in pools.Keys)
+        foreach (var key in pools.Keys)
         {
             ClearPool(key);
         }
