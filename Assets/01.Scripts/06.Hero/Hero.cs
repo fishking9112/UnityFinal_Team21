@@ -24,7 +24,7 @@ public class Hero : MonoBehaviour
 
         //MVP용 임시 기능
         ChangeDir().Forget();
-        //Move().Forget();
+        Move().Forget();
     }
 
     private async UniTaskVoid Move()
