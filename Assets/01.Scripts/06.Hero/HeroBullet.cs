@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 
 public class HeroBullet : MonoBehaviour , IPoolable
 {
@@ -16,7 +17,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     float limitTime;
     private Action<GameObject> returnToPool;
 
-
+    CancellationToken token;
     private void OnEnable()
     {
         speed = 3f;
@@ -27,7 +28,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     {
         returnToPool = returnAction;
         limitTime = 5f;
-       
+        token = this.GetCancellationTokenOnDestroy();
     }
 
     public void OnDespawn()
@@ -54,7 +55,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
             transform.position = (Vector2)transform.position + speed * Time.deltaTime * (Vector2)transform.up;
             time += Time.deltaTime;
 
-            await UniTask.Yield();
+            await UniTask.Yield(cancellationToken:token);
         }
 
         OnDespawn();
