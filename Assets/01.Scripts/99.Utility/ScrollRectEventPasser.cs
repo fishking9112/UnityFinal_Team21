@@ -4,7 +4,12 @@ using UnityEngine.UI;
 
 public class ScrollRectEventPasser : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public ScrollRect scrollRect;
+    private ScrollRect scrollRect;
+
+    private void Awake()
+    {
+        scrollRect = GetComponentInParent<ScrollRect>();
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
