@@ -42,6 +42,11 @@ public class UIQueenAbilityPanel : MonoBehaviour
         {
             uiQueenAbilityPanelRoot.SetActive(false);
         }
+
+        if (descriptionPopupUI.gameObject.activeSelf)
+        {
+            uiQueenAbilityPanelRoot.SetActive(false);
+        }
     }
 
     /// <summary>   
@@ -55,6 +60,7 @@ public class UIQueenAbilityPanel : MonoBehaviour
         resetButton.onClick.AddListener(OnClickResetButton);
         gameObject.SetActive(false);
         uiQueenAbilityPanelRoot.SetActive(true);
+        descriptionPopupUI.gameObject.SetActive(false);
     }
 
     /// <summary>
