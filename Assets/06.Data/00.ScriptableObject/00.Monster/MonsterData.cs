@@ -10,26 +10,32 @@ public enum MonsterType
 }
 
 [Serializable]
-public class MonsterInfo
+public class MonsterInfo : BaseStatData
 {
     public int id;
     public string name;
     public string description;
-    public float health;
-    public float defence;
     public float cost;
-    public float moveSpeed;
-    public float attack;
-    public float attackRange;
-    public float attackSpeed;
     public float reward;
     public string outfit;
 
     public MonsterType type;
     public string projectile;
+    public MonsterInfo() { }
+    public MonsterInfo(MonsterInfo other) : base(other)
+    {
+        id = other.id;
+        name = other.name;
+        description = other.description;
+        cost = other.cost;
+        reward = other.reward;
+        outfit = other.outfit;
+        type = other.type;
+        projectile = other.projectile;
+    }
 }
 
-[CreateAssetMenu(fileName ="MonsterData", menuName ="Scriptable Object/New MonsterData")]
+[CreateAssetMenu(fileName = "MonsterData", menuName = "Scriptable Object/New MonsterData")]
 public class MonsterData : SheetDataReaderBase
 {
     public List<MonsterInfo> infoList = new List<MonsterInfo>();
@@ -44,7 +50,7 @@ public class MonsterData : SheetDataReaderBase
     {
         monsterInfo = new MonsterInfo();
 
-        foreach(var cell in list)
+        foreach (var cell in list)
         {
             switch (cell.columnId)
             {
@@ -88,7 +94,7 @@ public class MonsterData : SheetDataReaderBase
                     monsterInfo.type = (MonsterType)Enum.Parse(typeof(MonsterType), cell.value);
                     break;
                 case "projectile":
-                    if(monsterInfo.type == MonsterType.RANGED)
+                    if (monsterInfo.type == MonsterType.RANGED)
                     {
                         monsterInfo.projectile = cell.value;
                     }
