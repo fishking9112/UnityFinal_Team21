@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public enum QueenSlot
 {
@@ -15,17 +16,16 @@ public class QueenController : MonoBehaviour
     private ObjectPoolManager objectPoolManager;
 
     private Vector3 worldMousePos;
-    private List<string> monsterSlot = new List<string>();
-    private Dictionary<string, Sprite> monsterSlotIcon = new Dictionary<string, Sprite>();
 
-    private string selectedSlotName;
+    [SerializeField] private MonsterSlotUI monsterSlot;
+    [SerializeField] private MagicSlotUI magicSlot;
 
     [SerializeField] private float summonGaugeRecoverySpeed = 10f;
     [SerializeField] private float magicGaugeRecoverySpeed = 5f;
 
+    public string selectedSlotName;
     public GameObject cursorIcon;
-
-    public QueenSlot slot = QueenSlot.MONSTER;
+    public QueenSlot curSlot = QueenSlot.MONSTER;
 
     public Sprite[] test;
 
@@ -35,21 +35,24 @@ public class QueenController : MonoBehaviour
         condition = GameManager.Instance.queen.condition;
         objectPoolManager = ObjectPoolManager.Instance;
 
-        AddMonsterToSlot("Circle", test[0]);
-        AddMonsterToSlot("Capsule", test[1]);
-        AddMonsterToSlot("Hexagon Flat-Top", test[2]);
+        // 테스트용 몬스터 추가
+        monsterSlot.AddSlot("Circle", test[0]);
+        monsterSlot.AddSlot("Capsule", test[1]);
+        monsterSlot.AddSlot("Hexagon Flat-Top", test[2]);
     }
 
     private void Update()
     {
-        switch (slot)
+        switch (curSlot)
         {
             case QueenSlot.MONSTER:
                 SummonMonster();
                 break;
             case QueenSlot.MAGIC:
+                UseMagic();
                 break;
         }
+
         ImageFollowCursor();
         RecoveryGauge();
     }
@@ -70,82 +73,71 @@ public class QueenController : MonoBehaviour
     /// <param name="context"> 1,2,3,4,5,6번 키 </param>
     public void OnPressSlotNumber(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started)
+        if (context.phase != InputActionPhase.Started)
         {
-            if (slot == QueenSlot.MONSTER)
-            {
-                int key = Mathf.RoundToInt(context.ReadValue<float>());
-
-                if (key > monsterSlot.Count)
-                {
-                    return;
-                }
-
-                selectedSlotName = monsterSlot[key - 1];
-                cursorIcon.GetComponent<SpriteRenderer>().sprite = monsterSlotIcon[monsterSlot[key - 1]];
-            }
-            else if (slot == QueenSlot.MAGIC)
-            {
-
-            }
+            return;
         }
+
+        int index = Mathf.RoundToInt(context.ReadValue<float>()) - 1;
+
+        BaseSlotUI curBaseSlotUI = curSlot == QueenSlot.MONSTER ? monsterSlot : magicSlot;
+        selectedSlotName = curBaseSlotUI.GetKey(index);
+
+        if (selectedSlotName == null)
+        {
+            return;
+        }
+
+        cursorIcon.GetComponent<SpriteRenderer>().sprite = curBaseSlotUI.GetIcon(selectedSlotName);
     }
 
     // 마우스의 월드좌표를 계산해서 해당 위치에 몬스터를 소환함
     private void SummonMonster()
     {
-        if (Pointer.current.press.isPressed)
+        if (!Pointer.current.press.isPressed)
         {
-            if (selectedSlotName == null)
-            {
-                return;
-            }
-
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                return;
-            }
-
-            float monsterRadius = 0.5f;
-
-            int layerMask = ~(1 << (LayerMask.NameToLayer("CameraLimit")));
-
-
-            Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius, layerMask);
-
-            if (hit != null)
-            {
-                return;
-            }
-
-            objectPoolManager.GetObject(selectedSlotName, worldMousePos);
+            return;
         }
+        if (selectedSlotName == null)
+        {
+            return;
+        }
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        float monsterRadius = 0.5f;
+        // CameraLimit 레이어만 제외하고 충돌 하도록 함
+        int layerMask = ~(1 << (LayerMask.NameToLayer("CameraLimit")));
+
+        Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius, layerMask);
+
+        if (hit != null)
+        {
+            return;
+        }
+
+        objectPoolManager.GetObject(selectedSlotName, worldMousePos);
     }
 
-    //public void AddMonsterToSlot(Monster monster)
-    //{
-    //    monsterSlot.Add(monster.monsterData.name);
-    //    monsterPrefabs.Add(monster.monsterData.name, monster.monsterData.outfit);
-    //}
 
-    //public void RemoveMonsterFromSlot(Monster monster)
-    //{
-    //    monsterSlot.Remove(monster.monsterData.name);
-    //    monsterPrefabs.Remove(monster.monsterData.name);
-    //}
-
-    // 슬롯에 몬스터 추가
-    public void AddMonsterToSlot(string key, Sprite sprite)
+    private void UseMagic()
     {
-        monsterSlot.Add(key);
-        monsterSlotIcon.Add(key, sprite);
-    }
+        if (!Pointer.current.press.isPressed)
+        {
+            return;
+        }
+        if (selectedSlotName == null)
+        {
+            return;
+        }
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
 
-    // 슬롯에서 몬스터 제거
-    public void RemoveMonsterFromSlot(string key)
-    {
-        monsterSlot.Remove(key);
-        monsterSlotIcon.Remove(key);
+        // 슬롯에 따라 다른 권능 구현
     }
 
     // 자동 게이지 회복
@@ -153,17 +145,5 @@ public class QueenController : MonoBehaviour
     {
         condition.AdjustCurMagicGauge(magicGaugeRecoverySpeed * Time.deltaTime);
         condition.AdjustCurSummonGauge(summonGaugeRecoverySpeed * Time.deltaTime);
-    }
-
-
-    private bool IsPointerOverUIObject()
-    {
-        PointerEventData pointerData = new PointerEventData(EventSystem.current)
-        {
-            position = Input.mousePosition
-        };
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(pointerData, results);
-        return results.Count > 0;
     }
 }

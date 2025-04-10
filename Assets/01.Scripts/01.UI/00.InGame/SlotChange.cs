@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class SlotsUI : MonoBehaviour
+public class SlotChange : MonoBehaviour
 {
     public CanvasGroup magicGroup;
     public CanvasGroup monsterGroup;
@@ -42,8 +42,8 @@ public class SlotsUI : MonoBehaviour
         Vector3 magicPos = magicSlotTransform.localPosition;
         Vector3 monsterPos = monsterSlotTransform.localPosition;
 
-        Vector3[] magicPath = CreateArc(magicPos, monsterPos, controller.slot == QueenSlot.MONSTER ? arcHeight : -arcHeight);
-        Vector3[] monsterPath = CreateArc(monsterPos, magicPos, controller.slot == QueenSlot.MONSTER ? -arcHeight : arcHeight);
+        Vector3[] magicPath = CreateArc(magicPos, monsterPos, controller.curSlot == QueenSlot.MONSTER ? arcHeight : -arcHeight);
+        Vector3[] monsterPath = CreateArc(monsterPos, magicPos, controller.curSlot == QueenSlot.MONSTER ? -arcHeight : arcHeight);
 
         Sequence seq = DOTween.Sequence();
 
@@ -61,13 +61,16 @@ public class SlotsUI : MonoBehaviour
     // 슬롯의 순서를 바꿈. 현재 선택된 슬롯이 아니면 반 투명해지면서 현재슬롯에 가려지도록 렌더링 순서 변경
     private void SetOrder()
     {
-        if (controller.slot == QueenSlot.MONSTER)
+        controller.selectedSlotName = null;
+        controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = null;
+
+        if (controller.curSlot == QueenSlot.MONSTER)
         {
             monsterGroupTransform.SetAsFirstSibling();
             magicGroup.DOFade(1f, 0.2f);
             monsterGroup.DOFade(0.5f, 0.2f);
         }
-        else if (controller.slot == QueenSlot.MAGIC)
+        else if (controller.curSlot == QueenSlot.MAGIC)
         {
             monsterGroupTransform.SetAsLastSibling();
             magicGroup.DOFade(0.5f, 0.2f);
@@ -78,7 +81,7 @@ public class SlotsUI : MonoBehaviour
     // 슬롯 변경이 끝날 때 호출. 현재 슬롯의 상태를 바꿔줌
     private void CheangeEnd()
     {
-        controller.slot = controller.slot == QueenSlot.MONSTER ? QueenSlot.MAGIC : QueenSlot.MONSTER;
+        controller.curSlot = controller.curSlot == QueenSlot.MONSTER ? QueenSlot.MAGIC : QueenSlot.MONSTER;
         isChange = false;
     }
 
