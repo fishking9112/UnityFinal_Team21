@@ -70,6 +70,10 @@ public class Hero : MonoBehaviour
         Vector2 pointA = Camera.main.ScreenToWorldPoint(Vector3.zero);
         Vector2 pointB = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height)); ;
 
+        Vector2 off = pointA - pointB;
+
+        pointA = (Vector2)transform.position - off / 2;
+        pointB = (Vector2)transform.position + off / 2;
 
         Collider2D[] col = Physics2D.OverlapAreaAll(pointA, pointB, enemyLayer);
 
