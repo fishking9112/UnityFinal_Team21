@@ -28,8 +28,6 @@ public class QueenController : MonoBehaviour
 
     [SerializeField] private MonsterSlotUI monsterSlotUI;
     [SerializeField] private MagicSlotUI magicSlotUI;
-    [SerializeField] private GaugeUI summonGaugeUI;
-    [SerializeField] private GaugeUI magicGaugeUI;
 
     [SerializeField] private float summonGaugeRecoverySpeed = 10f;
     [SerializeField] private float magicGaugeRecoverySpeed = 5f;
@@ -45,9 +43,6 @@ public class QueenController : MonoBehaviour
     {
         condition = GameManager.Instance.queen.condition;
         objectPoolManager = ObjectPoolManager.Instance;
-
-        summonGaugeUI.BindGauge(condition.CurSummonGauge, condition.MaxSummonGauge);
-        magicGaugeUI.BindGauge(condition.CurMagicGauge, condition.MaxMagicGauge);
 
         // 테스트용 몬스터 추가
         foreach (var monster in testMonster)

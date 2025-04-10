@@ -13,7 +13,8 @@ public class GaugeUI : MonoBehaviour
         fillImage = GetComponent<Image>();
     }
 
-    public void BindGauge(ReactiveProperty<float> curGauge, ReactiveProperty<float> maxGauge)
+
+    public void Bind(ReactiveProperty<float> curGauge, ReactiveProperty<float> maxGauge)
     {
         cur = curGauge;
         max = maxGauge;
@@ -36,7 +37,14 @@ public class GaugeUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (cur != null) cur.RemoveAction(UpdateFill);
-        if (max != null) max.RemoveAction(UpdateFill);
+        if (cur != null)
+        {
+            cur.RemoveAction(UpdateFill);
+        }
+
+        if (max != null)
+        {
+            max.RemoveAction(UpdateFill);
+        }
     }
 }

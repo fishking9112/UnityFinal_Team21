@@ -29,6 +29,8 @@ public class SlotChange : MonoBehaviour
     private void InitOrder()
     {
         monsterGroupTransform.SetAsLastSibling();
+        summonGauge.SetActive(true);
+        magicGauge.SetActive(false);
         monsterGroup.alpha = 1f;
         magicGroup.alpha = 0.5f;
     }
