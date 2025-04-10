@@ -26,16 +26,11 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     /// <returns></returns>
     protected async UniTaskVoid AutoAction() 
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(delayTime));
 
         while (true)
         {
-            // 타겟이 없을 경우 예외처리 추가 필요
-            //await UniTask.WaitUntil(() => target != null);
-
-
-            ActionAbility();
             await UniTask.Delay(TimeSpan.FromSeconds(delayTime));
+            ActionAbility();
         }
 
     }

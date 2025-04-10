@@ -11,16 +11,20 @@ public class Hero : MonoBehaviour
     private float randomDelay;
     private float moveSpeed;
 
+    public GameObject target;
+
+    private int enemyLayer;
+
     // Start is called before the first frame update
     void Start()
     {
         randomDelay = 3f;
         moveSpeed = 5;
-
+        enemyLayer= LayerMask.GetMask("Enemy");
 
         //MVP용 임시 기능
         ChangeDir().Forget();
-        Move().Forget();
+        //Move().Forget();
     }
 
     private async UniTaskVoid Move()
@@ -50,6 +54,41 @@ public class Hero : MonoBehaviour
             var a= gameObject.GetOrAddComponent<HeroAbilityMissile>();
             a.Init();
         }
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            FindNearestTarget();
+        }
 
+    }
+
+
+
+    public GameObject FindNearestTarget()
+    {
+        target = null;
+
+        Vector2 pointA=new Vector2(-Screen.width/2,Screen.height/2);
+        Vector2 pointB=new Vector2(Screen.width/2,-Screen.height/2);
+
+
+        Collider2D[] col = Physics2D.OverlapAreaAll(pointA, pointB, enemyLayer);
+
+        //foreach(Collider2D c in col)
+        //{
+
+        //}
+
+        target = col[0]?.gameObject;
+
+        return target;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Vector2 pointA = new Vector2(transform.position.x - 1920 / 2, transform.position.y + 1080 / 2);
+        Vector2 pointB = new Vector2(transform.position.x + 1920 / 2, transform.position.y - 1080 / 2);
+    
+
+        Gizmos.DrawLine(pointA, pointB);
     }
 }

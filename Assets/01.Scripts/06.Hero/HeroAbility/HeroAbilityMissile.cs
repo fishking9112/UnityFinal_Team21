@@ -28,7 +28,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
         bulletCount = 2;
         damage = 5;
         objectPoolManager = ObjectPoolManager.Instance;
-        target = GameObject.Find("enemy");
+        target = hero.target;
         AddAbility();
     }
 
@@ -54,8 +54,17 @@ public class HeroAbilityMissile : HeroAbilitySystem
 
     private async UniTaskVoid ShootBullet()
     {
-        float angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
-            target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
+        float angle;
+
+        if (target==null)
+        {
+            angle = 0;
+        }
+        else
+        {
+            angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
+                target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
+        }
 
         for (int i = 0; i < bulletCount; i++)
         {
