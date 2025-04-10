@@ -9,6 +9,10 @@ public class SlotChange : MonoBehaviour
     public RectTransform monsterGroupTransform;
     public RectTransform magicSlotTransform;
     public RectTransform monsterSlotTransform;
+
+    public GameObject magicGauge;
+    public GameObject summonGauge;
+
     public float duration;
     public float arcHeight;
 
@@ -61,18 +65,23 @@ public class SlotChange : MonoBehaviour
     // 슬롯의 순서를 바꿈. 현재 선택된 슬롯이 아니면 반 투명해지면서 현재슬롯에 가려지도록 렌더링 순서 변경
     private void SetOrder()
     {
-        controller.selectedSlotName = null;
+        controller.selectedMonster = null;
+        //controller.selectedMagic = null;
         controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = null;
 
         if (controller.curSlot == QueenSlot.MONSTER)
         {
             monsterGroupTransform.SetAsFirstSibling();
+            summonGauge.SetActive(false);
+            magicGauge.SetActive(true);
             magicGroup.DOFade(1f, 0.2f);
             monsterGroup.DOFade(0.5f, 0.2f);
         }
         else if (controller.curSlot == QueenSlot.MAGIC)
         {
             monsterGroupTransform.SetAsLastSibling();
+            summonGauge.SetActive(true);
+            magicGauge.SetActive(false);
             magicGroup.DOFade(0.5f, 0.2f);
             monsterGroup.DOFade(1f, 0.2f);
         }

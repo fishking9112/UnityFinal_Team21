@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,45 +7,52 @@ public class BaseSlotUI : MonoBehaviour
 {
     [SerializeField] protected List<Image> slotIcon;
 
-    protected List<string> keyList = new List<string>();
-    protected Dictionary<string, Sprite> iconMap = new Dictionary<string, Sprite>();
+    protected List<TestMonster> monsterList = new List<TestMonster>();
 
-    public virtual void AddSlot(string key, Sprite sprite)
+    // 슬롯에 추가
+    public virtual void AddSlot(TestMonster monster)
     {
-        keyList.Add(key);
-        iconMap[key] = sprite;
+        if (monsterList.Contains(monster))
+        {
+            return;
+        }
 
-        int index = keyList.Count - 1;
+        monsterList.Add(monster);
+
+        int index = monsterList.Count - 1;
 
         if(index < slotIcon.Count)
         {
-            slotIcon[index].sprite = sprite;
+            slotIcon[index].sprite = monster.icon;
             slotIcon[index].enabled = true;
             slotIcon[index].preserveAspect = true;
         }
     }
 
-    public virtual void RemoveSlot(string key)
+    // 슬롯에서 제거
+    public virtual void RemoveSlot(TestMonster monster)
     {
-        int index = keyList.IndexOf(key);
+        int index = monsterList.IndexOf(monster);
 
-        if(index >=0 && index < slotIcon.Count)
+        if(index >= 0 && index < slotIcon.Count)
         {
             slotIcon[index].sprite = null;
             slotIcon[index].enabled = false;
         }
 
-        keyList.Remove(key);
-        iconMap.Remove(key);
+        monsterList.Remove(monster);
     }
 
-    public string GetKey(int index)
+    // 슬롯의 번호로 해당 슬롯의 key값 가져오기
+    public TestMonster GetMonster(int index)
     {
-        return (index >= 0 && index < keyList.Count) ? keyList[index] : null;
+        return (index >= 0 && index < monsterList.Count) ? monsterList[index] : null;
     }
 
-    public Sprite GetIcon(string key)
+    // 키값으로 sprite 가져오기
+    public Sprite GetIcon(string monsterName)
     {
-        return iconMap.TryGetValue(key, out Sprite sprite) ? sprite : null;
+        TestMonster monster = monsterList.Find(monster => monster.name == monsterName);
+        return monster != null ? monster.icon : null;
     }
 }

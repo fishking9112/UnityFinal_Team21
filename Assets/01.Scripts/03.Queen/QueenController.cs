@@ -1,8 +1,17 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
+
+[Serializable]
+public class TestMonster
+{
+    public int id;
+    public string name;
+    public float cost;
+    public Sprite icon;
+    public GameObject prefabs;
+}
 
 public enum QueenSlot
 {
@@ -17,17 +26,19 @@ public class QueenController : MonoBehaviour
 
     private Vector3 worldMousePos;
 
-    [SerializeField] private MonsterSlotUI monsterSlot;
-    [SerializeField] private MagicSlotUI magicSlot;
+    [SerializeField] private MonsterSlotUI monsterSlotUI;
+    [SerializeField] private MagicSlotUI magicSlotUI;
+    [SerializeField] private GaugeUI summonGaugeUI;
+    [SerializeField] private GaugeUI magicGaugeUI;
 
     [SerializeField] private float summonGaugeRecoverySpeed = 10f;
     [SerializeField] private float magicGaugeRecoverySpeed = 5f;
 
-    public string selectedSlotName;
+    public TestMonster selectedMonster;
     public GameObject cursorIcon;
     public QueenSlot curSlot = QueenSlot.MONSTER;
 
-    public Sprite[] test;
+    public TestMonster[] testMonster;
 
 
     private void Start()
@@ -35,10 +46,14 @@ public class QueenController : MonoBehaviour
         condition = GameManager.Instance.queen.condition;
         objectPoolManager = ObjectPoolManager.Instance;
 
+        summonGaugeUI.BindGauge(condition.CurSummonGauge, condition.MaxSummonGauge);
+        magicGaugeUI.BindGauge(condition.CurMagicGauge, condition.MaxMagicGauge);
+
         // 테스트용 몬스터 추가
-        monsterSlot.AddSlot("Circle", test[0]);
-        monsterSlot.AddSlot("Capsule", test[1]);
-        monsterSlot.AddSlot("Hexagon Flat-Top", test[2]);
+        foreach (var monster in testMonster)
+        {
+            monsterSlotUI.AddSlot(monster);
+        }
     }
 
     private void Update()
@@ -80,15 +95,15 @@ public class QueenController : MonoBehaviour
 
         int index = Mathf.RoundToInt(context.ReadValue<float>()) - 1;
 
-        BaseSlotUI curBaseSlotUI = curSlot == QueenSlot.MONSTER ? monsterSlot : magicSlot;
-        selectedSlotName = curBaseSlotUI.GetKey(index);
+        BaseSlotUI curBaseSlotUI = curSlot == QueenSlot.MONSTER ? monsterSlotUI : magicSlotUI;
+        TestMonster monster = curBaseSlotUI.GetMonster(index);
 
-        if (selectedSlotName == null)
+        if (monster == null)
         {
             return;
         }
-
-        cursorIcon.GetComponent<SpriteRenderer>().sprite = curBaseSlotUI.GetIcon(selectedSlotName);
+        selectedMonster = monster;
+        cursorIcon.GetComponent<SpriteRenderer>().sprite = selectedMonster.icon;
     }
 
     // 마우스의 월드좌표를 계산해서 해당 위치에 몬스터를 소환함
@@ -98,11 +113,15 @@ public class QueenController : MonoBehaviour
         {
             return;
         }
-        if (selectedSlotName == null)
+        if (selectedMonster == null)
         {
             return;
         }
         if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+        if (condition.CurSummonGauge.Value < selectedMonster.cost)
         {
             return;
         }
@@ -118,7 +137,8 @@ public class QueenController : MonoBehaviour
             return;
         }
 
-        objectPoolManager.GetObject(selectedSlotName, worldMousePos);
+        condition.AdjustCurSummonGauge(-selectedMonster.cost);
+        objectPoolManager.GetObject(selectedMonster.name, worldMousePos);
     }
 
 
@@ -128,10 +148,10 @@ public class QueenController : MonoBehaviour
         {
             return;
         }
-        if (selectedSlotName == null)
-        {
-            return;
-        }
+        //if (selectedMagic == null)
+        //{
+        //    return;
+        //}
         if (EventSystem.current.IsPointerOverGameObject())
         {
             return;

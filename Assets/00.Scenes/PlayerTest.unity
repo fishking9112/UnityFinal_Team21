@@ -519,7 +519,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 156447341}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -676,21 +676,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73028f2f860e01e42b32de8cf58cb8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterSlotUI:
-  - {fileID: 1596810374}
-  - {fileID: 1062792387}
-  - {fileID: 2044365300}
-  - {fileID: 625599909}
-  - {fileID: 1489710700}
-  - {fileID: 1761155638}
+  monsterSlot: {fileID: 916721692}
+  magicSlot: {fileID: 736249064}
   summonGaugeRecoverySpeed: 10
   magicGaugeRecoverySpeed: 5
+  selectedMonster:
+    id: 0
+    name: 
+    icon: {fileID: 0}
+    prefabs: {fileID: 0}
   cursorIcon: {fileID: 90943526}
-  slot: 0
-  test:
-  - {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  - {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
-  - {fileID: 2747690628134850419, guid: 16037dbd798344f57a526d53d48f5ead, type: 3}
+  curSlot: 0
+  testMonster:
+  - id: 0
+    name: Circle
+    icon: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+    prefabs: {fileID: 7755255093581880619, guid: c0770b2c7de79644d9190e7bc80606b2, type: 3}
+  - id: 1
+    name: Capsule
+    icon: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
+    prefabs: {fileID: 6473522043481306828, guid: 8e3d19ebf3294f14f89b38bd179883dc, type: 3}
+  - id: 2
+    name: Hexagon Flat-Top
+    icon: {fileID: 2747690628134850419, guid: 16037dbd798344f57a526d53d48f5ead, type: 3}
+    prefabs: {fileID: 901894782038373447, guid: a8e4dc20c13bf174aae63dbf8870b225, type: 3}
 --- !u!114 &166616948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1317,7 +1326,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511715545}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1603,7 +1612,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 625599907}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1755,7 +1764,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 699790642}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1932,6 +1941,7 @@ GameObject:
   - component: {fileID: 736249063}
   - component: {fileID: 736249062}
   - component: {fileID: 736249061}
+  - component: {fileID: 736249064}
   m_Layer: 5
   m_Name: MagicSlot
   m_TagString: Untagged
@@ -2026,6 +2036,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 736249059}
   m_CullTransparentMesh: 1
+--- !u!114 &736249064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736249059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de0067522c7b89242b437fb6528d598a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotIcon:
+  - {fileID: 1522507070}
+  - {fileID: 1365239848}
+  - {fileID: 2116705705}
+  - {fileID: 156447343}
+  - {fileID: 699790644}
+  - {fileID: 511715547}
 --- !u!1 &798768133
 GameObject:
   m_ObjectHideFlags: 3
@@ -2430,6 +2459,7 @@ GameObject:
   - component: {fileID: 916721691}
   - component: {fileID: 916721690}
   - component: {fileID: 916721689}
+  - component: {fileID: 916721692}
   m_Layer: 5
   m_Name: MonsterSlot
   m_TagString: Untagged
@@ -2524,6 +2554,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 916721687}
   m_CullTransparentMesh: 1
+--- !u!114 &916721692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916721687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a04fd810f93abcb45896765c8fc6a2ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotIcon:
+  - {fileID: 1596810374}
+  - {fileID: 1062792387}
+  - {fileID: 2044365300}
+  - {fileID: 625599909}
+  - {fileID: 1489710700}
+  - {fileID: 1761155638}
 --- !u!1 &918094372
 GameObject:
   m_ObjectHideFlags: 0
@@ -2836,7 +2885,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1062792385}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -3482,7 +3531,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1365239846}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -3689,7 +3738,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1489710698}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -3764,7 +3813,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1522507068}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -3839,7 +3888,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1596810372}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -4305,7 +4354,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761155636}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -4762,7 +4811,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2044365298}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -5159,7 +5208,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2116705703}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
