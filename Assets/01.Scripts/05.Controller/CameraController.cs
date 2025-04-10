@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
 
     [Header("버츄얼 카메라")]
     public CinemachineVirtualCamera virtualCamera;
+    public GameObject Icon;
 
     [Header("카메라 이동")]
     public float cameraEdge;
@@ -43,6 +44,7 @@ public class CameraController : MonoBehaviour
         MoveCamera();
         ZoomCamera();
         ClampCameraPosition();
+        UpdateMiniMapIconScale();
     }
 
     // 마우스의 위치에 따라 카메라가 움직임
@@ -156,6 +158,16 @@ public class CameraController : MonoBehaviour
 
         camPos.z = cameraTransform.position.z;
         cameraTransform.position = camPos;
+    }
+
+    private void UpdateMiniMapIconScale()
+    {
+        float cameraHeight = virtualCamera.m_Lens.OrthographicSize * 2; // OrthographicSize는 반 높이이므로 2배
+        float cameraWidth = cameraHeight * ((float)Screen.width / Screen.height);
+
+        // 아이콘의 크기를 카메라 시야 범위에 맞게 조정
+        // 아이콘의 크기를 카메라의 시야 범위와 동일하게 설정
+        Icon.transform.localScale = new Vector3(cameraWidth, cameraHeight, 1);
     }
 
 
