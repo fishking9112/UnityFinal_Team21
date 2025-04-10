@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &22254970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7029083783806030930, guid: 5fbc3e6654c8b07498975ba12bb95db1, type: 3}
+  m_PrefabInstance: {fileID: 1328789236}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &73799745
 GameObject:
   m_ObjectHideFlags: 0
@@ -890,7 +895,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 311
+    m_Bits: 503
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2279,7 +2284,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].key
@@ -2295,7 +2300,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[3].key
-      value: Hexagon Flat-Top
+      value: bullet
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[4].key
@@ -2316,7 +2321,7 @@ PrefabInstance:
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[3].prefab
       value: 
-      objectReference: {fileID: 901894782038373447, guid: a8e4dc20c13bf174aae63dbf8870b225, type: 3}
+      objectReference: {fileID: 2231113967889475797, guid: b398365b77d238c4fa669b6ba63d6680, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[4].prefab
       value: 
@@ -2335,7 +2340,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[3].initPoolSize
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[4].initPoolSize
@@ -3889,7 +3894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7029083783806030930, guid: 5fbc3e6654c8b07498975ba12bb95db1, type: 3}
       propertyPath: m_Name
-      value: Hero (1)
+      value: Hero
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3904,7 +3909,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5852257096908644307, guid: 5fbc3e6654c8b07498975ba12bb95db1, type: 3}
   m_PrefabInstance: {fileID: 1328789236}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 22254970}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 924558aa655fabe4d94eecef5e34c8cc, type: 3}
@@ -5976,7 +5981,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 394d342942c0a96418de2bd7be65b5ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hero: {fileID: 0}
+  Hero: {fileID: 22254970}
   virtualCamera: {fileID: 2116450946}
   cameraEdge: 10
   acceleration: 50

@@ -19,10 +19,15 @@ public class Hero : MonoBehaviour
     void Start()
     {
         randomDelay = 3f;
-        moveSpeed = 5;
+        moveSpeed = 2;
         enemyLayer= LayerMask.GetMask("Monster");
 
+
+
+
         //MVP용 임시 기능
+        var a = gameObject.GetOrAddComponent<HeroAbilityMissile>();
+        a.Init();
         ChangeDir().Forget();
         Move().Forget();
     }
@@ -44,24 +49,6 @@ public class Hero : MonoBehaviour
             await UniTask.Delay(TimeSpan.FromSeconds(randomDelay));
         }
     }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            var a= gameObject.GetOrAddComponent<HeroAbilityMissile>();
-            a.Init();
-        }
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            FindNearestTarget();
-        }
-
-    }
-
-
 
     public GameObject FindNearestTarget()
     {
