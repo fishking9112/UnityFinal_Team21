@@ -212,7 +212,10 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
     public QueenAbilityUpgradeData SetSaveData()
     {
-        var saveData = new QueenAbilityUpgradeData();
+        var saveData = new QueenAbilityUpgradeData
+        {
+            upgrades = new List<QueenAbilityUpgradeInfo>()
+        };
 
         foreach (var pair in upgradeLevels)
         {

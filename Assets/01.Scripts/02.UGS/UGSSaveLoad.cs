@@ -44,7 +44,7 @@ public class UGSSaveLoad : MonoBehaviour
         {
             player = CollectPlayerData(),
             settings = CollectSettingsData(),
-           // queenUpgrades = CollectQueenAbilityUpgradeData()
+            queenUpgrades = CollectQueenAbilityUpgradeData()
         };
 
         return data;
