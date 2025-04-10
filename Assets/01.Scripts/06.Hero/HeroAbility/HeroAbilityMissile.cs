@@ -28,7 +28,6 @@ public class HeroAbilityMissile : HeroAbilitySystem
         bulletCount = 2;
         damage = 5;
         objectPoolManager = ObjectPoolManager.Instance;
-        target = hero.target;
         AddAbility();
     }
 
@@ -49,6 +48,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
     /// </summary>
     protected override void ActionAbility()
     {
+        target = hero.FindNearestTarget();
         ShootBullet().Forget();
     }
 

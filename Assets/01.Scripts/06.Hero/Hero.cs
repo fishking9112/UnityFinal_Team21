@@ -20,7 +20,7 @@ public class Hero : MonoBehaviour
     {
         randomDelay = 3f;
         moveSpeed = 5;
-        enemyLayer= LayerMask.GetMask("Enemy");
+        enemyLayer= LayerMask.GetMask("Monster");
 
         //MVP용 임시 기능
         ChangeDir().Forget();
@@ -67,28 +67,30 @@ public class Hero : MonoBehaviour
     {
         target = null;
 
-        Vector2 pointA=new Vector2(-Screen.width/2,Screen.height/2);
-        Vector2 pointB=new Vector2(Screen.width/2,-Screen.height/2);
+        Vector2 pointA = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        Vector2 pointB = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height)); ;
 
 
         Collider2D[] col = Physics2D.OverlapAreaAll(pointA, pointB, enemyLayer);
 
-        //foreach(Collider2D c in col)
-        //{
+        if (col.Length == 0)
+            return null;
 
-        //}
+        float minVal = float.MaxValue;
 
-        target = col[0]?.gameObject;
+        foreach (Collider2D c in col)
+        {
+            float distance=Vector2.Distance(c.transform.position, transform.position);
+            if(minVal>distance)
+            {
+                minVal = distance;
+                target = c.gameObject;
+            }
+        }
+
+        Debug.Log(target);
 
         return target;
     }
 
-    private void OnDrawGizmos()
-    {
-        Vector2 pointA = new Vector2(transform.position.x - 1920 / 2, transform.position.y + 1080 / 2);
-        Vector2 pointB = new Vector2(transform.position.x + 1920 / 2, transform.position.y - 1080 / 2);
-    
-
-        Gizmos.DrawLine(pointA, pointB);
-    }
 }
