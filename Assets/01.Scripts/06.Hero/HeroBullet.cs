@@ -23,23 +23,6 @@ public class HeroBullet : MonoBehaviour , IPoolable
         damage = 1;
     }
 
-    /// <summary>
-    /// 총알 세팅(발사할때 하면 되나?)
-    /// </summary>
-    /// <param name="direction">이동방향</param>
-    /// <param name="moveSpeed">이동속도</param>
-    /// <param name="dmg">대미지</param>
-    /// <param name="layer">충돌할 레이어</param>
-    public void Init(Vector2 direction, float moveSpeed, float dmg,int layer=7)
-    {
-        dir = direction;
-        speed = moveSpeed;
-        damage = dmg;
-        time = 0f;
-        targetLayer = 1 << layer;
-        limitTime = 5f;
-    }
-
     public void Init(Action<GameObject> returnAction)
     {
         returnToPool = returnAction;

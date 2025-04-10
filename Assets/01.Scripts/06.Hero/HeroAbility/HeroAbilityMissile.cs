@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -23,7 +25,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
     {
         //hero=GameManager.Instance.hero;
         hero = GameObject.Find("Hero").GetComponent<Hero>();
-        bulletCount = 1;
+        bulletCount = 2;
         damage = 5;
         objectPoolManager = ObjectPoolManager.Instance;
         target = GameObject.Find("enemy");
@@ -47,12 +49,21 @@ public class HeroAbilityMissile : HeroAbilitySystem
     /// </summary>
     protected override void ActionAbility()
     {
-        var bullet = objectPoolManager.GetObject("bullet", hero.transform.position);
-        float angle= Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
-            target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
-        bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        ShootBullet().Forget();
     }
 
+    private async UniTaskVoid ShootBullet()
+    {
+        float angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
+            target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
+
+        for (int i = 0; i < bulletCount; i++)
+        {
+            var bullet = objectPoolManager.GetObject("bullet", hero.transform.position);
+            bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
+        }
+    }
 
     /// <summary>
     /// 임시로 넣은 데이터
@@ -79,4 +90,5 @@ public class HeroAbilityMissile : HeroAbilitySystem
     {
         bulletCount += cnt;
     }
+
 }
