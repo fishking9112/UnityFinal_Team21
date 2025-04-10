@@ -9,12 +9,15 @@ public class CameraController : MonoBehaviour
 
     [Header("버츄얼 카메라")]
     public CinemachineVirtualCamera virtualCamera;
-    public Collider2D cameraLimitCollider;
 
     [Header("카메라 이동")]
     public float cameraEdge;
     public float acceleration;
     public float maxMoveSpeed;
+
+    [Header("카메라 이동 제한")]
+    public Vector2 minRange;
+    public Vector2 maxRange;
 
     [Header("카메라 줌")]
     public float zoomSpeed;
@@ -99,9 +102,10 @@ public class CameraController : MonoBehaviour
                                                         zoomSmoothValue);
     }
 
-    public void OnFixCamera(InputAction.CallbackContext context)
+    // Spacebar 입력시 카메라를 히어로가 있는 쪽으로 옮김
+    public void OnCameraMoveToHero(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started)
+        if (context.phase == InputActionPhase.Started)
         {
             cameraTransform.position = Hero.transform.position;
             cameraTransform.position += new Vector3(0, 0, -10);
@@ -111,15 +115,50 @@ public class CameraController : MonoBehaviour
     // 카메라 범위 제한
     private void ClampCameraPosition()
     {
-        Bounds bounds = cameraLimitCollider.bounds;
+        if (virtualCamera == null)
+        {
+            return;
+        }
+        if (cameraTransform == null)
+        {
+            return;
+        }
+
+        float cameraHeight = virtualCamera.m_Lens.OrthographicSize;
+        float cameraWidth = cameraHeight * ((float)Screen.width / Screen.height);
 
         Vector3 camPos = cameraTransform.position;
-        float cameraHeight = virtualCamera.m_Lens.OrthographicSize;
-        float cameraWidth = cameraHeight * (Screen.width / Screen.height);
 
-        camPos.x = Mathf.Clamp(camPos.x, bounds.min.x + cameraWidth, bounds.max.x - cameraWidth);
-        camPos.y = Mathf.Clamp(camPos.y, bounds.min.y + cameraHeight, bounds.max.y - cameraHeight);
+        float minX = minRange.x + cameraWidth;
+        float maxX = maxRange.x - cameraWidth;
+        float minY = minRange.y + cameraHeight;
+        float maxY = maxRange.y - cameraHeight;
 
+        camPos.x = Mathf.Clamp(camPos.x, minX, maxX);
+        camPos.y = Mathf.Clamp(camPos.y, minY, maxY);
+
+        camPos.z = cameraTransform.position.z;
         cameraTransform.position = camPos;
+    }
+
+
+    // 카메라 제한 범위 기즈모를 그려줌
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+
+        Vector3 center = new Vector3(
+            (minRange.x + maxRange.x) / 2f,
+            (minRange.y + maxRange.y) / 2f,
+            0f
+        );
+
+        Vector3 size = new Vector3(
+            Mathf.Abs(maxRange.x - minRange.x),
+            Mathf.Abs(maxRange.y - minRange.y),
+            0f
+        );
+
+        Gizmos.DrawWireCube(center, size);
     }
 }
