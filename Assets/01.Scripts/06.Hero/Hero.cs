@@ -53,19 +53,6 @@ public class Hero : MonoBehaviour
     }
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            var a= gameObject.GetOrAddComponent<HeroAbilityMissile>();
-            a.Init();
-        }
-
-    }
-
-
-
     public GameObject FindNearestTarget()
     {
         target = null;
