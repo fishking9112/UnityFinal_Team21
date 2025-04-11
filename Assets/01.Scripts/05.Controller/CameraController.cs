@@ -1,12 +1,11 @@
 using Cinemachine;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    [Header("용사")]
-    public GameObject Hero;
+    [Header("마왕성")]
+    public GameObject castle;
 
     [Header("버츄얼 카메라")]
     public CinemachineVirtualCamera virtualCamera;
@@ -132,7 +131,7 @@ public class CameraController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            cameraTransform.position = Hero.transform.position;
+            cameraTransform.position = castle.transform.position;
             cameraTransform.position += new Vector3(0, 0, -10);
         }
     }

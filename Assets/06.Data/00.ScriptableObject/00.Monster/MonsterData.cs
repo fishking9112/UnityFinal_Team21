@@ -10,7 +10,7 @@ public enum MonsterType
 }
 
 [Serializable]
-public class MonsterInfo
+public class MonsterInfo : IInfo
 {
     public int id;
     public string name;
@@ -27,6 +27,8 @@ public class MonsterInfo
 
     public MonsterType type;
     public string projectile;
+
+    public int ID => id;
 }
 
 [CreateAssetMenu(fileName ="MonsterData", menuName ="Scriptable Object/New MonsterData")]

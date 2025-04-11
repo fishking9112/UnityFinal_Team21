@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MonsterSlotUI : BaseSlotUI<TestMonster>
 {
-    protected override void OnSlotAdded(int index, TestMonster monster)
+    protected override void OnSlotAdd(int index, TestMonster monster)
     {
         if (index < slotIcon.Count)
         {
@@ -13,9 +13,9 @@ public class MonsterSlotUI : BaseSlotUI<TestMonster>
     }
 
     // 키값으로 sprite 가져오기
-    public Sprite GetIcon(string monsterName)
+    public override Sprite GetIcon(string name)
     {
-        TestMonster monster = slotList.Find(monster => monster.name == monsterName);
+        TestMonster monster = slotList.Find(monster => monster.name == name);
         return monster != null ? monster.icon : null;
     }
 }

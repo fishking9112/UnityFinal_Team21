@@ -17,11 +17,11 @@ public abstract class BaseSlotUI<T> : MonoBehaviour
         }
 
         slotList.Add(slot);
-        OnSlotAdded(slotList.Count - 1, slot);
+        OnSlotAdd(slotList.Count - 1, slot);
     }
 
     // T에 맞는 슬롯 추가 처리
-    protected abstract void OnSlotAdded(int index, T slot);
+    protected abstract void OnSlotAdd(int index, T slot);
 
     // 슬롯에서 제거
     public virtual void RemoveSlot(T slot)
@@ -42,4 +42,6 @@ public abstract class BaseSlotUI<T> : MonoBehaviour
     {
         return (index >= 0 && index < slotList.Count) ? slotList[index] : default;
     }
+
+    public abstract Sprite GetIcon(string name);
 }
