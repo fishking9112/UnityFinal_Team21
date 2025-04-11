@@ -16,6 +16,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     float time;
     float limitTime;
     private Action<GameObject> returnToPool;
+    CancellationTokenSource cancel = new CancellationTokenSource();
 
     CancellationToken token;
     private void OnEnable()
@@ -28,6 +29,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     {
         returnToPool = returnAction;
         limitTime = 5f;
+        targetLayer= LayerMask.GetMask("Monster"); ;
         token = this.GetCancellationTokenOnDestroy();
     }
 
@@ -35,6 +37,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     {
         time = 0f;
 
+        cancel.Cancel();
         returnToPool?.Invoke(gameObject);
     }
 
@@ -64,6 +67,10 @@ public class HeroBullet : MonoBehaviour , IPoolable
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // 딕셔너리 통해서 GetComponent 없이 쓰기
+        if(collision.gameObject.layer== targetLayer)
+        {
+            OnDespawn();
+        }
     }
 
 }
