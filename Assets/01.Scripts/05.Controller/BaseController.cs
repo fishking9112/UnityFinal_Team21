@@ -27,10 +27,19 @@ public class BaseController : MonoBehaviour
     }
 
     /// <summary>
+    /// (중요) 체력이 늘어나면 늘어난 만큼 최대 체력 수정할 수 있게 실행 할 것
+    /// </summary>
+    /// <param name="statInfo">참조 할 수치 데이터</param>
+    public void HealthStatUpdate()
+    {
+        healthHandler.SetMaxPoint(statData.health);
+    }
+
+    /// <summary>
     /// 데미지를 입음
     /// </summary>
     /// <param name="damage">공격 들어온 데미지 수치</param>
-    protected virtual void TakeDamaged(float damage)
+    protected virtual void TakeDamaged(float damage, float knockback = 0f)
     {
         float finalDamage = Mathf.Max(0, damage - statData.defence);
         healthHandler.Damage(finalDamage);
@@ -49,6 +58,7 @@ public class BaseController : MonoBehaviour
     protected virtual void DetectTarget() { }
 
     protected virtual void AttackTarget() { }
+
     protected virtual void Move() { }
 
 }

@@ -5,19 +5,26 @@ using UnityEngine;
 
 public class MonsterManager : MonoSingleton<MonsterManager>
 {
-    public Dictionary<GameObject, MonsterController> monsters = new Dictionary<GameObject, MonsterController>(); // 몬스터가 나오면 자동으로 이곳에 저장
+    public Dictionary<GameObject, MonsterController> monsters = new Dictionary<GameObject, MonsterController>(); // 몬스터가 나오면 자동으로 이곳에 저장(전체)
 
     // SO에서 받아온 데이터에서 변화된 값 (이곳에서 스텟을 상승시키면 몬스터 스텟 자동으로 업그레이드 완료)
     public List<MonsterInfo> monsterInfoList = new List<MonsterInfo>();
+    // Health값 바뀌면 BaseController의 HealthStatUpdate 실행 필요
+    public Dictionary<int, List<MonsterController>> idByMonsters = new Dictionary<int, List<MonsterController>>(); // 몬스터가 나오면 자동으로 이곳에 저장(종류별)
 
     [Header("SO 데이터")]
     public MonsterData monsterData;
     public int testSpawnNumber = 0;
+    public Transform testTarget;
 
     void Start()
     {
         // 깊은 복사로 저장해서 들고 있음
         monsterInfoList = monsterData.infoList.Clone(item => new MonsterInfo(item));
+        for (int i = 0; i < monsterInfoList.Count; i++)
+        {
+            idByMonsters[i] = new List<MonsterController>();
+        }
     }
 
     // 테스트 코드 주석처리
@@ -27,9 +34,8 @@ public class MonsterManager : MonoSingleton<MonsterManager>
         {
             Vector2 randomPos = GetRandomWorldPositionInCamera();
             var monster = ObjectPoolManager.Instance.GetObject(monsterInfoList[testSpawnNumber].outfit, randomPos);
-            Debug.Log(monster.name);
-            Debug.Log(monsterInfoList[testSpawnNumber].name);
             monster.GetComponent<MonsterController>().StatInit(monsterInfoList[testSpawnNumber]);
+            // monster.GetComponent<MonsterController>().fsm.Setup(testTarget);
         }
     }
     Vector2 GetRandomWorldPositionInCamera()

@@ -32,8 +32,9 @@ public class HealthHandler : MonoBehaviour
 
     public void Damage(float damage)
     {
-        currentPoint.Value -= damage;
-        if (currentPoint.Value <= 0f) currentPoint.Value = 0f;
+
+        if (currentPoint.Value - damage <= 0f) currentPoint.Value = 0f;
+        else currentPoint.Value -= damage;
     }
 
     public bool IsDie()
