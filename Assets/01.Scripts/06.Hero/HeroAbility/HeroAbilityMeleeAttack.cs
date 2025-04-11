@@ -29,7 +29,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         damage = 5;
         knockback = 1;
         basicSword.Init(damage, knockback);
-
+        sword.SetActive(false);
         AddAbility();
     }
 
