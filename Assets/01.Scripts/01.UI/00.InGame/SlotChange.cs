@@ -68,7 +68,7 @@ public class SlotChange : MonoBehaviour
     private void SetOrder()
     {
         controller.selectedMonster = null;
-        //controller.selectedMagic = null;
+        controller.selectedMagic = null;
         controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = null;
 
         if (controller.curSlot == QueenSlot.MONSTER)
