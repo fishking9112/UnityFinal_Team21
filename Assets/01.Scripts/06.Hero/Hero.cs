@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +16,12 @@ public class Hero : MonoBehaviour
 
     private int enemyLayer;
 
+    private void Awake()
+    {
+        GameManager.Instance.hero = this;
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +31,7 @@ public class Hero : MonoBehaviour
 
         //MVP용 임시 기능
         ChangeDir().Forget();
-        Move().Forget();
+        //Move().Forget();
     }
 
     private async UniTaskVoid Move()
@@ -53,10 +60,6 @@ public class Hero : MonoBehaviour
         {
             var a= gameObject.GetOrAddComponent<HeroAbilityMissile>();
             a.Init();
-        }
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            FindNearestTarget();
         }
 
     }

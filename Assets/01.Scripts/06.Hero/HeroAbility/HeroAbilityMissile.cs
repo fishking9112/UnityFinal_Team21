@@ -14,8 +14,6 @@ public class HeroAbilityMissile : HeroAbilitySystem
 
     private Hero hero;
 
-    [SerializeField] HeroBullet bullet;
-
     private ObjectPoolManager objectPoolManager;
 
     /// <summary>
