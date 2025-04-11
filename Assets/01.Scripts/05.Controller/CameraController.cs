@@ -1,4 +1,5 @@
 using Cinemachine;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,7 +10,11 @@ public class CameraController : MonoBehaviour
 
     [Header("버츄얼 카메라")]
     public CinemachineVirtualCamera virtualCamera;
-    public GameObject Icon;
+
+    [Header("미니맵")]
+    public Camera miniMapCamera;
+    public RectTransform miniMapRect;
+    public GameObject miniMapIcon;
 
     [Header("카메라 이동")]
     public float cameraEdge;
@@ -52,7 +57,8 @@ public class CameraController : MonoBehaviour
     {
         Vector3 moveDir = Vector3.zero;
 
-        if(keyboardMoveDir != Vector2.zero)
+        // 키보드의 입력을 우선으로 받음
+        if (keyboardMoveDir != Vector2.zero)
         {
             moveDir = new Vector3(keyboardMoveDir.x, keyboardMoveDir.y, 0);
         }
@@ -160,14 +166,38 @@ public class CameraController : MonoBehaviour
         cameraTransform.position = camPos;
     }
 
+    // 카메라 시야범위를 미니맵에 그려줌
     private void UpdateMiniMapIconScale()
     {
-        float cameraHeight = virtualCamera.m_Lens.OrthographicSize * 2; // OrthographicSize는 반 높이이므로 2배
+        float cameraHeight = virtualCamera.m_Lens.OrthographicSize * 2;
         float cameraWidth = cameraHeight * ((float)Screen.width / Screen.height);
 
-        // 아이콘의 크기를 카메라 시야 범위에 맞게 조정
-        // 아이콘의 크기를 카메라의 시야 범위와 동일하게 설정
-        Icon.transform.localScale = new Vector3(cameraWidth, cameraHeight, 1);
+        miniMapIcon.transform.localScale = new Vector3(cameraWidth, cameraHeight, 1);
+    }
+
+    // 미니맵을 클릭하면 해당 위치로 카메라가 이동
+    public void MiniMapClickCameraMove(Vector2 clickPosition)
+    {
+        Vector2 localPosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(miniMapRect, clickPosition, null, out localPosition);
+
+        // 미니맵 안의 위치를 0~1 범위로 정규화
+        Vector2 normalizedLocalPosition = new Vector2(
+            (localPosition.x / miniMapRect.rect.width) + miniMapRect.pivot.x,
+            (localPosition.y / miniMapRect.rect.height) + miniMapRect.pivot.y
+        );
+
+        // 정규화된 position을 월드 좌표로 변환
+        Vector3 worldPoint = miniMapCamera.ViewportToWorldPoint(normalizedLocalPosition);
+
+        // 변환한 월드 좌표에 레이캐스트를 발사해서 충돌체가 있으면 그쪽으로 카메라 이동.(충돌체가 있어야 하기 때문에 맵에 콜라이더 필요함)
+        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+
+        if (hit.collider != null)
+        {
+            Vector3 target = hit.point;
+            cameraTransform.position = new Vector3(target.x, target.y, cameraTransform.position.z);
+        }
     }
 
 

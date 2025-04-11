@@ -15,28 +15,45 @@ public class QueenCondition : MonoBehaviour
         MaxSummonGauge.Value = 100f;
     }
 
+    /// <summary>
+    /// 현재 권능 게이지 조정
+    /// </summary>
+    /// <param name="amount"> 조정할 수치 </param>
     public void AdjustCurMagicGauge(float amount)
     {
         CurMagicGauge.Value = AdjustValue(CurMagicGauge.Value, amount, MaxMagicGauge.Value);
     }
 
+    /// <summary>
+    /// 최대 권능 게이지 조정
+    /// </summary>
+    /// <param name="amount"> 조정할 수치 </param>
     public void AdjustMaxMagicGauge(float amount)
     {
         MaxMagicGauge.Value = AdjustValue(MaxMagicGauge.Value, amount, float.MaxValue);
         CurMagicGauge.Value = AdjustValue(CurMagicGauge.Value, 0, MaxMagicGauge.Value);
     }
 
+    /// <summary>
+    /// 현재 소환 게이지 조정
+    /// </summary>
+    /// <param name="amount"> 조정할 수치 </param>
     public void AdjustCurSummonGauge(float amount)
     {
         CurSummonGauge.Value = AdjustValue(CurSummonGauge.Value, amount, MaxSummonGauge.Value);
     }
 
+    /// <summary>
+    /// 최대 소환 게이지 조정
+    /// </summary>
+    /// <param name="amount"> 조정할 수치 </param>
     public void AdjustMaxSummonGauge(float amount)
     {
         MaxSummonGauge.Value = AdjustValue(MaxSummonGauge.Value, amount, float.MaxValue);
         CurSummonGauge.Value = AdjustValue(CurSummonGauge.Value, 0, MaxSummonGauge.Value);
     }
 
+    // 값 조정
     private float AdjustValue(float cur, float amount, float max)
     {
         return Mathf.Clamp(cur + amount, 0f, max);
