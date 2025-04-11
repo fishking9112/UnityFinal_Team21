@@ -72,5 +72,9 @@ public class DataReaderEditorWindow : EditorWindow
         {
             data.UpdateStat(sheet.rows[i]);
         }
+
+        // 데이터 저장
+        EditorUtility.SetDirty(data);
+        AssetDatabase.SaveAssets();
     }
 }

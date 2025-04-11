@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
 
     [Header("버츄얼 카메라")]
     public CinemachineVirtualCamera virtualCamera;
+    public GameObject Icon;
 
     [Header("카메라 이동")]
     public float cameraEdge;
@@ -30,6 +31,8 @@ public class CameraController : MonoBehaviour
     private Vector3 curSpeed;
     private Transform cameraTransform;
 
+    private Vector2 keyboardMoveDir;
+
     private void Start()
     {
         cameraTransform = virtualCamera.transform;
@@ -41,30 +44,39 @@ public class CameraController : MonoBehaviour
         MoveCamera();
         ZoomCamera();
         ClampCameraPosition();
+        UpdateMiniMapIconScale();
     }
 
     // 마우스의 위치에 따라 카메라가 움직임
     private void MoveCamera()
     {
         Vector3 moveDir = Vector3.zero;
-        Vector2 mousePos = Input.mousePosition;
 
-        if (mousePos.x <= cameraEdge)
+        if(keyboardMoveDir != Vector2.zero)
         {
-            moveDir.x = -1;
+            moveDir = new Vector3(keyboardMoveDir.x, keyboardMoveDir.y, 0);
         }
-        else if (mousePos.x >= Screen.width - cameraEdge)
+        else
         {
-            moveDir.x = 1;
-        }
+            Vector2 mousePos = Input.mousePosition;
 
-        if (mousePos.y <= cameraEdge)
-        {
-            moveDir.y = -1;
-        }
-        else if (mousePos.y >= Screen.height - cameraEdge)
-        {
-            moveDir.y = 1;
+            if (mousePos.x <= cameraEdge)
+            {
+                moveDir.x = -1;
+            }
+            else if (mousePos.x >= Screen.width - cameraEdge)
+            {
+                moveDir.x = 1;
+            }
+
+            if (mousePos.y <= cameraEdge)
+            {
+                moveDir.y = -1;
+            }
+            else if (mousePos.y >= Screen.height - cameraEdge)
+            {
+                moveDir.y = 1;
+            }
         }
 
         if (moveDir != Vector3.zero)
@@ -80,6 +92,13 @@ public class CameraController : MonoBehaviour
         cameraTransform.position += curSpeed * Time.deltaTime;
     }
 
+    // 키보드로 카메라 움직임
+    public void OnKeyboradCameraMove(InputAction.CallbackContext context)
+    {
+        keyboardMoveDir = context.ReadValue<Vector2>();
+    }
+
+    // 마우스 휠 값을 받아옴
     public void OnZoomCamera(InputAction.CallbackContext context)
     {
         Vector2 scrollValue = context.ReadValue<Vector2>();
@@ -139,6 +158,16 @@ public class CameraController : MonoBehaviour
 
         camPos.z = cameraTransform.position.z;
         cameraTransform.position = camPos;
+    }
+
+    private void UpdateMiniMapIconScale()
+    {
+        float cameraHeight = virtualCamera.m_Lens.OrthographicSize * 2; // OrthographicSize는 반 높이이므로 2배
+        float cameraWidth = cameraHeight * ((float)Screen.width / Screen.height);
+
+        // 아이콘의 크기를 카메라 시야 범위에 맞게 조정
+        // 아이콘의 크기를 카메라의 시야 범위와 동일하게 설정
+        Icon.transform.localScale = new Vector3(cameraWidth, cameraHeight, 1);
     }
 
 
