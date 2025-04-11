@@ -43,7 +43,8 @@ public class UGSSaveLoad : MonoBehaviour
         SaveData data = new SaveData
         {
             player = CollectPlayerData(),
-            settings = CollectSettingsData()
+            settings = CollectSettingsData(),
+            queenUpgrades = CollectQueenAbilityUpgradeData()
         };
 
         return data;
@@ -66,6 +67,10 @@ public class UGSSaveLoad : MonoBehaviour
             sfxVolume = SoundManager.Instance.SFXVolume,
             //  language = SettingsManager.Instance.CurrentLanguage
         };
+    }
+    private QueenAbilityUpgradeData CollectQueenAbilityUpgradeData()
+    {
+        return QueenAbilityUpgradeManager.Instance.SetSaveData();
     }
 
     #endregion
@@ -106,6 +111,8 @@ public class UGSSaveLoad : MonoBehaviour
     {
         SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
         SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
+
+        QueenAbilityUpgradeManager.Instance.ApplyUpgradeData(saveData.queenUpgrades);
     }
 
     #endregion
