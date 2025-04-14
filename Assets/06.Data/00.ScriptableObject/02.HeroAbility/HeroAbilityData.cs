@@ -116,4 +116,9 @@ public class HeroAbilityData : SheetDataReaderBase
         }
         infoList.Add(heroAbilityInfo);
     }
+
+    public override void ClearInfoList()
+    {
+        infoList.Clear();
+    }
 }

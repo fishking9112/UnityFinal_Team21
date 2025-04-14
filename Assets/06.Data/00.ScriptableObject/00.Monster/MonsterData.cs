@@ -99,4 +99,9 @@ public class MonsterData : SheetDataReaderBase
         }
         infoList.Add(monsterInfo);
     }
+
+    public override void ClearInfoList()
+    {
+        infoList.Clear();
+    }
 }

@@ -81,4 +81,9 @@ public class QueenAbilityData : SheetDataReaderBase
         }
         infoList.Add(queenAbilityInfo);
     }
+
+    public override void ClearInfoList()
+    {
+        infoList.Clear();
+    }
 }
