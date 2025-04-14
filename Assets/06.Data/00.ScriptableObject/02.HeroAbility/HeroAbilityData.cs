@@ -25,12 +25,12 @@ public class HeroAbilityInfo : IInfo
     public float range;
     public Vector3 pivot;
     public Vector3 size;
-    public float duration;
-    public int piercing;
 
     public HeroAbilityType type;
     public float speed;
     public float rotateSpeed;
+    public float duration;
+    public int piercing;
 
     public int ID => id;
 }
@@ -87,7 +87,8 @@ public class HeroAbilityData : SheetDataReaderBase
                     heroAbilityInfo.type = (HeroAbilityType)Enum.Parse(typeof(HeroAbilityType), cell.value);
                     break;
                 case "speed":
-                    if (heroAbilityInfo.type == HeroAbilityType.RANGED || heroAbilityInfo.type == HeroAbilityType.AXE)
+                    if (heroAbilityInfo.type == HeroAbilityType.RANGED
+                         || heroAbilityInfo.type == HeroAbilityType.AXE)
                     {
                         heroAbilityInfo.speed = float.Parse(cell.value);
                     }
@@ -98,6 +99,15 @@ public class HeroAbilityData : SheetDataReaderBase
                         heroAbilityInfo.rotateSpeed = float.Parse(cell.value);
                     }
                     break;
+                case "duration":
+                    if(heroAbilityInfo.type == HeroAbilityType.REVOLUTION
+                        || heroAbilityInfo.type == HeroAbilityType.AREA)
+                    {
+                        heroAbilityInfo.duration = float.Parse(cell.value);
+                    }
+                    break;
+                case "range":
+                    if(heroAbilityInfo.type == heroabilitytype)
             }
         }
         infoList.Add(heroAbilityInfo);

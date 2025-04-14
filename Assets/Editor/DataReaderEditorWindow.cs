@@ -9,6 +9,7 @@ public class DataReaderEditorWindow : EditorWindow
 {
     private MonsterData monsterData;
     private QueenAbilityData queenAbilityData;
+    private HeroAbilityData heroAbilityData;
 
     [MenuItem("Window/Google Sheet Reader")]
     public static void ShowWindow()
@@ -20,9 +21,10 @@ public class DataReaderEditorWindow : EditorWindow
     {
         Addressables.LoadAssetAsync<MonsterData>("MonsterData").Completed += OnLoaded<MonsterData>;
         Addressables.LoadAssetAsync<QueenAbilityData>("QueenAbilityData").Completed += OnLoaded<QueenAbilityData>;
+        Addressables.LoadAssetAsync<HeroAbilityData>("HeroAbilityData").Completed += OnLoaded<HeroAbilityData>;
     }
 
-    // Addressable을 이용하여 mosterData를 불러옴
+    // Addressable을 이용하여 Data를 불러옴
     private void OnLoaded<T>(AsyncOperationHandle<T> handle) where T : ScriptableObject
     {
         if (handle.Status == AsyncOperationStatus.Succeeded)
@@ -35,6 +37,10 @@ public class DataReaderEditorWindow : EditorWindow
             {
                 queenAbilityData = handle.Result as QueenAbilityData;
             }
+            else if(typeof(T) == typeof(HeroAbilityData))
+            {
+                heroAbilityData = handle.Result as HeroAbilityData;
+            }
         }
     }
 
@@ -45,18 +51,23 @@ public class DataReaderEditorWindow : EditorWindow
         GUILayout.Label("데이터 읽어오기", EditorStyles.boldLabel);
         GUILayout.Space(10);
 
-        if (GUILayout.Button("몬스터 데이터"))
+        if (GUILayout.Button("Monster 데이터"))
         {
             ReadSheet((sheet) => UpdateData(sheet, monsterData), monsterData);
             monsterData.infoList.Clear();
         }
 
-        if(GUILayout.Button("퀸 어빌리티 데이터"))
+        if(GUILayout.Button("QueenAbility 데이터"))
         {
             ReadSheet((sheet) => UpdateData(sheet, queenAbilityData), queenAbilityData);
             queenAbilityData.infoList.Clear();
         }
 
+        if(GUILayout.Button("HeroAbility 데이터"))
+        {
+            ReadSheet((sheet) => UpdateData(sheet, heroAbilityData), heroAbilityData);
+            heroAbilityData.infoList.Clear();
+        }
     }
 
     // 구글 시트의 데이터를 읽어옴
