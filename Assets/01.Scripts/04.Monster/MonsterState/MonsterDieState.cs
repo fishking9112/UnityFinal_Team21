@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class MonsterDeathState : MonsterBaseState
+public class MonsterDieState : MonsterBaseState
 {
-    public MonsterDeathState(MonsterStateMachine stateMachine) : base(stateMachine) { }
+    public MonsterDieState(MonsterStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {

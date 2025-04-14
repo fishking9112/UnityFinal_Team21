@@ -5,7 +5,7 @@ public class MonsterStateMachine : StateMachine
     public MonsterFindToDoState FindToDo { get; private set; }
     public MonsterTrackingState Tracking { get; private set; }
     public MonsterAttackState Attack { get; private set; }
-    public MonsterDeathState Death { get; private set; }
+    public MonsterDieState Die { get; private set; }
 
     public MonsterStateMachine(MonsterController controller)
     {
@@ -14,6 +14,6 @@ public class MonsterStateMachine : StateMachine
         FindToDo = new(this);
         Tracking = new(this);
         Attack = new(this);
-        Death = new(this);
+        Die = new(this);
     }
 }

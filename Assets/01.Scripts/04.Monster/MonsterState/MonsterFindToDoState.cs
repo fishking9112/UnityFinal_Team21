@@ -22,7 +22,7 @@ public class MonsterFindToDoState : MonsterBaseState
             // TODO : 적을 찾거나 퀘스트를 찾기
             if (MonsterManager.Instance.testTarget != null)
             {
-                stateMachine.Controller.target = MonsterManager.Instance.testTarget;
+                stateMachine.Controller.target = MonsterManager.Instance.testTarget.transform;
             }
         }
     }

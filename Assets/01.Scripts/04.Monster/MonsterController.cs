@@ -35,6 +35,7 @@ public class MonsterController : BaseController, IPoolable
     public NavMeshAgent navMeshAgent;
     public SpriteRenderer sprite;
     public MonsterStateMachine stateMachine;
+    public Vector2 projectileSize = Vector2.zero;
 
     // public MonsterFSM fsm;
     private void Update()
@@ -62,6 +63,14 @@ public class MonsterController : BaseController, IPoolable
         if (sprite == null)
             sprite = GetComponent<SpriteRenderer>();
 
+        // projectileObject의 XY값 가져오기
+        if (monsterInfo.projectile != "" && projectileSize == Vector2.zero)
+        {
+            var go = ObjectPoolManager.Instance.GetObject(monsterInfo.projectile, transform.position);
+            var projectileObject = go.GetComponent<ProjectileObject>();
+            projectileSize = projectileObject._boxCollider.size;
+            projectileObject.OnDespawn();
+        }
 
         if (stateMachine == null)
             stateMachine = new(this);
@@ -71,14 +80,16 @@ public class MonsterController : BaseController, IPoolable
         MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Add(this);
     }
 
-    protected override void TakeDamaged(float damage, float knockback = 0f)
+    public override void TakeDamaged(float damage)
     {
         base.TakeDamaged(damage);
     }
     protected override void Die()
     {
         MonsterManager.Instance.monsters.Remove(gameObject);
-        MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Add(this);
+        MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Remove(this);
+
+        stateMachine.ChangeState(stateMachine.Die); // 사망
         OnDespawn();
     }
 

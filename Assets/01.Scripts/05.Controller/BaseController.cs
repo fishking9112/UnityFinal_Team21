@@ -7,6 +7,8 @@ public class BaseController : MonoBehaviour
 {
     [Header("현재 데이터")]
     public BaseStatData statData;
+    public LayerMask attackLayer; // 공격할 레이어 (적)
+    public LayerMask obstacleLayer; // 감지할 레이어 (장애물)
 
     [Header("핸들러")]
     [SerializeField] protected HealthHandler healthHandler;
@@ -39,7 +41,7 @@ public class BaseController : MonoBehaviour
     /// 데미지를 입음
     /// </summary>
     /// <param name="damage">공격 들어온 데미지 수치</param>
-    protected virtual void TakeDamaged(float damage, float knockback = 0f)
+    public virtual void TakeDamaged(float damage)
     {
         float finalDamage = Mathf.Max(0, damage - statData.defence);
         healthHandler.Damage(finalDamage);
@@ -51,14 +53,20 @@ public class BaseController : MonoBehaviour
     }
 
     /// <summary>
+    /// 넉백을 입음
+    /// </summary>
+    /// <param name="damage">공격 들어온 데미지 수치</param>
+    public virtual void TakeKnockback(Transform other, float power, float duration)
+    {
+        // knockbackDuration = duration;
+        // knockback = -(other.position - transform.position).normalized * power;
+    }
+
+    /// <summary>
     /// 사망함
     /// </summary>
-    protected virtual void Die() { }
-
-    protected virtual void DetectTarget() { }
-
-    protected virtual void AttackTarget() { }
-
-    protected virtual void Move() { }
-
+    protected virtual void Die()
+    {
+        // Destroy(this.gameObject);
+    }
 }

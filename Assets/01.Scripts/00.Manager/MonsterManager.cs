@@ -15,7 +15,7 @@ public class MonsterManager : MonoSingleton<MonsterManager>
     [Header("SO 데이터")]
     public MonsterData monsterData;
     public int testSpawnNumber = 0;
-    public Transform testTarget;
+    public BaseController testTarget;
 
     void Start()
     {
@@ -25,6 +25,8 @@ public class MonsterManager : MonoSingleton<MonsterManager>
         {
             idByMonsters[i] = new List<MonsterController>();
         }
+
+        testTarget.StatInit(monsterInfoList[0]);
     }
 
     // 테스트 코드 주석처리
