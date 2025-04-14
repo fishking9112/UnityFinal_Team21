@@ -39,7 +39,7 @@ public class QueenAbilityData : SheetDataReaderBase
             switch (cell.columnId)
             {
                 case "id":
-                    queenAbilityInfo.id = int.Parse(cell.value);
+                    queenAbilityInfo.id = Utils.StringToInt(cell.value);
                     break;
                 case "name":
                     queenAbilityInfo.name = cell.value;
@@ -48,7 +48,7 @@ public class QueenAbilityData : SheetDataReaderBase
                     queenAbilityInfo.description = cell.value;
                     break;
                 case "maxLevel":
-                    queenAbilityInfo.maxLevel = int.Parse(cell.value);
+                    queenAbilityInfo.maxLevel = Utils.StringToInt(cell.value);
                     queenAbilityInfo.levelInfo = new LevelInfo[queenAbilityInfo.maxLevel];
                     for (int i = 0; i < queenAbilityInfo.maxLevel; i++)
                     {
@@ -60,10 +60,10 @@ public class QueenAbilityData : SheetDataReaderBase
                 case "cost_3":
                 case "cost_4":
                 case "cost_5":
-                    int levelIndex = int.Parse(cell.columnId.Split('_')[1]) - 1;
+                    int levelIndex = Utils.StringToInt(cell.columnId.Split('_')[1]) - 1;
                     if (levelIndex < queenAbilityInfo.maxLevel)
                     {
-                        queenAbilityInfo.levelInfo[levelIndex].cost = int.Parse(cell.value);
+                        queenAbilityInfo.levelInfo[levelIndex].cost = Utils.StringToInt(cell.value);
                     }
                     break;
                 case "eff_1":
@@ -71,10 +71,10 @@ public class QueenAbilityData : SheetDataReaderBase
                 case "eff_3":
                 case "eff_4":
                 case "eff_5":
-                    levelIndex = int.Parse(cell.columnId.Split('_')[1]) - 1;
+                    levelIndex = Utils.StringToInt(cell.columnId.Split('_')[1]) - 1;
                     if (levelIndex < queenAbilityInfo.maxLevel)
                     {
-                        queenAbilityInfo.levelInfo[levelIndex].eff = int.Parse(cell.value);
+                        queenAbilityInfo.levelInfo[levelIndex].eff = Utils.StringToInt(cell.value);
                     }
                     break;
             }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public enum HeroAbilityType
 {
+    NULL,
     MELEE,
     RANGED,
     REVOLUTION,
@@ -18,24 +19,35 @@ public class HeroAbilityInfo : IInfo
     public int id;
     public string name;
     public string description;
-    public string icon;
+    public int icon;
     public int maxLevel;
-    public float damage;
-    public float delay;
-    public int piercing;
     public Vector3 pivot;
-    public Vector3 size;
+    public float damage_Base;
+    public float damage_LevelUp;
+    public float delay_Base;
+    public float delay_LevelUp;
+    public int piercing_Base;
+    public int piercing_LevelUp;
+    public Vector3 size_Base;
+    public Vector3 size_LevelUp;
 
     public HeroAbilityType type;
-    public float speed;
-    public float rotateSpeed;
-    public float duration;
-    public float range;
+    public float speed_Base;
+    public float speed_LevelUp;
+    public float rotateSpeed_Base;
+    public float rotateSpeed_LevelUp;
+    public float duration_Base;
+    public float duration_LevelUp;
+
+    public float count_Base;
+    public float count_LevelUp;
+    public float countDelay_Base;
+    public float countDelay_LevelUp;
 
     public int ID => id;
 }
 
-[CreateAssetMenu(fileName ="HeroAbilityData",menuName ="Scriptable Object/New HeroAbilityData")]
+[CreateAssetMenu(fileName = "HeroAbilityData", menuName = "Scriptable Object/New HeroAbilityData")]
 public class HeroAbilityData : SheetDataReaderBase
 {
     public List<HeroAbilityInfo> infoList = new List<HeroAbilityInfo>();
@@ -51,7 +63,7 @@ public class HeroAbilityData : SheetDataReaderBase
             switch (cell.columnId)
             {
                 case "id":
-                    heroAbilityInfo.id = int.Parse(cell.value);
+                    heroAbilityInfo.id = Utils.StringToInt(cell.value);
                     break;
                 case "name":
                     heroAbilityInfo.name = cell.value;
@@ -60,57 +72,94 @@ public class HeroAbilityData : SheetDataReaderBase
                     heroAbilityInfo.description = cell.value;
                     break;
                 case "icon":
-                    heroAbilityInfo.icon = cell.value;
+                    heroAbilityInfo.icon = Utils.StringToInt(cell.value);
                     break;
                 case "maxLevel":
-                    heroAbilityInfo.maxLevel = int.Parse(cell.value);
-                    break;
-                case "damage":
-                    heroAbilityInfo.damage = float.Parse(cell.value);
-                    break;
-                case "delay":
-                    heroAbilityInfo.delay = float.Parse(cell.value);
+                    heroAbilityInfo.maxLevel = Utils.StringToInt(cell.value);
                     break;
                 case "pivot":
                     heroAbilityInfo.pivot = Utils.StringToVector3(cell.value);
                     break;
-                case "size":
-                    heroAbilityInfo.size = Utils.StringToVector3(cell.value);
+                case "damage_Base":
+                    heroAbilityInfo.damage_Base = Utils.StringToFloat(cell.value);
                     break;
-                case "piercing":
-                    heroAbilityInfo.piercing = int.Parse(cell.value);
+                case "damage_LevelUp":
+                    heroAbilityInfo.damage_LevelUp = Utils.StringToFloat(cell.value);
+                    break;
+                case "delay_Base":
+                    heroAbilityInfo.delay_Base = Utils.StringToFloat(cell.value);
+                    break;
+                case "delay_LevelUp":
+                    heroAbilityInfo.delay_LevelUp = Utils.StringToFloat(cell.value);
+                    break;
+                case "piercing_Base":
+                    heroAbilityInfo.piercing_Base = Utils.StringToInt(cell.value);
+                    break;
+                case "piercing_LevelUp":
+                    heroAbilityInfo.piercing_LevelUp = Utils.StringToInt(cell.value);
+                    break;
+                case "size_Base":
+                    heroAbilityInfo.size_Base = Utils.StringToVector3(cell.value);
+                    break;
+                case "size_LevelUp":
+                    heroAbilityInfo.size_LevelUp = Utils.StringToVector3(cell.value);
                     break;
                 case "type":
-                    heroAbilityInfo.type = (HeroAbilityType)Enum.Parse(typeof(HeroAbilityType), cell.value);
+                    heroAbilityInfo.type = Utils.StringToEnum<HeroAbilityType>(cell.value, HeroAbilityType.NULL);
                     break;
-                case "speed":
+                case "speed_Base":
                     if (heroAbilityInfo.type == HeroAbilityType.RANGED
-                         || heroAbilityInfo.type == HeroAbilityType.AXE)
+                         || heroAbilityInfo.type == HeroAbilityType.AXE
+                         || heroAbilityInfo.type == HeroAbilityType.REVOLUTION)
                     {
-                        heroAbilityInfo.speed = float.Parse(cell.value);
+                        heroAbilityInfo.speed_Base = Utils.StringToFloat(cell.value);
                     }
                     break;
-                case "rotateSpeed":
+                case "speed_LevelUp":
+                    if (heroAbilityInfo.type == HeroAbilityType.RANGED
+                         || heroAbilityInfo.type == HeroAbilityType.AXE
+                         || heroAbilityInfo.type == HeroAbilityType.REVOLUTION)
+                    {
+                        heroAbilityInfo.speed_LevelUp = Utils.StringToFloat(cell.value);
+                    }
+                    break;
+                case "rotateSpeed_Base":
                     if (heroAbilityInfo.type == HeroAbilityType.AXE)
                     {
-                        heroAbilityInfo.rotateSpeed = float.Parse(cell.value);
+                        heroAbilityInfo.rotateSpeed_Base = Utils.StringToFloat(cell.value); 
                     }
                     break;
-                case "duration":
-                    if(heroAbilityInfo.type == HeroAbilityType.REVOLUTION
+                case "rotateSpeed_LevelUp":
+                    if (heroAbilityInfo.type == HeroAbilityType.AXE)
+                    {
+                        heroAbilityInfo.rotateSpeed_LevelUp = Utils.StringToFloat(cell.value);
+                    }
+                    break;
+                case "duration_Base":
+                    if (heroAbilityInfo.type == HeroAbilityType.REVOLUTION
                         || heroAbilityInfo.type == HeroAbilityType.AREA)
                     {
-                        heroAbilityInfo.duration = float.Parse(cell.value);
+                        heroAbilityInfo.duration_Base = Utils.StringToFloat(cell.value);
                     }
                     break;
-                case "range":
-                    if(heroAbilityInfo.type == HeroAbilityType.MELEE
-                        || heroAbilityInfo.type == HeroAbilityType.RANGED
-                        || heroAbilityInfo.type == HeroAbilityType.REVOLUTION
-                        || heroAbilityInfo.type == HeroAbilityType.AXE)
+                case "duration_LevelUp":
+                    if (heroAbilityInfo.type == HeroAbilityType.REVOLUTION
+                        || heroAbilityInfo.type == HeroAbilityType.AREA)
                     {
-                        heroAbilityInfo.range = float.Parse(cell.value);
+                        heroAbilityInfo.duration_LevelUp = Utils.StringToFloat(cell.value);
                     }
+                    break;
+                case "count_Base":
+                    heroAbilityInfo.count_Base = Utils.StringToFloat(cell.value);
+                    break;
+                case "count_LevelUp":
+                    heroAbilityInfo.count_LevelUp = Utils.StringToFloat(cell.value);
+                    break;
+                case "countDelay_Base":
+                    heroAbilityInfo.countDelay_Base = Utils.StringToFloat(cell.value);
+                    break;
+                case "countDelay_LevelUp":
+                    heroAbilityInfo.countDelay_LevelUp = Utils.StringToFloat(cell.value);
                     break;
             }
         }

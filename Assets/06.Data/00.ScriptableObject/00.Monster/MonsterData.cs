@@ -5,6 +5,7 @@ using UnityEngine;
 
 public enum MonsterType
 {
+    NULL,
     MELEE,
     RANGED,
 }
@@ -51,7 +52,7 @@ public class MonsterData : SheetDataReaderBase
             switch (cell.columnId)
             {
                 case "id":
-                    monsterInfo.id = int.Parse(cell.value);
+                    monsterInfo.id = Utils.StringToInt(cell.value);
                     break;
                 case "name":
                     monsterInfo.name = cell.value;
@@ -60,34 +61,34 @@ public class MonsterData : SheetDataReaderBase
                     monsterInfo.description = cell.value;
                     break;
                 case "health":
-                    monsterInfo.health = float.Parse(cell.value);
+                    monsterInfo.health = Utils.StringToFloat(cell.value);
                     break;
                 case "defence":
-                    monsterInfo.defence = float.Parse(cell.value);
+                    monsterInfo.defence = Utils.StringToFloat(cell.value);
                     break;
                 case "cost":
-                    monsterInfo.cost = float.Parse(cell.value);
+                    monsterInfo.cost = Utils.StringToFloat(cell.value);
                     break;
                 case "moveSpeed":
-                    monsterInfo.moveSpeed = float.Parse(cell.value);
+                    monsterInfo.moveSpeed = Utils.StringToFloat(cell.value);
                     break;
                 case "attack":
-                    monsterInfo.attack = float.Parse(cell.value);
+                    monsterInfo.attack = Utils.StringToFloat(cell.value);
                     break;
                 case "attackRange":
-                    monsterInfo.attackRange = float.Parse(cell.value);
+                    monsterInfo.attackRange = Utils.StringToFloat(cell.value);
                     break;
                 case "attackSpeed":
-                    monsterInfo.attackSpeed = float.Parse(cell.value);
+                    monsterInfo.attackSpeed = Utils.StringToFloat(cell.value);
                     break;
                 case "reward":
-                    monsterInfo.reward = float.Parse(cell.value);
+                    monsterInfo.reward = Utils.StringToFloat(cell.value);
                     break;
                 case "outfit":
                     monsterInfo.outfit = cell.value;
                     break;
                 case "type":
-                    monsterInfo.type = (MonsterType)Enum.Parse(typeof(MonsterType), cell.value);
+                    monsterInfo.type = Utils.StringToEnum<MonsterType>(cell.value, MonsterType.NULL);
                     break;
                 case "projectile":
                     if(monsterInfo.type == MonsterType.RANGED)

@@ -66,14 +66,57 @@ public class Utils
     /// <param name="str"> Vector3로 바꿀 문자열. (x, y, z) <- 이런 형식이어야 됨 </param>
     public static Vector3 StringToVector3(string str)
     {
-        str = str.Trim('(', ')');
+        if (string.IsNullOrEmpty(str))
+        {
+            return Vector3.zero;
+        }
 
+        str = str.Trim('(', ')');
         string[] xyz = str.Split(',');
 
-        float x = float.Parse(xyz[0]);
-        float y = float.Parse(xyz[1]);
-        float z = float.Parse(xyz[2]);
+        if(xyz.Length != 3)
+        {
+            return Vector3.zero;
+        }
+
+        bool xCheck = float.TryParse(xyz[0], out float x);
+        bool yCheck = float.TryParse(xyz[1], out float y);
+        bool zCheck = float.TryParse(xyz[2], out float z);
+
+        if (!xCheck || !yCheck || !zCheck)
+        {
+            return Vector3.zero;
+        }
 
         return new Vector3(x, y, z);
+    }
+
+    /// <summary>
+    /// string 타입을 Int로 바꿔주는 함수
+    /// </summary>
+    /// <param name="value"> Int로 바꿀 문자열 </param>
+    public static int StringToInt(string value, int defaultValue = 0)
+    {
+        return int.TryParse(value, out var result) ? result : defaultValue;
+    }
+
+    /// <summary>
+    /// string 타입을 Float로 바꿔주는 함수
+    /// </summary>
+    /// <param name="value"> Float로 바꿀 문자열 </param>
+    public static float StringToFloat(string value, float defaultValue = 0)
+    {
+        return float.TryParse(value, out var result) ? result : defaultValue;
+    }
+
+    /// <summary>
+    /// string 타입을 Enum으로 바꿔주는 함수
+    /// </summary>
+    /// <typeparam name="T"> Enum 타입 </typeparam>
+    /// <param name="value"> Enum으로 바꿀 문자열 </param>
+    /// <returns></returns>
+    public static T StringToEnum<T>(string value, T defaultValue) where T : struct
+    {
+        return Enum.TryParse(value, out T result) ? result : defaultValue;
     }
 }
