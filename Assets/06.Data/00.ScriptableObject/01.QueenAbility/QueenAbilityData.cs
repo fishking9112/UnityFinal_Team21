@@ -11,13 +11,15 @@ public class LevelInfo
 }
 
 [Serializable]
-public class QueenAbilityInfo
+public class QueenAbilityInfo : IInfo
 {
     public int id;
     public string name;
     public string description;
     public int maxLevel;
     public LevelInfo[] levelInfo;
+
+    public int ID => id;
 }
 
 [CreateAssetMenu(fileName = "QueenAbilityData", menuName = "Scriptable Object/New QueenAbilityData")]
