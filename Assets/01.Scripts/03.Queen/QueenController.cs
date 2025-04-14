@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -32,6 +33,7 @@ public class QueenController : MonoBehaviour
     [SerializeField] private float summonGaugeRecoverySpeed = 10f;
     [SerializeField] private float magicGaugeRecoverySpeed = 5f;
 
+    public Magic selectedMagic;
     public TestMonster selectedMonster;
     public GameObject cursorIcon;
     public QueenSlot curSlot = QueenSlot.MONSTER;
@@ -77,10 +79,7 @@ public class QueenController : MonoBehaviour
         cursorIcon.transform.position = worldMousePos;
     }
 
-    /// <summary>
-    /// 번호 키를 누르면 해당 슬롯에 저장되어 있는 몬스터를 소환할 준비
-    /// </summary>
-    /// <param name="context"> 1,2,3,4,5,6번 키 </param>
+    // 번호 키를 누르면 해당 슬롯의 인덱스를 토대로 슬롯 선택
     public void OnPressSlotNumber(InputAction.CallbackContext context)
     {
         if (context.phase != InputActionPhase.Started)
@@ -90,15 +89,28 @@ public class QueenController : MonoBehaviour
 
         int index = Mathf.RoundToInt(context.ReadValue<float>()) - 1;
 
-        BaseSlotUI curBaseSlotUI = curSlot == QueenSlot.MONSTER ? monsterSlotUI : magicSlotUI;
-        TestMonster monster = curBaseSlotUI.GetMonster(index);
+        SelectSlot(index);
+    }
 
-        if (monster == null)
+    // 슬롯에 따라 다른 처리
+    public void SelectSlot(int index)
+    {
+        if (curSlot == QueenSlot.MONSTER)
         {
-            return;
+            BaseSlotUI<TestMonster> curBaseSlotUI = monsterSlotUI;
+            TestMonster monster = curBaseSlotUI.GetKey(index);
+
+            if (monster == null)
+            {
+                return;
+            }
+            selectedMonster = monster;
+            cursorIcon.GetComponent<SpriteRenderer>().sprite = selectedMonster.icon;
         }
-        selectedMonster = monster;
-        cursorIcon.GetComponent<SpriteRenderer>().sprite = selectedMonster.icon;
+        else if (curSlot == QueenSlot.MAGIC)
+        {
+            // 매직 슬롯일 경우 처리
+        }
     }
 
     // 마우스의 월드좌표를 계산해서 해당 위치에 몬스터를 소환함
@@ -122,6 +134,7 @@ public class QueenController : MonoBehaviour
         }
 
         float monsterRadius = 0.5f;
+
         // CameraLimit 레이어만 제외하고 충돌 하도록 함
         int layerMask = ~(1 << (LayerMask.NameToLayer("CameraLimit")));
 
@@ -143,10 +156,10 @@ public class QueenController : MonoBehaviour
         {
             return;
         }
-        //if (selectedMagic == null)
-        //{
-        //    return;
-        //}
+        if (selectedMagic == null)
+        {
+            return;
+        }
         if (EventSystem.current.IsPointerOverGameObject())
         {
             return;
