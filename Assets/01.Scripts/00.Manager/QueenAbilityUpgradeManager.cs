@@ -33,7 +33,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// </summary>
     public void Initialize()
     {
-        if (DataManager.Instance.queenAilityDic == null)
+        if (DataManager.Instance.queenAbilityDic == null)
         {
             Utils.LogError("DataManager의 queenAilityDic 없음");
             return;
@@ -41,7 +41,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
         upgradeLevels.Clear();
 
-        foreach (var kvp in DataManager.Instance.queenAilityDic)
+        foreach (var kvp in DataManager.Instance.queenAbilityDic)
         {
             upgradeLevels[kvp.Key] = 0;
         }
@@ -100,7 +100,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// <returns>QueenAbilityInfo 객체 또는 null</returns>
     private QueenAbilityInfo GetAbilityById(int id)
     {
-        DataManager.Instance.queenAilityDic.TryGetValue(id, out var ability);
+        DataManager.Instance.queenAbilityDic.TryGetValue(id, out var ability);
         return ability;
     }
 
@@ -137,7 +137,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     {
         int totalRefundCost = 0;
 
-        foreach (var kvp in DataManager.Instance.queenAilityDic)
+        foreach (var kvp in DataManager.Instance.queenAbilityDic)
         {
             var ability = kvp.Value;
             int id = ability.ID;
@@ -204,7 +204,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     {
         abilityItemDict.Clear();
 
-        foreach (var kvp in DataManager.Instance.queenAilityDic)
+        foreach (var kvp in DataManager.Instance.queenAbilityDic)
         {
             var ability = kvp.Value;
 

@@ -14,14 +14,14 @@ public class DataManager : MonoSingleton<DataManager>
 
     // 모든 데이터 딕셔너리
     public Dictionary<int, MonsterInfo> monsterDic = new Dictionary<int, MonsterInfo>();
-    public Dictionary<int, QueenAbilityInfo> queenAilityDic = new Dictionary<int, QueenAbilityInfo>();
+    public Dictionary<int, QueenAbilityInfo> queenAbilityDic = new Dictionary<int, QueenAbilityInfo>();
 
     protected override void Awake()
     {
         base.Awake();
 
         Init<MonsterInfo>(monsterData.infoList,monsterDic);
-        Init<QueenAbilityInfo>(queenAbilityData.infoList, queenAilityDic);
+        Init<QueenAbilityInfo>(queenAbilityData.infoList, queenAbilityDic);
     }
 
     // 딕셔너리 초기화
