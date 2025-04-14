@@ -11,7 +11,6 @@ public class QueenAbilityUpgradeInfo
 
 public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManager>
 {
-    [SerializeField] private QueenAbilityData abilityData;
     [SerializeField] private QueenAbilityUpgradeItem abilityItemPrefab;
 
     private readonly Dictionary<int, QueenAbilityUpgradeItem> abilityItemDict = new();
@@ -34,17 +33,17 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// </summary>
     public void Initialize()
     {
-        if (abilityData == null)
+        if (DataManager.Instance.queenAilityDic == null)
         {
-            Utils.LogError("QueenAbilityData 참조가 없음");
+            Utils.LogError("DataManager의 queenAilityDic 없음");
             return;
         }
 
         upgradeLevels.Clear();
 
-        foreach (var info in abilityData.infoList)
+        foreach (var kvp in DataManager.Instance.queenAilityDic)
         {
-            upgradeLevels[info.id] = 0;
+            upgradeLevels[kvp.Key] = 0;
         }
     }
 
@@ -92,7 +91,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     private bool IsValidAbility(int id, out QueenAbilityInfo ability)
     {
         ability = GetAbilityById(id);
-        return abilityData != null && upgradeLevels.ContainsKey(id) && ability != null;
+        return upgradeLevels.ContainsKey(id) && ability != null;
     }
 
     /// <summary>
@@ -101,7 +100,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// <returns>QueenAbilityInfo 객체 또는 null</returns>
     private QueenAbilityInfo GetAbilityById(int id)
     {
-        return abilityData?.infoList.Find(x => x.id == id);
+        DataManager.Instance.queenAilityDic.TryGetValue(id, out var ability);
+        return ability;
     }
 
     /// <summary>
@@ -137,9 +137,12 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     {
         int totalRefundCost = 0;
 
-        foreach (var ability in abilityData.infoList)
+        foreach (var kvp in DataManager.Instance.queenAilityDic)
         {
-            int currentLevel = upgradeLevels[ability.id];
+            var ability = kvp.Value;
+            int id = ability.ID;
+
+            int currentLevel = upgradeLevels[id];
 
             // 레벨이 1 이상일 경우, 누적 비용 계산
             for (int i = 0; i < currentLevel; i++)
@@ -148,8 +151,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             }
 
             // 레벨 초기화
-            upgradeLevels[ability.id] = 0;
-
+            upgradeLevels[id] = 0;
         }
 
         // UI갱신
@@ -202,11 +204,13 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     {
         abilityItemDict.Clear();
 
-        foreach (var ability in abilityData.infoList)
+        foreach (var kvp in DataManager.Instance.queenAilityDic)
         {
+            var ability = kvp.Value;
+
             var item = Instantiate(abilityItemPrefab, UIQueenAbilityPanel.ContentTransform);
-            item.Initialize(ability, GetLevel(ability.id));
-            abilityItemDict[ability.id] = item;
+            item.Initialize(ability, GetLevel(ability.ID));
+            abilityItemDict[ability.ID] = item;
         }
     }
 
