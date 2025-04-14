@@ -58,7 +58,7 @@ public class HeroMoveState : HeroBaseState
         }
         else
         {
-            state.ChangeState(state.attackState);
+            //state.ChangeState(state.attackState);
         }
     }
 }

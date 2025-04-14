@@ -25,6 +25,16 @@ public class Hero : MonoBehaviour, IPoolable
         GameManager.Instance.hero = this;
     }
 
+    private void Start()
+    {
+        stateMachine = new HeroState(this);
+        stateMachine.ChangeState(stateMachine.moveState);
+
+        enemyLayer = LayerMask.GetMask("Monster");
+
+        DeadCheck().Forget();
+    }
+
     public GameObject FindNearestTarget()
     {
         target = null;
