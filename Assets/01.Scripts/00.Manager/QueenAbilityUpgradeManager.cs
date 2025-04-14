@@ -214,6 +214,10 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         }
     }
 
+    /// <summary>
+    /// 현재 강화 상태를 저장 데이터 형태로 변환합니다.
+    /// </summary>
+    /// <returns>강화 정보가 담긴 QueenAbilityUpgradeData 객체</returns>
     public QueenAbilityUpgradeData SetSaveData()
     {
         var saveData = new QueenAbilityUpgradeData
@@ -233,6 +237,10 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         return saveData;
     }
 
+    /// <summary>
+    /// 저장된 강화 데이터를 적용하고 UI를 갱신합니다.
+    /// </summary>
+    /// <param name="data">적용할 강화 데이터</param>
     public void ApplyUpgradeData(QueenAbilityUpgradeData data)
     {
         if (data.upgrades == null)
