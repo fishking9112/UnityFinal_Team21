@@ -22,7 +22,7 @@ public class HeroAbilityInfo : IInfo
     public int maxLevel;
     public float damage;
     public float delay;
-    public float range;
+    public int piercing;
     public Vector3 pivot;
     public Vector3 size;
 
@@ -30,7 +30,7 @@ public class HeroAbilityInfo : IInfo
     public float speed;
     public float rotateSpeed;
     public float duration;
-    public int piercing;
+    public float range;
 
     public int ID => id;
 }
@@ -71,9 +71,6 @@ public class HeroAbilityData : SheetDataReaderBase
                 case "delay":
                     heroAbilityInfo.delay = float.Parse(cell.value);
                     break;
-                case "range":
-                    heroAbilityInfo.range = float.Parse(cell.value);
-                    break;
                 case "pivot":
                     heroAbilityInfo.pivot = Utils.StringToVector3(cell.value);
                     break;
@@ -107,7 +104,14 @@ public class HeroAbilityData : SheetDataReaderBase
                     }
                     break;
                 case "range":
-                    if(heroAbilityInfo.type == heroabilitytype)
+                    if(heroAbilityInfo.type == HeroAbilityType.MELEE
+                        || heroAbilityInfo.type == HeroAbilityType.RANGED
+                        || heroAbilityInfo.type == HeroAbilityType.REVOLUTION
+                        || heroAbilityInfo.type == HeroAbilityType.AXE)
+                    {
+                        heroAbilityInfo.range = float.Parse(cell.value);
+                    }
+                    break;
             }
         }
         infoList.Add(heroAbilityInfo);
