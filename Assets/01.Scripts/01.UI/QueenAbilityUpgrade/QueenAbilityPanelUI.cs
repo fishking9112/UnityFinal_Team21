@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIQueenAbilityPanel : MonoBehaviour
+public class QueenAbilityPanelUI : MonoBehaviour
 {
     [SerializeField] private Transform contentTransform;
     public Transform ContentTransform => contentTransform;
