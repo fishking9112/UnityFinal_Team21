@@ -18,8 +18,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
 
     private Dictionary<int, int> upgradeLevels = new();
-    private QueenAbilityPanelUI queenAbilityPanelUI;
-    public QueenAbilityPanelUI QueenAbilityPanelUI => queenAbilityPanelUI;
+    private QueenAbilityUIController queenAbilityUIController;
+    public QueenAbilityUIController QueenAbilityUIController => queenAbilityUIController;
 
     protected override void Awake()
     {
@@ -63,7 +63,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         // TODO: 자원 확인 및 차감
 
         upgradeLevels[id]++;
-        queenAbilityPanelUI.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
+        queenAbilityUIController.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         RefundCurrency(0);
 
         upgradeLevels[id]--;
-        queenAbilityPanelUI.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
+        queenAbilityUIController.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
     }
 
     /// <summary>
@@ -180,9 +180,9 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// UI 스크립트를 등록하고 능력 목록 UI 아이템을 생성합니다.
     /// </summary>
     /// <param name="script">UI 패널 스크립트</param>
-    public void SetUIQueenAbility(QueenAbilityPanelUI script)
+    public void SetUIQueenAbility(QueenAbilityUIController script)
     {
-        queenAbilityPanelUI = script;
+        queenAbilityUIController = script;
         CreateAbilityItems();
     }
 
@@ -208,7 +208,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         {
             var ability = kvp.Value;
 
-            var item = Instantiate(abilityItemPrefab, QueenAbilityPanelUI.ContentTransform);
+            var item = Instantiate(abilityItemPrefab, QueenAbilityUIController.ContentTransform);
             item.Initialize(ability, GetLevel(ability.ID));
             abilityItemDict[ability.ID] = item;
         }
