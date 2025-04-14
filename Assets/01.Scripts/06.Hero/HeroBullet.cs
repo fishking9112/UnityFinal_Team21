@@ -29,7 +29,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     {
         returnToPool = returnAction;
         limitTime = 5f;
-        targetLayer= LayerMask.GetMask("Monster"); ;
+        targetLayer = 1<< LayerMask.GetMask("Monster");
         token = this.GetCancellationTokenOnDestroy();
     }
 

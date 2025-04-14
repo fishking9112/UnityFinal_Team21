@@ -14,17 +14,14 @@ public class HeroAbilityMissile : HeroAbilitySystem
 
     private Hero hero;
 
-    [SerializeField] HeroBullet bullet;
-
     private ObjectPoolManager objectPoolManager;
 
     /// <summary>
     /// 선언과 동시에 호출하기. 값 입력
     /// </summary>
-    public void Init()
+    public void Start()
     {
-        //hero=GameManager.Instance.hero;
-        hero = GameObject.Find("Hero").GetComponent<Hero>();
+        hero=GameManager.Instance.hero;
         bulletCount = 2;
         damage = 5;
         objectPoolManager = ObjectPoolManager.Instance;

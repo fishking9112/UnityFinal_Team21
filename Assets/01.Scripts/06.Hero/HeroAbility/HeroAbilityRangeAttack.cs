@@ -19,7 +19,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
         delayTime = 5;
         damage = 20;
         range = 3;
-        layer= LayerMask.GetMask("Enemy");
+        layer= LayerMask.GetMask("Monster");
         AddAbility();
     }
 
