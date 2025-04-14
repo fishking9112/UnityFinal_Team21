@@ -1,7 +1,5 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Utils
@@ -47,8 +45,6 @@ public class Utils
 #endif
     }
 
-
-
     /// <summary>
     /// delayedTime초 후에 action 실행. 호출부에 using Unitask 필요 없음
     /// </summary>
@@ -64,5 +60,20 @@ public class Utils
         action?.Invoke();
     }
 
+    /// <summary>
+    /// string타입을 Vector3로 바꿔주는 함수
+    /// </summary>
+    /// <param name="str"> Vector3로 바꿀 문자열. (x, y, z) <- 이런 형식이어야 됨 </param>
+    public static Vector3 StringToVector3(string str)
+    {
+        str = str.Trim('(', ')');
 
+        string[] xyz = str.Split(',');
+
+        float x = float.Parse(xyz[0]);
+        float y = float.Parse(xyz[1]);
+        float z = float.Parse(xyz[2]);
+
+        return new Vector3(x, y, z);
+    }
 }
