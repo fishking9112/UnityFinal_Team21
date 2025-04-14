@@ -8,9 +8,11 @@ public interface IInfo
 
 public class DataManager : MonoSingleton<DataManager>
 {
+    [Header("Data SO")]
     [SerializeField] private MonsterData monsterData;
     [SerializeField] private QueenAbilityData queenAbilityData;
 
+    // 모든 데이터 딕셔너리
     public Dictionary<int, MonsterInfo> monsterDic = new Dictionary<int, MonsterInfo>();
     public Dictionary<int, QueenAbilityInfo> queenAilityDic = new Dictionary<int, QueenAbilityInfo>();
 
@@ -18,9 +20,6 @@ public class DataManager : MonoSingleton<DataManager>
     {
         Init<MonsterInfo>(monsterData.infoList,monsterDic);
         Init<QueenAbilityInfo>(queenAbilityData.infoList, queenAilityDic);
-
-        print(monsterDic[0].name);
-        print(queenAilityDic[0].name);
     }
 
     // 딕셔너리 초기화
