@@ -18,6 +18,8 @@ public class DataManager : MonoSingleton<DataManager>
 
     protected override void Awake()
     {
+        base.Awake();
+
         Init<MonsterInfo>(monsterData.infoList,monsterDic);
         Init<QueenAbilityInfo>(queenAbilityData.infoList, queenAilityDic);
     }
