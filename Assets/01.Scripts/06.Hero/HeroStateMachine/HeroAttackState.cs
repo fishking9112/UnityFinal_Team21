@@ -9,6 +9,11 @@ public class HeroAttackState : HeroBaseState
     private GameObject enemy;
     private CancellationTokenSource token;
     private CancellationTokenSource deadToken;
+
+    public HeroAttackState(HeroState state) : base(state)
+    {
+    }
+
     public override void StateEnter()
     {
         base.StateEnter();
@@ -16,7 +21,6 @@ public class HeroAttackState : HeroBaseState
         deadToken = new CancellationTokenSource();
         state.dir = GetEnemyDir();
         Move(token.Token).Forget();
-        DeadCheck(deadToken.Token).Forget();
     }
 
     private async UniTaskVoid Move(CancellationToken tk)

@@ -2,8 +2,6 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class HeroMoveState : HeroBaseState
@@ -11,19 +9,19 @@ public class HeroMoveState : HeroBaseState
     private bool isMove;
     private CancellationTokenSource deadToken;
 
+    public HeroMoveState(HeroState state) : base(state)
+    {
+    }
+
     public override void StateEnter()
     {
         base.StateEnter();
 
-        // dir 찾기
-        // dir방향 자동이동
-        // 적 검사
         deadToken = new CancellationTokenSource();
 
         state.dir = state.GetDir();
         isMove = true;
         MoveAndSearch().Forget();
-        DeadCheck(deadToken.Token).Forget();
 
     }
 

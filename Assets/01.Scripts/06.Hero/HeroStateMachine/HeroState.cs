@@ -25,13 +25,13 @@ public class HeroState : HeroStateMachine
     {
         this.hero = hero;
 
-        moveState= new HeroMoveState();
-        attackState= new HeroAttackState();
-        deadState= new HeroDeadStete();
+        moveState= new HeroMoveState(this);
+        attackState= new HeroAttackState(this);
+        deadState= new HeroDeadStete(this);
 
         // 데이터 가져오는걸로 수정 필요
-        moveSpeed = 5;
-        
+        moveSpeed = 1;
+        target = GameObject.Find("Circle").transform;
     }
 
 

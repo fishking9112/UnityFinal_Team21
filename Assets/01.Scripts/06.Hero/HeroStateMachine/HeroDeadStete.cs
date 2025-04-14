@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HeroDeadStete : HeroBaseState
 {
+    public HeroDeadStete(HeroState state) : base(state)
+    {
+    }
 
     public override void StateEnter()
     {
