@@ -10,11 +10,13 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] private float hoverScale = 1.1f;
     [SerializeField] private float scaleDuration = 0.1f;
 
-    //private QueenEnhanceInfo currentInfo;
-    [SerializeField] private TextMeshProUGUI titleText;
-    [SerializeField] private TextMeshProUGUI descText;
+    private QueenEnhanceInfo currentInfo;
     [SerializeField] private Image iconImage;
-    [SerializeField] private Button selectButton;
+    [SerializeField] private TextMeshProUGUI enhanceNameText;
+    [SerializeField] private TextMeshProUGUI enhanceNextLevelText;
+    [SerializeField] private TextMeshProUGUI enhanceTypeText;
+    [SerializeField] private TextMeshProUGUI enhanceDecText;
+    [SerializeField] private TextMeshProUGUI enhanceStatText;
 
     private Vector3 originalScale;
     private bool isSelected = false;
@@ -27,13 +29,32 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         originalScale = targetTransform.localScale;
     }
 
-   /* public void SetInfo(QueenInhanceInfo info)
+    public void SetInfo(QueenEnhanceInfo info)
     {
         currentInfo = info;
-        titleText.text = info.name;
-        descText.text = info.description;
+
+        // 현재 강화 레벨 정보 조회
+        int currentLevel = QueenEnhanceManager.Instance.GetEnhanceLevel(info.ID);
+        int nextLevel = currentLevel + 1;
+
         iconImage.sprite = null;
-    }*/
+        enhanceNameText.text = info.name;
+
+        if (nextLevel > info.maxLevel)
+        {
+            enhanceNextLevelText.text = "Lv. Max";
+        }
+        else
+        {
+            enhanceNextLevelText.text = $"Lv. {nextLevel}";
+        }
+
+        enhanceTypeText.text = info.type.ToString();
+        enhanceDecText.text = info.description;
+
+        int previewValue = info.state_Base + (info.state_LevelUp * currentLevel);
+        enhanceStatText.text = $"예상 효과: +{previewValue}";
+    }
 
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -65,8 +86,8 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 // 연출을 위해 0.1초 정도 텀을 주고 종료
                 DOVirtual.DelayedCall(0.1f, () =>
                 {
-                  //  QueenInhanceManager.Instance.ApplyInhance(currentInfo);
-                  //  QueenInhanceManager.Instance.QueenInhanceUIController.CloseUI();
+                    QueenEnhanceManager.Instance.ApplyInhance(currentInfo);
+                    QueenEnhanceManager.Instance.QueenEnhanceUIController.CloseUI();
 
                 });
             });

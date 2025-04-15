@@ -5,11 +5,9 @@ using UnityEngine;
 
 public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
 {
-    [Header("설정")]
-    [SerializeField] private int numberOfOptions = 3; // 레벨업 시 보여줄 옵션 개수
+    private List<QueenEnhanceInfo> cachedInhanceList = new();
 
-  //  private List<QueenEnhanceInfo> cachedInhanceList = new();
-
+    private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
 
     private QueenEnhanceUIController queenEnhanceUIController;
     public QueenEnhanceUIController QueenEnhanceUIController => queenEnhanceUIController;
@@ -18,53 +16,52 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
     private void Start()
     {
         // 모든 강화 옵션 데이터를 미리 캐싱
-    //    cachedInhanceList.AddRange(DataManager.Instance.queenInhanceDic.Values);
+        cachedInhanceList.AddRange(DataManager.Instance.queenEnhanceDic.Values);
     }
 
     /// <summary>
-    /// 외부에서 호출되는 레벨업 진입 함수
+    /// 외부에서 호출되는 강화 진입 함수
     /// </summary>
-    public void OnLevelUp()
+    public void ActivateEnhance()
     {
-     //   var randomOptions = GetRandomInhanceOptions(numberOfOptions);
+        var randomOptions = GetRandomInhanceOptions();
 
         // UIController에게 전달
-      //  QueenEnhanceUIController.ShowOptions(randomOptions);
+        QueenEnhanceUIController.ShowSelectUI(randomOptions);
     }
 
     /// <summary>
-    /// 현재 전체 강화 목록 중에서 랜덤하게 n개를 뽑는다.
+    /// 현재 전체 강화 목록 중에서 MaxLevel을 제외한 것들 중에서 3개 고른다.
     /// </summary>
-   /* private List<QueenInhanceInfo> GetRandomInhanceOptions(int count)
+    private List<QueenEnhanceInfo> GetRandomInhanceOptions()
     {
-        List<QueenInhanceInfo> result = new List<QueenInhanceInfo>();
-        List<QueenInhanceInfo> tempList = new List<QueenInhanceInfo>(cachedInhanceList);
+        List<QueenEnhanceInfo> availableList = new List<QueenEnhanceInfo>();
 
-        for (int i = 0; i < count && tempList.Count > 0; i++)
+        foreach (var pair in DataManager.Instance.queenEnhanceDic)
         {
-            int randomIndex = Random.Range(0, tempList.Count);
-            result.Add(tempList[randomIndex]);
-            tempList.RemoveAt(randomIndex);
+            int id = pair.Key;
+            QueenEnhanceInfo info = pair.Value;
 
+            int currentLevel = 0;
+            acquiredEnhanceLevels.TryGetValue(id, out currentLevel);
+
+            if (currentLevel < info.maxLevel)
+            {
+                availableList.Add(info);
+            }
+        }
+
+        List<QueenEnhanceInfo> result = new List<QueenEnhanceInfo>();
+
+        while (result.Count < 3)
+        {
+            int index = Random.Range(0, availableList.Count);
+            result.Add(availableList[index]);
+            availableList.RemoveAt(index); // 중복 제거
         }
 
         return result;
-    }*/
-
-    /// <summary>
-    /// 버튼에서 전달된 선택된 옵션 처리
-    /// </summary>
-    /*public void OnOptionSelected(QueenEnhanceInfo selectedInfo)
-   {
-
-        // 선택된 능력 적용 처리 로직 (TODO)
-        // ex. 플레이어 능력 강화
-
-        // UI 닫기
-        QueenEnhanceUIController.Instance.HideUI();
-    }*/
-
-
+    }
 
     /// <summary>
     /// UI 스크립트를 등록하고 능력 목록 UI 아이템을 생성합니다.
@@ -75,14 +72,30 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
         queenEnhanceUIController = script;
     }
 
-
     /// <summary>
     /// 강화 항목 선택 시 실제 적용되는 함수
     /// </summary>
-  /*  public void ApplyInhance(QueenInhanceInfo info)
+    public void ApplyInhance(QueenEnhanceInfo info)
     {
+        int id = info.ID;
 
-        // TODO: 능력 적용 로직 구현
-    }*/
+        // 레벨 증가
+        if (acquiredEnhanceLevels.ContainsKey(id))
+            acquiredEnhanceLevels[id]++;
+        else
+            acquiredEnhanceLevels[id] = 1;
+
+        int newLevel = acquiredEnhanceLevels[id];
+
+        Utils.Log($"{info.name} 강화 적용, 현재 레벨: {newLevel}");
+
+        // TODO: 해당 강화 효과 적용 처리 (예: 스탯 변화 등)
+    }
+
+
+    public int GetEnhanceLevel(int id)
+    {
+        return acquiredEnhanceLevels.TryGetValue(id, out var level) ? level : 0;
+    }
 
 }
