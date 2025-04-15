@@ -8,9 +8,10 @@ public class HeroAbilityBible : HeroAbilitySystem
     private ObjectPoolManager objectPoolManager;
     private List<GameObject> bibleList = new List<GameObject>();
 
-    private float speed;
-    private float duration;
-    private int count;
+    [Header("Bible Stat")]
+    [SerializeField] private float speed;
+    [SerializeField] private float duration;
+    [SerializeField] private int count;
 
     private bool maxUpgrade;
 
@@ -19,6 +20,7 @@ public class HeroAbilityBible : HeroAbilitySystem
         heroAbilityInfo = DataManager.Instance.heroAbilityDic[103];
 
         base.Start();
+
         objectPoolManager = ObjectPoolManager.Instance;
 
         speed = heroAbilityInfo.speed_Base;
@@ -28,6 +30,11 @@ public class HeroAbilityBible : HeroAbilitySystem
         maxUpgrade = false;
 
         AddAbility();
+
+        // 테스트 레벨업
+        AbilityLevelUp();
+        AbilityLevelUp();
+        AbilityLevelUp();
     }
 
     protected override void ActionAbility()
@@ -70,13 +77,17 @@ public class HeroAbilityBible : HeroAbilitySystem
             else
             {
                 // 만렙이 아닐 경우 지속시간이 지나면 디스폰
-                await UniTask.Delay(TimeSpan.FromSeconds(duration));
-                biblePrefab.GetComponent<IPoolable>()?.OnDespawn();
-                bibleList.Remove(biblePrefab);
+                DespawnBible(biblePrefab, duration).Forget();
             }
         }
     }
 
+    private async UniTaskVoid DespawnBible(GameObject bible, float delay)
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(duration));
+        bible.GetComponent<IPoolable>()?.OnDespawn();
+        bibleList.Remove(bible);
+    }
 
     public override void AbilityLevelUp()
     {
@@ -89,6 +100,11 @@ public class HeroAbilityBible : HeroAbilitySystem
 
     public override void DespawnAbility()
     {
-        
+        foreach(var bible in bibleList)
+        {
+            bible.GetComponent<IPoolable>()?.OnDespawn();
+        }
+
+        bibleList.Clear();
     }
 }

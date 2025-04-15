@@ -1,8 +1,5 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class HeroAbilityMeleeAttack : HeroAbilitySystem
 {
@@ -11,25 +8,18 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     private Animator animator;
 
-    private float damage;
-    private float knockback;
-
-
     private HeroBasicSword basicSword;
 
-    // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
         hero = transform.GetComponent<Hero>();
 
         sword = transform.Find("Sword").gameObject;
         basicSword = GetComponentInChildren<HeroBasicSword>();
         animator = sword.GetComponent<Animator>();
-        delayTime = 3;
-        damage = 5;
-        knockback = 1;
         basicSword.Init(damage, knockback);
         sword.SetActive(false);
+
         AddAbility();
     }
 
@@ -64,24 +54,15 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     }
 
-    public override void AbilityLevelUp(int nowLv)
+    public override void AbilityLevelUp()
     {
-        switch (nowLv)
-        {
-            case 0:
-            case 1:
-            case 4:
-                damage += 1;
-                basicSword.SetDamage(damage);
-                break;
-            case 2:
-            case 3:
-                knockback += 1;
-                basicSword.SetKnockback(knockback);
-                break;
-        }
+        base.AbilityLevelUp();
 
+        // MeleeAttack이 레벨업 시 증가해야 되는 스텟 증가 추가
     }
 
-
+    public override void DespawnAbility()
+    {
+       
+    }
 }

@@ -8,7 +8,7 @@ public class HeroBaseState : IState
 {
     protected HeroState state;
 
-    private Hero hero;
+    protected Hero hero;
 
     public HeroBaseState(HeroState state)
     {
