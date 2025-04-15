@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
@@ -7,9 +5,34 @@ using System;
 
 public abstract class HeroAbilitySystem : MonoBehaviour
 {
+    public HeroAbilityInfo heroAbilityInfo;
+
     protected GameObject target;
 
-    protected float delayTime = 1f;
+    [Header("Base Stat")]
+    [SerializeField] protected float delay;
+    [SerializeField] protected float damage;
+    [SerializeField] protected float knockback;
+    [SerializeField] protected int maxLevel;
+    [SerializeField] protected Vector3 pivot;
+    [SerializeField] protected Vector3 size;
+    [SerializeField] protected int curLevel;
+
+    protected virtual void Start()
+    {
+        Init();
+    }
+
+    private void Init()
+    {
+        delay = heroAbilityInfo.delay_Base;
+        damage = heroAbilityInfo.damage_Base;
+        knockback = 1; // 임시 값
+        maxLevel = heroAbilityInfo.maxLevel;
+        pivot = heroAbilityInfo.pivot;
+        size = heroAbilityInfo.size_Base;
+        curLevel = 1;
+    }
 
     /// <summary>
     /// 능력 획득
@@ -24,12 +47,12 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     /// delayTime간격으로 ActionAbility 호출
     /// </summary>
     /// <returns></returns>
-    protected async UniTaskVoid AutoAction() 
+    protected async UniTaskVoid AutoAction()
     {
 
         while (true)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(delayTime));
+            await UniTask.Delay(TimeSpan.FromSeconds(delay));
             ActionAbility();
         }
 
@@ -40,6 +63,13 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     /// </summary>
     protected abstract void ActionAbility();
 
-    public abstract void AbilityLevelUp(int nowLv);
+    public virtual void AbilityLevelUp()
+    {
+        maxLevel = curLevel + 1;
+        damage += heroAbilityInfo.damage_LevelUp;
+        delay -= heroAbilityInfo.delay_LevelUp;
+        size += heroAbilityInfo.size_LevelUp;
+    }
 
+    public abstract void DespawnAbility();
 }
