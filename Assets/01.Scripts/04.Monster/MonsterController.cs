@@ -37,7 +37,6 @@ public class MonsterController : BaseController, IPoolable
     public MonsterStateMachine stateMachine;
     public Vector2 projectileSize = Vector2.zero;
 
-    // public MonsterFSM fsm;
     private void Update()
     {
         stateMachine.Update();
@@ -66,6 +65,7 @@ public class MonsterController : BaseController, IPoolable
         // projectileObject의 XY값 가져오기
         if (monsterInfo.projectile != "" && projectileSize == Vector2.zero)
         {
+            //? LATE : GetComponent..!
             var go = ObjectPoolManager.Instance.GetObject(monsterInfo.projectile, transform.position);
             var projectileObject = go.GetComponent<ProjectileObject>();
             projectileSize = projectileObject._boxCollider.size;
@@ -80,10 +80,18 @@ public class MonsterController : BaseController, IPoolable
         MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Add(this);
     }
 
+    /// <summary>
+    /// 데미지를 입었을 경우
+    /// </summary>
+    /// <param name="damage"></param>
     public override void TakeDamaged(float damage)
     {
         base.TakeDamaged(damage);
     }
+
+    /// <summary>
+    /// 사망했을 경우
+    /// </summary>
     protected override void Die()
     {
         MonsterManager.Instance.monsters.Remove(gameObject);
@@ -92,14 +100,4 @@ public class MonsterController : BaseController, IPoolable
         stateMachine.ChangeState(stateMachine.Die); // 사망
         OnDespawn();
     }
-
-    // 테스트 코드 주석처리
-    // public void Update()
-    // {
-    //     if (Input.GetMouseButtonDown(1))
-    //     {
-    //         OnDespawn();
-    //     }
-    // }
-
 }

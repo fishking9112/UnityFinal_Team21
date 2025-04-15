@@ -1,3 +1,6 @@
+/// <summary>
+/// 몬스터 상태 머신 (상태 추가될 때 마다 추가해줘야함)
+/// </summary>
 public class MonsterStateMachine : StateMachine
 {
     public MonsterController Controller { get; private set; }

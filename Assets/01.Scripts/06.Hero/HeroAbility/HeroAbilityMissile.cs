@@ -1,16 +1,12 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HeroAbilityMissile : HeroAbilitySystem
 {
-    private Vector2 fireDir=Vector2.left;
+    private Vector2 fireDir = Vector2.left;
 
-    private int bulletCount;
-    private float damage;
+    private int count;
 
     private Hero hero;
 
@@ -19,25 +15,19 @@ public class HeroAbilityMissile : HeroAbilitySystem
     /// <summary>
     /// 선언과 동시에 호출하기. 값 입력
     /// </summary>
-    public void Start()
+    protected override void Start()
     {
-        hero=GameManager.Instance.hero;
-        bulletCount = 2;
-        damage = 5;
+        heroAbilityInfo = DataManager.Instance.heroAbilityDic[102];
+
+        base.Start();
+
+        hero = GameManager.Instance.hero;
         objectPoolManager = ObjectPoolManager.Instance;
+
+        count = heroAbilityInfo.count_Base;
+
         AddAbility();
     }
-
-
-    /// <summary>
-    /// 능력 실제로 발동 하는 부분. 세팅해줄것 필요하면 해주기
-    /// </summary>
-    protected override void AddAbility()
-    {
-        base.AddAbility();
-    }
-
-
 
     /// <summary>
     /// 어떤 능력인지 구현하는 곳
@@ -53,7 +43,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
     {
         float angle;
 
-        if (target==null)
+        if (target == null)
         {
             angle = 0;
         }
@@ -63,28 +53,11 @@ public class HeroAbilityMissile : HeroAbilitySystem
                 target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
         }
 
-        for (int i = 0; i < bulletCount; i++)
+        for (int i = 0; i < count; i++)
         {
             var bullet = objectPoolManager.GetObject("bullet", hero.transform.position);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-            await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-        }
-    }
-
-    /// <summary>
-    /// 임시로 넣은 데이터
-    /// </summary>
-    /// <param name="nowLv"></param>
-    public override void AbilityLevelUp(int nowLv)
-    {
-        switch(nowLv)
-        {
-            case 0: case 1: case 4:
-                bulletCount++;
-                break;
-            case 2: case 3:
-                damage += 3;
-                break;
+            await UniTask.Delay(TimeSpan.FromSeconds(delay));
         }
     }
 
@@ -94,7 +67,18 @@ public class HeroAbilityMissile : HeroAbilitySystem
     /// <param name="cnt"></param>
     public void IncreaseBulletCount(int cnt)
     {
-        bulletCount += cnt;
+        count += cnt;
     }
 
+    public override void AbilityLevelUp()
+    {
+        base.AbilityLevelUp();
+
+        // Missile이 레벨업 시 증가해야 되는 스텟 증가 추가
+    }
+
+    public override void DespawnAbility()
+    {
+
+    }
 }

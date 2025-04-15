@@ -128,7 +128,7 @@ public class Utils
     /// <param name="angleDeg"></param>
     /// <param name="color"></param>
     /// <param name="duration"></param>
-    public void DrawBoxCast(Vector2 center, Vector2 size, float angleDeg, Color color, float duration = 0.1f)
+    public static void DrawBoxCast(Vector2 center, Vector2 size, float angleDeg, Color color, float duration = 0.1f)
     {
         // 회전값을 라디안으로 변환
         float angleRad = angleDeg * Mathf.Deg2Rad;
@@ -162,7 +162,7 @@ public class Utils
     /// <param name="radius"></param>
     /// <param name="color"></param>
     /// <param name="duration"></param>
-    public void DrawOverlapCircle(Vector2 origin, float radius, Color color, float duration = 0.1f)
+    public static void DrawOverlapCircle(Vector2 origin, float radius, Color color, float duration = 0.1f)
     {
         // 원을 그리기 위한 360도 각도
         int segments = 36; // 원을 그릴 때 사용할 점의 수
