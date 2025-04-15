@@ -32,16 +32,16 @@ public interface IPoolable
 }
 
 [Serializable]
-public class PoolPrefab
+public class PoolPrefab<T> where T : UnityEngine.Object
 {
     public string key;
-    public GameObject prefab;
+    public T prefab;
     public int initPoolSize;
 }
 
 public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
 {
-    [SerializeField] private PoolPrefab[] poolPrefabs;
+    [SerializeField] private PoolPrefab<GameObject>[] poolPrefabs;
 
     private Dictionary<string, Stack<GameObject>> pools = new Dictionary<string, Stack<GameObject>>();
     private Dictionary<string, GameObject> parentMap = new Dictionary<string, GameObject>();

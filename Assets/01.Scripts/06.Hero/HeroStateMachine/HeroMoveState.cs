@@ -13,9 +13,9 @@ public class HeroMoveState : HeroBaseState
     {
     }
 
-    public override void StateEnter()
+    public override void Enter()
     {
-        base.StateEnter();
+        base.Enter();
 
         deadToken = new CancellationTokenSource();
 
@@ -27,7 +27,7 @@ public class HeroMoveState : HeroBaseState
 
     private async UniTaskVoid MoveAndSearch()
     {
-        while(isMove)
+        while (isMove)
         {
             MoveHero();
             Search();
@@ -35,9 +35,9 @@ public class HeroMoveState : HeroBaseState
         }
     }
 
-    public override void StateExit()
+    public override void Exit()
     {
-        base.StateExit();
+        base.Exit();
         isMove = false;
         deadToken?.Cancel();
         deadToken = null;

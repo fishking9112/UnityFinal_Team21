@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -53,6 +54,21 @@ public class AddressableManager : MonoSingleton<AddressableManager>
             }
             else
                 return Addressables.LoadAssetAsync<T>(path).WaitForCompletion();
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"로드 중 오류 발생: {e.Message}");
+        }
+        return default;
+    }
+
+    // T는 에셋 타입 (예: GameObject, Sprite 등)
+    public List<T> LoadDataAssets<T>(string label)
+    {
+        try
+        {
+            var loadList = new List<T>(Addressables.LoadAssetsAsync<T>(label, null).WaitForCompletion());
+            return loadList;
         }
         catch (Exception e)
         {

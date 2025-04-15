@@ -107,11 +107,13 @@ public class UGSSaveLoad : MonoBehaviour
     /// <summary>
     /// 불러온 내용 실제 적용 시키는 함수
     /// </summary>
-    private void OnLoadComplete(SaveData saveData)
+    private async void OnLoadComplete(SaveData saveData)
     {
+        // sound
         SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
         SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
 
+        // QueenAbilityUpgrade
         QueenAbilityUpgradeManager.Instance.ApplyUpgradeData(saveData.queenUpgrades);
     }
 

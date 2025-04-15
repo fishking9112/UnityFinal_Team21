@@ -76,7 +76,7 @@ public class QueenAbilityUpgradeItem : MonoBehaviour, IPointerEnterHandler, IPoi
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
-        manager.UIQueenAbilityPanel.SetPopupQueenAbilityInfo(queenAbilityInfo, manager.GetLevel(queenAbilityInfo.id));
+        manager.QueenAbilityUIController.SetPopupQueenAbilityInfo(queenAbilityInfo, manager.GetLevel(queenAbilityInfo.id));
     }
 
     /// <summary>
@@ -84,6 +84,6 @@ public class QueenAbilityUpgradeItem : MonoBehaviour, IPointerEnterHandler, IPoi
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
-        QueenAbilityUpgradeManager.Instance.UIQueenAbilityPanel.HidePopup();
+        QueenAbilityUpgradeManager.Instance.QueenAbilityUIController.HidePopup();
     }
 }

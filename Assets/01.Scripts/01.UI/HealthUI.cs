@@ -1,18 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Image gaugeImg;
+
+    public void SetAmount(float _gauge)
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        gaugeImg.fillAmount = _gauge;
     }
 }
