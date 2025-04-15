@@ -55,7 +55,7 @@ public class QueenAbilityUIController : MonoBehaviour
     private async void Start()
     {
         await UniTask.WaitUntil(() => QueenAbilityUpgradeManager.Instance != null);
-        QueenAbilityUpgradeManager.Instance.SetUIQueenAbility(this);
+        QueenAbilityUpgradeManager.Instance.SetQueenAbilityUIController(this);
         resetButton.onClick.RemoveAllListeners();
         resetButton.onClick.AddListener(OnClickResetButton);
         gameObject.SetActive(true);

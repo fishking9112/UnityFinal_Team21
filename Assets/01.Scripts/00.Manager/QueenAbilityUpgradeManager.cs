@@ -180,7 +180,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// UI 스크립트를 등록하고 능력 목록 UI 아이템을 생성합니다.
     /// </summary>
     /// <param name="script">UI 패널 스크립트</param>
-    public void SetUIQueenAbility(QueenAbilityUIController script)
+    public void SetQueenAbilityUIController(QueenAbilityUIController script)
     {
         queenAbilityUIController = script;
         CreateAbilityItems();
