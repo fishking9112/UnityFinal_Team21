@@ -58,6 +58,7 @@ public class BaseController : MonoBehaviour
     /// <param name="damage">공격 들어온 데미지 수치</param>
     public virtual void TakeKnockback(Transform other, float power, float duration)
     {
+        // TODO : 넉백 개산 있다면 해야함
         // knockbackDuration = duration;
         // knockback = -(other.position - transform.position).normalized * power;
     }

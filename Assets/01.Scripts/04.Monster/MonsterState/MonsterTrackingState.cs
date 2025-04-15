@@ -7,13 +7,11 @@ public class MonsterTrackingState : MonsterBaseState
     public override void Enter()
     {
         base.Enter();
-
-        // stateMachine.Controller.AnimationHandler.SetState(ActionState.Idle);
     }
 
     public override void FixedUpdate()
     {
-        // 타겟이 없다면 다시 적 찾기
+        //? LATE : 타겟이 없다면 다시 적 찾기
         if (target == null)
         {
             stateMachine.ChangeState(stateMachine.FindToDo); // 찾기!
@@ -42,7 +40,13 @@ public class MonsterTrackingState : MonsterBaseState
         }
     }
 
-    public bool IsObstacleBetween(Vector2 from, Vector2 to)
+    /// <summary>
+    /// 만약 타겟과 나 사이에 장애물이 있다면 계속 움직이기
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    /// <returns></returns>
+    private bool IsObstacleBetween(Vector2 from, Vector2 to)
     {
         Vector2 direction = to - from;
         Vector2 center = (to + from) * 0.5f;
@@ -54,35 +58,7 @@ public class MonsterTrackingState : MonsterBaseState
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         Collider2D hit = Physics2D.OverlapBox(center, boxSize, angle, stateMachine.Controller.obstacleLayer);
-        DrawBoxCast(center, boxSize, angle, Color.red, 0.1f);
-
+        Utils.DrawBoxCast(center, boxSize, angle, Color.red, 0.1f);
         return hit != null;
-    }
-
-    public void DrawBoxCast(Vector2 center, Vector2 size, float angleDeg, Color color, float duration = 0.1f)
-    {
-        // 회전값을 라디안으로 변환
-        float angleRad = angleDeg * Mathf.Deg2Rad;
-        Quaternion rotation = Quaternion.Euler(0, 0, angleDeg);
-
-        // 박스의 4개 꼭짓점 구하기 (기준은 중심에서 오프셋)
-        Vector2 halfSize = size * 0.5f;
-
-        Vector2 topRight = new Vector2(halfSize.x, halfSize.y);
-        Vector2 topLeft = new Vector2(-halfSize.x, halfSize.y);
-        Vector2 bottomLeft = new Vector2(-halfSize.x, -halfSize.y);
-        Vector2 bottomRight = new Vector2(halfSize.x, -halfSize.y);
-
-        // 회전 적용 후 월드 좌표로 변환
-        topRight = center + (Vector2)(rotation * topRight);
-        topLeft = center + (Vector2)(rotation * topLeft);
-        bottomLeft = center + (Vector2)(rotation * bottomLeft);
-        bottomRight = center + (Vector2)(rotation * bottomRight);
-
-        // 박스 테두리 그리기
-        Debug.DrawLine(topRight, topLeft, color, duration);
-        Debug.DrawLine(topLeft, bottomLeft, color, duration);
-        Debug.DrawLine(bottomLeft, bottomRight, color, duration);
-        Debug.DrawLine(bottomRight, topRight, color, duration);
     }
 }

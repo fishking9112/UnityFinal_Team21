@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// 몬스터의 상태 베이스
+/// </summary>
 public abstract class MonsterBaseState : IState
 {
     protected Transform target => stateMachine.Controller.target;
@@ -17,7 +20,6 @@ public abstract class MonsterBaseState : IState
     {
         this.stateMachine = stateMachine;
     }
-
 
     public virtual void Enter() { }
     public virtual void Exit() { }

@@ -6,11 +6,11 @@ public class MonsterFindToDoState : MonsterBaseState
     public override void Enter()
     {
         base.Enter();
-        // stateMachine.Controller.AnimationHandler.SetState(ActionState.Idle);
     }
 
     public override void FixedUpdate()
     {
+        //? LATE : null 다 없애고
         if (target != null)
         {
             stateMachine.ChangeState(stateMachine.Tracking);
@@ -19,7 +19,7 @@ public class MonsterFindToDoState : MonsterBaseState
 
         if (target == null)
         {
-            // TODO : 적을 찾거나 퀘스트를 찾기
+            //? LATE : 적을 찾거나 퀘스트를 찾기
             if (MonsterManager.Instance.testTarget != null)
             {
                 stateMachine.Controller.target = MonsterManager.Instance.testTarget.transform;
