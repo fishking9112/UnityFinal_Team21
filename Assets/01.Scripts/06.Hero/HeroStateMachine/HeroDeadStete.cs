@@ -8,17 +8,17 @@ public class HeroDeadStete : HeroBaseState
     {
     }
 
-    public override void StateEnter()
+    public override void Enter()
     {
-        base.StateEnter();
+        base.Enter();
         // 사망 애니메이션, 사운드
         // 전투(자동전투 포함) 중지
         // 보상 떨구기/획득하기
     }
 
-    public override void StateExit()
+    public override void Exit()
     {
-        base.StateExit();
+        base.Exit();
     }
 
 }
