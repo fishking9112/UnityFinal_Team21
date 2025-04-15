@@ -8,7 +8,6 @@ public class HeroAttackState : HeroBaseState
 {
     private GameObject enemy;
     private CancellationTokenSource token;
-    private CancellationTokenSource deadToken;
 
     public HeroAttackState(HeroState state) : base(state)
     {
@@ -18,7 +17,6 @@ public class HeroAttackState : HeroBaseState
     {
         base.StateEnter();
         token = new CancellationTokenSource();
-        deadToken = new CancellationTokenSource();
         state.dir = GetEnemyDir();
         Move(token.Token).Forget();
     }
@@ -29,6 +27,15 @@ public class HeroAttackState : HeroBaseState
         {
             while (enemy != null && enemy.activeSelf)
             {
+                Bounds selfBounds = GetBounds(state.hero.gameObject);
+                Bounds targetBounds = GetBounds(enemy);
+                float distance = GetMinDistanceBetweenBounds(selfBounds, targetBounds);
+
+                if (distance<0.3f)
+                {
+                    break;
+                }
+
                 state.hero.transform.Translate(state.moveSpeed * Time.deltaTime * state.dir);
 
                 await UniTask.Yield(tk,true);
@@ -43,8 +50,6 @@ public class HeroAttackState : HeroBaseState
     {
         base.StateExit();
         token?.Cancel();
-        deadToken?.Cancel();
-        deadToken = null;
         token = null;
         enemy = null;
     }
@@ -65,4 +70,17 @@ public class HeroAttackState : HeroBaseState
         }
 
     }
+
+    private Bounds GetBounds(GameObject obj)
+    {
+        var renderer = obj.GetComponent<SpriteRenderer>();
+        return renderer != null ? renderer.bounds : new Bounds(obj.transform.position, Vector3.zero);
+    }
+    private float GetMinDistanceBetweenBounds(Bounds a, Bounds b)
+    {
+        float dx = Mathf.Max(0, Mathf.Abs(a.center.x - b.center.x) - (a.extents.x + b.extents.x));
+        float dy = Mathf.Max(0, Mathf.Abs(a.center.y - b.center.y) - (a.extents.y + b.extents.y));
+        return Mathf.Sqrt(dx * dx + dy * dy);
+    }
+
 }

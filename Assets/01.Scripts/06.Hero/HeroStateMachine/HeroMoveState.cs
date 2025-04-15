@@ -7,7 +7,6 @@ using UnityEngine;
 public class HeroMoveState : HeroBaseState
 {
     private bool isMove;
-    private CancellationTokenSource deadToken;
 
     public HeroMoveState(HeroState state) : base(state)
     {
@@ -17,7 +16,6 @@ public class HeroMoveState : HeroBaseState
     {
         base.StateEnter();
 
-        deadToken = new CancellationTokenSource();
 
         state.dir = state.GetDir();
         isMove = true;
@@ -39,8 +37,6 @@ public class HeroMoveState : HeroBaseState
     {
         base.StateExit();
         isMove = false;
-        deadToken?.Cancel();
-        deadToken = null;
     }
 
     private void MoveHero()
@@ -58,7 +54,7 @@ public class HeroMoveState : HeroBaseState
         }
         else
         {
-            //state.ChangeState(state.attackState);
+            state.ChangeState(state.attackState);
         }
     }
 }
