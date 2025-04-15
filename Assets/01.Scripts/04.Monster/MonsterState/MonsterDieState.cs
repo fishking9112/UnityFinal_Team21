@@ -7,7 +7,6 @@ public class MonsterDieState : MonsterBaseState
     public override void Enter()
     {
         base.Enter();
-        // stateMachine.Controller.AnimationHandler.SetState(ActionState.Idle);
         navMeshAgent.ResetPath();
         navMeshAgent.velocity = Vector2.zero;
     }
