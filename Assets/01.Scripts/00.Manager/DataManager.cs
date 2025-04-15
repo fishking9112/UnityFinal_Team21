@@ -13,11 +13,13 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private MonsterData monsterData;
     [SerializeField] private QueenAbilityData queenAbilityData;
     [SerializeField] private HeroAbilityData heroAbilityData;
+    [SerializeField] private QueenEnhanceData queenEnhanceData;
 
     // 모든 데이터 딕셔너리
     public Dictionary<int, MonsterInfo> monsterDic = new Dictionary<int, MonsterInfo>();
     public Dictionary<int, QueenAbilityInfo> queenAbilityDic = new Dictionary<int, QueenAbilityInfo>();
     public Dictionary<int, HeroAbilityInfo> heroAbilityDic = new Dictionary<int, HeroAbilityInfo>();
+    public Dictionary<int, QueenEnhanceInfo> queenEnhanceDic = new Dictionary<int, QueenEnhanceInfo>();
 
     protected override void Awake()
     {
@@ -26,6 +28,7 @@ public class DataManager : MonoSingleton<DataManager>
         Init<MonsterInfo>(monsterData.infoList,monsterDic);
         Init<QueenAbilityInfo>(queenAbilityData.infoList, queenAbilityDic);
         Init<HeroAbilityInfo>(heroAbilityData.infoList, heroAbilityDic);
+        Init<QueenEnhanceInfo>(queenEnhanceData.infoList, queenEnhanceDic);
     }
 
     // 딕셔너리 초기화
