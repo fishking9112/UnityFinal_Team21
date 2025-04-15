@@ -10,19 +10,27 @@ public class HeroBaseState : IState
 
     private Hero hero;
 
-    protected virtual async UniTaskVoid DeadCheck(CancellationToken token)
+    public HeroBaseState(HeroState state)
     {
-        // 사망 체크로 수정 핋요
-        await UniTask.WaitUntil(() =>hero.enabled==false,PlayerLoopTiming.Update,token);
-        state.ChangeState(state.deadState);
+        this.state = state;
+        hero = GameManager.Instance.hero;
     }
 
-    public virtual void StateEnter()
+    public virtual void Enter()
     {
 
     }
 
-    public virtual void StateExit()
+    public virtual void Exit()
+    {
+
+    }
+
+    public virtual void Update()
+    {
+
+    }
+    public virtual void FixedUpdate()
     {
 
     }

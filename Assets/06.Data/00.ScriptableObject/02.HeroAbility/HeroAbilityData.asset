@@ -14,81 +14,131 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sheetURL: 1Of0EBz6S6NjUCNtNGPNnWgAcb5RdXT_xJnsCn-1LZ4w
   sheetName: HeroAbility
-  startRowIndex: 2
-  endRowIndex: 6
+  startRowIndex: 3
+  endRowIndex: 7
   infoList:
   - id: 101
     name: "\uAC80"
     description: "\uADFC\uC811\uACF5\uACA9 \uC608\uC2DC"
-    icon: 
+    icon: 0
     maxLevel: 8
-    damage: 10
-    delay: 1
-    piercing: -1
     pivot: {x: 1, y: 0, z: 0}
-    size: {x: 0, y: 0, z: 0}
-    type: 0
-    speed: 0
-    rotateSpeed: 0
-    duration: 0
-    range: 1
+    damage_Base: 10
+    damage_LevelUp: 0
+    delay_Base: 1
+    delay_LevelUp: 0
+    piercing_Base: -1
+    piercing_LevelUp: 0
+    size_Base: {x: 1, y: 1, z: 1}
+    size_LevelUp: {x: 0, y: 0, z: 0}
+    type: 1
+    speed_Base: 0
+    speed_LevelUp: 0
+    rotateSpeed_Base: 0
+    rotateSpeed_LevelUp: 0
+    duration_Base: 0
+    duration_LevelUp: 0
+    count_Base: 1
+    count_LevelUp: 0
+    countDelay_Base: 0
+    countDelay_LevelUp: 0
   - id: 102
     name: "\uC644\uB4DC"
     description: "\uC6D0\uAC70\uB9AC\uACF5\uACA9 \uC608\uC2DC"
-    icon: 
+    icon: 0
     maxLevel: 8
-    damage: 5
-    delay: 0.5
-    piercing: 0
     pivot: {x: 0, y: 0, z: 0}
-    size: {x: 0, y: 0, z: 0}
-    type: 1
-    speed: 10
-    rotateSpeed: 0
-    duration: 0
-    range: 10
+    damage_Base: 5
+    damage_LevelUp: 0
+    delay_Base: 0.5
+    delay_LevelUp: 0
+    piercing_Base: 0
+    piercing_LevelUp: 0
+    size_Base: {x: 1, y: 1, z: 1}
+    size_LevelUp: {x: 0, y: 0, z: 0}
+    type: 2
+    speed_Base: 10
+    speed_LevelUp: 0
+    rotateSpeed_Base: 0
+    rotateSpeed_LevelUp: 0
+    duration_Base: 0
+    duration_LevelUp: 0
+    count_Base: 1
+    count_LevelUp: 1
+    countDelay_Base: 0
+    countDelay_LevelUp: 0
   - id: 103
     name: "\uC131\uACBD\uCC45"
     description: "\uD68C\uC804\uACF5\uACA9 \uC608\uC2DC"
-    icon: 
+    icon: 0
     maxLevel: 8
-    damage: 5
-    delay: 10
-    piercing: -1
     pivot: {x: 5, y: 0, z: 0}
-    size: {x: 0, y: 0, z: 0}
-    type: 2
-    speed: 0
-    rotateSpeed: 0
-    duration: -1
-    range: 0
+    damage_Base: 5
+    damage_LevelUp: 0
+    delay_Base: 10
+    delay_LevelUp: 0
+    piercing_Base: -1
+    piercing_LevelUp: 0
+    size_Base: {x: 1, y: 1, z: 1}
+    size_LevelUp: {x: 0, y: 0, z: 0}
+    type: 3
+    speed_Base: 3
+    speed_LevelUp: 0.5
+    rotateSpeed_Base: 0
+    rotateSpeed_LevelUp: 0
+    duration_Base: 5
+    duration_LevelUp: 1
+    count_Base: 1
+    count_LevelUp: 1
+    countDelay_Base: 0
+    countDelay_LevelUp: 0
   - id: 104
     name: "\uB9C8\uB298"
     description: "\uBC94\uC704\uACF5\uACA9 \uC608\uC2DC"
-    icon: 
+    icon: 0
     maxLevel: 8
-    damage: 2
-    delay: 0.1
-    piercing: -1
     pivot: {x: 0, y: 0, z: 0}
-    size: {x: 0, y: 0, z: 0}
-    type: 3
-    speed: 0
-    rotateSpeed: 0
-    duration: 0
-    range: 0
+    damage_Base: 2
+    damage_LevelUp: 0
+    delay_Base: 0.1
+    delay_LevelUp: 0
+    piercing_Base: -1
+    piercing_LevelUp: 0
+    size_Base: {x: 1, y: 1, z: 1}
+    size_LevelUp: {x: 0.2, y: 0.2, z: 0.2}
+    type: 4
+    speed_Base: 0
+    speed_LevelUp: 0
+    rotateSpeed_Base: 0
+    rotateSpeed_LevelUp: 0
+    duration_Base: -1
+    duration_LevelUp: 0
+    count_Base: 1
+    count_LevelUp: 0
+    countDelay_Base: 0
+    countDelay_LevelUp: 0
   - id: 105
     name: "\uB3C4\uB07C"
     description: "\uB3C4\uB07C \uACF5\uACA9 \uC608\uC2DC"
-    icon: 
+    icon: 0
     maxLevel: 8
-    damage: 20
-    delay: 3
-    piercing: 5
     pivot: {x: 0, y: 0, z: 0}
-    size: {x: 0, y: 0, z: 0}
-    type: 4
-    speed: 3
-    rotateSpeed: 1
-    duration: 0
-    range: 10
+    damage_Base: 20
+    damage_LevelUp: 0
+    delay_Base: 3
+    delay_LevelUp: 0
+    piercing_Base: 5
+    piercing_LevelUp: 1
+    size_Base: {x: 1, y: 1, z: 1}
+    size_LevelUp: {x: 0, y: 0, z: 0}
+    type: 5
+    speed_Base: 3
+    speed_LevelUp: 0
+    rotateSpeed_Base: 1
+    rotateSpeed_LevelUp: 0
+    duration_Base: 0
+    duration_LevelUp: 0
+    count_Base: 1
+    count_LevelUp: 1
+    countDelay_Base: 0
+    countDelay_LevelUp: 0

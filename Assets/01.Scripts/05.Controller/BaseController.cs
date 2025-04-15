@@ -5,48 +5,68 @@ using UnityEngine.AI;
 
 public class BaseController : MonoBehaviour
 {
-    private NavMeshAgent navMesh;
-    private GameObject target;
+    [Header("현재 데이터")]
+    public BaseStatData statData;
+    public LayerMask attackLayer; // 공격할 레이어 (적)
+    public LayerMask obstacleLayer; // 감지할 레이어 (장애물)
 
+    [Header("핸들러")]
+    [SerializeField] protected HealthHandler healthHandler;
 
-    protected HealthHandler healthHandler;
-
-    private float attack;
-    public float Attack
+    protected virtual void Start()
     {
-        get { return attack; }
-        private set { attack = value; }
+
     }
 
-    private float def;
-    public float Def
+    /// <summary>
+    /// 최초 생성 시 한번만 실행(참조해서 수치 자동 수정)
+    /// </summary>
+    /// <param name="statInfo">참조 할 수치 데이터</param>
+    public void StatInit(BaseStatData statData)
     {
-        get { return def; }
-        private set { def = value; }
+        this.statData = statData;
+        healthHandler.Init(statData.health);
     }
 
-    private float moveSpeed;
-    public float MoveSpeed
+    /// <summary>
+    /// (중요) 체력이 늘어나면 늘어난 만큼 최대 체력 수정할 수 있게 실행 할 것
+    /// </summary>
+    /// <param name="statInfo">참조 할 수치 데이터</param>
+    public void HealthStatUpdate()
     {
-        get { return moveSpeed; }
-        private set { moveSpeed = value; }
+        healthHandler.SetMaxPoint(statData.health);
     }
 
-    private float attackDelay;
-    public float AttackDelay
+    /// <summary>
+    /// 데미지를 입음
+    /// </summary>
+    /// <param name="damage">공격 들어온 데미지 수치</param>
+    public virtual void TakeDamaged(float damage)
     {
-        get { return attackDelay; }
-        private set { attackDelay = value; }
+        float finalDamage = Mathf.Max(0, damage - statData.defence);
+        healthHandler.Damage(finalDamage);
+
+        if (healthHandler.IsDie())
+        {
+            Die();
+        }
     }
 
-    protected virtual void DetectTarget() { }
+    /// <summary>
+    /// 넉백을 입음
+    /// </summary>
+    /// <param name="damage">공격 들어온 데미지 수치</param>
+    public virtual void TakeKnockback(Transform other, float power, float duration)
+    {
+        // knockbackDuration = duration;
+        // knockback = -(other.position - transform.position).normalized * power;
+    }
 
-    protected virtual void AttackTarget() { }
-
-    protected virtual void OnDamaged() { }
-
-    protected virtual void Move() { }
-
-    protected virtual void Die() { }
-
+    /// <summary>
+    /// 사망함
+    /// </summary>
+    protected virtual void Die()
+    {
+        // Destroy(this.gameObject);
+    }
 }

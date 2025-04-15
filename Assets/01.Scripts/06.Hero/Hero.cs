@@ -3,10 +3,14 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
-public class Hero : MonoBehaviour
+public class Hero : MonoBehaviour, IPoolable
 {
+    private HeroState stateMachine;
+
+
     private Vector2 dir;
 
     private float randomDelay;
@@ -21,37 +25,15 @@ public class Hero : MonoBehaviour
         GameManager.Instance.hero = this;
     }
 
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        randomDelay = 3f;
-        moveSpeed = 5;
-        enemyLayer= LayerMask.GetMask("Monster");
+        stateMachine = new HeroState(this);
+        stateMachine.ChangeState(stateMachine.moveState);
 
-        //MVP용 임시 기능
-        ChangeDir().Forget();
-        //Move().Forget();
+        enemyLayer = LayerMask.GetMask("Monster");
+
+        DeadCheck().Forget();
     }
-
-    private async UniTaskVoid Move()
-    {
-        while(true)
-        {
-            transform.position = moveSpeed * Time.deltaTime * (Vector3)dir + transform.position;
-            await UniTask.Yield();
-        }
-    }
-
-    private async UniTaskVoid ChangeDir()
-    {
-        while(true)
-        {
-            dir = UnityEngine.Random.insideUnitCircle.normalized;
-            await UniTask.Delay(TimeSpan.FromSeconds(randomDelay));
-        }
-    }
-
 
     public GameObject FindNearestTarget()
     {
@@ -87,4 +69,33 @@ public class Hero : MonoBehaviour
         return target;
     }
 
+    public void Init(Action<GameObject> returnAction)
+    { 
+        throw new NotImplementedException();
+    }
+
+    public void OnSpawn()
+    {
+        stateMachine = new HeroState(this);
+        stateMachine.ChangeState(stateMachine.moveState);
+
+
+        randomDelay = 3f;
+        moveSpeed = 5;
+        enemyLayer = LayerMask.GetMask("Monster");
+
+        DeadCheck().Forget();
+    }
+    
+    private async UniTaskVoid DeadCheck()
+    {
+        // 사망 체크로 수정 핋요
+        await UniTask.WaitUntil(() => gameObject.activeSelf == false);
+        stateMachine.ChangeState(stateMachine.deadState);
+    }
+
+    public void OnDespawn()
+    {
+        throw new NotImplementedException();
+    }
 }
