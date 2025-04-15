@@ -6,7 +6,7 @@ using UnityEngine;
 public class HeroAbilityBible : HeroAbilitySystem
 {
     private ObjectPoolManager objectPoolManager;
-    private List<GameObject> bibleList = new List<GameObject>();
+    private List<IPoolable> bibleList = new List<IPoolable>();
 
     [Header("Bible Stat")]
     [SerializeField] private float speed;
@@ -59,16 +59,16 @@ public class HeroAbilityBible : HeroAbilitySystem
             float summonAngle = i * angle * Mathf.Deg2Rad;
             Vector3 summonPosition = transform.position + new Vector3(MathF.Cos(summonAngle), MathF.Sin(summonAngle), 0f) + pivot;
 
-            GameObject biblePrefab = objectPoolManager.GetObject("Bible", summonPosition);
+            Bible bible = objectPoolManager.GetObject<Bible>("Bible", summonPosition);
 
             // 소환한 성경책 초기화
-            Bible bible = biblePrefab.GetComponent<Bible>();
+            //Bible bible = biblePrefab.GetComponent<Bible>();
             bible.target = this.transform;
             bible.radius = pivot.magnitude;
             bible.speed = speed;
             bible.angle = summonAngle;
 
-            bibleList.Add(biblePrefab);
+            bibleList.Add(bible);
 
             if(curLevel == maxLevel)
             {
@@ -77,15 +77,15 @@ public class HeroAbilityBible : HeroAbilitySystem
             else
             {
                 // 만렙이 아닐 경우 지속시간이 지나면 디스폰
-                DespawnBible(biblePrefab, duration).Forget();
+                DespawnBible(bible, duration).Forget();
             }
         }
     }
 
-    private async UniTaskVoid DespawnBible(GameObject bible, float delay)
+    private async UniTaskVoid DespawnBible(IPoolable bible, float delay)
     {
         await UniTask.Delay(TimeSpan.FromSeconds(duration));
-        bible.GetComponent<IPoolable>()?.OnDespawn();
+        bible?.OnDespawn();
         bibleList.Remove(bible);
     }
 
@@ -102,7 +102,7 @@ public class HeroAbilityBible : HeroAbilitySystem
     {
         foreach(var bible in bibleList)
         {
-            bible.GetComponent<IPoolable>()?.OnDespawn();
+            bible?.OnDespawn();
         }
 
         bibleList.Clear();

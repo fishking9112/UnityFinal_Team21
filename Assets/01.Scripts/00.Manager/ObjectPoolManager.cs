@@ -26,26 +26,37 @@ public interface IPoolable
         }
     */
 
-    void Init(Action<GameObject> returnAction);
+    void Init(Action<Component> returnAction);
     void OnSpawn();
     void OnDespawn();
 }
 
 [Serializable]
-public class PoolPrefab<T> where T : UnityEngine.Object
+public class PoolPrefab<T> where T : Component
 {
     public string key;
     public T prefab;
     public int initPoolSize;
 }
 
+public class PrefabType
+{
+    public Component prefab;
+    public Type type;
+
+    public PrefabType(Component prefab)
+    {
+        this.prefab = prefab;
+        this.type = prefab.GetType();
+    }
+}
 public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
 {
-    [SerializeField] private PoolPrefab<GameObject>[] poolPrefabs;
+    [SerializeField] private PoolPrefab<Component>[] poolPrefabs;
 
-    private Dictionary<string, Stack<GameObject>> pools = new Dictionary<string, Stack<GameObject>>();
+    private Dictionary<string, Stack<Component>> pools = new Dictionary<string, Stack<Component>>();
     private Dictionary<string, GameObject> parentMap = new Dictionary<string, GameObject>();
-    private Dictionary<string, GameObject> prefabMap = new Dictionary<string, GameObject>();
+    private Dictionary<string, PrefabType> prefabMap = new Dictionary<string, PrefabType>();
 
     protected override void Awake()
     {
@@ -59,25 +70,27 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     {
         foreach (var prefab in poolPrefabs)
         {
-            pools[prefab.key] = new Stack<GameObject>();
+            pools[prefab.key] = new Stack<Component>();
 
             GameObject parentPool = new GameObject($"Pool_{prefab.key}");
             parentPool.transform.SetParent(this.transform);
             parentMap[prefab.key] = parentPool;
-            prefabMap[prefab.key] = prefab.prefab;
+            prefabMap[prefab.key] = new PrefabType(prefab.prefab);
 
             for (int i = 0; i < prefab.initPoolSize; i++)
             {
-                GameObject obj = CreatePool(prefab.key);
-                obj.SetActive(false);
+                Component obj = CreatePool<Component>(prefab.key);
+                obj.gameObject.SetActive(false);
                 pools[prefab.key].Push(obj);
             }
         }
     }
 
-    private GameObject CreatePool(string key)
+    private T CreatePool<T>(string key) where T : Component
     {
-        GameObject obj = Instantiate(prefabMap[key], parentMap[key].transform);
+        var p = prefabMap[key];
+        T obj = Instantiate(p.prefab, parentMap[key].transform) as T;
+
         obj.GetComponent<IPoolable>()?.Init(o => ReturnObject(key, o));
         return obj;
     }
@@ -89,30 +102,29 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     /// <param name="position"> 가져올 position </param>
     /// <param name="rotation"> 가져올 rotation </param>
     /// <returns></returns>
-    public GameObject GetObject(string key, Vector2 position)
+    public T GetObject<T>(string key, Vector2 position) where T:Component
     {
         if (!pools.ContainsKey(key))
         {
             return null;
         }
 
-        GameObject obj;
+        Component obj;
 
         if (!(pools[key].TryPop(out obj)))
         {
-            obj = CreatePool(key);
+            obj = CreatePool<T>(key);
         }
         obj.transform.position = position;
-        obj.SetActive(true);
+        obj.gameObject.SetActive(true);
         obj.GetComponent<IPoolable>()?.OnSpawn();
-
-        return obj;
+        return obj as T;
     }
 
     /// <summary>
     /// 풀에 오브젝트를 반환함
     /// </summary>
-    private void ReturnObject(string key, GameObject obj)
+    private void ReturnObject(string key, Component obj)
     {
         if (!pools.ContainsKey(key))
         {
@@ -120,7 +132,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
             return;
         }
 
-        obj.SetActive(false);
+        obj.gameObject.SetActive(false);
         pools[key].Push(obj);
     }
 
