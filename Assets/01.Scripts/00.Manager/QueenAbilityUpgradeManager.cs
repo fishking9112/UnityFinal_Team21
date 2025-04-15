@@ -22,7 +22,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     private UIQueenAbilityPanel uiQueenAbilityPanel;
     public UIQueenAbilityPanel UIQueenAbilityPanel => uiQueenAbilityPanel;
 
-    protected void Awake()
+    protected override void Awake()
     {
         base.Awake();
         Initialize();

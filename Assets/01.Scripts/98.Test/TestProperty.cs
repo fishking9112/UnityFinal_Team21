@@ -15,8 +15,8 @@ public class TestProperty : MonoBehaviour
         tmp = GetComponent<Text>();
 
         p=new ReactiveProperty<int>();
+        p.AddAction(TestAction);
         p.Value= 0;
-        p.AddAction(_=>TestAction(p.Value));
     }
 
 

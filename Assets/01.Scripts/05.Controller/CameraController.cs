@@ -4,11 +4,16 @@ using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    [Header("용사")]
-    public GameObject Hero;
+    [Header("마왕성")]
+    public GameObject castle;
 
     [Header("버츄얼 카메라")]
     public CinemachineVirtualCamera virtualCamera;
+
+    [Header("미니맵")]
+    public Camera miniMapCamera;
+    public RectTransform miniMapRect;
+    public GameObject miniMapIcon;
 
     [Header("카메라 이동")]
     public float cameraEdge;
@@ -30,6 +35,8 @@ public class CameraController : MonoBehaviour
     private Vector3 curSpeed;
     private Transform cameraTransform;
 
+    private Vector2 keyboardMoveDir;
+
     private void Start()
     {
         cameraTransform = virtualCamera.transform;
@@ -41,30 +48,40 @@ public class CameraController : MonoBehaviour
         MoveCamera();
         ZoomCamera();
         ClampCameraPosition();
+        UpdateMiniMapIconScale();
     }
 
     // 마우스의 위치에 따라 카메라가 움직임
     private void MoveCamera()
     {
         Vector3 moveDir = Vector3.zero;
-        Vector2 mousePos = Input.mousePosition;
 
-        if (mousePos.x <= cameraEdge)
+        // 키보드의 입력을 우선으로 받음
+        if (keyboardMoveDir != Vector2.zero)
         {
-            moveDir.x = -1;
+            moveDir = new Vector3(keyboardMoveDir.x, keyboardMoveDir.y, 0);
         }
-        else if (mousePos.x >= Screen.width - cameraEdge)
+        else
         {
-            moveDir.x = 1;
-        }
+            Vector2 mousePos = Input.mousePosition;
 
-        if (mousePos.y <= cameraEdge)
-        {
-            moveDir.y = -1;
-        }
-        else if (mousePos.y >= Screen.height - cameraEdge)
-        {
-            moveDir.y = 1;
+            if (mousePos.x <= cameraEdge)
+            {
+                moveDir.x = -1;
+            }
+            else if (mousePos.x >= Screen.width - cameraEdge)
+            {
+                moveDir.x = 1;
+            }
+
+            if (mousePos.y <= cameraEdge)
+            {
+                moveDir.y = -1;
+            }
+            else if (mousePos.y >= Screen.height - cameraEdge)
+            {
+                moveDir.y = 1;
+            }
         }
 
         if (moveDir != Vector3.zero)
@@ -80,6 +97,13 @@ public class CameraController : MonoBehaviour
         cameraTransform.position += curSpeed * Time.deltaTime;
     }
 
+    // 키보드로 카메라 움직임
+    public void OnKeyboradCameraMove(InputAction.CallbackContext context)
+    {
+        keyboardMoveDir = context.ReadValue<Vector2>();
+    }
+
+    // 마우스 휠 값을 받아옴
     public void OnZoomCamera(InputAction.CallbackContext context)
     {
         Vector2 scrollValue = context.ReadValue<Vector2>();
@@ -107,7 +131,7 @@ public class CameraController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            cameraTransform.position = Hero.transform.position;
+            cameraTransform.position = castle.transform.position;
             cameraTransform.position += new Vector3(0, 0, -10);
         }
     }
@@ -139,6 +163,40 @@ public class CameraController : MonoBehaviour
 
         camPos.z = cameraTransform.position.z;
         cameraTransform.position = camPos;
+    }
+
+    // 카메라 시야범위를 미니맵에 그려줌
+    private void UpdateMiniMapIconScale()
+    {
+        float cameraHeight = virtualCamera.m_Lens.OrthographicSize * 2;
+        float cameraWidth = cameraHeight * ((float)Screen.width / Screen.height);
+
+        miniMapIcon.transform.localScale = new Vector3(cameraWidth, cameraHeight, 1);
+    }
+
+    // 미니맵을 클릭하면 해당 위치로 카메라가 이동
+    public void MiniMapClickCameraMove(Vector2 clickPosition)
+    {
+        Vector2 localPosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(miniMapRect, clickPosition, null, out localPosition);
+
+        // 미니맵 안의 위치를 0~1 범위로 정규화
+        Vector2 normalizedLocalPosition = new Vector2(
+            (localPosition.x / miniMapRect.rect.width) + miniMapRect.pivot.x,
+            (localPosition.y / miniMapRect.rect.height) + miniMapRect.pivot.y
+        );
+
+        // 정규화된 position을 월드 좌표로 변환
+        Vector3 worldPoint = miniMapCamera.ViewportToWorldPoint(normalizedLocalPosition);
+
+        // 변환한 월드 좌표에 레이캐스트를 발사해서 충돌체가 있으면 그쪽으로 카메라 이동.(충돌체가 있어야 하기 때문에 맵에 콜라이더 필요함)
+        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+
+        if (hit.collider != null)
+        {
+            Vector3 target = hit.point;
+            cameraTransform.position = new Vector3(target.x, target.y, cameraTransform.position.z);
+        }
     }
 
 

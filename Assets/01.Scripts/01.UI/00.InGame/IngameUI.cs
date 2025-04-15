@@ -36,6 +36,7 @@ public class IngameUI : MonoBehaviour
         OnTimer();
     }
 
+    // 제한 시간에서 점점 시간이 줄어들고 시간이 0이 됐을 때 클리어 판정
     private void OnTimer()
     {
         if (isTimeOver)
