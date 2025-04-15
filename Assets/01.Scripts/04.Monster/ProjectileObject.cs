@@ -35,7 +35,6 @@ public class ProjectileObject : MonoBehaviour, IPoolable
     private Rigidbody2D _rigidbody;
     public BoxCollider2D _boxCollider;
 
-
     private float bulletSpeed = 5f;
     private float bulletSize = 1f;
 
@@ -62,6 +61,11 @@ public class ProjectileObject : MonoBehaviour, IPoolable
         _rigidbody.velocity = direction * bulletSpeed;
     }
 
+    /// <summary>
+    /// 투사체의 초기 세팅
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <param name="baseController"></param>
     public void Set(Vector2 direction, BaseController baseController)
     {
         this.baseController = baseController;
@@ -87,27 +91,31 @@ public class ProjectileObject : MonoBehaviour, IPoolable
         }
         else if (baseController.attackLayer.value == (baseController.attackLayer.value | (1 << collision.gameObject.layer)))
         {
-            // TODO : 나중에 한곳에 몰아야 할 듯(Hero나 Monster나)
-            // BaseController baseController = MonsterManager.Instance.monsters[collision.gameObject];
+            //? LATE : 나중에 한곳에 몰아야 할 듯(Hero나 Monster나)
             BaseController target = MonsterManager.Instance.testTarget.GetComponent<BaseController>();
             if (target != null)
             {
                 target.TakeDamaged(baseController.statData.attack);
-                // TODO : 넉백 적용 할 것
+                //? LATE : 넉백 적용 할 것
             }
 
             DestroyProjectile(collision.ClosestPoint(transform.position), fxOnDestory);
         }
     }
 
+    /// <summary>
+    /// 오브젝트 파괴 시 파티클 및 pool에 반환
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="createFx"></param>
     private void DestroyProjectile(Vector3 position, bool createFx)
     {
         if (createFx)
         {
-            // projectileManager.CreateImpactParticlesAtPostion(position, rangeWeaponHandler);
+            // TODO : 화살 충돌 후 터지는 파티클
+            // ex) projectileManager.CreateImpactParticlesAtPostion(position, rangeWeaponHandler);
         }
 
-        // Destroy(this.gameObject);
         isReady = false;
         OnDespawn();
     }
