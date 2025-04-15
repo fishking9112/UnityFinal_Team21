@@ -16,12 +16,21 @@ public class HeroBaseState : IState
         hero = GameManager.Instance.hero;
     }
 
-    public virtual void StateEnter()
+    public virtual void Enter()
     {
 
     }
 
-    public virtual void StateExit()
+    public virtual void Exit()
+    {
+
+    }
+
+    public virtual void Update()
+    {
+
+    }
+    public virtual void FixedUpdate()
     {
 
     }

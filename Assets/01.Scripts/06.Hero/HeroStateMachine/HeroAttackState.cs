@@ -13,9 +13,9 @@ public class HeroAttackState : HeroBaseState
     {
     }
 
-    public override void StateEnter()
+    public override void Enter()
     {
-        base.StateEnter();
+        base.Enter();
         token = new CancellationTokenSource();
         state.dir = GetEnemyDir();
         Move(token.Token).Forget();
@@ -38,7 +38,7 @@ public class HeroAttackState : HeroBaseState
 
                 state.hero.transform.Translate(state.moveSpeed * Time.deltaTime * state.dir);
 
-                await UniTask.Yield(tk,true);
+                await UniTask.Yield(tk, true);
             }
             GetEnemyDir();
             await UniTask.Yield(tk, true);
@@ -46,9 +46,9 @@ public class HeroAttackState : HeroBaseState
     }
 
 
-    public override void StateExit()
+    public override void Exit()
     {
-        base.StateExit();
+        base.Exit();
         token?.Cancel();
         token = null;
         enemy = null;
@@ -65,7 +65,7 @@ public class HeroAttackState : HeroBaseState
         else
         {
             enemy = col.gameObject;
-            state.dir=col.transform.position-state.hero.transform.position;
+            state.dir = col.transform.position - state.hero.transform.position;
             return state.dir;
         }
 

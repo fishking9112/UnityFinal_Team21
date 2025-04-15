@@ -4,12 +4,25 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using GoogleSheetsToUnity;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class DataReaderEditorWindow : EditorWindow
 {
-    private MonsterData monsterData;
-    private QueenAbilityData queenAbilityData;
-    private HeroAbilityData heroAbilityData;
+    private class DataInfo
+    {
+        public string addressableKey;
+        public string buttonName;
+        public ScriptableObject dataSo;
+        public SheetDataReaderBase sheetData => dataSo as SheetDataReaderBase;
+
+        public DataInfo(string buttonName,string addressableKey)
+        {
+            this.buttonName = buttonName;
+            this.addressableKey = addressableKey;
+        }
+    }
+
+    private List<DataInfo> dataInfo;
 
     [MenuItem("Window/Google Sheet Reader")]
     public static void ShowWindow()
@@ -19,55 +32,53 @@ public class DataReaderEditorWindow : EditorWindow
 
     private void OnEnable()
     {
-        Addressables.LoadAssetAsync<MonsterData>("MonsterData").Completed += OnLoaded<MonsterData>;
-        Addressables.LoadAssetAsync<QueenAbilityData>("QueenAbilityData").Completed += OnLoaded<QueenAbilityData>;
-        Addressables.LoadAssetAsync<HeroAbilityData>("HeroAbilityData").Completed += OnLoaded<HeroAbilityData>;
-    }
-
-    // Addressable을 이용하여 Data를 불러옴
-    private void OnLoaded<T>(AsyncOperationHandle<T> handle) where T : ScriptableObject
-    {
-        if (handle.Status == AsyncOperationStatus.Succeeded)
+        dataInfo = new List<DataInfo>()
         {
-            if(typeof(T) == typeof(MonsterData))
-            {
-                monsterData = handle.Result as MonsterData;
-            }
-            else if(typeof(T) == typeof(QueenAbilityData))
-            {
-                queenAbilityData = handle.Result as QueenAbilityData;
-            }
-            else if(typeof(T) == typeof(HeroAbilityData))
-            {
-                heroAbilityData = handle.Result as HeroAbilityData;
-            }
+            new DataInfo("Monster 데이터", "MonsterData"),
+            new DataInfo("QueenAbility 데이터", "QueenAbilityData"),
+            new DataInfo("HeroAbility 데이터", "HeroAbilityData")
+        };
+
+        foreach (var info in dataInfo)
+        {
+            LoadAsset(info);
         }
     }
 
+    // Addressable을 이용하여 에셋을 로드
+    private void LoadAsset(DataInfo info)
+    {
+        Addressables.LoadAssetAsync<ScriptableObject>(info.addressableKey).Completed += handle =>
+        {
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                info.dataSo = handle.Result;
+            }
+            else
+            {
+                Utils.Log($"[{info.addressableKey}]를 불러오지 못했습니다.");
+            }
+        };
+    }
 
     // 커스텀 윈도우 창에 띄워질 UI
     private void OnGUI()
     {
-        GUILayout.Label("데이터 읽어오기", EditorStyles.boldLabel);
+        GUILayout.Label("데이터 불러오기", EditorStyles.boldLabel);
         GUILayout.Space(10);
 
-        if (GUILayout.Button("Monster 데이터"))
+        foreach (var info in dataInfo)
         {
-            ReadSheet((sheet) => UpdateData(sheet, monsterData), monsterData);
-            monsterData.infoList.Clear();
+            GUI.enabled = info.dataSo != null;
+
+            if (GUILayout.Button(info.buttonName))
+            {
+                info.sheetData.ClearInfoList();
+                ReadSheet(sheet => UpdateData(sheet, info.sheetData), info.sheetData);
+            }
         }
 
-        if(GUILayout.Button("QueenAbility 데이터"))
-        {
-            ReadSheet((sheet) => UpdateData(sheet, queenAbilityData), queenAbilityData);
-            queenAbilityData.infoList.Clear();
-        }
-
-        if(GUILayout.Button("HeroAbility 데이터"))
-        {
-            ReadSheet((sheet) => UpdateData(sheet, heroAbilityData), heroAbilityData);
-            heroAbilityData.infoList.Clear();
-        }
+        GUI.enabled = true;
     }
 
     // 구글 시트의 데이터를 읽어옴
@@ -87,5 +98,7 @@ public class DataReaderEditorWindow : EditorWindow
         // 데이터 저장
         EditorUtility.SetDirty(data);
         AssetDatabase.SaveAssets();
+
+        Utils.Log($"[{data.name}] 시트를 불러왔습니다.");
     }
 }
