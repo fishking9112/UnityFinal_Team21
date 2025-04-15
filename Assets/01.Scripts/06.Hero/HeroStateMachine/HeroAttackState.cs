@@ -8,7 +8,6 @@ public class HeroAttackState : HeroBaseState
 {
     private GameObject enemy;
     private CancellationTokenSource token;
-    private CancellationTokenSource deadToken;
 
     public HeroAttackState(HeroState state) : base(state)
     {
@@ -18,7 +17,6 @@ public class HeroAttackState : HeroBaseState
     {
         base.Enter();
         token = new CancellationTokenSource();
-        deadToken = new CancellationTokenSource();
         state.dir = GetEnemyDir();
         Move(token.Token).Forget();
     }
@@ -29,11 +27,20 @@ public class HeroAttackState : HeroBaseState
         {
             while (enemy != null && enemy.activeSelf)
             {
-                state.hero.transform.Translate(state.moveSpeed * Time.deltaTime * state.dir);
+                if (state.navMeshAgent.remainingDistance < state.navMeshAgent.stoppingDistance)
+                {
+                    state.navMeshAgent.ResetPath();
+                    await UniTask.WaitUntil(() => enemy.activeSelf == false);
+                    GetEnemyDir();
 
+                    break;
+                }
+                else
+                {
+                    state.navMeshAgent.SetDestination(state.dir);
+                }
                 await UniTask.Yield(tk, true);
             }
-            GetEnemyDir();
             await UniTask.Yield(tk, true);
         }
     }
@@ -43,15 +50,13 @@ public class HeroAttackState : HeroBaseState
     {
         base.Exit();
         token?.Cancel();
-        deadToken?.Cancel();
-        deadToken = null;
         token = null;
         enemy = null;
     }
 
     private Vector2 GetEnemyDir()
     {
-        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, 3);
+        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, 3,1<<7);
         if (col == null)
         {
             state.ChangeState(state.moveState);
@@ -60,9 +65,10 @@ public class HeroAttackState : HeroBaseState
         else
         {
             enemy = col.gameObject;
-            state.dir = col.transform.position - state.hero.transform.position;
+            state.dir = col.transform.position;
             return state.dir;
         }
 
     }
+
 }
