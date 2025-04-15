@@ -50,14 +50,6 @@ public class Hero : MonoBehaviour, IPoolable
         AddAbility<HeroAbilityMissile>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            ResetAbility();
-        }
-    }
-
     public GameObject FindNearestTarget()
     {
         target = null;
