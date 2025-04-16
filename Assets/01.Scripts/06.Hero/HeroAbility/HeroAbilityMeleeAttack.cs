@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class HeroAbilityMeleeAttack : HeroAbilitySystem
@@ -8,16 +9,18 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     private Animator animator;
 
-    private HeroBasicSword basicSword;
+
 
     protected override void Start()
     {
+        heroAbilityInfo = DataManager.Instance.heroAbilityDic[101];
+        base.Start();
+
+
         hero = transform.GetComponent<Hero>();
 
         sword = transform.Find("Sword").gameObject;
-        basicSword = GetComponentInChildren<HeroBasicSword>();
         animator = sword.GetComponent<Animator>();
-        basicSword.Init(damage, knockback);
         sword.SetActive(false);
 
         AddAbility();
@@ -49,6 +52,11 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
         sword.SetActive(true);
         
+        await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=0.5f);
+
+        // 충돌처리
+        OverlapCheck(angle);
+
         await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=1f);
         sword.SetActive(false);
 
@@ -59,6 +67,23 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         base.AbilityLevelUp();
 
         // MeleeAttack이 레벨업 시 증가해야 되는 스텟 증가 추가
+    }
+
+    private void OverlapCheck(float angle)
+    {
+        float angleRad = angle * Mathf.Deg2Rad;
+        Vector2 local= (Vector2)transform.position+ new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+
+        Collider2D[] col = Physics2D.OverlapCircleAll(local, size.x,1<<7);
+        Utils.DrawOverlapCircle(local, 1, Color.red);
+        foreach(var c in col)
+        {
+            if (MonsterManager.Instance.monsters.TryGetValue(c.gameObject, out var monster))
+            {
+                monster.TakeDamaged(damage);
+                Utils.Log("맞음");
+            }
+        }
     }
 
     public override void DespawnAbility()

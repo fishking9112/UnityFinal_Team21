@@ -26,6 +26,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
         hero = this.GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
 
+        speed = heroAbilityInfo.speed_Base;
         count = heroAbilityInfo.count_Base;
         pierce = heroAbilityInfo.piercing_Base;
         AddAbility();
