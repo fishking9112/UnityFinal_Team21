@@ -84,8 +84,26 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
 
         // TODO: 해당 강화 효과 적용 처리 (예: 스탯 변화 등)
 
+
     }
 
+    public int GetEnhanceValueByID(int id)
+    {
+        if (!acquiredEnhanceLevels.TryGetValue(id, out int level) || level <= 0)
+            return 0;
+
+        if (!DataManager.Instance.queenEnhanceDic.TryGetValue(id, out var info))
+            return 0;
+
+        int total = 0;
+
+        for (int i = 1; i <= level; i++)
+        {
+            total += info.state_Base + info.state_LevelUp * (i - 1);
+        }
+
+        return total;
+    }
 
     public int GetEnhanceLevel(int id)
     {
