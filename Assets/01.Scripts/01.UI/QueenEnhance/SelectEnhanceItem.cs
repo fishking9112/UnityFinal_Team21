@@ -63,14 +63,14 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         if (isSelected) return;
 
-        targetTransform.DOScale(originalScale * hoverScale, scaleDuration).SetEase(Ease.OutBack);
+        targetTransform.DOScale(originalScale * hoverScale, scaleDuration).SetEase(Ease.OutBack).SetUpdate(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (isSelected) return;
 
-        targetTransform.DOScale(originalScale, scaleDuration).SetEase(Ease.InOutSine);
+        targetTransform.DOScale(originalScale, scaleDuration).SetEase(Ease.InOutSine).SetUpdate(true);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -78,13 +78,13 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (isSelected) return;
 
         isSelected = true;
-        targetTransform.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutBounce)
+        targetTransform.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutBounce).SetUpdate(true)
             .OnComplete(() => {
                 Utils.Log("능력 선택됨");
 
                 // 다른 선택지들은 비활성화하기
                 // 선택된 후 원래 크기로 복원 (UI가 닫히기 전에)
-                targetTransform.DOScale(originalScale, 0.1f).SetEase(Ease.InOutSine);
+                targetTransform.DOScale(originalScale, 0.1f).SetEase(Ease.InOutSine).SetUpdate(true);
 
                 isSelected = false;
 
