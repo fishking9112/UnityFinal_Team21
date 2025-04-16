@@ -65,28 +65,6 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
         queenEnhanceUIController = script;
     }
 
-    /// <summary>
-    /// 강화 항목 선택 시 실제 적용되는 함수
-    /// </summary>
-    public void ApplyInhance(QueenEnhanceInfo info)
-    {
-        int id = info.ID;
-
-        // 레벨 증가
-        if (acquiredEnhanceLevels.ContainsKey(id))
-            acquiredEnhanceLevels[id]++;
-        else
-            acquiredEnhanceLevels[id] = 1;
-
-        int newLevel = acquiredEnhanceLevels[id];
-
-        Utils.Log($"{info.name} 강화 적용, 현재 레벨: {newLevel}");
-
-        // TODO: 해당 강화 효과 적용 처리 (예: 스탯 변화 등)
-
-
-    }
-
     public int GetEnhanceValueByID(int id)
     {
         if (!acquiredEnhanceLevels.TryGetValue(id, out int level) || level <= 0)
@@ -109,5 +87,81 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
     {
         return acquiredEnhanceLevels.TryGetValue(id, out var level) ? level : 0;
     }
+
+
+    /// <summary>
+    /// 강화 항목 선택 시 실제 적용되는 함수
+    /// </summary>
+    public void ApplyInhance(QueenEnhanceInfo info)
+    {
+        int id = info.ID;
+
+        // 레벨 증가
+        if (acquiredEnhanceLevels.ContainsKey(id))
+            acquiredEnhanceLevels[id]++;
+        else
+            acquiredEnhanceLevels[id] = 1;
+
+        int level = acquiredEnhanceLevels[id];
+
+        Utils.Log($"{info.name} 강화 적용, 현재 레벨: {level}");
+
+        int value = 0;
+        value += info.state_Base + info.state_LevelUp * (level - 1);
+
+        switch (info.type)
+        {
+            case QueenEnhanceType.QueenPassive:
+                ApplyQueenPassive(id, value);
+                break;
+
+            case QueenEnhanceType.MonsterPassive:
+                ApplyMonsterPassive(info.brood, info.name, value);
+                break;
+
+            case QueenEnhanceType.Point:
+                // 포인트 +1
+                break;
+        }
+    }
+
+    private void ApplyQueenPassive(int id, int value)
+    {
+        var condition = GameManager.Instance.queen.condition;
+
+        switch (id)
+        {
+            case 1002: // 마나 회복 속도 증가
+                condition.magicGaugeRecoverySpeed += value;
+                break;
+            case 1003: // 소환 게이지 회복 속도 증가
+                condition.summonGaugeRecoverySpeed += value;
+                break;
+        }
+    }
+
+    private void ApplyMonsterPassive(QueenEnhanceBrood brood, string name, int value)
+    {
+        foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
+        {
+            if (monster.type.ToString() != brood.ToString())
+                continue;
+
+
+            if (name.Contains("체력"))
+            {
+                monster.health += value;
+            }
+            else if (name.Contains("공격력"))
+            {
+                monster.attack += value;
+            }
+            else if (name.Contains("이동속도"))
+            {
+                monster.moveSpeed += value;
+            }
+        }
+    }
+
 
 }

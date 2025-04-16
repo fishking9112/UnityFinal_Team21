@@ -46,7 +46,9 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         float maxCastleHp = castleHpBase + castleHpEnhance;
         builder.AppendLine($"캐슬 체력 : {FormatNumber(castleHpBase)} + {FormatNumber(castleHpEnhance)} / {FormatNumber(maxCastleHp)}");
 
-        builder.AppendLine("------------------------------------");
+        builder.AppendLine();
+        builder.AppendLine("──────────────────");
+        builder.AppendLine();
 
 
         // 종족별 강화 효과 표시 (MonsterPassive만)
@@ -75,13 +77,22 @@ public class QueenEnhanceStatusUI : MonoBehaviour
                 if (info.brood.ToString() != brood || info.type != QueenEnhanceType.MonsterPassive) continue;
 
                 int level = QueenEnhanceManager.Instance.GetEnhanceLevel(info.ID);
-                if (level <= 0) continue; 
+                if (level <= 0) continue;
 
-                int value = info.state_Base + info.state_LevelUp * Mathf.Max(0, level - 1);
+                int value = 0;
+                for (int i = 1; i <= level; i++)
+                {
+                    value += info.state_Base + info.state_LevelUp * (i - 1);
+                }
+
                 builder.AppendLine($"- {info.name} : Lv.{level} (+{value})");
             }
-            builder.AppendLine("------------------------------------");
+
+            builder.AppendLine();
+            builder.AppendLine("──────────────────");
+            builder.AppendLine();
         }
+
 
         statusText.text = builder.ToString();
     }
