@@ -15,7 +15,7 @@ public class Hero : MonoBehaviour, IPoolable
     public List<HeroAbilitySystem> abilityList;
     private Dictionary<Type, HeroAbilitySystem> allAbilityDic;
 
-    private Action<GameObject> returnToPool;
+    private Action<Component> returnToPool;
 
     private void Awake()
     {
@@ -82,9 +82,9 @@ public class Hero : MonoBehaviour, IPoolable
         return target;
     }
 
-    public void Init(Action<GameObject> returnAction)
+    public void Init(Action<Component> returnAction)
     {
-        returnToPool += returnAction;
+        returnToPool = returnAction;
     }
 
     public void OnSpawn()
@@ -106,7 +106,7 @@ public class Hero : MonoBehaviour, IPoolable
 
     public void OnDespawn()
     {
-        returnToPool?.Invoke(gameObject);
+        returnToPool?.Invoke(this);
     }
 
     /// <summary>

@@ -10,9 +10,9 @@ using UnityEngine.AI;
 public class MonsterController : BaseController, IPoolable
 {
     #region IPoolable
-    private Action<GameObject> returnToPool;
+    private Action<Component> returnToPool;
 
-    public void Init(Action<GameObject> returnAction)
+    public void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
     }
@@ -24,7 +24,7 @@ public class MonsterController : BaseController, IPoolable
 
     public void OnDespawn() // 실행하면 자동으로 반환
     {
-        returnToPool?.Invoke(gameObject);
+        returnToPool?.Invoke(this);
     }
     #endregion
 
@@ -66,8 +66,8 @@ public class MonsterController : BaseController, IPoolable
         if (monsterInfo.projectile != "" && projectileSize == Vector2.zero)
         {
             //? LATE : GetComponent..!
-            var go = ObjectPoolManager.Instance.GetObject(monsterInfo.projectile, transform.position);
-            var projectileObject = go.GetComponent<ProjectileObject>();
+            var projectileObject = ObjectPoolManager.Instance.GetObject<ProjectileObject>(monsterInfo.projectile, transform.position);
+            //var projectileObject = go.GetComponent<ProjectileObject>();
             projectileSize = projectileObject._boxCollider.size;
             projectileObject.OnDespawn();
         }

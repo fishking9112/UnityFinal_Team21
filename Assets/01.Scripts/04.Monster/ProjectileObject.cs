@@ -7,9 +7,9 @@ public class ProjectileObject : MonoBehaviour, IPoolable
 {
 
     #region IPoolable
-    private Action<GameObject> returnToPool;
+    private Action<Component> returnToPool;
 
-    public void Init(Action<GameObject> returnAction)
+    public void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
     }
@@ -21,7 +21,7 @@ public class ProjectileObject : MonoBehaviour, IPoolable
 
     public void OnDespawn() // 실행하면 자동으로 반환
     {
-        returnToPool?.Invoke(gameObject);
+        returnToPool?.Invoke(gameObject.GetComponent<ProjectileObject>());
     }
     #endregion
 

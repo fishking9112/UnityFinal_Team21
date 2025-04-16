@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bible : MonoBehaviour, IPoolable
 {
-    private Action<GameObject> returnToPool;
+    private Action<Component> returnToPool;
 
     public Transform target;
     public float radius;
@@ -24,7 +24,7 @@ public class Bible : MonoBehaviour, IPoolable
         transform.position = target.position + offset;
     }
 
-    public void Init(Action<GameObject> returnAction)
+    public void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
     }
@@ -36,6 +36,6 @@ public class Bible : MonoBehaviour, IPoolable
 
     public void OnDespawn()
     {
-        returnToPool?.Invoke(gameObject);
+        returnToPool?.Invoke(this);
     }
 }
