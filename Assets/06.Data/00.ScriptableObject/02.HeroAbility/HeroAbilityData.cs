@@ -108,47 +108,22 @@ public class HeroAbilityData : SheetDataReaderBase
                     heroAbilityInfo.type = Utils.StringToEnum<HeroAbilityType>(cell.value, HeroAbilityType.NULL);
                     break;
                 case "speed_Base":
-                    if (heroAbilityInfo.type == HeroAbilityType.RANGED
-                         || heroAbilityInfo.type == HeroAbilityType.AXE
-                         || heroAbilityInfo.type == HeroAbilityType.REVOLUTION)
-                    {
-                        heroAbilityInfo.speed_Base = Utils.StringToFloat(cell.value);
-                    }
+                    heroAbilityInfo.speed_Base = Utils.StringToFloat(cell.value);
                     break;
                 case "speed_LevelUp":
-                    if (heroAbilityInfo.type == HeroAbilityType.RANGED
-                         || heroAbilityInfo.type == HeroAbilityType.AXE
-                         || heroAbilityInfo.type == HeroAbilityType.REVOLUTION)
-                    {
-                        heroAbilityInfo.speed_LevelUp = Utils.StringToFloat(cell.value);
-                    }
+                    heroAbilityInfo.speed_LevelUp = Utils.StringToFloat(cell.value);
                     break;
                 case "rotateSpeed_Base":
-                    if (heroAbilityInfo.type == HeroAbilityType.AXE)
-                    {
-                        heroAbilityInfo.rotateSpeed_Base = Utils.StringToFloat(cell.value); 
-                    }
+                    heroAbilityInfo.rotateSpeed_Base = Utils.StringToFloat(cell.value);
                     break;
                 case "rotateSpeed_LevelUp":
-                    if (heroAbilityInfo.type == HeroAbilityType.AXE)
-                    {
-                        heroAbilityInfo.rotateSpeed_LevelUp = Utils.StringToFloat(cell.value);
-                    }
+                    heroAbilityInfo.rotateSpeed_LevelUp = Utils.StringToFloat(cell.value);
                     break;
                 case "duration_Base":
-                    if (heroAbilityInfo.type == HeroAbilityType.REVOLUTION
-                        || heroAbilityInfo.type == HeroAbilityType.AREA
-                        || heroAbilityInfo.type == HeroAbilityType.RANGED)
-                    {
-                        heroAbilityInfo.duration_Base = Utils.StringToFloat(cell.value);
-                    }
+                    heroAbilityInfo.duration_Base = Utils.StringToFloat(cell.value);
                     break;
                 case "duration_LevelUp":
-                    if (heroAbilityInfo.type == HeroAbilityType.REVOLUTION
-                        || heroAbilityInfo.type == HeroAbilityType.AREA)
-                    {
-                        heroAbilityInfo.duration_LevelUp = Utils.StringToFloat(cell.value);
-                    }
+                    heroAbilityInfo.duration_LevelUp = Utils.StringToFloat(cell.value);
                     break;
                 case "count_Base":
                     heroAbilityInfo.count_Base = Utils.StringToInt(cell.value);
