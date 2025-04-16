@@ -39,14 +39,14 @@ public class GameManager : MonoSingleton<GameManager>
 
     private async void OnApplicationQuit()
     {
-        await UGSManager.Instance.SaveLoad.SaveAsync();
+        //await UGSManager.Instance.SaveLoad.SaveAsync();
     }
 
     private void OnApplicationPause(bool pause)
     {
         if (pause)
         {
-            _ = UGSManager.Instance.SaveLoad.SaveAsync();
+            //_ = UGSManager.Instance.SaveLoad.SaveAsync();
         }
     }
 }
