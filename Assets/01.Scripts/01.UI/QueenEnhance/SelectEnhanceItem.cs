@@ -55,7 +55,11 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         int previewValue = info.state_Base + (info.state_LevelUp * currentLevel);
         enhanceStatText.text = $"예상 효과: +{previewValue}";
     }
-
+    public void ResetButton()
+    {
+        isSelected = false;
+        targetTransform.localScale = originalScale;
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -79,9 +83,12 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         targetTransform.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutBounce)
             .OnComplete(() => {
                 Utils.Log("능력 선택됨");
-                    
-                // 다른 선택지들은 비활성화하기
 
+                // 다른 선택지들은 비활성화하기
+                // 선택된 후 원래 크기로 복원 (UI가 닫히기 전에)
+                targetTransform.DOScale(originalScale, 0.1f).SetEase(Ease.InOutSine);
+
+                isSelected = false;
 
                 // 연출을 위해 0.1초 정도 텀을 주고 종료
                 DOVirtual.DelayedCall(0.1f, () =>

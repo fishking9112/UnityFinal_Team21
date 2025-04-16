@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class QueenEnhanceUIController : MonoBehaviour
 {
+    [SerializeField] private GameObject objectParent;
     [SerializeField] private Transform contentParent;
     [SerializeField] private SelectInhanceItem[] itemSlots;
 
@@ -19,6 +20,9 @@ public class QueenEnhanceUIController : MonoBehaviour
         {
             itemSlots[i] = contentParent.GetChild(i).GetComponent<SelectInhanceItem>();
         }
+
+        objectParent = transform.GetChild(0).gameObject;
+        objectParent.SetActive(false);
     }
 
     /// <summary>   
@@ -36,6 +40,7 @@ public class QueenEnhanceUIController : MonoBehaviour
     /// </summary>
     public void ShowSelectUI(List<QueenEnhanceInfo> list)
     {
+        objectParent.SetActive(true);
         for (int i = 0; i < itemSlots.Length; i++)
         {
             itemSlots[i].SetInfo(list[i]);
@@ -44,6 +49,10 @@ public class QueenEnhanceUIController : MonoBehaviour
 
     public void CloseUI()
     {
-        gameObject.SetActive(false);
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            itemSlots[i].ResetButton();
+        }
+        objectParent.SetActive(false);
     }
 }

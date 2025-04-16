@@ -57,7 +57,7 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
         {
             int index = Random.Range(0, availableList.Count);
             result.Add(availableList[index]);
-            availableList.RemoveAt(index); // 중복 제거
+            availableList.RemoveAt(index);
         }
 
         return result;
