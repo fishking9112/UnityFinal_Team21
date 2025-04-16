@@ -32,7 +32,6 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         currentInfo = info;
 
-        // 현재 강화 레벨 정보 조회
         int currentLevel = QueenEnhanceManager.Instance.GetEnhanceLevel(info.ID);
         int nextLevel = currentLevel + 1;
 
@@ -50,7 +49,10 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         enhanceTypeText.text = info.type.ToString();
 
-        int previewValue = info.state_Base + (info.state_LevelUp * currentLevel);
+        int previewValue = currentLevel == 0
+            ? info.state_Base
+            : info.state_Base + (info.state_LevelUp * currentLevel);
+
         enhanceDecText.text = info.description.Replace("n", previewValue.ToString());
     }
     public void ResetButton()
