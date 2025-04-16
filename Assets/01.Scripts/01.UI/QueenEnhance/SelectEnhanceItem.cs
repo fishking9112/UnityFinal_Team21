@@ -1,25 +1,29 @@
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    private Transform targetTransform;
     [SerializeField] private float hoverScale = 1.1f;
     [SerializeField] private float scaleDuration = 0.1f;
 
+    private Transform targetTransform;
     private QueenEnhanceInfo currentInfo;
+    private Vector3 originalScale;
+    private bool isSelected = false;
+
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI enhanceNameText;
     [SerializeField] private TextMeshProUGUI enhanceNextLevelText;
     [SerializeField] private TextMeshProUGUI enhanceTypeText;
     [SerializeField] private TextMeshProUGUI enhanceDecText;
 
-    private Vector3 originalScale;
-    private bool isSelected = false;
 
+    /// <summary>
+    /// UI 요소와 기본 크기를 설정.
+    /// </summary>
     private void Awake()
     {
         if (targetTransform == null) 
@@ -28,6 +32,10 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         originalScale = targetTransform.localScale;
     }
 
+    /// <summary>
+    /// 강화 항목 정보를 설정합니다.
+    /// </summary>
+    /// <param name="info">강화 항목 정보</param>
     public void SetInfo(QueenEnhanceInfo info)
     {
         currentInfo = info;
@@ -55,12 +63,19 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         enhanceDecText.text = info.description.Replace("n", previewValue.ToString());
     }
+
+    /// <summary>
+    /// 버튼 상태를 초기화합니다.
+    /// </summary>
     public void ResetButton()
     {
         isSelected = false;
         targetTransform.localScale = originalScale;
     }
 
+    /// <summary>
+    /// 마우스가 버튼에 들어왔을 때 호출되는 함수. 크기를 키웁니다.
+    /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (isSelected) return;
@@ -68,6 +83,9 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         targetTransform.DOScale(originalScale * hoverScale, scaleDuration).SetEase(Ease.OutBack).SetUpdate(true);
     }
 
+    /// <summary>
+    /// 마우스가 버튼에서 나갔을 때 호출되는 함수. 원래 크기로 복원합니다.
+    /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
         if (isSelected) return;
@@ -75,6 +93,9 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         targetTransform.DOScale(originalScale, scaleDuration).SetEase(Ease.InOutSine).SetUpdate(true);
     }
 
+    /// <summary>
+    /// 버튼이 클릭되었을 때 호출되는 함수. 강화 항목을 선택합니다.
+    /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
         if (isSelected) return;
@@ -84,7 +105,6 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
             .OnComplete(() => {
                 Utils.Log("능력 선택됨");
 
-                // 다른 선택지들은 비활성화하기
                 // 선택된 후 원래 크기로 복원 (UI가 닫히기 전에)
                 targetTransform.DOScale(originalScale, 0.1f).SetEase(Ease.InOutSine).SetUpdate(true);
 

@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -10,16 +8,48 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     [SerializeField] private QueenCondition queenCondition;
     [SerializeField] private TextMeshProUGUI statusText;
 
+    /// <summary>
+    /// 퀸의 상태 정보를 설정합니다.
+    /// </summary>
     public void SetQueenCondition(QueenCondition queenCondition)
     {
         this.queenCondition = queenCondition;
     }
 
+    /// <summary>
+    /// 퀸의 강화 상태 UI를 갱신합니다.
+    /// </summary>
     public void RefreshStatus()
     {
         var builder = new StringBuilder();
 
-        // 마나
+        // 마나 표시
+        AppendManaStatus(builder);
+
+        // 소환 게이지 표시
+        AppendSummonGaugeStatus(builder);
+
+        // 소환 회복량 표시
+        AppendSummonRegenStatus(builder);
+
+        // 캐슬 체력 표시
+        AppendCastleHpStatus(builder);
+
+        builder.AppendLine();
+        builder.AppendLine("──────────────────");
+        builder.AppendLine();
+
+        // 종족별 강화 효과 표시 (MonsterPassive만)
+        AppendBroodEnhanceStatus(builder);
+
+        statusText.text = builder.ToString();
+    }
+
+    /// <summary>
+    /// 마나 상태를 문자열로 추가합니다.
+    /// </summary>
+    private void AppendManaStatus(StringBuilder builder)
+    {
         float curMana = queenCondition.CurMagicGauge.Value;
         float maxMana = queenCondition.MaxMagicGauge.Value;
         builder.AppendLine($"마나 : ({(int)curMana} / {(int)maxMana})");
@@ -28,33 +58,49 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         float manaRegenBase = queenCondition.magicGaugeRecoverySpeed;
         float manaRegenEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(1002);
         builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / sec");
+    }
 
-        // 소환 게이지 = 현재 + 강화 / 최대
+    /// <summary>
+    /// 소환 게이지 상태를 문자열로 추가합니다.
+    /// </summary>
+    private void AppendSummonGaugeStatus(StringBuilder builder)
+    {
         float maxSummonBase = queenCondition.MaxSummonGauge.Value;
         float maxSummonEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(1003);
         float maxSummonGauge = maxSummonBase + maxSummonEnhance;
         builder.AppendLine($"소환 게이지 : {FormatNumber(maxSummonBase)} + {FormatNumber(maxSummonEnhance)} / {FormatNumber(maxSummonGauge)}");
+    }
 
-        // 소환 회복량 = 기본 + 강화
+    /// <summary>
+    /// 소환 회복량 상태를 문자열로 추가합니다.
+    /// </summary>
+    private void AppendSummonRegenStatus(StringBuilder builder)
+    {
         float summonRegenBase = queenCondition.summonGaugeRecoverySpeed;
         float summonRegenEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(-1);
         builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / sec");
+    }
 
-        // 캐슬 체력 = 기본 + 강화 / 최대
+    /// <summary>
+    /// 캐슬 체력 상태를 문자열로 추가합니다.
+    /// </summary>
+    private void AppendCastleHpStatus(StringBuilder builder)
+    {
         float castleHpBase = 100;
         float castleHpEnhance = 100;
         float maxCastleHp = castleHpBase + castleHpEnhance;
         builder.AppendLine($"캐슬 체력 : {FormatNumber(castleHpBase)} + {FormatNumber(castleHpEnhance)} / {FormatNumber(maxCastleHp)}");
+    }
 
-        builder.AppendLine();
-        builder.AppendLine("──────────────────");
-        builder.AppendLine();
-
-
-        // 종족별 강화 효과 표시 (MonsterPassive만)
+    /// <summary>
+    /// 종족별 강화 효과(특히 MonsterPassive)를 문자열로 추가합니다.
+    /// </summary>
+    private void AppendBroodEnhanceStatus(StringBuilder builder)
+    {
         var acquiredEnhances = QueenEnhanceManager.Instance.AcquiredEnhanceLevels;
-
         var orderedBroods = new List<string>();
+
+        // 종족별 강화 항목을 추출
         foreach (var enhanceID in acquiredEnhances.Keys)
         {
             if (acquiredEnhances[enhanceID] <= 0) continue;
@@ -68,6 +114,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
             }
         }
 
+        // 각 종족별 강화 효과 출력
         foreach (var brood in orderedBroods)
         {
             builder.AppendLine($"{brood}");
@@ -92,13 +139,13 @@ public class QueenEnhanceStatusUI : MonoBehaviour
             builder.AppendLine("──────────────────");
             builder.AppendLine();
         }
-
-
-        statusText.text = builder.ToString();
     }
+
+    /// <summary>
+    /// 숫자를 보기 좋은 형식으로 변환합니다.
+    /// </summary>
     private string FormatNumber(float value)
     {
         return value % 1 == 0 ? ((int)value).ToString() : value.ToString("F1");
     }
-
 }

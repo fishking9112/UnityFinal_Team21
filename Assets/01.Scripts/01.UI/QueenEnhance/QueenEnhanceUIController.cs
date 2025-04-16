@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class QueenEnhanceUIController : MonoBehaviour
 {
@@ -10,6 +9,9 @@ public class QueenEnhanceUIController : MonoBehaviour
     [SerializeField] private QueenEnhanceStatusUI queenEnhanceStatusUI;
     [SerializeField] private SelectInhanceItem[] itemSlots;
 
+    /// <summary>
+    /// 자동으로 참조를 할당하고 초기 비활성화 처리
+    /// </summary>
     private void OnValidate()
     {
         if (contentParent == null) return;
