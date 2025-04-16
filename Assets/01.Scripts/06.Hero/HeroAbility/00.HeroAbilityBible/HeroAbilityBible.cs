@@ -39,11 +39,11 @@ public class HeroAbilityBible : HeroAbilitySystem
 
     protected override void ActionAbility()
     {
-        SummonBible().Forget();
+        SummonBible();
     }
 
     // 성경책 생성
-    private async UniTaskVoid SummonBible()
+    private void SummonBible()
     {
         // 만렙일 경우 무한 지속
         if (maxUpgrade)
@@ -70,7 +70,7 @@ public class HeroAbilityBible : HeroAbilitySystem
 
             bibleList.Add(bible);
 
-            if(curLevel == maxLevel)
+            if(curLevel == maxLevel && !maxUpgrade)
             {
                 maxUpgrade = true;
             }
@@ -84,7 +84,7 @@ public class HeroAbilityBible : HeroAbilitySystem
 
     private async UniTaskVoid DespawnBible(IPoolable bible, float delay)
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(duration));
+        await UniTask.Delay(TimeSpan.FromSeconds(delay));
         bible?.OnDespawn();
         bibleList.Remove(bible);
     }
