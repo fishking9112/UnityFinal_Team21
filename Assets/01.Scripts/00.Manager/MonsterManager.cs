@@ -24,7 +24,6 @@ public class MonsterManager : MonoSingleton<MonsterManager>
             // 깊은 복사로 저장해서 들고 있음
             monsterInfoList[monsterData.infoList[i].id] = new MonsterInfo(monsterData.infoList[i]);
             idByMonsters[i] = new List<MonsterController>();
-            Debug.Log(monsterInfoList[monsterData.infoList[i].id].name);
         }
 
         testTarget.StatInit(monsterInfoList[0]);
@@ -37,7 +36,7 @@ public class MonsterManager : MonoSingleton<MonsterManager>
         {
             Vector2 randomPos = GetRandomWorldPositionInCamera();
             var monster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfoList[testSpawnNumber].outfit, randomPos);
-            monster.GetComponent<MonsterController>().StatInit(monsterInfoList[testSpawnNumber]);
+            monster.StatInit(monsterInfoList[testSpawnNumber]);
             // monster.GetComponent<MonsterController>().fsm.Setup(testTarget);
         }
     }

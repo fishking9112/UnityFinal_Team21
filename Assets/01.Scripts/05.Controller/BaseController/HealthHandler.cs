@@ -32,7 +32,6 @@ public class HealthHandler : MonoBehaviour
 
     public void Damage(float damage)
     {
-        // Debug.Log("데미지입음" + currentPoint.Value);
         if (currentPoint.Value - damage <= 0f) currentPoint.Value = 0f;
         else currentPoint.Value -= damage;
     }
