@@ -97,10 +97,7 @@ public class MonsterData : SheetDataReaderBase
                     monsterInfo.type = Utils.StringToEnum<MonsterType>(cell.value, MonsterType.NULL);
                     break;
                 case "projectile":
-                    if (monsterInfo.type == MonsterType.RANGED)
-                    {
-                        monsterInfo.projectile = cell.value;
-                    }
+                    monsterInfo.projectile = cell.value;
                     break;
             }
         }

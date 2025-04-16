@@ -8,7 +8,7 @@ public class MonsterManager : MonoSingleton<MonsterManager>
     public Dictionary<GameObject, MonsterController> monsters = new Dictionary<GameObject, MonsterController>(); // 몬스터가 나오면 자동으로 이곳에 저장(전체)
 
     // SO에서 받아온 데이터에서 변화된 값 (이곳에서 스텟을 상승시키면 몬스터 스텟 자동으로 업그레이드 완료)
-    public List<MonsterInfo> monsterInfoList = new List<MonsterInfo>();
+    public Dictionary<int, MonsterInfo> monsterInfoList = new();
     // Health값 바뀌면 BaseController의 HealthStatUpdate 실행 필요
     public Dictionary<int, List<MonsterController>> idByMonsters = new Dictionary<int, List<MonsterController>>(); // 몬스터가 나오면 자동으로 이곳에 저장(종류별)
 
@@ -19,11 +19,12 @@ public class MonsterManager : MonoSingleton<MonsterManager>
 
     void Start()
     {
-        // 깊은 복사로 저장해서 들고 있음
-        monsterInfoList = monsterData.infoList.Clone(item => new MonsterInfo(item));
-        for (int i = 0; i < monsterInfoList.Count; i++)
+        for (int i = 0; i < monsterData.infoList.Count; i++)
         {
+            // 깊은 복사로 저장해서 들고 있음
+            monsterInfoList[monsterData.infoList[i].id] = new MonsterInfo(monsterData.infoList[i]);
             idByMonsters[i] = new List<MonsterController>();
+            Debug.Log(monsterInfoList[monsterData.infoList[i].id].name);
         }
 
         testTarget.StatInit(monsterInfoList[0]);
@@ -35,8 +36,8 @@ public class MonsterManager : MonoSingleton<MonsterManager>
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 randomPos = GetRandomWorldPositionInCamera();
-            MonsterController monster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfoList[testSpawnNumber].outfit, randomPos);
-            monster.StatInit(monsterInfoList[testSpawnNumber]);
+            var monster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfoList[testSpawnNumber].outfit, randomPos);
+            monster.GetComponent<MonsterController>().StatInit(monsterInfoList[testSpawnNumber]);
             // monster.GetComponent<MonsterController>().fsm.Setup(testTarget);
         }
     }
