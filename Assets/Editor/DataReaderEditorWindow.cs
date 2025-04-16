@@ -36,7 +36,8 @@ public class DataReaderEditorWindow : EditorWindow
         {
             new DataInfo("Monster 데이터", "MonsterData"),
             new DataInfo("QueenAbility 데이터", "QueenAbilityData"),
-            new DataInfo("HeroAbility 데이터", "HeroAbilityData")
+            new DataInfo("HeroAbility 데이터", "HeroAbilityData"),
+            new DataInfo("Enhance 데이터", "QueenEnhanceData")
         };
 
         foreach (var info in dataInfo)

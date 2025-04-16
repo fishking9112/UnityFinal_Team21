@@ -11,7 +11,6 @@ public class QueenAbilityUpgradeInfo
 
 public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManager>
 {
-    [SerializeField] private QueenAbilityData abilityData;
     [SerializeField] private QueenAbilityUpgradeItem abilityItemPrefab;
 
     private readonly Dictionary<int, QueenAbilityUpgradeItem> abilityItemDict = new();
@@ -19,8 +18,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
 
     private Dictionary<int, int> upgradeLevels = new();
-    private UIQueenAbilityPanel uiQueenAbilityPanel;
-    public UIQueenAbilityPanel UIQueenAbilityPanel => uiQueenAbilityPanel;
+    private QueenAbilityUIController queenAbilityUIController;
+    public QueenAbilityUIController QueenAbilityUIController => queenAbilityUIController;
 
     protected override void Awake()
     {
@@ -34,17 +33,17 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// </summary>
     public void Initialize()
     {
-        if (abilityData == null)
+        if (DataManager.Instance.queenAbilityDic == null)
         {
-            Utils.LogError("QueenAbilityData 참조가 없음");
+            Utils.LogError("DataManager의 queenAilityDic 없음");
             return;
         }
 
         upgradeLevels.Clear();
 
-        foreach (var info in abilityData.infoList)
+        foreach (var kvp in DataManager.Instance.queenAbilityDic)
         {
-            upgradeLevels[info.id] = 0;
+            upgradeLevels[kvp.Key] = 0;
         }
     }
 
@@ -64,7 +63,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         // TODO: 자원 확인 및 차감
 
         upgradeLevels[id]++;
-        uiQueenAbilityPanel.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
+        queenAbilityUIController.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
     }
 
     /// <summary>
@@ -82,7 +81,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         RefundCurrency(0);
 
         upgradeLevels[id]--;
-        uiQueenAbilityPanel.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
+        queenAbilityUIController.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
     }
 
     /// <summary>
@@ -92,7 +91,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     private bool IsValidAbility(int id, out QueenAbilityInfo ability)
     {
         ability = GetAbilityById(id);
-        return abilityData != null && upgradeLevels.ContainsKey(id) && ability != null;
+        return upgradeLevels.ContainsKey(id) && ability != null;
     }
 
     /// <summary>
@@ -101,7 +100,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// <returns>QueenAbilityInfo 객체 또는 null</returns>
     private QueenAbilityInfo GetAbilityById(int id)
     {
-        return abilityData?.infoList.Find(x => x.id == id);
+        DataManager.Instance.queenAbilityDic.TryGetValue(id, out var ability);
+        return ability;
     }
 
     /// <summary>
@@ -137,9 +137,12 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     {
         int totalRefundCost = 0;
 
-        foreach (var ability in abilityData.infoList)
+        foreach (var kvp in DataManager.Instance.queenAbilityDic)
         {
-            int currentLevel = upgradeLevels[ability.id];
+            var ability = kvp.Value;
+            int id = ability.ID;
+
+            int currentLevel = upgradeLevels[id];
 
             // 레벨이 1 이상일 경우, 누적 비용 계산
             for (int i = 0; i < currentLevel; i++)
@@ -148,8 +151,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             }
 
             // 레벨 초기화
-            upgradeLevels[ability.id] = 0;
-
+            upgradeLevels[id] = 0;
         }
 
         // UI갱신
@@ -178,9 +180,9 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// UI 스크립트를 등록하고 능력 목록 UI 아이템을 생성합니다.
     /// </summary>
     /// <param name="script">UI 패널 스크립트</param>
-    public void SetUIQueenAbility(UIQueenAbilityPanel script)
+    public void SetQueenAbilityUIController(QueenAbilityUIController script)
     {
-        uiQueenAbilityPanel = script;
+        queenAbilityUIController = script;
         CreateAbilityItems();
     }
 
@@ -202,14 +204,20 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     {
         abilityItemDict.Clear();
 
-        foreach (var ability in abilityData.infoList)
+        foreach (var kvp in DataManager.Instance.queenAbilityDic)
         {
-            var item = Instantiate(abilityItemPrefab, UIQueenAbilityPanel.ContentTransform);
-            item.Initialize(ability, GetLevel(ability.id));
-            abilityItemDict[ability.id] = item;
+            var ability = kvp.Value;
+
+            var item = Instantiate(abilityItemPrefab, QueenAbilityUIController.ContentTransform);
+            item.Initialize(ability, GetLevel(ability.ID));
+            abilityItemDict[ability.ID] = item;
         }
     }
 
+    /// <summary>
+    /// 현재 강화 상태를 저장 데이터 형태로 변환합니다.
+    /// </summary>
+    /// <returns>강화 정보가 담긴 QueenAbilityUpgradeData 객체</returns>
     public QueenAbilityUpgradeData SetSaveData()
     {
         var saveData = new QueenAbilityUpgradeData
@@ -229,6 +237,10 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         return saveData;
     }
 
+    /// <summary>
+    /// 저장된 강화 데이터를 적용하고 UI를 갱신합니다.
+    /// </summary>
+    /// <param name="data">적용할 강화 데이터</param>
     public void ApplyUpgradeData(QueenAbilityUpgradeData data)
     {
         if (data.upgrades == null)

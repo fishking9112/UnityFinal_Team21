@@ -39,8 +39,8 @@ public class HeroAbilityInfo : IInfo
     public float duration_Base;
     public float duration_LevelUp;
 
-    public float count_Base;
-    public float count_LevelUp;
+    public int count_Base;
+    public int count_LevelUp;
     public float countDelay_Base;
     public float countDelay_LevelUp;
 
@@ -151,10 +151,10 @@ public class HeroAbilityData : SheetDataReaderBase
                     }
                     break;
                 case "count_Base":
-                    heroAbilityInfo.count_Base = Utils.StringToFloat(cell.value);
+                    heroAbilityInfo.count_Base = Utils.StringToInt(cell.value);
                     break;
                 case "count_LevelUp":
-                    heroAbilityInfo.count_LevelUp = Utils.StringToFloat(cell.value);
+                    heroAbilityInfo.count_LevelUp = Utils.StringToInt(cell.value);
                     break;
                 case "countDelay_Base":
                     heroAbilityInfo.countDelay_Base = Utils.StringToFloat(cell.value);

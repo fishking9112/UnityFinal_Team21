@@ -7,17 +7,14 @@ using UnityEngine;
 public class HeroMoveState : HeroBaseState
 {
     private bool isMove;
-    private CancellationTokenSource deadToken;
 
     public HeroMoveState(HeroState state) : base(state)
     {
     }
 
-    public override void StateEnter()
+    public override void Enter()
     {
-        base.StateEnter();
-
-        deadToken = new CancellationTokenSource();
+        base.Enter();
 
         state.dir = state.GetDir();
         isMove = true;
@@ -27,38 +24,39 @@ public class HeroMoveState : HeroBaseState
 
     private async UniTaskVoid MoveAndSearch()
     {
-        while(isMove)
+        while (isMove)
         {
             MoveHero();
-            Search();
+            Search(); 
+
             await UniTask.Yield();
         }
     }
 
-    public override void StateExit()
+    public override void Exit()
     {
-        base.StateExit();
+        base.Exit();
         isMove = false;
-        deadToken?.Cancel();
-        deadToken = null;
     }
 
     private void MoveHero()
     {
-        state.hero.transform.Translate(state.moveSpeed * Time.deltaTime * state.dir);
+        state.navMeshAgent.SetDestination(state.dir);
+        //state.hero.transform.Translate(state.moveSpeed * Time.deltaTime * state.dir);
     }
 
     private void Search()
     {
         // Find Enemy that inside check area
-        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, 3);
+        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, 3,1<<7);
         if (col == null)
         {
             return;
         }
         else
         {
-            //state.ChangeState(state.attackState);
+            state.ChangeState(state.attackState);
         }
     }
+
 }
