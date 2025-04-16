@@ -6,6 +6,7 @@ using UnityEngine;
 public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
 {
     private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
+    public IReadOnlyDictionary<int, int> AcquiredEnhanceLevels => acquiredEnhanceLevels;
 
     private QueenEnhanceUIController queenEnhanceUIController;
     public QueenEnhanceUIController QueenEnhanceUIController => queenEnhanceUIController;
@@ -15,6 +16,7 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
     /// </summary>
     public void ActivateEnhance()
     {
+        Time.timeScale = 0;
         var randomOptions = GetRandomInhanceOptions();
 
         // UIController에게 전달
@@ -81,6 +83,7 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
         Utils.Log($"{info.name} 강화 적용, 현재 레벨: {newLevel}");
 
         // TODO: 해당 강화 효과 적용 처리 (예: 스탯 변화 등)
+
     }
 
 

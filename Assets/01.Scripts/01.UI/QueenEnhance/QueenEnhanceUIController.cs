@@ -56,5 +56,6 @@ public class QueenEnhanceUIController : MonoBehaviour
             itemSlots[i].ResetButton();
         }
         objectParent.SetActive(false);
+        Time.timeScale = 1;
     }
 }
