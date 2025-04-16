@@ -32,27 +32,20 @@ public interface IPoolable
 }
 
 [Serializable]
-public class PoolPrefab<T> where T : Component
-{
-    public string key;
-    public T prefab;
-    public int initPoolSize;
-}
-
 public class PrefabType
 {
+    public string key;
     public Component prefab;
-    public Type type;
+    public int initPoolSize;
 
     public PrefabType(Component prefab)
     {
         this.prefab = prefab;
-        this.type = prefab.GetType();
     }
 }
 public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
 {
-    [SerializeField] private PoolPrefab<Component>[] poolPrefabs;
+    [SerializeField] private PrefabType[] poolPrefabs;
 
     private Dictionary<string, Stack<Component>> pools = new Dictionary<string, Stack<Component>>();
     private Dictionary<string, GameObject> parentMap = new Dictionary<string, GameObject>();
