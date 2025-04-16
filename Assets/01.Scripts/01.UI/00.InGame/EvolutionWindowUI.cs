@@ -26,16 +26,19 @@ public class EvolutionWindowUI : MonoBehaviour
 
     private void Start()
     {
-        curIndex = 0;
-        SetUI();
-
         leftButton.onClick.AddListener(OnClickLeftButton);
         rightButton.onClick.AddListener(OnClickRightButton);
         backButton.onClick.AddListener(OnClickBackButton);
     }
 
+    private void OnEnable()
+    {
+        curIndex = 0;
+        UpdateUI();
+    }
+
     // UI 초기화
-    private void SetUI()
+    private void UpdateUI()
     {
         // 양쪽 맨 끝 페이지에서는 버튼 하나 비활성화
         leftButton.gameObject.SetActive(curIndex > 0);
@@ -70,7 +73,7 @@ public class EvolutionWindowUI : MonoBehaviour
         if (curIndex > 0)
         {
             curIndex--;
-            SetUI();
+            UpdateUI();
         }
     }
 
@@ -80,7 +83,7 @@ public class EvolutionWindowUI : MonoBehaviour
         if (curIndex < pageList.Count - 1)
         {
             curIndex++;
-            SetUI();
+            UpdateUI();
         }
     }
 
