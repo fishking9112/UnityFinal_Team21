@@ -1,17 +1,7 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-
-[Serializable]
-public class TestMonster
-{
-    public int id;
-    public string name;
-    public float cost;
-    public Sprite icon;
-    public GameObject prefabs;
-}
 
 public enum QueenSlot
 {
@@ -29,31 +19,35 @@ public class QueenController : MonoBehaviour
     [SerializeField] private MonsterSlotUI monsterSlotUI;
     [SerializeField] private MagicSlotUI magicSlotUI;
 
-    [SerializeField] private float summonGaugeRecoverySpeed = 10f;
-    [SerializeField] private float magicGaugeRecoverySpeed = 5f;
-
     public Magic selectedMagic;
-    public TestMonster selectedMonster;
+    public MonsterInfo selectedMonster;
     public GameObject cursorIcon;
     public QueenSlot curSlot = QueenSlot.MONSTER;
 
-    public TestMonster[] testMonster;
-
+    public List<MonsterInfo> monsterList;
 
     private void Start()
     {
         condition = GameManager.Instance.queen.condition;
         objectPoolManager = ObjectPoolManager.Instance;
 
-        // 테스트용 몬스터 추가
-        foreach (var monster in testMonster)
-        {
-            monsterSlotUI.AddSlot(monster);
-        }
+        // 테스트 코드
+        monsterList.Add(DataManager.Instance.monsterDic[0]);
+        monsterList.Add(DataManager.Instance.monsterDic[1]);
     }
 
     private void Update()
     {
+        // 테스트 코드
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            foreach (var monster in monsterList)
+            {
+                Debug.Log(monster.outfit);
+                monsterSlotUI.AddSlot(monster);
+            }
+        }
+
         switch (curSlot)
         {
             case QueenSlot.MONSTER:
@@ -96,15 +90,15 @@ public class QueenController : MonoBehaviour
     {
         if (curSlot == QueenSlot.MONSTER)
         {
-            BaseSlotUI<TestMonster> curBaseSlotUI = monsterSlotUI;
-            TestMonster monster = curBaseSlotUI.GetKey(index);
+            MonsterInfo monster = monsterSlotUI.GetValue(index);
 
             if (monster == null)
             {
                 return;
             }
+
             selectedMonster = monster;
-            cursorIcon.GetComponent<SpriteRenderer>().sprite = selectedMonster.icon;
+            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(selectedMonster.outfit);
         }
         else if (curSlot == QueenSlot.MAGIC)
         {
@@ -145,7 +139,8 @@ public class QueenController : MonoBehaviour
         }
 
         condition.AdjustCurSummonGauge(-selectedMonster.cost);
-        //objectPoolManager.GetObject(selectedMonster.name, worldMousePos);
+        var monster = objectPoolManager.GetObject<MonsterController>(selectedMonster.outfit, worldMousePos);
+        monster.GetComponent<MonsterController>().StatInit(selectedMonster);
     }
 
 
@@ -170,7 +165,7 @@ public class QueenController : MonoBehaviour
     // 자동 게이지 회복
     private void RecoveryGauge()
     {
-        condition.AdjustCurMagicGauge(magicGaugeRecoverySpeed * Time.deltaTime);
-        condition.AdjustCurSummonGauge(summonGaugeRecoverySpeed * Time.deltaTime);
+        condition.AdjustCurMagicGauge(condition.MagicGaugeRecoverySpeed * Time.deltaTime);
+        condition.AdjustCurSummonGauge(condition.SummonGaugeRecoverySpeed * Time.deltaTime);
     }
 }
