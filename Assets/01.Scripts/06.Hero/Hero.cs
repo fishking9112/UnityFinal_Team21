@@ -7,11 +7,7 @@ public class Hero : MonoBehaviour, IPoolable
 {
     private HeroState stateMachine;
 
-    private Vector2 dir;
-
-    private float randomDelay;
-    private float moveSpeed;
-
+    public  HeroController controller;
     public GameObject target;
 
     private int enemyLayer;
@@ -29,6 +25,8 @@ public class Hero : MonoBehaviour, IPoolable
     private void Start()
     {
         stateMachine = new HeroState(this);
+        controller=GetComponent<HeroController>();
+        stateMachine.navMeshAgent = controller.navMeshAgent;
         stateMachine.ChangeState(stateMachine.moveState);
 
         enemyLayer = LayerMask.GetMask("Monster");
@@ -48,14 +46,6 @@ public class Hero : MonoBehaviour, IPoolable
         // 테스트 코드(성경책, 미사일 추가)
         AddAbility<HeroAbilityBible>();
         AddAbility<HeroAbilityMissile>();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            ResetAbility();
-        }
     }
 
     public GameObject FindNearestTarget()
@@ -102,8 +92,6 @@ public class Hero : MonoBehaviour, IPoolable
         stateMachine = new HeroState(this);
         stateMachine.ChangeState(stateMachine.moveState);
 
-        randomDelay = 3f;
-        moveSpeed = 5;
         enemyLayer = LayerMask.GetMask("Monster");
 
         DeadCheck().Forget();

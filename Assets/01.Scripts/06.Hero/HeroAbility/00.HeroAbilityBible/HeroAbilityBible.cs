@@ -6,7 +6,7 @@ using UnityEngine;
 public class HeroAbilityBible : HeroAbilitySystem
 {
     private ObjectPoolManager objectPoolManager;
-    private List<GameObject> bibleList = new List<GameObject>();
+    private List<IPoolable> bibleList = new List<IPoolable>();
 
     [Header("Bible Stat")]
     [SerializeField] private float speed;
@@ -39,11 +39,11 @@ public class HeroAbilityBible : HeroAbilitySystem
 
     protected override void ActionAbility()
     {
-        SummonBible().Forget();
+        SummonBible();
     }
 
     // 성경책 생성
-    private async UniTaskVoid SummonBible()
+    private void SummonBible()
     {
         // 만렙일 경우 무한 지속
         if (maxUpgrade)
@@ -68,24 +68,24 @@ public class HeroAbilityBible : HeroAbilitySystem
             bible.speed = speed;
             bible.angle = summonAngle;
 
-            bibleList.Add(biblePrefab);
+            bibleList.Add(bible);
 
-            if(curLevel == maxLevel)
+            if(curLevel == maxLevel && !maxUpgrade)
             {
                 maxUpgrade = true;
             }
             else
             {
                 // 만렙이 아닐 경우 지속시간이 지나면 디스폰
-                DespawnBible(biblePrefab, duration).Forget();
+                DespawnBible(bible, duration).Forget();
             }
         }
     }
 
-    private async UniTaskVoid DespawnBible(GameObject bible, float delay)
+    private async UniTaskVoid DespawnBible(IPoolable bible,float delay)
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(duration));
-        bible.GetComponent<IPoolable>()?.OnDespawn();
+        await UniTask.Delay(TimeSpan.FromSeconds(delay));
+        bible?.OnDespawn();
         bibleList.Remove(bible);
     }
 
@@ -102,7 +102,7 @@ public class HeroAbilityBible : HeroAbilitySystem
     {
         foreach(var bible in bibleList)
         {
-            bible.GetComponent<IPoolable>()?.OnDespawn();
+            bible?.OnDespawn();
         }
 
         bibleList.Clear();

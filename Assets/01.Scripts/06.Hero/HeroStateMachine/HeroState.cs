@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Android.Types;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class HeroState : StateMachine
 {
@@ -12,6 +13,7 @@ public class HeroState : StateMachine
     public HeroAttackState attackState { get; private set; }
     public HeroDeadStete deadState { get; private set; }
 
+    public NavMeshAgent navMeshAgent { get; set; }
 
     public Transform target;
     public Vector2 dir { get; set; }
@@ -31,12 +33,12 @@ public class HeroState : StateMachine
 
         // 데이터 가져오는걸로 수정 필요
         moveSpeed = 1;
-        target = GameObject.Find("Circle").transform;
+        target = GameObject.Find("Circle (1)").transform;
     }
 
 
     public Vector2 GetDir()
     {
-        return target.position - hero.transform.position;
+        return target.position;
     }
 }
