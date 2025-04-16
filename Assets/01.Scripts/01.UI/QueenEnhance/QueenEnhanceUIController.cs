@@ -33,7 +33,7 @@ public class QueenEnhanceUIController : MonoBehaviour
     {
         await UniTask.WaitUntil(() => QueenEnhanceManager.Instance != null); 
         QueenEnhanceManager.Instance.SetQueenInhanceUIController(this);
-
+        queenEnhanceStatusUI.SetQueenCondition(GameManager.Instance.queen.condition);
     }
 
     /// <summary>
@@ -49,6 +49,9 @@ public class QueenEnhanceUIController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 강화 선택창 UI 비활성화
+    /// </summary>
     public void CloseUI()
     {
         for (int i = 0; i < itemSlots.Length; i++)

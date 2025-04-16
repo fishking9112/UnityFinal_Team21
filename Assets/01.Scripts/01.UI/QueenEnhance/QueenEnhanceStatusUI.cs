@@ -7,46 +7,49 @@ using UnityEngine;
 
 public class QueenEnhanceStatusUI : MonoBehaviour
 {
-    private QueenCondition queenCondition;
+    [SerializeField] private QueenCondition queenCondition;
     [SerializeField] private TextMeshProUGUI statusText;
-    [SerializeField] private TextMeshProUGUI enhanceText;
 
-    private void Start()
+    public void SetQueenCondition(QueenCondition queenCondition)
     {
-        queenCondition = GameManager.Instance.queen.condition;
+        this.queenCondition = queenCondition;
     }
 
     public void RefreshStatus()
     {
         var builder = new StringBuilder();
 
-        // 1. 기본 스탯 표시
-        // 마나 (n / max)
+        // 마나
         float curMana = queenCondition.CurMagicGauge.Value;
         float maxMana = queenCondition.MaxMagicGauge.Value;
         builder.AppendLine($"마나 : ({(int)curMana} / {(int)maxMana})");
-        
-        // 마나 회복량 (ex: n / sec)
-        float manaRegen = queenCondition.magicGaugeRecoverySpeed;
-        builder.AppendLine($"마나 회복량 : {manaRegen:F1} / sec");
-        
-        // 소환 게이지 (n / max)
-        float curSummon = queenCondition.CurSummonGauge.Value;
-        float maxSummon = queenCondition.MaxSummonGauge.Value;
-        builder.AppendLine($"소환 게이지 : {(int)curSummon} / {(int)maxSummon})");
-        
-        // 소환 회복량
-        float summonRegen = queenCondition.summonGaugeRecoverySpeed;
-        builder.AppendLine($"소환 회복량 : {summonRegen:F1} / sec");
-       
-        // TODO : 해야함.
-        int castleHp = 100;
-        int maxCastleHp = 100;
-        builder.AppendLine($"캐슬 체력 : ({castleHp}/{maxCastleHp})");
+
+        // 마나 회복량 = 기본 회복량 + 강화 효과
+        float manaRegenBase = queenCondition.magicGaugeRecoverySpeed;
+        float manaRegenEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(1002);
+        builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / sec");
+
+        // 소환 게이지 = 현재 + 강화 / 최대
+        float maxSummonBase = queenCondition.MaxSummonGauge.Value;
+        float maxSummonEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(1003);
+        float maxSummonGauge = maxSummonBase + maxSummonEnhance;
+        builder.AppendLine($"소환 게이지 : {FormatNumber(maxSummonBase)} + {FormatNumber(maxSummonEnhance)} / {FormatNumber(maxSummonGauge)}");
+
+        // 소환 회복량 = 기본 + 강화
+        float summonRegenBase = queenCondition.summonGaugeRecoverySpeed;
+        float summonRegenEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(-1);
+        builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / sec");
+
+        // 캐슬 체력 = 기본 + 강화 / 최대
+        float castleHpBase = 100;
+        float castleHpEnhance = 100;
+        float maxCastleHp = castleHpBase + castleHpEnhance;
+        builder.AppendLine($"캐슬 체력 : {FormatNumber(castleHpBase)} + {FormatNumber(castleHpEnhance)} / {FormatNumber(maxCastleHp)}");
 
         builder.AppendLine("------------------------------------");
 
-        // 2. 종족별 강화 효과 표시 (MonsterPassive만)
+
+        // 종족별 강화 효과 표시 (MonsterPassive만)
         var acquiredEnhances = QueenEnhanceManager.Instance.AcquiredEnhanceLevels;
 
         var orderedBroods = new List<string>();
@@ -72,15 +75,19 @@ public class QueenEnhanceStatusUI : MonoBehaviour
                 if (info.brood.ToString() != brood || info.type != QueenEnhanceType.MonsterPassive) continue;
 
                 int level = QueenEnhanceManager.Instance.GetEnhanceLevel(info.ID);
-                if (level <= 0) continue;
+                if (level <= 0) continue; 
 
                 int value = info.state_Base + info.state_LevelUp * Mathf.Max(0, level - 1);
                 builder.AppendLine($"- {info.name} : Lv.{level} (+{value})");
             }
-
             builder.AppendLine("------------------------------------");
         }
 
         statusText.text = builder.ToString();
     }
+    private string FormatNumber(float value)
+    {
+        return value % 1 == 0 ? ((int)value).ToString() : value.ToString("F1");
+    }
+
 }
