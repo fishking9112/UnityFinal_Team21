@@ -137,7 +137,8 @@ public class HeroAbilityData : SheetDataReaderBase
                     break;
                 case "duration_Base":
                     if (heroAbilityInfo.type == HeroAbilityType.REVOLUTION
-                        || heroAbilityInfo.type == HeroAbilityType.AREA)
+                        || heroAbilityInfo.type == HeroAbilityType.AREA
+                        || heroAbilityInfo.type == HeroAbilityType.RANGED)
                     {
                         heroAbilityInfo.duration_Base = Utils.StringToFloat(cell.value);
                     }
