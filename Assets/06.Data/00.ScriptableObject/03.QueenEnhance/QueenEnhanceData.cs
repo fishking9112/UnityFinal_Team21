@@ -12,6 +12,7 @@ public enum QueenEnhanceType
 public enum QueenEnhanceBrood
 {
     NULL,
+    None,
     Smile,
     Skeleton,
 }
