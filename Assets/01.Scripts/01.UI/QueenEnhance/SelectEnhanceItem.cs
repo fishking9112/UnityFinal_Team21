@@ -16,7 +16,6 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] private TextMeshProUGUI enhanceNextLevelText;
     [SerializeField] private TextMeshProUGUI enhanceTypeText;
     [SerializeField] private TextMeshProUGUI enhanceDecText;
-    [SerializeField] private TextMeshProUGUI enhanceStatText;
 
     private Vector3 originalScale;
     private bool isSelected = false;
@@ -40,9 +39,9 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         iconImage.sprite = null;
         enhanceNameText.text = info.name;
 
-        if (nextLevel > info.maxLevel)
+        if (nextLevel >= info.maxLevel)
         {
-            enhanceNextLevelText.text = "Lv. Max";
+            enhanceNextLevelText.text = $"Lv. {nextLevel}(Max)";
         }
         else
         {
@@ -50,10 +49,9 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
 
         enhanceTypeText.text = info.type.ToString();
-        enhanceDecText.text = info.description;
 
         int previewValue = info.state_Base + (info.state_LevelUp * currentLevel);
-        enhanceStatText.text = $"예상 효과: +{previewValue}";
+        enhanceDecText.text = info.description.Replace("n", previewValue.ToString());
     }
     public void ResetButton()
     {
