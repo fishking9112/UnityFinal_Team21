@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Return : MonoBehaviour, IPoolable
 {
-    private Action<GameObject> returnToPool;
+    private Action<Component> returnToPool;
     private IEnumerator ReturnToPool()
     {
         yield return new WaitForSeconds(2.0f);
         OnDespawn();
     }
 
-    public void Init(Action<GameObject> returnAction)
+    public void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
     }
@@ -24,7 +24,6 @@ public class Return : MonoBehaviour, IPoolable
 
     public void OnDespawn()
     {
-        returnToPool?.Invoke(this.gameObject);
         //GameManager.Instance.MosterMap.Remove(this.gameObject,this);
     }
 }

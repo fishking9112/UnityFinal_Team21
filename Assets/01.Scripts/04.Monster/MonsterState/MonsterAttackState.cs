@@ -89,9 +89,9 @@ public class MonsterAttackState : MonsterBaseState
     /// </summary>
     private void RangedAttack()
     {
-        var go = ObjectPoolManager.Instance.GetObject(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
+        var projectileObject = ObjectPoolManager.Instance.GetObject<ProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
         //? LATE : GetComponent를 안쓰는 방법이 뭐가 있을까?
-        var projectileObject = go.GetComponent<ProjectileObject>();
+        //var projectileObject = go.GetComponent<ProjectileObject>();
         projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);
     }
 

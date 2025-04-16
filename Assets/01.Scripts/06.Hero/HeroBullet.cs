@@ -15,7 +15,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     Rigidbody2D rigid;
     float time;
     float limitTime;
-    private Action<GameObject> returnToPool;
+    private Action<Component> returnToPool;
     CancellationTokenSource cancel = new CancellationTokenSource();
 
     CancellationToken token;
@@ -25,7 +25,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
         damage = 1;
     }
 
-    public void Init(Action<GameObject> returnAction)
+    public void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
         limitTime = 5f;
@@ -38,7 +38,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
         time = 0f;
 
         cancel.Cancel();
-        returnToPool?.Invoke(gameObject);
+        returnToPool?.Invoke(this);
     }
 
     public void OnSpawn()

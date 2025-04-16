@@ -59,10 +59,10 @@ public class HeroAbilityBible : HeroAbilitySystem
             float summonAngle = i * angle * Mathf.Deg2Rad;
             Vector3 summonPosition = transform.position + new Vector3(MathF.Cos(summonAngle), MathF.Sin(summonAngle), 0f) + pivot;
 
-            GameObject biblePrefab = objectPoolManager.GetObject("Bible", summonPosition);
+            Bible bible = objectPoolManager.GetObject<Bible>("Bible", summonPosition);
 
             // 소환한 성경책 초기화
-            Bible bible = biblePrefab.GetComponent<Bible>();
+            //Bible bible = biblePrefab.GetComponent<Bible>();
             bible.target = this.transform;
             bible.radius = pivot.magnitude;
             bible.speed = speed;
@@ -82,7 +82,7 @@ public class HeroAbilityBible : HeroAbilitySystem
         }
     }
 
-    private async UniTaskVoid DespawnBible(IPoolable bible,float delay)
+    private async UniTaskVoid DespawnBible(IPoolable bible, float delay)
     {
         await UniTask.Delay(TimeSpan.FromSeconds(delay));
         bible?.OnDespawn();

@@ -35,8 +35,8 @@ public class MonsterManager : MonoSingleton<MonsterManager>
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 randomPos = GetRandomWorldPositionInCamera();
-            var monster = ObjectPoolManager.Instance.GetObject(monsterInfoList[testSpawnNumber].outfit, randomPos);
-            monster.GetComponent<MonsterController>().StatInit(monsterInfoList[testSpawnNumber]);
+            MonsterController monster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfoList[testSpawnNumber].outfit, randomPos);
+            monster.StatInit(monsterInfoList[testSpawnNumber]);
             // monster.GetComponent<MonsterController>().fsm.Setup(testTarget);
         }
     }
