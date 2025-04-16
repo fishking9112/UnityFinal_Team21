@@ -7,6 +7,7 @@ public class QueenEnhanceUIController : MonoBehaviour
 {
     [SerializeField] private GameObject objectParent;
     [SerializeField] private Transform contentParent;
+    [SerializeField] private QueenEnhanceStatusUI queenEnhanceStatusUI;
     [SerializeField] private SelectInhanceItem[] itemSlots;
 
     private void OnValidate()
@@ -41,6 +42,7 @@ public class QueenEnhanceUIController : MonoBehaviour
     public void ShowSelectUI(List<QueenEnhanceInfo> list)
     {
         objectParent.SetActive(true);
+        queenEnhanceStatusUI.RefreshStatus();
         for (int i = 0; i < itemSlots.Length; i++)
         {
             itemSlots[i].SetInfo(list[i]);

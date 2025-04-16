@@ -5,19 +5,10 @@ using UnityEngine;
 
 public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
 {
-    private List<QueenEnhanceInfo> cachedInhanceList = new();
-
     private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
 
     private QueenEnhanceUIController queenEnhanceUIController;
     public QueenEnhanceUIController QueenEnhanceUIController => queenEnhanceUIController;
-
-
-    private void Start()
-    {
-        // 모든 강화 옵션 데이터를 미리 캐싱
-        cachedInhanceList.AddRange(DataManager.Instance.queenEnhanceDic.Values);
-    }
 
     /// <summary>
     /// 외부에서 호출되는 강화 진입 함수
