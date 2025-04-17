@@ -39,6 +39,7 @@ public class EvolutionNode : MonoBehaviour
         evolutionTree.OnClickNodeButton(this);
     }
 
+    // 현재 버튼(노드)들의 상태 업데이트
     public void UpdateButtonState()
     {
         if (nodeLock)

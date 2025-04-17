@@ -2,13 +2,19 @@ using UnityEngine;
 
 public class MonsterSlotUI : BaseSlotUI<MonsterInfo>
 {
-    protected override void OnSlotAdd(int index, MonsterInfo monster)
+    // Queen의 몬스터 슬롯에 정보 추가
+    public override void AddSlot(int index, MonsterInfo monster)
     {
-        if (index < slotIcon.Count)
+        base.AddSlot(index,monster);
+
+        if (index < 0 || index >= slotIcon.Count)
         {
-            slotIcon[index].sprite = DataManager.Instance.iconData.GetSprite(monster.outfit);
-            slotIcon[index].enabled = true;
-            slotIcon[index].preserveAspect = true;
+            return;
         }
+
+        slotIcon[index].sprite = DataManager.Instance.iconData.GetSprite(monster.outfit);
+        slotIcon[index].enabled = true;
+        slotIcon[index].preserveAspect = true;
+
     }
 }

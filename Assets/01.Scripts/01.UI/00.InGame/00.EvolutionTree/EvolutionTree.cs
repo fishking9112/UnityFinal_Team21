@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -21,9 +22,11 @@ public class EvolutionTree : MonoBehaviour
     [SerializeField] private List<EvolutionSlot> slotList;
 
     public EvolutionNode selectedNode;
+    private QueenController queenController;
 
     private void Start()
     {
+        queenController = GameManager.Instance.queen.controller;
         evolutionNodeDic = new Dictionary<int, EvolutionNode>();
 
         foreach (EvolutionNode node in evolutionNodeList)
@@ -39,9 +42,10 @@ public class EvolutionTree : MonoBehaviour
             evolutionButton.gameObject.SetActive(false);
         }
 
-        foreach(EvolutionSlot slot in slotList)
+        for(int i = 0; i < slotList.Count; i++)
         {
-            slot.evolutionTree = this;
+            slotList[i].evolutionTree = this;
+            slotList[i].slotIndex = i;
         }
 
         descriptionImage.enabled = false;
@@ -132,11 +136,24 @@ public class EvolutionTree : MonoBehaviour
     {
         foreach (var slot in slotList)
         {
-            if (slot.FindPreNode(node))
+            if (slot.selectedMonster == node)
             {
                 slot.ClearSlot();
+                RemoveQueenSlot(slot.slotIndex);
                 return;
             }
         }
+    }
+
+    // 진화 트리 슬롯에 등록한 몬스터를 퀸 슬롯에도 등록
+    public void AddQueenSlot(MonsterInfo monster, int index)
+    {
+        queenController.monsterSlotUI.AddSlot(index, monster);
+    }
+
+    // 진화 트리 슬롯에 제거한 몬스터를 퀸 슬롯에도 제거
+    public void RemoveQueenSlot(int index)
+    {
+        queenController.monsterSlotUI.RemoveSlot(index);
     }
 }

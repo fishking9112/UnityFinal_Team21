@@ -16,8 +16,8 @@ public class QueenController : MonoBehaviour
 
     private Vector3 worldMousePos;
 
-    [SerializeField] private MonsterSlotUI monsterSlotUI;
-    [SerializeField] private MagicSlotUI magicSlotUI;
+    public MonsterSlotUI monsterSlotUI;
+    public MagicSlotUI magicSlotUI;
 
     public Magic selectedMagic;
     public MonsterInfo selectedMonster;
