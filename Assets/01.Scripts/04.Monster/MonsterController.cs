@@ -119,7 +119,7 @@ public class MonsterController : BaseController, IPoolable
             renderer.color = color;
         }
 
-        stateMachine.ChangeState(stateMachine.FindToDo); // 할 일 찾기
+        stateMachine.ChangeState(stateMachine.Tracking); // 할 일 찾기
 
         MonsterManager.Instance.monsters.Add(gameObject, this);
         MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Add(this);

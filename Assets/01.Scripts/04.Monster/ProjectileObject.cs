@@ -92,12 +92,12 @@ public class ProjectileObject : MonoBehaviour, IPoolable
         else if (baseController.attackLayer.value == (baseController.attackLayer.value | (1 << collision.gameObject.layer)))
         {
             //? LATE : 나중에 한곳에 몰아야 할 듯(Hero나 Monster나)
-            BaseController target = MonsterManager.Instance.testTarget.GetComponent<BaseController>();
-            if (target != null)
-            {
-                target.TakeDamaged(baseController.statData.attack);
-                //? LATE : 넉백 적용 할 것
-            }
+            // BaseController target = MonsterManager.Instance.testTarget.GetComponent<BaseController>();
+            // if (target != null)
+            // {
+            //     target.TakeDamaged(baseController.statData.attack);
+            //     //? LATE : 넉백 적용 할 것
+            // }
 
             DestroyProjectile(collision.ClosestPoint(transform.position), fxOnDestory);
         }

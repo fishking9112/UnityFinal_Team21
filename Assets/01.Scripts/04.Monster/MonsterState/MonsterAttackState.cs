@@ -49,7 +49,6 @@ public class MonsterAttackState : MonsterBaseState
         attackTimer += Time.deltaTime;
         if (attackTimer < (1f / stateMachine.Controller.monsterInfo.attackSpeed)) return;
 
-
         targetDistance = (target.position - navMeshAgent.transform.position).magnitude;
 
         // 타겟과의 거리가 적절해졌다면
@@ -69,7 +68,6 @@ public class MonsterAttackState : MonsterBaseState
         {
             stateMachine.ChangeState(stateMachine.Tracking);
         }
-        stateMachine.ChangeState(stateMachine.FindToDo); // 다시 적 찾기로 변경
     }
 
     public override void FixedUpdate()

@@ -5,28 +5,20 @@ using UnityEngine;
 
 public class MonsterManager : MonoSingleton<MonsterManager>
 {
-    public Dictionary<GameObject, MonsterController> monsters = new Dictionary<GameObject, MonsterController>(); // 몬스터가 나오면 자동으로 이곳에 저장(전체)
+    public Dictionary<GameObject, MonsterController> monsters = new(); // 몬스터가 나오면 자동으로 이곳에 저장(전체)
 
-    // SO에서 받아온 데이터에서 변화된 값 (이곳에서 스텟을 상승시키면 몬스터 스텟 자동으로 업그레이드 완료)
+    // Data에서 받아온 데이터에서 변화된 값 (이곳에서 스텟을 상승시키면 몬스터 스텟 자동으로 업그레이드 완료)
     public Dictionary<int, MonsterInfo> monsterInfoList = new();
     // Health값 바뀌면 BaseController의 HealthStatUpdate 실행 필요
-    public Dictionary<int, List<MonsterController>> idByMonsters = new Dictionary<int, List<MonsterController>>(); // 몬스터가 나오면 자동으로 이곳에 저장(종류별)
-
-    [Header("SO 데이터")]
-    public MonsterData monsterData;
-    public int testSpawnNumber = 0;
-    public BaseController testTarget;
+    public Dictionary<int, List<MonsterController>> idByMonsters = new(); // 몬스터가 나오면 자동으로 이곳에 저장(종류별)
 
     void Start()
     {
-        for (int i = 0; i < monsterData.infoList.Count; i++)
+        foreach (var monsterdata in DataManager.Instance.monsterDic.Values)
         {
-            // 깊은 복사로 저장해서 들고 있음
-            monsterInfoList[monsterData.infoList[i].id] = new MonsterInfo(monsterData.infoList[i]);
-            idByMonsters[i] = new List<MonsterController>();
+            monsterInfoList[monsterdata.ID] = new MonsterInfo(monsterdata);
+            idByMonsters[monsterdata.ID] = new List<MonsterController>();
         }
-
-        testTarget.StatInit(monsterInfoList[0]);
     }
 
     // 테스트 코드 주석처리
