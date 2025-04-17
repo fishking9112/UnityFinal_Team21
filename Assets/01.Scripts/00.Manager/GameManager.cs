@@ -10,7 +10,6 @@ public class GameManager : MonoSingleton<GameManager>
 {
     public Queen queen;
     private CursorState curCursorState;
-    public Hero hero;
     private PauseController pauseController;
 
     protected override void Awake()

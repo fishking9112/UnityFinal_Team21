@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hero : MonoBehaviour, IPoolable
+public class Hero : MonoBehaviour
 {
     private HeroState stateMachine;
 
@@ -15,12 +15,6 @@ public class Hero : MonoBehaviour, IPoolable
     public List<HeroAbilitySystem> abilityList;
     private Dictionary<Type, HeroAbilitySystem> allAbilityDic;
 
-    private Action<Component> returnToPool;
-
-    private void Awake()
-    {
-        GameManager.Instance.hero = this;
-    }
 
     private void Start()
     {
@@ -83,31 +77,11 @@ public class Hero : MonoBehaviour, IPoolable
         return target;
     }
 
-    public void Init(Action<Component> returnAction)
-    {
-        returnToPool = returnAction;
-    }
-
-    public void OnSpawn()
-    {
-        stateMachine = new HeroState(this);
-        stateMachine.ChangeState(stateMachine.moveState);
-
-        enemyLayer = LayerMask.GetMask("Monster");
-
-        DeadCheck().Forget();
-    }
-
     private async UniTaskVoid DeadCheck()
     {
         // 사망 체크로 수정 핋요
         await UniTask.WaitUntil(() => gameObject.activeSelf == false);
         stateMachine.ChangeState(stateMachine.deadState);
-    }
-
-    public void OnDespawn()
-    {
-        returnToPool?.Invoke(this);
     }
 
     /// <summary>
