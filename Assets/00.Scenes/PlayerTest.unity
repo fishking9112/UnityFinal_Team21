@@ -1797,11 +1797,27 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 574638e4-8190-433f-b8f2-c3843f64e956
-    m_ActionName: Queen/EvolutionWindow[/Keyboard/tab]
+    m_ActionId: 14bb0621-d7da-4213-8b56-9a532701bec5
+    m_ActionName: UI/EvolutionWindow[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1819578968}
+        m_TargetAssemblyTypeName: IngameUI, Assembly-CSharp
+        m_MethodName: OnEvolutionWindow
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9c2d3ada-8a9b-4938-a828-f1d85799f0b6
+    m_ActionName: InGame/EvolutionWindow[/Keyboard/tab]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Queen
+  m_DefaultActionMap: InGame
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &166616946
@@ -1853,6 +1869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   condition: {fileID: 0}
   controller: {fileID: 0}
+  input: {fileID: 0}
 --- !u!4 &166616949
 Transform:
   m_ObjectHideFlags: 0

@@ -50,6 +50,7 @@ public class EvolutionTree : MonoBehaviour
         attackText.text = string.Empty;
     }
 
+
     // 진화 버튼을 누르면 진화 확정
     public void OnClickEvolutionButton()
     {

@@ -1,5 +1,6 @@
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
@@ -45,6 +46,11 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         MoveCamera();
         ZoomCamera();
         ClampCameraPosition();

@@ -33,6 +33,12 @@ public class EvolutionWindowUI : MonoBehaviour
     {
         curIndex = 0;
         UpdateUI();
+        GameManager.Instance.queen.input.SwitchCurrentActionMap("UI");
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.queen.input.SwitchCurrentActionMap("InGame");
     }
 
     // UI 초기화
