@@ -6,12 +6,14 @@ using UnityEngine;
 public enum QueenEnhanceType
 {
     NULL,
+    Point,
     QueenPassive,
     MonsterPassive
 }
 public enum QueenEnhanceBrood
 {
     NULL,
+    None,
     Smile,
     Skeleton,
 }

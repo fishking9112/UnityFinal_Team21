@@ -13,20 +13,24 @@ public class MonsterAttackState : MonsterBaseState
     public override void Enter()
     {
         base.Enter();
-
-        sprite.flipX = navMeshAgent.transform.position.x < target.position.x; // 방향 바꾸기
         navMeshAgent.ResetPath();
         navMeshAgent.velocity = Vector2.zero;
+        spum.PlayAnimation(PlayerState.ATTACK, 0);
+        spum.SetAttackSpeed(stateMachine.Controller.monsterInfo.attackSpeed);
 
         // 원거리 공격은 projectile 생성
-        if (stateMachine.Controller.monsterInfo.projectile != "")
+        if (stateMachine.Controller.monsterInfo.type == MonsterType.RANGED)
         {
             RangedAttack();
             return;
         }
 
         // 근거리 공격
-        MeleeAttack();
+        if (stateMachine.Controller.monsterInfo.type == MonsterType.MELEE)
+        {
+            MeleeAttack();
+            return;
+        }
     }
 
     public override void Exit()
@@ -40,11 +44,43 @@ public class MonsterAttackState : MonsterBaseState
 
     public override void Update()
     {
+        base.Update();
         // 공격 이후 애니메이션이 끝나거나 공격 딜레이를 기다림
         attackTimer += Time.deltaTime;
-        if (attackTimer < stateMachine.Controller.monsterInfo.attackSpeed) return;
+        if (attackTimer < (1f / stateMachine.Controller.monsterInfo.attackSpeed)) return;
 
+
+        targetDistance = (target.position - navMeshAgent.transform.position).magnitude;
+
+        // 타겟과의 거리가 적절해졌다면
+        if (stateMachine.Controller.monsterInfo.attackRange >= targetDistance)
+        {
+            // 타겟과 나 사이에 장애물이 있다면 계속 움직이기
+            if (stateMachine.Controller.stateMachine.Tracking.IsObstacleBetween(navMeshAgent.transform.position, target.position))
+            {
+                stateMachine.ChangeState(stateMachine.Tracking);
+            }
+            else
+            {
+                stateMachine.ChangeState(stateMachine.Attack); // 공격!
+            }
+        }
+        else // 아니면 계속 target 위치로 이동할 수 있도록 업데이트하여 추적
+        {
+            stateMachine.ChangeState(stateMachine.Tracking);
+        }
         stateMachine.ChangeState(stateMachine.FindToDo); // 다시 적 찾기로 변경
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        if (target != null)
+        {
+            // 방향 바꾸기
+            pivot.localScale = new Vector3(navMeshAgent.transform.position.x < target.position.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
+        }
     }
 
     /// <summary>
@@ -52,13 +88,12 @@ public class MonsterAttackState : MonsterBaseState
     /// </summary>
     private void MeleeAttack()
     {
-        // 근접공격은 0.25초 뒤에 Overlap생성 후 공격
         cts?.Cancel();
         cts?.Dispose(); // 메모리 누수 방지
         cts = new CancellationTokenSource();
 
-        // 0.25초 뒤에 원을 생성해서 
-        UniTask.Delay(250, cancellationToken: cts.Token).ContinueWith(() =>
+        // 1초 프레임에서 0.55때 공격됨
+        UniTask.Delay((int)(550 * (1f / stateMachine.Controller.monsterInfo.attackSpeed)), cancellationToken: cts.Token).ContinueWith(() =>
         {
             float minDist = float.MaxValue;
             Vector2 origin = navMeshAgent.transform.position;
@@ -79,6 +114,7 @@ public class MonsterAttackState : MonsterBaseState
 
             if (nearHit != null)
             {
+                //? LATE : GetComponent?
                 nearHit.gameObject.GetComponent<BaseController>().TakeDamaged(stateMachine.Controller.statData.attack);
             }
         });
@@ -89,10 +125,16 @@ public class MonsterAttackState : MonsterBaseState
     /// </summary>
     private void RangedAttack()
     {
-        var projectileObject = ObjectPoolManager.Instance.GetObject<ProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
-        //? LATE : GetComponent를 안쓰는 방법이 뭐가 있을까?
-        //var projectileObject = go.GetComponent<ProjectileObject>();
-        projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);
+        cts?.Cancel();
+        cts?.Dispose(); // 메모리 누수 방지
+        cts = new CancellationTokenSource();
+
+        // 1초 프레임에서 0.65때 발사
+        UniTask.Delay((int)(650 * (1f / stateMachine.Controller.monsterInfo.attackSpeed)), cancellationToken: cts.Token).ContinueWith(() =>
+        {
+            var projectileObject = ObjectPoolManager.Instance.GetObject<ProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
+            projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);
+        });
     }
 
 }

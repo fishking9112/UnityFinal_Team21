@@ -7,10 +7,15 @@ public class MonsterTrackingState : MonsterBaseState
     public override void Enter()
     {
         base.Enter();
+        spum.PlayAnimation(PlayerState.MOVE, 0);
+        //? LATE : 속도 0.1f 곱해서 너프시킴
+        spum.SetMoveSpeed(stateMachine.Controller.monsterInfo.moveSpeed * 0.1f);
+        navMeshAgent.speed = stateMachine.Controller.monsterInfo.moveSpeed * 0.1f;
     }
 
     public override void FixedUpdate()
     {
+        base.FixedUpdate();
         //? LATE : 타겟이 없다면 다시 적 찾기
         if (target == null)
         {
@@ -36,7 +41,11 @@ public class MonsterTrackingState : MonsterBaseState
         else // 아니면 계속 target 위치로 이동할 수 있도록 업데이트하여 추적
         {
             navMeshAgent.SetDestination(target.position); // 이동 업데이트
-            sprite.flipX = navMeshAgent.transform.position.x < target.position.x; // 방향 바꾸기
+
+            // 방향 바꾸기
+            if (navMeshAgent.velocity.magnitude >= stateMachine.Controller.monsterInfo.moveSpeed * 0.04f)
+                pivot.localScale = new Vector3(0 <= navMeshAgent.velocity.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
+            // pivot.localScale = new Vector3(navMeshAgent.transform.position.x < target.position.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
         }
     }
 
@@ -46,7 +55,7 @@ public class MonsterTrackingState : MonsterBaseState
     /// <param name="from"></param>
     /// <param name="to"></param>
     /// <returns></returns>
-    private bool IsObstacleBetween(Vector2 from, Vector2 to)
+    public bool IsObstacleBetween(Vector2 from, Vector2 to)
     {
         Vector2 direction = to - from;
         Vector2 center = (to + from) * 0.5f;

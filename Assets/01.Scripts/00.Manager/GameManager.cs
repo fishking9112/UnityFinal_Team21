@@ -11,6 +11,7 @@ public class GameManager : MonoSingleton<GameManager>
     public Queen queen;
     private CursorState curCursorState;
     public Hero hero;
+    private PauseController pauseController;
 
     protected override void Awake()
     {
@@ -36,17 +37,25 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
+    public void SetPauseController(PauseController pauseController)
+    {
+        this.pauseController = pauseController;
+    }
 
     private async void OnApplicationQuit()
     {
-        await UGSManager.Instance.SaveLoad.SaveAsync();
+        //await UGSManager.Instance.SaveLoad.SaveAsync();
     }
 
     private void OnApplicationPause(bool pause)
     {
         if (pause)
         {
-            _ = UGSManager.Instance.SaveLoad.SaveAsync();
+            if(pauseController != null)
+            {
+                pauseController.ForcePause();
+            }
+            //_ = UGSManager.Instance.SaveLoad.SaveAsync();
         }
     }
 }

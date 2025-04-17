@@ -15,21 +15,26 @@ public class HeroBullet : MonoBehaviour , IPoolable
     Rigidbody2D rigid;
     float time;
     float limitTime;
+    float pierce;
     private Action<Component> returnToPool;
     CancellationTokenSource cancel = new CancellationTokenSource();
 
     CancellationToken token;
-    private void OnEnable()
+
+    public void SetBullet(float time,float pierceCnt,float dmg,float spd)
     {
-        speed = 3f;
-        damage = 1;
+        limitTime = time;
+        pierce = pierceCnt;
+        damage = dmg;
+        speed = spd;
+
+        Move().Forget();
     }
 
     public void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
-        limitTime = 5f;
-        targetLayer = 1<< LayerMask.GetMask("Monster");
+        targetLayer = 7;
         token = this.GetCancellationTokenOnDestroy();
     }
 
@@ -43,7 +48,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
 
     public void OnSpawn()
     {
-        Move().Forget();
+        
     }
 
 
@@ -67,9 +72,17 @@ public class HeroBullet : MonoBehaviour , IPoolable
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // 딕셔너리 통해서 GetComponent 없이 쓰기
-        if(collision.gameObject.layer== targetLayer)
+        if (collision.gameObject.layer == targetLayer)
         {
-            OnDespawn();
+            if (MonsterManager.Instance.monsters.TryGetValue(collision.gameObject, out var monster))
+            {
+                monster.TakeDamaged(damage);
+            }
+            pierce--;
+            if (pierce <= 0)
+            {
+                OnDespawn();
+            }
         }
     }
 
