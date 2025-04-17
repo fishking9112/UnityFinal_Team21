@@ -8,11 +8,6 @@ public class HeroAbilityBible : HeroAbilitySystem
     private ObjectPoolManager objectPoolManager;
     private List<IPoolable> bibleList = new List<IPoolable>();
 
-    [Header("Bible Stat")]
-    [SerializeField] private float speed;
-    [SerializeField] private float duration;
-    [SerializeField] private int count;
-
     private bool maxUpgrade;
 
     protected override void Start()
@@ -22,10 +17,6 @@ public class HeroAbilityBible : HeroAbilitySystem
         base.Start();
 
         objectPoolManager = ObjectPoolManager.Instance;
-
-        speed = heroAbilityInfo.speed_Base;
-        duration = heroAbilityInfo.duration_Base;
-        count = heroAbilityInfo.count_Base;
 
         maxUpgrade = false;
 
@@ -93,9 +84,6 @@ public class HeroAbilityBible : HeroAbilitySystem
     {
         base.AbilityLevelUp();
 
-        speed += heroAbilityInfo.speed_LevelUp;
-        duration += heroAbilityInfo.duration_LevelUp;
-        count += heroAbilityInfo.count_LevelUp;
     }
 
     public override void DespawnAbility()
@@ -106,5 +94,9 @@ public class HeroAbilityBible : HeroAbilitySystem
         }
 
         bibleList.Clear();
+    }
+    public override void SetAbilityLevel(int level)
+    {
+        base.SetAbilityLevel(level);
     }
 }

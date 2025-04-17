@@ -16,18 +16,19 @@ public class HeroBullet : MonoBehaviour , IPoolable
     float time;
     float limitTime;
     float pierce;
+    float rotateSpeed;
     private Action<Component> returnToPool;
     CancellationTokenSource cancel = new CancellationTokenSource();
 
     CancellationToken token;
 
-    public void SetBullet(float time,float pierceCnt,float dmg,float spd)
+    public void SetBullet(float time,float pierceCnt,float dmg,float spd,float rSpeed)
     {
         limitTime = time;
         pierce = pierceCnt;
         damage = dmg;
         speed = spd;
-
+        rotateSpeed = rSpeed;
         Move().Forget();
     }
 
@@ -58,8 +59,10 @@ public class HeroBullet : MonoBehaviour , IPoolable
     /// <returns></returns>
     private async UniTaskVoid Move()
     {
+        
         while (time < limitTime)
         {
+            transform.Rotate(0,0, rotateSpeed * Time.deltaTime);
             transform.position = (Vector2)transform.position + speed * Time.deltaTime * (Vector2)transform.up;
             time += Time.deltaTime;
 

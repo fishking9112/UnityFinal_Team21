@@ -13,7 +13,6 @@ public class HeroBaseState : IState
     public HeroBaseState(HeroState state)
     {
         this.state = state;
-        hero = GameManager.Instance.hero;
     }
 
     public virtual void Enter()

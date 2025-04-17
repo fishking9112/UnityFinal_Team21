@@ -37,11 +37,9 @@ public abstract class BaseSlotUI<T> : MonoBehaviour
         slotList.Remove(slot);
     }
 
-    // 슬롯의 번호로 해당 슬롯의 key값 가져오기
-    public T GetKey(int index)
+    // 슬롯의 번호로 해당 슬롯의 값 가져오기
+    public T GetValue(int index)
     {
         return (index >= 0 && index < slotList.Count) ? slotList[index] : default;
     }
-
-    public abstract Sprite GetIcon(string name);
 }

@@ -1,18 +1,14 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 using UnityEngine;
 
 public class HeroAbilityMissile : HeroAbilitySystem
 {
-    private Vector2 fireDir = Vector2.left;
-
-
-    private float count;
-    private float pierce;
-    private float speed;
     private Hero hero;
 
     private ObjectPoolManager objectPoolManager;
+    private CancellationTokenSource token;
 
     /// <summary>
     /// 선언과 동시에 호출하기. 값 입력
@@ -25,10 +21,8 @@ public class HeroAbilityMissile : HeroAbilitySystem
 
         hero = this.GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
+        token = new CancellationTokenSource();
 
-        speed = heroAbilityInfo.speed_Base;
-        count = heroAbilityInfo.count_Base;
-        pierce = heroAbilityInfo.piercing_Base;
         AddAbility();
     }
 
@@ -39,10 +33,10 @@ public class HeroAbilityMissile : HeroAbilitySystem
     protected override void ActionAbility()
     {
         target = hero.FindNearestTarget();
-        ShootBullet().Forget();
+        ShootBullet(token.Token).Forget();
     }
 
-    private async UniTaskVoid ShootBullet()
+    private async UniTaskVoid ShootBullet(CancellationToken tk)
     {
         float angle;
 
@@ -59,25 +53,25 @@ public class HeroAbilityMissile : HeroAbilitySystem
         for (int i = 0; i < count; i++)
         {
             var bullet = objectPoolManager.GetObject<HeroBullet>("Bullet", hero.transform.position);
-            bullet.SetBullet(heroAbilityInfo.duration_Base, pierce, damage, speed);
+            bullet.SetBullet(heroAbilityInfo.duration_Base, pierce, damage, speed,0);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
             
-            await UniTask.Delay(TimeSpan.FromSeconds(delay));
+            await UniTask.Delay(TimeSpan.FromSeconds(delay),false,PlayerLoopTiming.Update,cancellationToken:tk);
         }
     }
 
     public override void AbilityLevelUp()
     {
         base.AbilityLevelUp();
-
-        // Missile이 레벨업 시 증가해야 되는 스텟 증가 추가
-        count+= heroAbilityInfo.count_LevelUp;
-        pierce += heroAbilityInfo.piercing_LevelUp;
-        speed += heroAbilityInfo.speed_LevelUp;
     }
 
     public override void DespawnAbility()
     {
-
+        token?.Cancel();
+        token?.Dispose();
+    }
+    public override void SetAbilityLevel(int level)
+    {
+        base.SetAbilityLevel(level);
     }
 }

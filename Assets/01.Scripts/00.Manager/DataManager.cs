@@ -15,6 +15,9 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private HeroAbilityData heroAbilityData;
     [SerializeField] private QueenEnhanceData queenEnhanceData;
 
+    // iconData는 id값으로 초기화 하지 않으므로, iconData 안에 Dictionary 존재
+    public IconData iconData;
+
     // 모든 데이터 딕셔너리
     public Dictionary<int, MonsterInfo> monsterDic = new Dictionary<int, MonsterInfo>();
     public Dictionary<int, QueenAbilityInfo> queenAbilityDic = new Dictionary<int, QueenAbilityInfo>();
