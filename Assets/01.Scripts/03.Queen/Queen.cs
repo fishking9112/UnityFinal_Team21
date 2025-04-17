@@ -7,6 +7,7 @@ public class Queen : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.queen = this;
         condition = GetComponent<QueenCondition>();
         controller = GetComponent<QueenController>();
     }

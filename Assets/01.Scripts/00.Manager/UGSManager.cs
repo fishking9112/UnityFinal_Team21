@@ -55,7 +55,7 @@ public class UGSManager : MonoSingleton<UGSManager>
         }
 
         await LoadPlayerDataAsync();
-        SceneLoadManager.Instance.LoadScene("MenuScene").Forget();
+        SceneLoadManager.Instance.LoadScene("MenuScene");
     }
 
     /// <summary>

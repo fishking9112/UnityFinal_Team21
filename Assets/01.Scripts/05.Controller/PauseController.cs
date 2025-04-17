@@ -65,7 +65,7 @@ public class PauseController : MonoBehaviour
     public void OnClickGoToTitle()
     {
         Time.timeScale = 1f;
-        SceneLoadManager.Instance.LoadScene("MainUITest").Forget();
+        SceneLoadManager.Instance.LoadScene("MainUITest");
     }
 
     /// <summary>

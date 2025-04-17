@@ -9,7 +9,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
     [SerializeField] private GameObject loadingCanvas;
     [SerializeField] private TextMeshProUGUI loadingText;
 
-    private bool isFading = false; 
+    private bool isFading = false;
     private bool isAnimatingLoadingText = false;
 
     protected override void Awake()
@@ -32,7 +32,16 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
     /// 페이드 아웃 -> 로딩 UI -> 씬 로드 -> 페이드 인의 순서로 씬을 전환
     /// </summary>
     /// <param name="sceneName">로드할 씬 이름</param>
-    public async UniTask LoadScene(string sceneName)
+    public void LoadScene(string sceneName)
+    {
+        LoadSceneTask(sceneName).Forget();
+    }
+
+    /// <summary>
+    /// 페이드 아웃 -> 로딩 UI -> 씬 로드 -> 페이드 인의 순서로 씬을 전환
+    /// </summary>
+    /// <param name="sceneName">로드할 씬 이름</param>
+    public async UniTask LoadSceneTask(string sceneName)
     {
         if (isFading) return;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,7 +21,7 @@ public class QueenController : MonoBehaviour
     [SerializeField] private MagicSlotUI magicSlotUI;
 
     public Magic selectedMagic;
-    public MonsterInfo selectedMonster;
+    [NonSerialized] public MonsterInfo selectedMonster;
     public GameObject cursorIcon;
     public QueenSlot curSlot = QueenSlot.MONSTER;
 

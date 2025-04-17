@@ -15,7 +15,7 @@ public class QueenSelectUI : MonoBehaviour
         {
             button.onClick.AddListener(() =>
             {
-                SceneLoadManager.Instance.LoadScene("GameScene").Forget();
+                SceneLoadManager.Instance.LoadScene("GameScene");
             });
         }
     }
