@@ -65,7 +65,12 @@ public abstract class HeroAbilitySystem : MonoBehaviour
 
     public virtual void AbilityLevelUp()
     {
-        maxLevel = curLevel + 1;
+        if(maxLevel == curLevel)
+        {
+            return;
+        }
+
+        curLevel++;
         damage += heroAbilityInfo.damage_LevelUp;
         delay -= heroAbilityInfo.delay_LevelUp;
         size += heroAbilityInfo.size_LevelUp;

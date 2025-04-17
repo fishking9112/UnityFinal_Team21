@@ -1,6 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -49,7 +47,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
         AnimateLoadingText();                 // 점 애니메이션 시작
 
         await LoadSceneAsync(sceneName);      // 씬 로드
-        await UniTask.Delay(1000);            // 1초 대기
+        await UniTask.Delay(3000);            // 1초 대기
 
         fadeCanvasGroup.interactable = false;
         fadeCanvasGroup.blocksRaycasts = false;

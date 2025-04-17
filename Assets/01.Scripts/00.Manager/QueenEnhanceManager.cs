@@ -1,88 +1,167 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
 {
-    [Header("설정")]
-    [SerializeField] private int numberOfOptions = 3; // 레벨업 시 보여줄 옵션 개수
-
-  //  private List<QueenEnhanceInfo> cachedInhanceList = new();
-
+    private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
+    public IReadOnlyDictionary<int, int> AcquiredEnhanceLevels => acquiredEnhanceLevels;
 
     private QueenEnhanceUIController queenEnhanceUIController;
     public QueenEnhanceUIController QueenEnhanceUIController => queenEnhanceUIController;
 
-
-    private void Start()
+    /// <summary>
+    /// 외부에서 호출되는 강화 진입 함수
+    /// </summary>
+    public void ActivateEnhance()
     {
-        // 모든 강화 옵션 데이터를 미리 캐싱
-    //    cachedInhanceList.AddRange(DataManager.Instance.queenInhanceDic.Values);
+        Time.timeScale = 0;
+        var randomOptions = GetRandomInhanceOptions();
+        QueenEnhanceUIController.ShowSelectUI(randomOptions);
     }
 
     /// <summary>
-    /// 외부에서 호출되는 레벨업 진입 함수
+    /// UI 패널 스크립트 등록
     /// </summary>
-    public void OnLevelUp()
-    {
-     //   var randomOptions = GetRandomInhanceOptions(numberOfOptions);
-
-        // UIController에게 전달
-      //  QueenEnhanceUIController.ShowOptions(randomOptions);
-    }
-
-    /// <summary>
-    /// 현재 전체 강화 목록 중에서 랜덤하게 n개를 뽑는다.
-    /// </summary>
-   /* private List<QueenInhanceInfo> GetRandomInhanceOptions(int count)
-    {
-        List<QueenInhanceInfo> result = new List<QueenInhanceInfo>();
-        List<QueenInhanceInfo> tempList = new List<QueenInhanceInfo>(cachedInhanceList);
-
-        for (int i = 0; i < count && tempList.Count > 0; i++)
-        {
-            int randomIndex = Random.Range(0, tempList.Count);
-            result.Add(tempList[randomIndex]);
-            tempList.RemoveAt(randomIndex);
-
-        }
-
-        return result;
-    }*/
-
-    /// <summary>
-    /// 버튼에서 전달된 선택된 옵션 처리
-    /// </summary>
-    /*public void OnOptionSelected(QueenEnhanceInfo selectedInfo)
-   {
-
-        // 선택된 능력 적용 처리 로직 (TODO)
-        // ex. 플레이어 능력 강화
-
-        // UI 닫기
-        QueenEnhanceUIController.Instance.HideUI();
-    }*/
-
-
-
-    /// <summary>
-    /// UI 스크립트를 등록하고 능력 목록 UI 아이템을 생성합니다.
-    /// </summary>
-    /// <param name="script">UI 패널 스크립트</param>
+    /// <param name="script">강화 UI 컨트롤러</param>
     public void SetQueenInhanceUIController(QueenEnhanceUIController script)
     {
         queenEnhanceUIController = script;
     }
 
+    /// <summary>
+    /// 현재 강화 목록에서 레벨이 MaxLevel이 아닌 3개 항목을 무작위로 선택
+    /// </summary>
+    private List<QueenEnhanceInfo> GetRandomInhanceOptions()
+    {
+        List<QueenEnhanceInfo> availableList = new List<QueenEnhanceInfo>();
+
+        foreach (var pair in DataManager.Instance.queenEnhanceDic)
+        {
+            int id = pair.Key;
+            QueenEnhanceInfo info = pair.Value;
+
+            acquiredEnhanceLevels.TryGetValue(id, out int currentLevel);
+
+            if (currentLevel < info.maxLevel)
+                availableList.Add(info);
+        }
+
+        List<QueenEnhanceInfo> result = new List<QueenEnhanceInfo>();
+
+        while (result.Count < 3 && availableList.Count > 0)
+        {
+            int index = Random.Range(0, availableList.Count);
+            result.Add(availableList[index]);
+            availableList.RemoveAt(index);
+        }
+
+        return result;
+    }
 
     /// <summary>
     /// 강화 항목 선택 시 실제 적용되는 함수
     /// </summary>
-  /*  public void ApplyInhance(QueenInhanceInfo info)
+    /// <param name="info">강화 항목 정보</param>
+    public void ApplyInhance(QueenEnhanceInfo info)
     {
+        int id = info.ID;
 
-        // TODO: 능력 적용 로직 구현
-    }*/
+        if (acquiredEnhanceLevels.ContainsKey(id))
+            acquiredEnhanceLevels[id]++;
+        else
+            acquiredEnhanceLevels[id] = 1;
 
+        int level = acquiredEnhanceLevels[id];
+
+        Utils.Log($"{info.name} 강화 적용, 현재 레벨: {level}");
+
+        int value = info.state_Base + info.state_LevelUp * (level - 1);
+
+        switch (info.type)
+        {
+            case QueenEnhanceType.QueenPassive:
+                ApplyQueenPassive(id, value);
+                break;
+
+            case QueenEnhanceType.MonsterPassive:
+                ApplyMonsterPassive(info.brood, info.name, value);
+                break;
+
+            case QueenEnhanceType.Point:
+                // TODO: 진화 포인트 증가 등 추가 처리
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 여왕 강화 스탯 적용 처리
+    /// </summary>
+    private void ApplyQueenPassive(int id, int value)
+    {
+        var condition = GameManager.Instance.queen.condition;
+
+        switch (id)
+        {
+            case 1002: // 마나 회복 속도 증가
+                condition.magicGaugeRecoverySpeed += value;
+                break;
+
+            case 1003: // 소환 게이지 회복 속도 증가
+                condition.summonGaugeRecoverySpeed += value;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 몬스터 강화 스탯 적용 처리 (종족 + 항목 이름 기반 분기)
+    /// </summary>
+    private void ApplyMonsterPassive(QueenEnhanceBrood brood, string name, int value)
+    {
+        foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
+        {
+            if (monster.type.ToString() != brood.ToString())
+                continue;
+
+            if (name.Contains("체력"))
+            {
+                monster.health += value;
+            }
+            else if (name.Contains("공격력"))
+            {
+                monster.attack += value;
+            }
+            else if (name.Contains("이동속도"))
+            {
+                monster.moveSpeed += value;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 강화 수치 총합을 반환 (현재 레벨까지 누적 계산)
+    /// </summary>
+    public int GetEnhanceValueByID(int id)
+    {
+        if (!acquiredEnhanceLevels.TryGetValue(id, out int level) || level <= 0)
+            return 0;
+
+        if (!DataManager.Instance.queenEnhanceDic.TryGetValue(id, out var info))
+            return 0;
+
+        int total = 0;
+        for (int i = 1; i <= level; i++)
+        {
+            total += info.state_Base + info.state_LevelUp * (i - 1);
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// 해당 ID의 현재 강화 레벨 반환
+    /// </summary>
+    public int GetEnhanceLevel(int id)
+    {
+        return acquiredEnhanceLevels.TryGetValue(id, out var level) ? level : 0;
+    }
 }
