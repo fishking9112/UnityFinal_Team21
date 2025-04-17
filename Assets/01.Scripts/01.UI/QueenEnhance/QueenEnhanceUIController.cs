@@ -35,7 +35,6 @@ public class QueenEnhanceUIController : MonoBehaviour
     {
         await UniTask.WaitUntil(() => QueenEnhanceManager.Instance != null); 
         QueenEnhanceManager.Instance.SetQueenInhanceUIController(this);
-        queenEnhanceStatusUI.SetQueenCondition(GameManager.Instance.queen.condition);
     }
 
     /// <summary>

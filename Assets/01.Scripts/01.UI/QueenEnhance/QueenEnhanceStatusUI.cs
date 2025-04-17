@@ -8,6 +8,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     [SerializeField] private QueenCondition queenCondition;
     [SerializeField] private TextMeshProUGUI statusText;
 
+
     /// <summary>
     /// 퀸의 상태 정보를 설정합니다.
     /// </summary>
@@ -21,6 +22,9 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     public void RefreshStatus()
     {
+        if(queenCondition == null)
+            SetQueenCondition(GameManager.Instance.queen.condition);
+
         var builder = new StringBuilder();
 
         // 마나 표시
