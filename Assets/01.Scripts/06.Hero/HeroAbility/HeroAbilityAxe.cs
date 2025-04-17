@@ -6,12 +6,6 @@ using UnityEngine;
 
 public class HeroAbilityAxe : HeroAbilitySystem
 {
-    private float pierce;
-    private float duration;
-    private int count;
-    private float delayCount;
-    private float rotateSpeed;
-    private float speed;
 
     private LayerMask layer;
     private ObjectPoolManager objectPoolManager;
@@ -23,13 +17,6 @@ public class HeroAbilityAxe : HeroAbilitySystem
         heroAbilityInfo = DataManager.Instance.heroAbilityDic[105];
 
         base.Start();
-
-        pierce = heroAbilityInfo.piercing_Base;
-        duration = heroAbilityInfo.duration_Base;
-        count = heroAbilityInfo.count_Base;
-        delayCount = heroAbilityInfo.countDelay_Base;
-        rotateSpeed = heroAbilityInfo.rotateSpeed_Base;
-        speed = heroAbilityInfo.speed_Base;
 
         layer = LayerMask.GetMask("Monster");
 
@@ -73,6 +60,11 @@ public class HeroAbilityAxe : HeroAbilitySystem
     public override void DespawnAbility()
     {
 
+    }
+
+    public override void AbilityLevelUp()
+    {
+        base.AbilityLevelUp();
     }
 
 }

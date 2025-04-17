@@ -57,8 +57,6 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     public override void AbilityLevelUp()
     {
         base.AbilityLevelUp();
-
-        // MeleeAttack이 레벨업 시 증가해야 되는 스텟 증가 추가
     }
 
     private void OverlapCheck(float angle)

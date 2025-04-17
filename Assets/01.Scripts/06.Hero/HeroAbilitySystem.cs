@@ -10,12 +10,28 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     protected GameObject target;
 
     [Header("Base Stat")]
-    [SerializeField] protected float delay;
-    [SerializeField] protected float damage;
-    [SerializeField] protected float knockback;
     [SerializeField] protected int maxLevel;
     [SerializeField] protected Vector3 pivot;
+    [SerializeField] protected float damage;
+    [SerializeField] protected float damage_LevelUp;
+    [SerializeField] protected float delay;
+    [SerializeField] protected float delay_LevelUp;
+    [SerializeField] protected float pierce;
+    [SerializeField] protected float pierce_LevelUp;
     [SerializeField] protected Vector3 size;
+    [SerializeField] protected Vector3 size_LevelUp;
+    [SerializeField] protected HeroAbilityType type;
+    [SerializeField] protected float speed;
+    [SerializeField] protected float speed_LevelUp;
+    [SerializeField] protected float rotateSpeed;
+    [SerializeField] protected float rotateSpeed_LevelUp;
+    [SerializeField] protected float duration;
+    [SerializeField] protected float duration_LevelUp;
+    [SerializeField] protected float count;
+    [SerializeField] protected float count_LevelUp;
+    [SerializeField] protected float countDelay;
+    [SerializeField] protected float countDelay_LevelUp;
+    [SerializeField] protected float knockback;
     [SerializeField] protected int curLevel;
 
     protected virtual void Start()
@@ -26,11 +42,27 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     private void Init()
     {
         delay = heroAbilityInfo.delay_Base;
+        delay_LevelUp = heroAbilityInfo.delay_LevelUp;
         damage = heroAbilityInfo.damage_Base;
+        damage_LevelUp= heroAbilityInfo.damage_LevelUp;
+        pierce = heroAbilityInfo.piercing_Base;
+        pierce_LevelUp = heroAbilityInfo.piercing_LevelUp;
+        size = heroAbilityInfo.size_Base;
+        size_LevelUp = heroAbilityInfo.size_LevelUp;
+        type = heroAbilityInfo.type;
+        speed = heroAbilityInfo.speed_Base;
+        speed_LevelUp = heroAbilityInfo.speed_LevelUp;
+        rotateSpeed = heroAbilityInfo.rotateSpeed_Base;
+        rotateSpeed_LevelUp = heroAbilityInfo.rotateSpeed_LevelUp;
+        duration = heroAbilityInfo.damage_Base;
+        duration_LevelUp = heroAbilityInfo.duration_LevelUp;
+        count = heroAbilityInfo.count_Base;
+        count_LevelUp = heroAbilityInfo.count_LevelUp;
+        countDelay = heroAbilityInfo.countDelay_Base;
+        countDelay_LevelUp = heroAbilityInfo.countDelay_LevelUp;
         knockback = 1; // 임시 값
         maxLevel = heroAbilityInfo.maxLevel;
         pivot = heroAbilityInfo.pivot;
-        size = heroAbilityInfo.size_Base;
         curLevel = 1;
     }
 
@@ -71,9 +103,15 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         }
 
         curLevel++;
-        damage += heroAbilityInfo.damage_LevelUp;
-        delay -= heroAbilityInfo.delay_LevelUp;
-        size += heroAbilityInfo.size_LevelUp;
+        damage += damage_LevelUp;
+        delay -= delay_LevelUp;
+        pierce += pierce_LevelUp;
+        size += size_LevelUp;
+        speed += speed_LevelUp;
+        rotateSpeed += rotateSpeed_LevelUp;
+        duration += duration_LevelUp;
+        count += count_LevelUp;
+        countDelay += countDelay_LevelUp;
     }
 
     public abstract void DespawnAbility();

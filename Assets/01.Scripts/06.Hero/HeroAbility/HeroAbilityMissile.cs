@@ -26,9 +26,6 @@ public class HeroAbilityMissile : HeroAbilitySystem
         hero = this.GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
 
-        speed = heroAbilityInfo.speed_Base;
-        count = heroAbilityInfo.count_Base;
-        pierce = heroAbilityInfo.piercing_Base;
         AddAbility();
     }
 
@@ -69,11 +66,6 @@ public class HeroAbilityMissile : HeroAbilitySystem
     public override void AbilityLevelUp()
     {
         base.AbilityLevelUp();
-
-        // Missile이 레벨업 시 증가해야 되는 스텟 증가 추가
-        count+= heroAbilityInfo.count_LevelUp;
-        pierce += heroAbilityInfo.piercing_LevelUp;
-        speed += heroAbilityInfo.speed_LevelUp;
     }
 
     public override void DespawnAbility()
