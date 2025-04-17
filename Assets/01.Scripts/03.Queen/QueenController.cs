@@ -95,11 +95,11 @@ public class QueenController : MonoBehaviour
     // 마우스의 월드좌표를 계산해서 해당 위치에 몬스터를 소환함
     private void SummonMonster()
     {
-        if (!Pointer.current.press.isPressed)
+        if (selectedMonster == null)
         {
             return;
         }
-        if (selectedMonster == null)
+        if (!Pointer.current.press.isPressed)
         {
             return;
         }
@@ -117,6 +117,7 @@ public class QueenController : MonoBehaviour
         // CameraLimit 레이어만 제외하고 충돌 하도록 함
         int layerMask = ~(1 << (LayerMask.NameToLayer("CameraLimit")));
 
+        Physics2D.SyncTransforms();
         Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius, layerMask);
 
         if (hit != null)
@@ -126,7 +127,7 @@ public class QueenController : MonoBehaviour
 
         condition.AdjustCurSummonGauge(-selectedMonster.cost);
         var monster = objectPoolManager.GetObject<MonsterController>(selectedMonster.outfit, worldMousePos);
-        monster.GetComponent<MonsterController>().StatInit(selectedMonster);
+        //monster.GetComponent<MonsterController>().StatInit(selectedMonster);
     }
 
 

@@ -620,7 +620,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 166616949}
@@ -764,6 +764,7 @@ MonoBehaviour:
   slotIcon: {fileID: 201546801}
   slotButton: {fileID: 106504967}
   slotIndex: 0
+  selectedMonster: {fileID: 0}
 --- !u!1 &107307900
 GameObject:
   m_ObjectHideFlags: 0
@@ -6919,6 +6920,7 @@ MonoBehaviour:
   slotIcon: {fileID: 782540438}
   slotButton: {fileID: 768306862}
   slotIndex: 0
+  selectedMonster: {fileID: 0}
 --- !u!1 &782540436
 GameObject:
   m_ObjectHideFlags: 0
@@ -7133,6 +7135,7 @@ MonoBehaviour:
   slotIcon: {fileID: 2128053390}
   slotButton: {fileID: 793711815}
   slotIndex: 0
+  selectedMonster: {fileID: 0}
 --- !u!1 &795237533
 GameObject:
   m_ObjectHideFlags: 0
@@ -8252,48 +8255,56 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.size
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].key
-      value: Orc_Warrior
+      value: Orc_Normal
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[1].key
-      value: Orc_Archer
+      value: Orc_Warrior
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[2].key
-      value: Hexagon Flat-Top
+      value: Orc_Warrior2
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[3].key
-      value: Bible
+      value: Orc_Berserker
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[4].key
-      value: bullet
+      value: Orc_Shaman
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[5].key
+      value: Orc_Shaman2
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].prefab
       value: 
-      objectReference: {fileID: 8060435520532602691, guid: 30a48ab96f5e18e4b9a72af19c266246, type: 3}
+      objectReference: {fileID: -5065648347422326743, guid: 9087f0fc5b52f7949a3a64d7048c8e50, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[1].prefab
       value: 
-      objectReference: {fileID: 8082864424410019987, guid: e2326d26f48824b4d9ea87dfee82767d, type: 3}
+      objectReference: {fileID: 6108453531247598012, guid: 2c5f99dfec1b51a48bb6e6e36d827821, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[2].prefab
       value: 
-      objectReference: {fileID: 901894782038373447, guid: a8e4dc20c13bf174aae63dbf8870b225, type: 3}
+      objectReference: {fileID: -7280241979764187070, guid: eb50b7986d7c9f040a6b2cac64b19ad9, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[3].prefab
       value: 
-      objectReference: {fileID: 6854478423553729202, guid: 93dee373ed3430d4dbde3d7d85765d71, type: 3}
+      objectReference: {fileID: 3196656898459127484, guid: e0b319bb29b6df443bc87ead5d027c00, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[4].prefab
       value: 
-      objectReference: {fileID: 2231113967889475797, guid: b398365b77d238c4fa669b6ba63d6680, type: 3}
+      objectReference: {fileID: 1889287506551884028, guid: 171e6520e3834b141a33d7d23acbce1a, type: 3}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[5].prefab
+      value: 
+      objectReference: {fileID: -1970046417982249742, guid: 2ed60f7b899dd3848899940e7025dffe, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].initPoolSize
       value: 5
@@ -8312,6 +8323,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[4].initPoolSize
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[5].initPoolSize
       value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -14292,6 +14307,7 @@ MonoBehaviour:
   slotIcon: {fileID: 1101280797}
   slotButton: {fileID: 1662603190}
   slotIndex: 0
+  selectedMonster: {fileID: 0}
 --- !u!1001 &1671790278
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16457,6 +16473,7 @@ MonoBehaviour:
   slotIcon: {fileID: 1680393975}
   slotButton: {fileID: 1918639229}
   slotIndex: 0
+  selectedMonster: {fileID: 0}
 --- !u!1 &1952195692
 GameObject:
   m_ObjectHideFlags: 0
@@ -17266,6 +17283,7 @@ MonoBehaviour:
   slotIcon: {fileID: 988230007}
   slotButton: {fileID: 2018910531}
   slotIndex: 0
+  selectedMonster: {fileID: 0}
 --- !u!1 &2026092541
 GameObject:
   m_ObjectHideFlags: 0

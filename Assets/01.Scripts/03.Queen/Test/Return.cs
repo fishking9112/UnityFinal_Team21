@@ -19,11 +19,10 @@ public class Return : MonoBehaviour, IPoolable
     public void OnSpawn()
     {
         StartCoroutine(ReturnToPool());
-        //GameManger.Instacnce.MonsterMap.Add(this.gameObject,this);
     }
 
     public void OnDespawn()
     {
-        //GameManager.Instance.MosterMap.Remove(this.gameObject,this);
+        returnToPool?.Invoke(this);
     }
 }
