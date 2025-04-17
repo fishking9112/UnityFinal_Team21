@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HeroAbilityMeleeAttack : HeroAbilitySystem
 {
-    private GameObject sword;
     private Hero hero;
 
     private Animator animator;
@@ -19,9 +18,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
         hero = transform.GetComponent<Hero>();
 
-        sword = transform.Find("Sword").gameObject;
-        animator = sword.GetComponent<Animator>();
-        sword.SetActive(false);
+        animator = this.GetComponentInChildren<Animator>();
 
         AddAbility();
     }
@@ -47,18 +44,13 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
             angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
                 target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
         }
-
-        sword.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-
-        sword.SetActive(true);
-        
+        animator.SetBool("2_Attack", true);
         await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=0.5f);
 
         // 충돌처리
         OverlapCheck(angle);
 
         await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=1f);
-        sword.SetActive(false);
 
     }
 

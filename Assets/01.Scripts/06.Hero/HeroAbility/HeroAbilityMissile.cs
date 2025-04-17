@@ -59,7 +59,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
         for (int i = 0; i < count; i++)
         {
             var bullet = objectPoolManager.GetObject<HeroBullet>("Bullet", hero.transform.position);
-            bullet.SetBullet(heroAbilityInfo.duration_Base, pierce, damage, speed);
+            bullet.SetBullet(heroAbilityInfo.duration_Base, pierce, damage, speed,0);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
             
             await UniTask.Delay(TimeSpan.FromSeconds(delay));
