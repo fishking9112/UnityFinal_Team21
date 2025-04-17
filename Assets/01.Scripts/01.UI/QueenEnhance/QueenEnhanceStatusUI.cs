@@ -8,6 +8,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     [SerializeField] private QueenCondition queenCondition;
     [SerializeField] private TextMeshProUGUI statusText;
 
+
     /// <summary>
     /// 퀸의 상태 정보를 설정합니다.
     /// </summary>
@@ -21,6 +22,9 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     public void RefreshStatus()
     {
+        if(queenCondition == null)
+            SetQueenCondition(GameManager.Instance.queen.condition);
+
         var builder = new StringBuilder();
 
         // 마나 표시
@@ -55,7 +59,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         builder.AppendLine($"마나 : ({(int)curMana} / {(int)maxMana})");
 
         // 마나 회복량 = 기본 회복량 + 강화 효과
-        float manaRegenBase = queenCondition.magicGaugeRecoverySpeed;
+        float manaRegenBase = queenCondition.MagicGaugeRecoverySpeed;
         float manaRegenEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(1002);
         builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / sec");
     }
@@ -76,7 +80,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendSummonRegenStatus(StringBuilder builder)
     {
-        float summonRegenBase = queenCondition.summonGaugeRecoverySpeed;
+        float summonRegenBase = queenCondition.SummonGaugeRecoverySpeed;
         float summonRegenEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(-1);
         builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / sec");
     }

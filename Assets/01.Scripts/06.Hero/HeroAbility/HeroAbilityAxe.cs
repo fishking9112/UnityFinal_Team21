@@ -1,42 +1,36 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class HeroAbilityMissile : HeroAbilitySystem
+public class HeroAbilityAxe : HeroAbilitySystem
 {
-    private Hero hero;
-
     private ObjectPoolManager objectPoolManager;
+    private Hero hero;
     private CancellationTokenSource token;
 
-    /// <summary>
-    /// 선언과 동시에 호출하기. 값 입력
-    /// </summary>
+    // Start is called before the first frame update
     protected override void Start()
     {
-        heroAbilityInfo = DataManager.Instance.heroAbilityDic[102];
+        heroAbilityInfo = DataManager.Instance.heroAbilityDic[105];
 
         base.Start();
 
-        hero = this.GetComponent<Hero>();
+        hero = GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
         token = new CancellationTokenSource();
-
         AddAbility();
     }
 
-    /// <summary>
-    /// 어떤 능력인지 구현하는 곳
-    /// 오브젝트풀로 구현해야함
-    /// </summary>
     protected override void ActionAbility()
     {
         target = hero.FindNearestTarget();
-        ShootBullet(token.Token).Forget();
+        ShootAxe(token.Token).Forget();
     }
 
-    private async UniTaskVoid ShootBullet(CancellationToken tk)
+    private async UniTaskVoid ShootAxe(CancellationToken tk)
     {
         float angle;
 
@@ -52,12 +46,20 @@ public class HeroAbilityMissile : HeroAbilitySystem
 
         for (int i = 0; i < count; i++)
         {
-            var bullet = objectPoolManager.GetObject<HeroBullet>("Bullet", hero.transform.position);
-            bullet.SetBullet(heroAbilityInfo.duration_Base, pierce, damage, speed,0);
+            var bullet = objectPoolManager.GetObject<HeroBullet>("Axe", hero.transform.position);
+            bullet.SetBullet(duration, pierce, damage, speed, rotateSpeed);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-            
-            await UniTask.Delay(TimeSpan.FromSeconds(delay),false,PlayerLoopTiming.Update,cancellationToken:tk);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, cancellationToken: tk);
         }
+    }
+
+
+    public override void DespawnAbility()
+    {
+        this.enabled = false;
+        token?.Cancel();
+        token?.Dispose();
     }
 
     public override void AbilityLevelUp()
@@ -65,11 +67,6 @@ public class HeroAbilityMissile : HeroAbilitySystem
         base.AbilityLevelUp();
     }
 
-    public override void DespawnAbility()
-    {
-        token?.Cancel();
-        token?.Dispose();
-    }
     public override void SetAbilityLevel(int level)
     {
         base.SetAbilityLevel(level);
