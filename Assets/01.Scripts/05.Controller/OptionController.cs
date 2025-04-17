@@ -31,19 +31,18 @@ public class OptionController : MonoBehaviour
 
     private void OnBGMVolumeChanged(float value)
     {
-        tempBGMVolume = value;
         SoundManager.Instance.SetBGMVolume(value);
     }
 
     private void OnSFXVolumeChanged(float value)
     {
-        tempSFXVolume = value;
         SoundManager.Instance.SetSFXVolume(value);
     }
 
     private void SaveOptions()
     {
-        // 여기에 저장 로직 추가
+        tempBGMVolume = SoundManager.Instance.BGMVolume;
+        tempSFXVolume = SoundManager.Instance.SFXVolume;
         gameObject.SetActive(false);
     }
 
