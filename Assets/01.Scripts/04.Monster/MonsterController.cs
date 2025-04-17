@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// 외형은 Prefab으로 미리 등록해서 사용
@@ -24,26 +26,39 @@ public class MonsterController : BaseController, IPoolable
 
     public void OnDespawn() // 실행하면 자동으로 반환
     {
+        // TODO : 죽을 때 크리스탈 반환?
         returnToPool?.Invoke(this);
     }
     #endregion
 
     [Header("현재 데이터")]
-    public MonsterInfo monsterInfo;
+    [NonSerialized] public MonsterInfo monsterInfo;
+    [NonSerialized] public Transform pivot;
+    [NonSerialized] public SPUM_Prefabs spum;
 
-    public Transform target;
-    public NavMeshAgent navMeshAgent;
-    public SpriteRenderer sprite;
-    public MonsterStateMachine stateMachine;
-    public Vector2 projectileSize = Vector2.zero;
+    [NonSerialized] public Transform target;
+    [NonSerialized] public NavMeshAgent navMeshAgent;
+    [NonSerialized] public MonsterStateMachine stateMachine;
+    [NonSerialized] public Vector2 projectileSize = Vector2.zero;
+    [NonSerialized] public List<SpriteRenderer> renderers;
+
+    private SortingGroup group;
+    private int sortingOffset = 0;
 
     private void Update()
     {
         stateMachine.Update();
+
+        // 테스트 코드 주석 처리
+        // if (Input.GetMouseButtonDown(1))
+        // {
+        //     Die();
+        // }
     }
     private void FixedUpdate()
     {
         stateMachine.FixedUpdate();
+        group.sortingOrder = Mathf.RoundToInt(transform.position.y * -100) + sortingOffset;
     }
 
     /// <summary>
@@ -59,21 +74,51 @@ public class MonsterController : BaseController, IPoolable
             navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
-        if (sprite == null)
-            sprite = GetComponent<SpriteRenderer>();
+        navMeshAgent.enabled = true;
+
+        if (pivot == null)
+            pivot = transform.GetChild(0);
+
+        if (spum == null)
+        {
+            spum = pivot.GetChild(0).GetComponent<SPUM_Prefabs>();
+            if (!spum.allListsHaveItemsExist())
+            {
+                spum.PopulateAnimationLists();
+            }
+            spum.OverrideControllerInit();
+        }
 
         // projectileObject의 XY값 가져오기
         if (monsterInfo.projectile != "" && projectileSize == Vector2.zero)
         {
-            //? LATE : GetComponent..!
             var projectileObject = ObjectPoolManager.Instance.GetObject<ProjectileObject>(monsterInfo.projectile, transform.position);
-            //var projectileObject = go.GetComponent<ProjectileObject>();
             projectileSize = projectileObject._boxCollider.size;
             projectileObject.OnDespawn();
         }
 
         if (stateMachine == null)
             stateMachine = new(this);
+
+        if (group == null)
+        {
+            group = GetComponent<SortingGroup>();
+        }
+
+        if (renderers == null)
+        {
+            renderers = new();
+            renderers = gameObject.GetComponentsInChildren<SpriteRenderer>(true).ToList();
+        }
+
+        // alpha 1로 초기화
+        foreach (var renderer in renderers)
+        {
+            Color color = renderer.color;
+            color.a = 1f;
+            renderer.color = color;
+        }
+
         stateMachine.ChangeState(stateMachine.FindToDo); // 할 일 찾기
 
         MonsterManager.Instance.monsters.Add(gameObject, this);
@@ -98,6 +143,6 @@ public class MonsterController : BaseController, IPoolable
         MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Remove(this);
 
         stateMachine.ChangeState(stateMachine.Die); // 사망
-        OnDespawn();
+        // OnDespawn();
     }
 }

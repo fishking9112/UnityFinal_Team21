@@ -10,8 +10,11 @@ public abstract class MonsterBaseState : IState
 {
     protected Transform target => stateMachine.Controller.target;
     protected NavMeshAgent navMeshAgent => stateMachine.Controller.navMeshAgent;
+    protected Transform pivot => stateMachine.Controller.pivot;
+    protected SPUM_Prefabs spum => stateMachine.Controller.spum;
+    protected float moveSpeed => stateMachine.Controller.statData.moveSpeed;
+    protected float attackSpeed => stateMachine.Controller.statData.moveSpeed;
     protected float targetDistance = float.MaxValue;
-    protected SpriteRenderer sprite => stateMachine.Controller.sprite;
 
 
     protected readonly MonsterStateMachine stateMachine;
