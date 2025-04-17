@@ -49,11 +49,11 @@ public class MonsterController : BaseController, IPoolable
     {
         stateMachine.Update();
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            Die();
-            // monster.GetComponent<MonsterController>().fsm.Setup(testTarget);
-        }
+        // 테스트 코드 주석 처리
+        // if (Input.GetMouseButtonDown(1))
+        // {
+        //     Die();
+        // }
     }
     private void FixedUpdate()
     {

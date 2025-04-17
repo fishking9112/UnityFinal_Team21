@@ -30,25 +30,24 @@ public class MonsterManager : MonoSingleton<MonsterManager>
     }
 
     // 테스트 코드 주석처리
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 randomPos = GetRandomWorldPositionInCamera();
-            var monster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfoList[testSpawnNumber].outfit, randomPos);
-            monster.StatInit(monsterInfoList[testSpawnNumber]);
-            // monster.GetComponent<MonsterController>().fsm.Setup(testTarget);
-        }
-    }
-    Vector2 GetRandomWorldPositionInCamera()
-    {
-        // Viewport 좌표: (0, 0) = 왼쪽 아래, (1, 1) = 오른쪽 위
-        float randomX = Random.Range(0f, 1f);
-        float randomY = Random.Range(0f, 1f);
+    // void Update()
+    // {
+    //     if (Input.GetMouseButtonDown(0))
+    //     {
+    //         Vector2 randomPos = GetRandomWorldPositionInCamera();
+    //         var monster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfoList[testSpawnNumber].outfit, randomPos);
+    //         monster.StatInit(monsterInfoList[testSpawnNumber]);
+    //     }
+    // }
+    // Vector2 GetRandomWorldPositionInCamera()
+    // {
+    //     // Viewport 좌표: (0, 0) = 왼쪽 아래, (1, 1) = 오른쪽 위
+    //     float randomX = Random.Range(0f, 1f);
+    //     float randomY = Random.Range(0f, 1f);
 
-        Vector3 viewportPos = new Vector3(randomX, randomY, Camera.main.nearClipPlane); // z는 필요없지만 있어야 함
-        Vector3 worldPos = Camera.main.ViewportToWorldPoint(viewportPos);
+    //     Vector3 viewportPos = new Vector3(randomX, randomY, Camera.main.nearClipPlane); // z는 필요없지만 있어야 함
+    //     Vector3 worldPos = Camera.main.ViewportToWorldPoint(viewportPos);
 
-        return new Vector2(worldPos.x, worldPos.y);
-    }
+    //     return new Vector2(worldPos.x, worldPos.y);
+    // }
 }

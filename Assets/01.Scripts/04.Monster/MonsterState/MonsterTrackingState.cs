@@ -43,7 +43,9 @@ public class MonsterTrackingState : MonsterBaseState
             navMeshAgent.SetDestination(target.position); // 이동 업데이트
 
             // 방향 바꾸기
-            pivot.localScale = new Vector3(navMeshAgent.transform.position.x < target.position.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
+            if (navMeshAgent.velocity.magnitude >= stateMachine.Controller.monsterInfo.moveSpeed * 0.04f)
+                pivot.localScale = new Vector3(0 <= navMeshAgent.velocity.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
+            // pivot.localScale = new Vector3(navMeshAgent.transform.position.x < target.position.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
         }
     }
 
