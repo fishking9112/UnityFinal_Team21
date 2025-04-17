@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class QueenCondition : MonoBehaviour
 {
-    [SerializeField] public float summonGaugeRecoverySpeed = 10f;
-    [SerializeField] public float magicGaugeRecoverySpeed = 5f;
     public ReactiveProperty<float> CurMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurSummonGauge { get; private set; } = new ReactiveProperty<float>();
