@@ -1361,21 +1361,6 @@ MonoBehaviour:
   monsterSlotUI: {fileID: 916721692}
   magicSlotUI: {fileID: 736249064}
   selectedMagic: {fileID: 0}
-  selectedMonster:
-    health: 0
-    defence: 0
-    moveSpeed: 0
-    attack: 0
-    attackRange: 0
-    attackSpeed: 0
-    id: 0
-    name: 
-    description: 
-    cost: 0
-    reward: 0
-    outfit: 
-    type: 0
-    projectile: 
   cursorIcon: {fileID: 90943526}
   curSlot: 0
   monsterList: []
@@ -1393,6 +1378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   condition: {fileID: 166616950}
   controller: {fileID: 166616946}
+  input: {fileID: 0}
 --- !u!4 &166616949
 Transform:
   m_ObjectHideFlags: 0
@@ -14267,6 +14253,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4531107686632742758, guid: 6d8afe8e491d0a04a9d46732c688e062, type: 3}
+      propertyPath: iconData
+      value: 
+      objectReference: {fileID: 11400000, guid: 22849e3242fcc2546addebf62243ce60, type: 2}
     - target: {fileID: 6110679251029518485, guid: 6d8afe8e491d0a04a9d46732c688e062, type: 3}
       propertyPath: m_Name
       value: DataManager

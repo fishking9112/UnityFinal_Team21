@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class QueenCondition : MonoBehaviour
 {
+    [SerializeField] private float summonGaugeRecoverySpeed = 10f;
+    public float SummonGaugeRecoverySpeed { get; private set; }
+    [SerializeField] private float magicGaugeRecoverySpeed = 5f;
+    public float MagicGaugeRecoverySpeed { get; private set; }
+
     public ReactiveProperty<float> CurMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurSummonGauge { get; private set; } = new ReactiveProperty<float>();
@@ -51,6 +56,24 @@ public class QueenCondition : MonoBehaviour
     {
         MaxSummonGauge.Value = AdjustValue(MaxSummonGauge.Value, amount, float.MaxValue);
         CurSummonGauge.Value = AdjustValue(CurSummonGauge.Value, 0, MaxSummonGauge.Value);
+    }
+
+    /// <summary>
+    /// 소환 게이지 회복 속도 조정
+    /// </summary>
+    /// <param name="amount"> 조정할 수치 </param>
+    public void AdjustSummonGaugeRecoverySpeed(float amount)
+    {
+        SummonGaugeRecoverySpeed = AdjustValue(SummonGaugeRecoverySpeed, amount, float.MaxValue);
+    }
+
+    /// <summary>
+    /// 마나 게이지 회복 속도 조정
+    /// </summary>
+    /// <param name="amount"> 조정할 수치 </param>
+    public void AdjustMagicGaugeRecoverySpeed(float amount)
+    {
+        MagicGaugeRecoverySpeed = AdjustValue(MagicGaugeRecoverySpeed, amount, float.MaxValue);
     }
 
     // 값 조정

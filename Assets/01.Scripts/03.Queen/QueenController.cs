@@ -127,8 +127,8 @@ public class QueenController : MonoBehaviour
         }
 
         condition.AdjustCurSummonGauge(-selectedMonster.cost);
-        var monster = objectPoolManager.GetObject<Return>(selectedMonster.outfit, worldMousePos);
-        //monster.StatInit(selectedMonster);
+        var monster = objectPoolManager.GetObject<MonsterController>(selectedMonster.outfit, worldMousePos);
+        monster.StatInit(selectedMonster);
     }
 
 
@@ -153,7 +153,7 @@ public class QueenController : MonoBehaviour
     // 자동 게이지 회복
     private void RecoveryGauge()
     {
-        condition.AdjustCurMagicGauge(condition.magicGaugeRecoverySpeed * Time.deltaTime);
-        condition.AdjustCurSummonGauge(condition.summonGaugeRecoverySpeed * Time.deltaTime);
+        condition.AdjustCurMagicGauge(condition.MagicGaugeRecoverySpeed * Time.deltaTime);
+        condition.AdjustCurSummonGauge(condition.SummonGaugeRecoverySpeed * Time.deltaTime);
     }
 }
