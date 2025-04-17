@@ -24,9 +24,9 @@ public class HeroMoveState : HeroBaseState
 
     private async UniTaskVoid MoveAndSearch()
     {
+            MoveHero();
         while (isMove)
         {
-            MoveHero();
             Search(); 
 
             await UniTask.Yield();
