@@ -872,33 +872,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterSlotUI: {fileID: 916721692}
   magicSlotUI: {fileID: 736249064}
-  summonGaugeRecoverySpeed: 10
-  magicGaugeRecoverySpeed: 5
   selectedMagic: {fileID: 0}
   selectedMonster:
+    health: 0
+    defence: 0
+    moveSpeed: 0
+    attack: 0
+    attackRange: 0
+    attackSpeed: 0
     id: 0
     name: 
+    description: 
     cost: 0
-    icon: {fileID: 0}
-    prefabs: {fileID: 0}
+    reward: 0
+    outfit: 
+    type: 0
+    projectile: 
   cursorIcon: {fileID: 90943526}
   curSlot: 0
-  testMonster:
-  - id: 0
-    name: Circle
-    cost: 1
-    icon: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-    prefabs: {fileID: 7755255093581880619, guid: c0770b2c7de79644d9190e7bc80606b2, type: 3}
-  - id: 1
-    name: Capsule
-    cost: 5
-    icon: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
-    prefabs: {fileID: 6473522043481306828, guid: 8e3d19ebf3294f14f89b38bd179883dc, type: 3}
-  - id: 2
-    name: Hexagon Flat-Top
-    cost: 10
-    icon: {fileID: 2747690628134850419, guid: 16037dbd798344f57a526d53d48f5ead, type: 3}
-    prefabs: {fileID: 901894782038373447, guid: a8e4dc20c13bf174aae63dbf8870b225, type: 3}
+  monsterList: []
 --- !u!114 &166616948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -941,6 +933,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfae8e215b528d44aaa8279cd6dec07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  summonGaugeRecoverySpeed: 10
+  magicGaugeRecoverySpeed: 5
 --- !u!1 &245668746
 GameObject:
   m_ObjectHideFlags: 0
@@ -2899,7 +2893,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &555875768
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5236,15 +5230,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.size
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].key
-      value: Capsule
+      value: Orc_Warrior
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[1].key
-      value: Circle
+      value: Orc_Archer
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[2].key
@@ -5261,11 +5255,11 @@ PrefabInstance:
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].prefab
       value: 
-      objectReference: {fileID: 6473522043481306828, guid: 8e3d19ebf3294f14f89b38bd179883dc, type: 3}
+      objectReference: {fileID: 8060435520532602691, guid: 30a48ab96f5e18e4b9a72af19c266246, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[1].prefab
       value: 
-      objectReference: {fileID: 7755255093581880619, guid: c0770b2c7de79644d9190e7bc80606b2, type: 3}
+      objectReference: {fileID: 8082864424410019987, guid: e2326d26f48824b4d9ea87dfee82767d, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[2].prefab
       value: 
@@ -9486,6 +9480,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4531107686632742758, guid: 6d8afe8e491d0a04a9d46732c688e062, type: 3}
+      propertyPath: iconData
+      value: 
+      objectReference: {fileID: 11400000, guid: 22849e3242fcc2546addebf62243ce60, type: 2}
+    - target: {fileID: 4531107686632742758, guid: 6d8afe8e491d0a04a9d46732c688e062, type: 3}
+      propertyPath: isDontDestroy
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4531107686632742758, guid: 6d8afe8e491d0a04a9d46732c688e062, type: 3}
       propertyPath: queenEnhanceData
       value: 
       objectReference: {fileID: 11400000, guid: 50302411824f3e64f82bf95e1dff4e97, type: 2}
@@ -10303,7 +10305,7 @@ MonoBehaviour:
   summonGaugeUI: {fileID: 621515135}
   timerUI: {fileID: 1311935696}
   limitTime: 1800
-  evolutionTreeWindow: {fileID: 1985000020}
+  evolutionTreeWindow: {fileID: 0}
 --- !u!1 &1853540437
 GameObject:
   m_ObjectHideFlags: 0
@@ -10786,7 +10788,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1985000021
 RectTransform:
   m_ObjectHideFlags: 0

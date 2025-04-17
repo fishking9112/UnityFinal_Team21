@@ -1,31 +1,35 @@
+using System.Threading;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class HeroAbilityRangeAttack : HeroAbilitySystem
 {
     private Hero hero;
 
-    private float range;
-
     private LayerMask layer;
     protected override void Start()
     {
-        heroAbilityInfo = DataManager.Instance.heroAbilityDic[101];
+        heroAbilityInfo = DataManager.Instance.heroAbilityDic[104];
 
         base.Start();
-        hero = GameManager.Instance.hero;
-        delay = heroAbilityInfo.delay_Base;
-        damage = heroAbilityInfo.damage_Base;
-        range = 3;  // 임시 값
+        hero = this.GetComponent<Hero>();
         layer = LayerMask.GetMask("Monster");
+
         AddAbility();
     }
 
     protected override void ActionAbility()
     {
-        Collider2D[] rangedTarget = Physics2D.OverlapCircleAll(hero.transform.position, range, layer);
+        Collider2D[] rangedTarget = Physics2D.OverlapCircleAll(hero.transform.position, size.x, layer);
+        Utils.DrawOverlapCircle(hero.transform.position, size.x, Color.red);
 
         foreach (Collider2D c in rangedTarget)
         {
+            if (MonsterManager.Instance.monsters.TryGetValue(c.gameObject, out var monster))
+            {
+                Utils.Log("마늘공격");
+                monster.TakeDamaged(damage);
+            }
             // 딕셔너리로 GetComponent없이 대미지 입히기
         }
     }
@@ -33,12 +37,14 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     public override void AbilityLevelUp()
     {
         base.AbilityLevelUp();
-
-        // RangeAttack이 레벨업 시 증가해야 되는 스텟 증가 추가
     }
 
     public override void DespawnAbility()
     {
 
+    }
+    public override void SetAbilityLevel(int level)
+    {
+        base.SetAbilityLevel(level);
     }
 }

@@ -45,7 +45,10 @@ public class Hero : MonoBehaviour, IPoolable
 
         // 테스트 코드(성경책, 미사일 추가)
         //AddAbility<HeroAbilityBible>();
-        AddAbility<HeroAbilityMissile>();
+        //AddAbility<HeroAbilityMissile>();
+        //AddAbility<HeroAbilityMeleeAttack>();
+        //AddAbility<HeroAbilityRangeAttack>();
+        AddAbility<HeroAbilityAxe>();
     }
 
     public GameObject FindNearestTarget()
