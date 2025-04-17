@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [Serializable]
@@ -17,7 +18,6 @@ public class EvolutionWindowUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI monsterNameText;
     [SerializeField] private Button leftButton;
     [SerializeField] private Button rightButton;
-    [SerializeField] private Button backButton;
     [SerializeField] private List<GameObject> selectedMonster;
 
     [SerializeField] private List<Page> pageList;
@@ -28,13 +28,18 @@ public class EvolutionWindowUI : MonoBehaviour
     {
         leftButton.onClick.AddListener(OnClickLeftButton);
         rightButton.onClick.AddListener(OnClickRightButton);
-        backButton.onClick.AddListener(OnClickBackButton);
     }
 
     private void OnEnable()
     {
         curIndex = 0;
         UpdateUI();
+        GameManager.Instance.queen.input.SwitchCurrentActionMap("UI");
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.queen.input.SwitchCurrentActionMap("InGame");
     }
 
     // UI 초기화
@@ -85,10 +90,5 @@ public class EvolutionWindowUI : MonoBehaviour
             curIndex++;
             UpdateUI();
         }
-    }
-
-    public void OnClickBackButton()
-    {
-        this.gameObject.SetActive(false);
     }
 }

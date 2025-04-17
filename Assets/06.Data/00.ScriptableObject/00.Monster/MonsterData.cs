@@ -22,6 +22,8 @@ public class MonsterInfo : BaseStatData, IInfo
 
     public MonsterType type;
     public string projectile;
+    public int tire;
+    public int preNode;
     public MonsterInfo() { }
     public MonsterInfo(MonsterInfo other) : base(other)
     {
@@ -98,6 +100,12 @@ public class MonsterData : SheetDataReaderBase
                     break;
                 case "projectile":
                     monsterInfo.projectile = cell.value;
+                    break;
+                case "tire":
+                    monsterInfo.tire = Utils.StringToInt(cell.value);
+                    break;
+                case "preNode":
+                    monsterInfo.preNode = Utils.StringToInt(cell.value);
                     break;
             }
         }

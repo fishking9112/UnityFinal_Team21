@@ -2,7 +2,7 @@
     "name": "QueenInput",
     "maps": [
         {
-            "name": "Queen",
+            "name": "InGame",
             "id": "5dbcdbb5-0188-4499-90a4-43793c6cd4be",
             "actions": [
                 {
@@ -53,7 +53,7 @@
                 {
                     "name": "EvolutionWindow",
                     "type": "Button",
-                    "id": "574638e4-8190-433f-b8f2-c3843f64e956",
+                    "id": "9c2d3ada-8a9b-4938-a828-f1d85799f0b6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -217,7 +217,35 @@
                 },
                 {
                     "name": "",
-                    "id": "fe2a397b-3c40-4523-856c-39edcfeb54d4",
+                    "id": "348f50e8-9173-4e57-8b5a-52fa0ecd9efb",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EvolutionWindow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "820c1332-dfe6-4fbd-b890-b01fd2d38d31",
+            "actions": [
+                {
+                    "name": "EvolutionWindow",
+                    "type": "Button",
+                    "id": "14bb0621-d7da-4213-8b56-9a532701bec5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "af895c9c-5841-4504-b24c-753466cd0f53",
                     "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",

@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class MagicSlotUI : BaseSlotUI<Magic>
 {
-    protected override void OnSlotAdd(int index, Magic slot)
+    public override void AddSlot(int index, Magic slot)
     {
-        
+        base.AddSlot(index, slot);
     }
 }

@@ -1,5 +1,6 @@
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
@@ -63,7 +64,7 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            Vector2 mousePos = Input.mousePosition;
+            Vector2 mousePos = Mouse.current.position.ReadValue();
 
             if (mousePos.x <= cameraEdge)
             {
@@ -95,6 +96,11 @@ public class CameraController : MonoBehaviour
         }
 
         cameraTransform.position += curSpeed * Time.deltaTime;
+    }
+
+    public void OnMoveCamera(InputAction.CallbackContext context)
+    {
+
     }
 
     // 키보드로 카메라 움직임

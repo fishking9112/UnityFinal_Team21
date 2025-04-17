@@ -17,8 +17,8 @@ public class QueenController : MonoBehaviour
 
     private Vector3 worldMousePos;
 
-    [SerializeField] private MonsterSlotUI monsterSlotUI;
-    [SerializeField] private MagicSlotUI magicSlotUI;
+    public MonsterSlotUI monsterSlotUI;
+    public MagicSlotUI magicSlotUI;
 
     public Magic selectedMagic;
     [NonSerialized] public MonsterInfo selectedMonster;
@@ -31,24 +31,10 @@ public class QueenController : MonoBehaviour
     {
         condition = GameManager.Instance.queen.condition;
         objectPoolManager = ObjectPoolManager.Instance;
-
-        // 테스트 코드
-        monsterList.Add(DataManager.Instance.monsterDic[0]);
-        monsterList.Add(DataManager.Instance.monsterDic[1]);
     }
 
     private void Update()
     {
-        // 테스트 코드
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            foreach (var monster in monsterList)
-            {
-                Debug.Log(monster.outfit);
-                monsterSlotUI.AddSlot(monster);
-            }
-        }
-
         switch (curSlot)
         {
             case QueenSlot.MONSTER:
@@ -110,11 +96,11 @@ public class QueenController : MonoBehaviour
     // 마우스의 월드좌표를 계산해서 해당 위치에 몬스터를 소환함
     private void SummonMonster()
     {
-        if (!Pointer.current.press.isPressed)
+        if (selectedMonster == null)
         {
             return;
         }
-        if (selectedMonster == null)
+        if (!Pointer.current.press.isPressed)
         {
             return;
         }
@@ -132,6 +118,7 @@ public class QueenController : MonoBehaviour
         // CameraLimit 레이어만 제외하고 충돌 하도록 함
         int layerMask = ~(1 << (LayerMask.NameToLayer("CameraLimit")));
 
+        Physics2D.SyncTransforms();
         Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius, layerMask);
 
         if (hit != null)
@@ -140,8 +127,8 @@ public class QueenController : MonoBehaviour
         }
 
         condition.AdjustCurSummonGauge(-selectedMonster.cost);
-        var monster = objectPoolManager.GetObject<MonsterController>(selectedMonster.outfit, worldMousePos);
-        monster.GetComponent<MonsterController>().StatInit(selectedMonster);
+        var monster = objectPoolManager.GetObject<Return>(selectedMonster.outfit, worldMousePos);
+        //monster.StatInit(selectedMonster);
     }
 
 
@@ -166,7 +153,7 @@ public class QueenController : MonoBehaviour
     // 자동 게이지 회복
     private void RecoveryGauge()
     {
-        condition.AdjustCurMagicGauge(condition.MagicGaugeRecoverySpeed * Time.deltaTime);
-        condition.AdjustCurSummonGauge(condition.SummonGaugeRecoverySpeed * Time.deltaTime);
+        condition.AdjustCurMagicGauge(condition.magicGaugeRecoverySpeed * Time.deltaTime);
+        condition.AdjustCurSummonGauge(condition.summonGaugeRecoverySpeed * Time.deltaTime);
     }
 }
