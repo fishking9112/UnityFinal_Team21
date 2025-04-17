@@ -125,6 +125,10 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
             if (name.Contains("체력"))
             {
                 monster.health += value;
+                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
+                {
+                    monsterController.HealthStatUpdate();
+                }
             }
             else if (name.Contains("공격력"))
             {

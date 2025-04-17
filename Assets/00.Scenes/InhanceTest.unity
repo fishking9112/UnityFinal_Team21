@@ -3915,7 +3915,6 @@ GameObject:
   - component: {fileID: 1105089709}
   - component: {fileID: 1105089713}
   - component: {fileID: 1105089712}
-  - component: {fileID: 1105089711}
   - component: {fileID: 1105089710}
   m_Layer: 5
   m_Name: Button
@@ -3988,9 +3987,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1105089711}
-        m_TargetAssemblyTypeName: testbutton, Assembly-CSharp
-        m_MethodName: fsetset
+      - m_Target: {fileID: 4023463006633567412}
+        m_TargetAssemblyTypeName: QueenEnhanceManager, Assembly-CSharp
+        m_MethodName: ActivateEnhance
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4000,18 +3999,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1105089711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1105089708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5a308f1b656ecc4a837a93c3c8341d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1105089712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7871,6 +7858,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b37c06aa2146084d90ba9f35f18b0ca, type: 3}
+--- !u!114 &4023463006633567412 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1167508553472613323, guid: 2b37c06aa2146084d90ba9f35f18b0ca, type: 3}
+  m_PrefabInstance: {fileID: 4023463006633567411}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3dd2c400ca048844be70401e85178cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
