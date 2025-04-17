@@ -6,9 +6,4 @@ public class MagicSlotUI : BaseSlotUI<Magic>
     {
         
     }
-
-    public override Sprite GetIcon(string name)
-    {
-        return null;
-    }
 }
