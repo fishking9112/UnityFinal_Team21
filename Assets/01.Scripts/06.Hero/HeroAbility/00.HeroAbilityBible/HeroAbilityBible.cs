@@ -95,4 +95,8 @@ public class HeroAbilityBible : HeroAbilitySystem
 
         bibleList.Clear();
     }
+    public override void SetAbilityLevel(int level)
+    {
+        base.SetAbilityLevel(level);
+    }
 }

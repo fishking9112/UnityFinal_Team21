@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Threading;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -8,7 +9,8 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     private Animator animator;
 
-
+    private CancellationTokenSource token;
+    
 
     protected override void Start()
     {
@@ -19,7 +21,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         hero = transform.GetComponent<Hero>();
 
         animator = this.GetComponentInChildren<Animator>();
-
+        token = new CancellationTokenSource();
         AddAbility();
     }
 
@@ -27,11 +29,11 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     {
         target = hero.FindNearestTarget();
 
-        SwingSword().Forget();
+        SwingSword(token.Token).Forget();
     }
 
 
-    private async UniTaskVoid SwingSword()
+    private async UniTaskVoid SwingSword(CancellationToken tk)
     {
         float angle;
 
@@ -45,12 +47,12 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
                 target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
         }
         animator.SetBool("2_Attack", true);
-        await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=0.5f);
+        await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=0.5f,cancellationToken: tk);
 
         // 충돌처리
         OverlapCheck(angle);
 
-        await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=1f);
+        await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=1f,cancellationToken: tk);
 
     }
 
@@ -78,6 +80,12 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     public override void DespawnAbility()
     {
-       
+        animator.SetBool("4_Death", true);
+        token?.Cancel();
+        token?.Dispose();
+    }
+    public override void SetAbilityLevel(int level)
+    {
+        base.SetAbilityLevel(level);
     }
 }

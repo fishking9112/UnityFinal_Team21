@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
@@ -13,6 +14,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
         base.Start();
         hero = this.GetComponent<Hero>();
         layer = LayerMask.GetMask("Monster");
+
         AddAbility();
     }
 
@@ -40,5 +42,9 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     public override void DespawnAbility()
     {
 
+    }
+    public override void SetAbilityLevel(int level)
+    {
+        base.SetAbilityLevel(level);
     }
 }

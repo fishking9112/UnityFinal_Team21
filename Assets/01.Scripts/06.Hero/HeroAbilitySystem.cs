@@ -82,7 +82,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     protected async UniTaskVoid AutoAction()
     {
 
-        while (true)
+        while (this.gameObject.activeSelf)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(delay));
             ActionAbility();
@@ -111,8 +111,18 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         rotateSpeed += rotateSpeed_LevelUp;
         duration += duration_LevelUp;
         count += count_LevelUp;
-        countDelay += countDelay_LevelUp;
+        countDelay -= countDelay_LevelUp;
     }
 
     public abstract void DespawnAbility();
+
+    public virtual void SetAbilityLevel(int level)
+    {
+        Init();
+
+        for(int i=1;i<level;i++)
+        {
+            AbilityLevelUp();
+        }
+    }
 }
