@@ -77,8 +77,6 @@ public class Hero : MonoBehaviour, IPoolable
             }
         }
 
-        Debug.Log(target);
-
         return target;
     }
 
