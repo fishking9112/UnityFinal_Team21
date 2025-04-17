@@ -51,7 +51,7 @@ public class EvolutionSlot : MonoBehaviour
         slotIcon.enabled = false;
     }
 
-    public bool HasMonster(EvolutionNode node)
+    public bool FindPreNode(EvolutionNode node)
     {
         return selectedMonster == node;
     }

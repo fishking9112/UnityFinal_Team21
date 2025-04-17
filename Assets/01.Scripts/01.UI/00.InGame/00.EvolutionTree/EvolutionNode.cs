@@ -22,8 +22,8 @@ public class EvolutionNode : MonoBehaviour
 
         if(DataManager.Instance.monsterDic.TryGetValue(monsterInfoId,out var info))
         {
-            image.sprite = DataManager.Instance.iconData.GetSprite(monsterInfo.outfit);
             monsterInfo = info;
+            image.sprite = DataManager.Instance.iconData.GetSprite(monsterInfo.outfit);
         }
         else
         {
@@ -54,7 +54,7 @@ public class EvolutionNode : MonoBehaviour
         // 해금 된 노드
         if (isUnlock)
         {
-            image.color = Color.green;
+            image.color = Color.white;
             nameText.text = monsterInfo.name;
             button.interactable = true;
         }
@@ -63,7 +63,7 @@ public class EvolutionNode : MonoBehaviour
             // 해금 안된 것 중 해금할 수 있는 노드
             if (isActive)
             {
-                image.color = Color.blue;
+                image.color = Color.gray;
                 nameText.text = monsterInfo.name;
                 button.interactable = true;
             }

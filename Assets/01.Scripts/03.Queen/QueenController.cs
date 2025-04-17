@@ -30,24 +30,10 @@ public class QueenController : MonoBehaviour
     {
         condition = GameManager.Instance.queen.condition;
         objectPoolManager = ObjectPoolManager.Instance;
-
-        // 테스트 코드
-        monsterList.Add(DataManager.Instance.monsterDic[0]);
-        monsterList.Add(DataManager.Instance.monsterDic[1]);
     }
 
     private void Update()
     {
-        // 테스트 코드
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            foreach (var monster in monsterList)
-            {
-                Debug.Log(monster.outfit);
-                monsterSlotUI.AddSlot(monster);
-            }
-        }
-
         switch (curSlot)
         {
             case QueenSlot.MONSTER:
@@ -165,7 +151,7 @@ public class QueenController : MonoBehaviour
     // 자동 게이지 회복
     private void RecoveryGauge()
     {
-        condition.AdjustCurMagicGauge(condition.MagicGaugeRecoverySpeed * Time.deltaTime);
-        condition.AdjustCurSummonGauge(condition.SummonGaugeRecoverySpeed * Time.deltaTime);
+        condition.AdjustCurMagicGauge(condition.magicGaugeRecoverySpeed * Time.deltaTime);
+        condition.AdjustCurSummonGauge(condition.summonGaugeRecoverySpeed * Time.deltaTime);
     }
 }

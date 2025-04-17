@@ -14,8 +14,8 @@ public class EvolutionTree : MonoBehaviour
     [SerializeField] private Button evolutionButton;
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private TextMeshProUGUI healthText;
-    [SerializeField] private TextMeshProUGUI defenceText;
     [SerializeField] private TextMeshProUGUI attackText;
+    [SerializeField] private TextMeshProUGUI costText;
 
     [Header("Slot")]
     [SerializeField] private List<EvolutionSlot> slotList;
@@ -44,9 +44,10 @@ public class EvolutionTree : MonoBehaviour
             slot.evolutionTree = this;
         }
 
+        descriptionImage.enabled = false;
         description.text = string.Empty;
         healthText.text = string.Empty;
-        defenceText.text = string.Empty;
+        costText.text = string.Empty;
         attackText.text = string.Empty;
     }
 
@@ -102,11 +103,12 @@ public class EvolutionTree : MonoBehaviour
     {
         MonsterInfo info = node.monsterInfo;
 
+        descriptionImage.enabled = true;
         descriptionImage.sprite = node.image.sprite;
         description.text = info.description;
         healthText.text = $"체력 : {info.health}";
-        defenceText.text = $"방어력 : {info.defence}";
         attackText.text = $"공격력 : {info.attack}";
+        costText.text = $"소환 비용 : {info.cost}";
     }
 
     // 노드가 활성화 되어 있는 지 확인 (해금된 노드 or 해금할 수 있는 노드)
@@ -130,7 +132,7 @@ public class EvolutionTree : MonoBehaviour
     {
         foreach (var slot in slotList)
         {
-            if (slot.HasMonster(node))
+            if (slot.FindPreNode(node))
             {
                 slot.ClearSlot();
                 return;
