@@ -118,7 +118,6 @@ public class QueenController : MonoBehaviour
         // CameraLimit 레이어만 제외하고 충돌 하도록 함
         int layerMask = ~(1 << (LayerMask.NameToLayer("CameraLimit")));
 
-        Physics2D.SyncTransforms();
         Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius, layerMask);
 
         if (hit != null)

@@ -18,6 +18,9 @@ public class QueenCondition : MonoBehaviour
         MaxMagicGauge.Value = 100f;
         CurSummonGauge.Value = 100f;
         MaxSummonGauge.Value = 100f;
+
+        SummonGaugeRecoverySpeed = summonGaugeRecoverySpeed;
+        MagicGaugeRecoverySpeed = magicGaugeRecoverySpeed;
     }
 
     /// <summary>

@@ -119,7 +119,7 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
     {
         foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
         {
-            if (monster.monsterAttackType.ToString() != brood.ToString())
+            if (monster.monsterBrood != brood)
                 continue;
 
             if (name.Contains("체력"))
