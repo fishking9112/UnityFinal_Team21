@@ -27,6 +27,8 @@ public class QueenController : MonoBehaviour
 
     public List<MonsterInfo> monsterList;
 
+    private bool isDrag;
+
     private void Start()
     {
         condition = GameManager.Instance.queen.condition;
@@ -35,16 +37,6 @@ public class QueenController : MonoBehaviour
 
     private void Update()
     {
-        switch (curSlot)
-        {
-            case QueenSlot.MONSTER:
-                SummonMonster();
-                break;
-            case QueenSlot.MAGIC:
-                UseMagic();
-                break;
-        }
-
         ImageFollowCursor();
         RecoveryGauge();
     }
@@ -93,14 +85,53 @@ public class QueenController : MonoBehaviour
         }
     }
 
-    // 마우스의 월드좌표를 계산해서 해당 위치에 몬스터를 소환함
-    private void SummonMonster()
+    // 클릭 시 처리
+    public void OnClick(InputAction.CallbackContext context)
     {
-        if (selectedMonster == null)
+        switch (curSlot)
+        {
+            // 현재 슬롯이 몬스터 슬롯이면 몬스터 소환
+            case QueenSlot.MONSTER:
+                if (context.phase == InputActionPhase.Started)
+                {
+                    isDrag = true;
+                    SummonMonster();
+                }
+                else if (context.phase == InputActionPhase.Canceled)
+                {
+                    isDrag = false;
+                }
+                break;
+            // 현재 슬롯이 매직 슬롯이면 스킬 발동
+            case QueenSlot.MAGIC:
+                break;
+        }
+    }
+
+    // 드래그 시 처리
+    public void OnDrag(InputAction.CallbackContext context)
+    {
+        if (!isDrag)
         {
             return;
         }
-        if (!Pointer.current.press.isPressed)
+
+        switch (curSlot)
+        {
+            case QueenSlot.MONSTER:
+                if (context.ReadValue<Vector2>() != Vector2.zero)
+                {
+                    SummonMonster();
+                }
+                break;
+            case QueenSlot.MAGIC:
+                break;
+        }
+    }
+
+    private void SummonMonster()
+    {
+        if (selectedMonster == null)
         {
             return;
         }
@@ -113,23 +144,10 @@ public class QueenController : MonoBehaviour
             return;
         }
 
-        float monsterRadius = 0.5f;
-
-        // CameraLimit 레이어만 제외하고 충돌 하도록 함
-        int layerMask = ~(1 << (LayerMask.NameToLayer("CameraLimit")));
-
-        Collider2D hit = Physics2D.OverlapCircle(worldMousePos, monsterRadius, layerMask);
-
-        if (hit != null)
-        {
-            return;
-        }
-
         condition.AdjustCurSummonGauge(-selectedMonster.cost);
         var monster = objectPoolManager.GetObject<MonsterController>(selectedMonster.outfit, worldMousePos);
         monster.StatInit(selectedMonster);
     }
-
 
     private void UseMagic()
     {

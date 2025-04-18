@@ -4,6 +4,7 @@ public class QueenCondition : MonoBehaviour
 {
     [SerializeField] private float summonGaugeRecoverySpeed = 10f;
     public float SummonGaugeRecoverySpeed { get; private set; }
+
     [SerializeField] private float magicGaugeRecoverySpeed = 5f;
     public float MagicGaugeRecoverySpeed { get; private set; }
 
