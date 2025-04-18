@@ -152,6 +152,7 @@ public class QueenController : MonoBehaviour
         }
 
         condition.AdjustCurSummonGauge(-selectedMonster.cost);
+        Utils.Log($"{selectedMonster.outfit}");
         var monster = objectPoolManager.GetObject<MonsterController>(selectedMonster.outfit, worldMousePos);
         monster.StatInit(selectedMonster);
     }

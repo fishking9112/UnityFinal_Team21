@@ -56,13 +56,15 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
         AnimateLoadingText();                 // 점 애니메이션 시작
 
         await LoadSceneAsync(sceneName);      // 씬 로드
-        await UniTask.Delay(3000);            // 1초 대기
+        await UniTask.Delay(3000, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update);            // 1초 대기
 
         fadeCanvasGroup.interactable = false;
         fadeCanvasGroup.blocksRaycasts = false;
 
         isAnimatingLoadingText = false;       // 점 애니메이션 종료
-        await UniTask.Delay(500);             // 점 애니메이션 종료 대기
+        await UniTask.Delay(500, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update);             // 점 애니메이션 종료 대기
+
+        Time.timeScale = 1f;
 
         await FadeInAsync();                  // 화면 밝아짐
         loadingCanvas.SetActive(false);       // 로딩 UI 끄기
@@ -99,7 +101,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
 
         while (t < duration)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             fadeCanvasGroup.alpha = Mathf.Clamp01(t / duration);
             await UniTask.Yield();
         }
@@ -117,7 +119,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
 
         while (t < duration)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             fadeCanvasGroup.alpha = 1f - Mathf.Clamp01(t / duration);
             await UniTask.Yield();
         }
@@ -143,7 +145,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
             {
                 loadingText.text = baseText + dots[index];
                 index = (index + 1) % dots.Length;
-                await UniTask.Delay(500);
+                await UniTask.Delay(500, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update);
             }
 
             loadingText.text = ""; // 종료 시 초기화
