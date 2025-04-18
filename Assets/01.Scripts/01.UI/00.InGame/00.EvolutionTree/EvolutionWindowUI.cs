@@ -34,11 +34,12 @@ public class EvolutionWindowUI : MonoBehaviour
     {
         curIndex = 0;
         UpdateUI();
+        Time.timeScale = 0;
     }
 
     private void OnDisable()
     {
-
+        Time.timeScale = 1;
     }
 
     // UI 초기화
