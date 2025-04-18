@@ -34,12 +34,11 @@ public class EvolutionWindowUI : MonoBehaviour
     {
         curIndex = 0;
         UpdateUI();
-        GameManager.Instance.queen.input.SwitchCurrentActionMap("UI");
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.queen.input.SwitchCurrentActionMap("InGame");
+
     }
 
     // UI 초기화
@@ -70,7 +69,6 @@ public class EvolutionWindowUI : MonoBehaviour
             }
         }
     }
-
 
     // 이전 페이지로 이동
     public void OnClickLeftButton()

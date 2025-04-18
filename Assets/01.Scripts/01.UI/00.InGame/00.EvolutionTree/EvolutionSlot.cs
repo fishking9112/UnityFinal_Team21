@@ -9,7 +9,7 @@ public class EvolutionSlot : MonoBehaviour
     [SerializeField] private Button slotButton;
 
     public int slotIndex;
-    public EvolutionNode selectedMonster;
+    public EvolutionNode slotMonsterData;
 
     private void Start()
     {
@@ -19,7 +19,7 @@ public class EvolutionSlot : MonoBehaviour
     private void OnClickSlot()
     {
         // 아무 몬스터를 선택하지 않고 슬롯을 클릭하면 해당 슬롯 초기화
-        if(selectedMonster != null)
+        if(slotMonsterData != null)
         {
             ClearSlot();
             evolutionTree.RemoveQueenSlot(slotIndex);
@@ -44,7 +44,7 @@ public class EvolutionSlot : MonoBehaviour
             return;
         }
 
-        selectedMonster = node;
+        slotMonsterData = node;
         slotIcon.sprite = node.image.sprite;
         slotIcon.enabled = true;
         slotIcon.preserveAspect = true;
@@ -53,7 +53,7 @@ public class EvolutionSlot : MonoBehaviour
     // 슬롯 초기화
     public void ClearSlot()
     {
-        selectedMonster = null;
+        slotMonsterData = null;
         slotIcon.enabled = false;
     }
 }
