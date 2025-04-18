@@ -19,14 +19,14 @@ public class MonsterAttackState : MonsterBaseState
         spum.SetAttackSpeed(stateMachine.Controller.monsterInfo.attackSpeed);
 
         // 원거리 공격은 projectile 생성
-        if (stateMachine.Controller.monsterInfo.type == MonsterType.RANGED)
+        if (stateMachine.Controller.monsterInfo.monsterAttackType == MonsterAttackType.RANGED)
         {
             RangedAttack();
             return;
         }
 
         // 근거리 공격
-        if (stateMachine.Controller.monsterInfo.type == MonsterType.MELEE)
+        if (stateMachine.Controller.monsterInfo.monsterAttackType == MonsterAttackType.MELEE)
         {
             MeleeAttack();
             return;

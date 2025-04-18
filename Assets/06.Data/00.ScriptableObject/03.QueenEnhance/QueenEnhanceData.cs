@@ -10,13 +10,6 @@ public enum QueenEnhanceType
     QueenPassive,
     MonsterPassive
 }
-public enum QueenEnhanceBrood
-{
-    NULL,
-    None,
-    Smile,
-    Skeleton,
-}
 
 [Serializable]
 public class QueenEnhanceInfo : IInfo
@@ -29,7 +22,7 @@ public class QueenEnhanceInfo : IInfo
     public int state_Base;
     public int state_LevelUp;
     public QueenEnhanceType type;
-    public QueenEnhanceBrood brood;
+    public MonsterBrood brood;
 
     public int ID => id;
 }
@@ -74,7 +67,7 @@ public class QueenEnhanceData : SheetDataReaderBase
                     queenEnhanceInfo.type = Utils.StringToEnum<QueenEnhanceType>(cell.value, QueenEnhanceType.NULL);
                     break;
                 case "brood":
-                    queenEnhanceInfo.brood = Utils.StringToEnum<QueenEnhanceBrood>(cell.value, QueenEnhanceBrood.NULL);
+                    queenEnhanceInfo.brood = Utils.StringToEnum<MonsterBrood>(cell.value, MonsterBrood.NULL);
                     break;
             }
         }

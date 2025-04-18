@@ -9,6 +9,7 @@ public class PauseController : MonoBehaviour
     [SerializeField] private GameObject optionPanel; // 옵션 화면 UI
     [SerializeField] private QueenEnhanceStatusUI queenEnhanceStatusUI; // 여왕 강화 스탯창
 
+    [SerializeField] private Button pauseButton;
     [SerializeField] private Button continueButton;
     [SerializeField] private Button optionButton;
     [SerializeField] private Button exitButton;
@@ -26,9 +27,13 @@ public class PauseController : MonoBehaviour
         if (optionPanel != null)
             optionPanel.SetActive(false);
 
+        if (pauseButton != null)
+            pauseButton.gameObject.SetActive(true);
+
+        pauseButton.onClick.AddListener(TogglePause);
         continueButton.onClick.AddListener(TogglePause);
         optionButton.onClick.AddListener(OnClickOption);
-        exitButton.onClick.AddListener(OnClickGoToTitle);
+        exitButton.onClick.AddListener(OnClickActiveResult);
     }
 
     /// <summary>
@@ -37,17 +42,6 @@ public class PauseController : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.SetPauseController(this);
-    }
-
-    /// <summary>
-    /// ESC 키 입력 시 일시정지 토글
-    /// </summary>
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            TogglePause();
-        }
     }
 
     /// <summary>
@@ -60,12 +54,11 @@ public class PauseController : MonoBehaviour
 
     /// <summary>
     /// 타이틀 화면으로 이동
-    /// TODO : 결과창 만들어지면 결과창으로 연결하기
     /// </summary>
-    public void OnClickGoToTitle()
+    public void OnClickActiveResult()
     {
-        Time.timeScale = 1f;
-        SceneLoadManager.Instance.LoadScene("MainUITest");
+        TogglePause();
+        GameResultManager.Instance.DisplayGameResult();
     }
 
     /// <summary>

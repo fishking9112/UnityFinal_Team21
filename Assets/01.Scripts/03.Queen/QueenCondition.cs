@@ -4,6 +4,7 @@ public class QueenCondition : MonoBehaviour
 {
     [SerializeField] private float summonGaugeRecoverySpeed = 10f;
     public float SummonGaugeRecoverySpeed { get; private set; }
+
     [SerializeField] private float magicGaugeRecoverySpeed = 5f;
     public float MagicGaugeRecoverySpeed { get; private set; }
 
@@ -18,6 +19,9 @@ public class QueenCondition : MonoBehaviour
         MaxMagicGauge.Value = 100f;
         CurSummonGauge.Value = 100f;
         MaxSummonGauge.Value = 100f;
+
+        SummonGaugeRecoverySpeed = summonGaugeRecoverySpeed;
+        MagicGaugeRecoverySpeed = magicGaugeRecoverySpeed;
     }
 
     /// <summary>
