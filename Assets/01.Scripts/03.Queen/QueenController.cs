@@ -144,6 +144,13 @@ public class QueenController : MonoBehaviour
             return;
         }
 
+        Collider2D hit = Physics2D.OverlapCircle(worldMousePos, 0.5f);
+
+        if (hit != null)
+        {
+            return;
+        }
+
         condition.AdjustCurSummonGauge(-selectedMonster.cost);
         var monster = objectPoolManager.GetObject<MonsterController>(selectedMonster.outfit, worldMousePos);
         monster.StatInit(selectedMonster);
