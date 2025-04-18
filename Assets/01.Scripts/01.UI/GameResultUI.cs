@@ -6,19 +6,20 @@ using Cysharp.Threading.Tasks;
 
 public class GameResultUI : MonoBehaviour
 {
+    public GameObject resultWindow;
     public TextMeshProUGUI gameTimeText;
     public TextMeshProUGUI resourceText;
 
     /// <summary>   
-    /// 시작 시 매니저가 생성될 때까지 대기한 뒤 UI를 초기화합니다.
+    /// 시작 시 UI를 초기화합니다.
     /// </summary>
     private void Start()
     {
-        GameResultManager.Instance.SeUI(this);
+        GameResultManager.Instance.SetUI(this);
     }
 
     public void OnClickTitleMenu()
     {
-        SceneLoadManager.Instance.LoadScene("MenuScene");
+        GameResultManager.Instance.ReturnToTitle();
     }
 }
