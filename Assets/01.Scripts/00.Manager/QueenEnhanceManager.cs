@@ -115,11 +115,11 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
     /// <summary>
     /// 몬스터 강화 스탯 적용 처리 (종족 + 항목 이름 기반 분기)
     /// </summary>
-    private void ApplyMonsterPassive(QueenEnhanceBrood brood, string name, int value)
+    private void ApplyMonsterPassive(MonsterBrood brood, string name, int value)
     {
         foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
         {
-            if (monster.type.ToString() != brood.ToString())
+            if (monster.monsterAttackType.ToString() != brood.ToString())
                 continue;
 
             if (name.Contains("체력"))

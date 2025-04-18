@@ -29,7 +29,8 @@ MonoBehaviour:
     cost: 1
     reward: 0
     outfit: 
-    type: 1
+    monsterAttackType: 1
+    monsterBrood: 2
     projectile: 
     tire: 0
     preNode: -1
@@ -45,7 +46,8 @@ MonoBehaviour:
     cost: 2
     reward: 0
     outfit: 
-    type: 1
+    monsterAttackType: 1
+    monsterBrood: 2
     projectile: 
     tire: 1
     preNode: 1001
@@ -61,7 +63,8 @@ MonoBehaviour:
     cost: 4
     reward: 0
     outfit: 
-    type: 1
+    monsterAttackType: 1
+    monsterBrood: 2
     projectile: 
     tire: 2
     preNode: 1002
@@ -77,7 +80,8 @@ MonoBehaviour:
     cost: 2
     reward: 0
     outfit: 
-    type: 1
+    monsterAttackType: 1
+    monsterBrood: 2
     projectile: 
     tire: 2
     preNode: 1002
@@ -94,7 +98,8 @@ MonoBehaviour:
     cost: 3
     reward: 0
     outfit: 
-    type: 1
+    monsterAttackType: 1
+    monsterBrood: 2
     projectile: 
     tire: 1
     preNode: 1001
@@ -110,7 +115,8 @@ MonoBehaviour:
     cost: 3
     reward: 0
     outfit: 
-    type: 1
+    monsterAttackType: 1
+    monsterBrood: 2
     projectile: 
     tire: 2
     preNode: 1005
@@ -126,7 +132,8 @@ MonoBehaviour:
     cost: 3
     reward: 0
     outfit: Orc_Normal
-    type: 1
+    monsterAttackType: 1
+    monsterBrood: 0
     projectile: 
     tire: 0
     preNode: -1
@@ -143,7 +150,8 @@ MonoBehaviour:
     cost: 4
     reward: 0
     outfit: Orc_Warrior
-    type: 1
+    monsterAttackType: 1
+    monsterBrood: 0
     projectile: 
     tire: 1
     preNode: 1101
@@ -160,7 +168,8 @@ MonoBehaviour:
     cost: 5
     reward: 0
     outfit: Orc_Shaman
-    type: 2
+    monsterAttackType: 2
+    monsterBrood: 0
     projectile: Fireball
     tire: 1
     preNode: 1101
@@ -177,7 +186,8 @@ MonoBehaviour:
     cost: 5
     reward: 0
     outfit: Orc_Warrior2
-    type: 1
+    monsterAttackType: 1
+    monsterBrood: 0
     projectile: 
     tire: 2
     preNode: 1102
@@ -194,7 +204,8 @@ MonoBehaviour:
     cost: 5
     reward: 0
     outfit: Orc_Berserker
-    type: 1
+    monsterAttackType: 1
+    monsterBrood: 0
     projectile: 
     tire: 2
     preNode: 1102
@@ -211,7 +222,8 @@ MonoBehaviour:
     cost: 6
     reward: 0
     outfit: Orc_Shaman2
-    type: 2
+    monsterAttackType: 2
+    monsterBrood: 0
     projectile: Fireball
     tire: 2
     preNode: 1103
@@ -226,8 +238,9 @@ MonoBehaviour:
     description: "\uAE30\uBCF8 \uD574\uACE8 \uC2A4\uCF08\uB808\uD1A4 \uC785\uB2C8\uB2E4."
     cost: 1
     reward: 0
-    outfit: 
-    type: 1
+    outfit: Skeleton_Normal
+    monsterAttackType: 1
+    monsterBrood: 3
     projectile: 
     tire: 0
     preNode: -1
@@ -243,8 +256,9 @@ MonoBehaviour:
       \uC2A4\uCF08\uB808\uD1A4 \uC785\uB2C8\uB2E4."
     cost: 2
     reward: 0
-    outfit: 
-    type: 1
+    outfit: Skeleton_Warrior
+    monsterAttackType: 1
+    monsterBrood: 3
     projectile: 
     tire: 1
     preNode: 1201
@@ -260,8 +274,9 @@ MonoBehaviour:
       \uC785\uB2C8\uB2E4."
     cost: 2
     reward: 0
-    outfit: 
-    type: 2
+    outfit: Skeleton_Archer
+    monsterAttackType: 2
+    monsterBrood: 3
     projectile: Arrow
     tire: 1
     preNode: 1201
@@ -273,12 +288,13 @@ MonoBehaviour:
     attackSpeed: 0.4
     id: 1204
     name: "\uC2A4\uCF08\uB808\uD1A4\uBA54\uC774\uC9C0"
-    description: "\uC545\uB839\uC758 \uB9C8\uBC95\uC744 \uC0AC\uC6A9\uD558\uB294
-      \uC2A4\uCF08\uB808\uD1A4 \uC785\uB2C8\uB2E4."
+    description: "\uB9C8\uBC95\uC744 \uC0AC\uC6A9\uD558\uB294 \uC2A4\uCF08\uB808\uD1A4
+      \uC785\uB2C8\uB2E4."
     cost: 3
     reward: 0
-    outfit: 
-    type: 2
+    outfit: Skeleton_Mage
+    monsterAttackType: 2
+    monsterBrood: 3
     projectile: MagicMissile
     tire: 1
     preNode: 1201
@@ -294,8 +310,9 @@ MonoBehaviour:
       \uB0A8\uC544\uC788\uB294 \uC2A4\uCF08\uB808\uD1A4"
     cost: 3
     reward: 0
-    outfit: 
-    type: 1
+    outfit: Skeleton_Knight
+    monsterAttackType: 1
+    monsterBrood: 3
     projectile: 
     tire: 2
     preNode: 1202
@@ -311,8 +328,9 @@ MonoBehaviour:
       \uC800\uACA9\uD558\uB294 \uC2A4\uCF08\uB808\uD1A4"
     cost: 3
     reward: 0
-    outfit: 
-    type: 2
+    outfit: Skeleton_Ranger
+    monsterAttackType: 2
+    monsterBrood: 3
     projectile: Arrow
     tire: 2
     preNode: 1203
@@ -323,13 +341,14 @@ MonoBehaviour:
     attackRange: 7
     attackSpeed: 0.5
     id: 1207
-    name: "\uC2A4\uCF08\uB808\uD1A4\uB9AC\uCE58"
-    description: "\uD751\uB9C8\uBC95\uC744 \uC0AC\uC6A9\uD558\uC5EC \uC2A4\uCF08\uB808\uD1A4\uC744
-      \uC18C\uD658\uD558\uB294 \uB9AC\uCE58"
+    name: "\uC2A4\uCF08\uB808\uD1A4\uC704\uC790\uB4DC"
+    description: "\uB354 \uAC15\uB825\uD55C \uB9C8\uBC95\uC744 \uC0AC\uC6A9\uD558\uB294
+      \uC2A4\uCF08\uB808\uD1A4 \uC785\uB2C8\uB2E4."
     cost: 6
     reward: 0
-    outfit: 
-    type: 2
+    outfit: Skeleton_Wizard
+    monsterAttackType: 2
+    monsterBrood: 3
     projectile: MagicMissile
     tire: 2
     preNode: 1204

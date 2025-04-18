@@ -3,11 +3,19 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MonsterType
+public enum MonsterAttackType
 {
     NULL,
     MELEE,
     RANGED,
+}
+
+public enum MonsterBrood
+{
+    NULL,
+    None,
+    Smile,
+    Skeleton,
 }
 
 [Serializable]
@@ -20,7 +28,8 @@ public class MonsterInfo : BaseStatData, IInfo
     public float reward;
     public string outfit;
 
-    public MonsterType type;
+    public MonsterAttackType monsterAttackType;
+    public MonsterBrood monsterBrood;
     public string projectile;
     public int tire;
     public int preNode;
@@ -33,7 +42,8 @@ public class MonsterInfo : BaseStatData, IInfo
         cost = other.cost;
         reward = other.reward;
         outfit = other.outfit;
-        type = other.type;
+        monsterAttackType = other.monsterAttackType;
+        monsterBrood = other.monsterBrood;
         projectile = other.projectile;
     }
 
@@ -92,11 +102,14 @@ public class MonsterData : SheetDataReaderBase
                 case "reward":
                     monsterInfo.reward = Utils.StringToFloat(cell.value);
                     break;
+                case "brood":
+                    monsterInfo.monsterBrood = Utils.StringToEnum<MonsterBrood>(cell.value, MonsterBrood.NULL);
+                    break;
                 case "outfit":
                     monsterInfo.outfit = cell.value;
                     break;
                 case "type":
-                    monsterInfo.type = Utils.StringToEnum<MonsterType>(cell.value, MonsterType.NULL);
+                    monsterInfo.monsterAttackType = Utils.StringToEnum<MonsterAttackType>(cell.value, MonsterAttackType.NULL);
                     break;
                 case "projectile":
                     monsterInfo.projectile = cell.value;
