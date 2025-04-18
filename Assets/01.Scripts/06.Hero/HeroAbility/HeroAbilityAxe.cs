@@ -12,11 +12,14 @@ public class HeroAbilityAxe : HeroAbilitySystem
     private CancellationTokenSource token;
 
     // Start is called before the first frame update
-    protected override void Start()
+    public override void Initialize(int id)
     {
-        heroAbilityInfo = DataManager.Instance.heroAbilityDic[105];
+        base.Initialize(id);
+    }
 
-        base.Start();
+    private void Start()
+    {
+
 
         hero = GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;

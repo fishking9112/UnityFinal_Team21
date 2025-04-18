@@ -13,7 +13,9 @@ public abstract class StateMachine
     public void ChangeState(IState state)
     {
         currentState?.Exit();
+        Utils.Log(currentState?.ToString());
         currentState = state;
+        Utils.Log(currentState.ToString());
         currentState?.Enter();
     }
 

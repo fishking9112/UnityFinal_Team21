@@ -13,16 +13,17 @@ public class HeroAbilityMissile : HeroAbilitySystem
     /// <summary>
     /// 선언과 동시에 호출하기. 값 입력
     /// </summary>
-    protected override void Start()
+    public override void Initialize(int id)
     {
-        heroAbilityInfo = DataManager.Instance.heroAbilityDic[102];
+        base.Initialize(id);
 
-        base.Start();
+    }
 
+    private void Start()
+    {
         hero = this.GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
         token = new CancellationTokenSource();
-
         AddAbility();
     }
 

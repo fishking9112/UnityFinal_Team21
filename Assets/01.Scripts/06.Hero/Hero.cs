@@ -1,48 +1,34 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class Hero : MonoBehaviour
 {
-    private HeroState stateMachine;
-
-    public  HeroController controller;
     public GameObject target;
 
     private int enemyLayer;
 
     public List<HeroAbilitySystem> abilityList;
-    private Dictionary<Type, HeroAbilitySystem> allAbilityDic;
 
+    public List<HeroAbilitySystem> allAbility;
 
     private void Start()
     {
-        stateMachine = new HeroState(this);
-        controller=GetComponent<HeroController>();
-        stateMachine.navMeshAgent = controller.navMeshAgent;
-        stateMachine.ChangeState(stateMachine.moveState);
 
-        enemyLayer = LayerMask.GetMask("Monster");
 
-        DeadCheck().Forget();
+    }
+
+    public void Init()
+    {
+        abilityList.Clear();
+        allAbility.Clear();
 
         abilityList = new List<HeroAbilitySystem>();
-        allAbilityDic = new Dictionary<Type, HeroAbilitySystem>();
+        allAbility = GetComponents<HeroAbilitySystem>().ToList();
 
-        foreach (var ability in GetComponents<HeroAbilitySystem>())
-        {
-            Type type = ability.GetType();
-            ability.enabled = false;
-            allAbilityDic[type] = ability;
-        }
-
-        // 테스트 코드(성경책, 미사일 추가)
-        //AddAbility<HeroAbilityBible>();
-        //AddAbility<HeroAbilityMissile>();
-        //AddAbility<HeroAbilityMeleeAttack>();
-        //AddAbility<HeroAbilityRangeAttack>();
-        AddAbility<HeroAbilityAxe>();
     }
 
     public GameObject FindNearestTarget()
@@ -57,7 +43,7 @@ public class Hero : MonoBehaviour
         pointA = (Vector2)transform.position - off / 2;
         pointB = (Vector2)transform.position + off / 2;
 
-        Collider2D[] col = Physics2D.OverlapAreaAll(pointA, pointB, enemyLayer);
+        Collider2D[] col = Physics2D.OverlapAreaAll(pointA, pointB, 1<<7);
 
         if (col.Length == 0)
             return null;
@@ -77,52 +63,78 @@ public class Hero : MonoBehaviour
         return target;
     }
 
-    private async UniTaskVoid DeadCheck()
-    {
-        // 사망 체크로 수정 핋요
-        await UniTask.WaitUntil(() => gameObject.activeSelf == false);
-        stateMachine.ChangeState(stateMachine.deadState);
-    }
+
 
     /// <summary>
     /// 히어로 능력 추가
     /// </summary>
     /// <typeparam name="T"> 넣고 싶은 능력 클래스 이름 </typeparam>
-    public void AddAbility<T>() where T : HeroAbilitySystem
+    public void AddAbility(int id) 
     {
-        Type type = typeof(T);
-
-        if (allAbilityDic.TryGetValue(type, out HeroAbilitySystem ability))
+        foreach (var a in allAbility)
         {
-            if (!abilityList.Contains(ability))
+            if (a.GetID() != id)
             {
-                ability.enabled = true;
-                abilityList.Add(ability);
+                continue;
             }
+            a.enabled = true;
+            abilityList.Add(a);
         }
-        else
+
+    }
+
+    public void SetAbilityLevel(int id, int level)
+    {
+        foreach(var a in allAbility)
         {
-            Utils.Log($"{type}은 존재하지 않습니다.");
+            if(a.GetID()!=id)
+            {
+                continue;
+            }
+            a.enabled = true;
+            abilityList.Add(a);
+
+            a.SetAbilityLevel(level);
         }
+
+
+        //if (HeroManager.Instance.allAbilityDic.TryGetValue(id, out HeroAbilitySystem ability))
+        //{
+        //    if (!abilityList.Contains(ability))
+        //    {
+        //        ability.enabled = true;
+        //        abilityList.Add(ability);
+        //    }
+        //    ability.SetAbilityLevel(level);
+        //}
     }
 
     /// <summary>
     /// 히어로 능력 제거
     /// </summary>
     /// <typeparam name="T"> 제거 하고 싶은 능력 클래스 이름 </typeparam>
-    public void RemoveAbility<T>() where T : HeroAbilitySystem
+    public void RemoveAbility(int id) 
     {
-        Type type = typeof(T);
-
-        if (allAbilityDic.TryGetValue(type, out HeroAbilitySystem ability))
+        foreach (var a in abilityList)
         {
-            if (abilityList.Contains(ability))
+            if (a.GetID() != id)
             {
-                ability.enabled = false;
-                ability.DespawnAbility();
-                abilityList.Remove(ability);
+                continue;
             }
+            a.enabled = false;
+            a.DespawnAbility();
+            abilityList.Remove(a);
         }
+
+        //if (HeroManager.Instance.allAbilityDic.TryGetValue(id, out HeroAbilitySystem ability))
+        //{
+        //    if (abilityList.Contains(ability))
+        //    {
+        //        ability.enabled = false;
+        //        ability.DespawnAbility();
+        //        abilityList.Remove(ability);
+        //    }
+        //}
     }
 
     /// <summary>

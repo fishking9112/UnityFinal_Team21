@@ -32,7 +32,6 @@ public class HeroState : StateMachine
         deadState = new HeroDeadStete(this);
 
         // 데이터 가져오는걸로 수정 필요
-        moveSpeed = 1;
         target = GameObject.Find("Circle (1)").transform;
     }
 
