@@ -49,6 +49,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
             if (!obj.activeSelf)
             {
                 // 세팅은 받은 쪽에서 하기
+                obj.transform.position = pos;
                 obj.SetActive(true);
                 return obj;
             }

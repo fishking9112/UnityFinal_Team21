@@ -12,9 +12,18 @@ public class HeroManager : MonoSingleton<HeroManager>
     private List<int> levelList = new List<int>();
 
     public Dictionary<int, HeroAbilitySystem> allAbilityDic = new Dictionary<int, HeroAbilitySystem>();
-    public HeroAbilitySystem a;
+    float rand;
+    float rand2;
 
-    private int id = 101;
+    int weapon1;
+    int weapon2;
+    int weapon3;
+
+    int level1;
+    int level2;
+    int level3;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,15 +33,35 @@ public class HeroManager : MonoSingleton<HeroManager>
         levelList.Add(1);
 
 
-
-
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.L))
         {
-            GameObject hero = HeroPoolManager.Instance.GetObject(Vector2.zero);
+            idList.Clear();
+            levelList.Clear();
+
+            rand = UnityEngine.Random.Range(-45, 45);
+            rand2 = UnityEngine.Random.Range(-45, 45);
+            
+            weapon1 = UnityEngine.Random.Range(101, 106);
+            weapon2 = UnityEngine.Random.Range(101, 106);
+            weapon3 = UnityEngine.Random.Range(101, 106);
+
+            level1 = UnityEngine.Random.Range(1, 9);
+            level2 = UnityEngine.Random.Range(1, 9);
+            level3 = UnityEngine.Random.Range(1, 9);
+
+            idList.Add(weapon1);
+            idList.Add(weapon2);
+            idList.Add(weapon3);
+
+            levelList.Add(level1);
+            levelList.Add(level2);
+            levelList.Add(level3);
+
+            GameObject hero = HeroPoolManager.Instance.GetObject(new Vector2(rand,rand2));
             hero.GetComponent<HeroController>().InitAbility(idList, levelList);
         }
     }

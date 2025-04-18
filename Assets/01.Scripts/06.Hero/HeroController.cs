@@ -39,7 +39,6 @@ public class HeroController : BaseController , IPoolable
         stateMachine = new HeroState(hero);
         navMeshAgent = GetComponent<NavMeshAgent>();
         stateMachine.navMeshAgent = navMeshAgent;
-        stateMachine.ChangeState(stateMachine.moveState);
 
 
         navMeshAgent.updateRotation = false;
@@ -49,6 +48,8 @@ public class HeroController : BaseController , IPoolable
     public void InitAbility(List<int> abList, List<int> abLev)
     {
         DeadCheck().Forget();
+        stateMachine.ChangeState(stateMachine.moveState);
+
         hero.Init();
         hero.ResetAbility();
 
