@@ -104,13 +104,16 @@ public class MyKebabMenu
         // GameObject로 변환
         SPUM_Prefabs obj = (SPUM_Prefabs)command.context;
 
+
         // Update SpriteRenderer Material
         SpriteRenderer[] renderers = obj.GetComponentsInChildren<SpriteRenderer>();
         foreach (SpriteRenderer sr in renderers)
         {
             sr.sharedMaterial = spriteDiffuseMaterial;
-            Debug.Log("변경중?");
+            EditorUtility.SetDirty(sr);
         }
+
+        AssetDatabase.SaveAssets();
     }
 
 }
