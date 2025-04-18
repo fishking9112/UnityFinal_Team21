@@ -27,11 +27,6 @@ public class HeroManager : MonoSingleton<HeroManager>
     // Start is called before the first frame update
     void Start()
     {
-        idList.Add(103);
-        idList.Add(102);
-        levelList.Add(3);
-        levelList.Add(1);
-
 
     }
 
@@ -39,27 +34,27 @@ public class HeroManager : MonoSingleton<HeroManager>
     {
         if(Input.GetKeyDown(KeyCode.L))
         {
-            idList.Clear();
-            levelList.Clear();
-
             rand = UnityEngine.Random.Range(-45, 45);
             rand2 = UnityEngine.Random.Range(-45, 45);
-            
-            weapon1 = UnityEngine.Random.Range(101, 106);
-            weapon2 = UnityEngine.Random.Range(101, 106);
-            weapon3 = UnityEngine.Random.Range(101, 106);
+            idList.Clear();
+            levelList.Clear();
+            //var l = Enumerable.Range(101, 5).OrderBy(x => UnityEngine.Random.value).Take(3);
 
-            level1 = UnityEngine.Random.Range(1, 9);
-            level2 = UnityEngine.Random.Range(1, 9);
-            level3 = UnityEngine.Random.Range(1, 9);
+            //foreach(int i in l)
+            //{
+            //    idList.Add(i);
+            //    Utils.Log(i.ToString());
+            //}
 
-            idList.Add(weapon1);
-            idList.Add(weapon2);
-            idList.Add(weapon3);
+            //var lv= Enumerable.Range(1,8).OrderBy(x => UnityEngine.Random.value).Take(3);
 
-            levelList.Add(level1);
-            levelList.Add(level2);
-            levelList.Add(level3);
+            //foreach (int i in lv)
+            //{
+            //    levelList.Add(i);
+            //    Utils.Log(i.ToString());
+            //}
+            idList.Add(102);
+            levelList.Add(1);
 
             GameObject hero = HeroPoolManager.Instance.GetObject(new Vector2(rand,rand2));
             hero.GetComponent<HeroController>().InitAbility(idList, levelList);
