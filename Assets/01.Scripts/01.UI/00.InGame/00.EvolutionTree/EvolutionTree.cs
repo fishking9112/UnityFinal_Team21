@@ -41,8 +41,11 @@ public class EvolutionTree : MonoBehaviour
             evolutionButton.onClick.AddListener(OnClickEvolutionButton);
             evolutionButton.gameObject.SetActive(false);
         }
+    }
 
-        for(int i = 0; i < slotList.Count; i++)
+    private void OnEnable()
+    {
+        for (int i = 0; i < slotList.Count; i++)
         {
             slotList[i].evolutionTree = this;
             slotList[i].slotIndex = i;
@@ -54,7 +57,6 @@ public class EvolutionTree : MonoBehaviour
         costText.text = string.Empty;
         attackText.text = string.Empty;
     }
-
 
     // 진화 버튼을 누르면 진화 확정
     public void OnClickEvolutionButton()
@@ -136,7 +138,7 @@ public class EvolutionTree : MonoBehaviour
     {
         foreach (var slot in slotList)
         {
-            if (slot.selectedMonster == node)
+            if (slot.slotMonsterData == node)
             {
                 slot.ClearSlot();
                 RemoveQueenSlot(slot.slotIndex);

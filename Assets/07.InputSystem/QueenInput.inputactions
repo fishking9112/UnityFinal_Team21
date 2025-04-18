@@ -6,6 +6,24 @@
             "id": "5dbcdbb5-0188-4499-90a4-43793c6cd4be",
             "actions": [
                 {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "7993f986-62ad-4b31-8522-048e5e207462",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Drag",
+                    "type": "Value",
+                    "id": "8a3979c0-1b61-4efb-9c61-197eb64688a6",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "PressSlotNumber",
                     "type": "Value",
                     "id": "bf3a3a1d-8b98-43a3-a819-c775cc2f9b2d",
@@ -223,6 +241,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "EvolutionWindow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc2e1ab5-96c5-4664-b040-438b233adf69",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4294f80c-81dc-4ffe-bd71-7d20ed0e404b",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drag",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
