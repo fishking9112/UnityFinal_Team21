@@ -6,6 +6,14 @@ public class MiniMapClick : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
     public CameraController cameraController;
     private bool isDragging = false;
 
+    private void Start()
+    {
+        if(cameraController == null)
+        {
+            cameraController = GameObject.Find("QueenCamera").GetComponent<CameraController>();
+        }
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         isDragging = true;
