@@ -2,11 +2,13 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class HeroMoveState : HeroBaseState
 {
     private bool isMove;
+    private CancellationTokenSource token;
 
     public HeroMoveState(HeroState state) : base(state)
     {
@@ -15,21 +17,21 @@ public class HeroMoveState : HeroBaseState
     public override void Enter()
     {
         base.Enter();
-
+        token=new CancellationTokenSource();
         state.dir = state.GetDir();
         isMove = true;
-        MoveAndSearch().Forget();
+        MoveAndSearch(token.Token).Forget();
 
     }
 
-    private async UniTaskVoid MoveAndSearch()
+    private async UniTaskVoid MoveAndSearch(CancellationToken tk)
     {
             MoveHero();
         while (isMove)
         {
             Search(); 
 
-            await UniTask.Yield();
+            await UniTask.Yield(cancellationToken: tk);
         }
     }
 
@@ -37,6 +39,8 @@ public class HeroMoveState : HeroBaseState
     {
         base.Exit();
         isMove = false;
+        token?.Cancel();
+        token?.Dispose();
     }
 
     private void MoveHero()
@@ -49,7 +53,7 @@ public class HeroMoveState : HeroBaseState
     {
         // Find Enemy that inside check area
         Utils.DrawOverlapCircle(state.hero.transform.position, 3, Color.red);
-        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, 3,7);
+        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, 3,1<<7);
         if (col == null)
         {
             return;
