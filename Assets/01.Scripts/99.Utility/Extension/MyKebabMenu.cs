@@ -105,12 +105,11 @@ public class MyKebabMenu
         SPUM_Prefabs obj = (SPUM_Prefabs)command.context;
 
         // Update SpriteRenderer Material
-        SpriteRenderer[] spriteRenderers = obj.GetComponentsInChildren<SpriteRenderer>();
-        for (int j = 0; j < spriteRenderers.Length; j++)
+        SpriteRenderer[] renderers = obj.GetComponentsInChildren<SpriteRenderer>();
+        foreach (SpriteRenderer sr in renderers)
         {
-            SpriteRenderer spriteRenderer = spriteRenderers[j];
-            // spriteRenderer.sharedMaterial = spriteDiffuseMaterial;
-            spriteRenderer.material = spriteDiffuseMaterial;
+            sr.sharedMaterial = spriteDiffuseMaterial;
+            Debug.Log("변경중?");
         }
     }
 
