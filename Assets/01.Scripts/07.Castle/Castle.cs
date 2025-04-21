@@ -11,6 +11,8 @@ public class Castle : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.castle = this;
+
         cur = condition.CurCastleHealth;
         max = condition.MaxCastleHealth;
 

@@ -1,11 +1,16 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class IngameUI : MonoBehaviour
 {
+    [Header("레벨")]
+    [SerializeField] private TextMeshProUGUI levelText;
+
     [Header("게이지")]
     [SerializeField] private GaugeUI magicGaugeUI;
     [SerializeField] private GaugeUI summonGaugeUI;
+    [SerializeField] private GaugeUI expGaugeUI;
 
     [Header("타이머")]
     [SerializeField] private TimerUI timerUI;
@@ -28,8 +33,12 @@ public class IngameUI : MonoBehaviour
     {
         condition = GameManager.Instance.queen.condition;
 
+        condition.Level.AddAction(UpdateLevelText);
+        UpdateLevelText(condition.Level.Value);
+
         summonGaugeUI.Bind(condition.CurSummonGauge, condition.MaxSummonGauge);
         magicGaugeUI.Bind(condition.CurMagicGauge, condition.MaxMagicGauge);
+        expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
 
         CurTime.Value = limitTime;
         timerUI.Bind(CurTime);
@@ -38,6 +47,11 @@ public class IngameUI : MonoBehaviour
     private void Update()
     {
         OnTimer();
+    }
+
+    private void UpdateLevelText(float level)
+    {
+        levelText.text = $"LV. {level}";
     }
 
     // 제한 시간에서 점점 시간이 줄어들고 시간이 0이 됐을 때 클리어 판정
@@ -70,5 +84,11 @@ public class IngameUI : MonoBehaviour
         {
             evolutionTreeWindow.SetActive(!evolutionTreeWindow.activeInHierarchy);
         }
+    }
+
+    // 메모리 누수 방지
+    private void OnDestroy()
+    {
+        condition.Level.RemoveAction(UpdateLevelText);
     }
 }

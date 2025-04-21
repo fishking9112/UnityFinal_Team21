@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,10 +6,13 @@ using UnityEngine.UI;
 
 public class EvolutionTree : MonoBehaviour
 {
+    private QueenCondition condition;
+
     [SerializeField] private List<EvolutionNode> evolutionNodeList;
     private Dictionary<int, EvolutionNode> evolutionNodeDic;
 
     [Header("UI")]
+    [SerializeField] private TextMeshProUGUI evolutionPointText;
     [SerializeField] private Image descriptionImage;
     [SerializeField] private Button evolutionButton;
     [SerializeField] private TextMeshProUGUI description;
@@ -26,8 +28,12 @@ public class EvolutionTree : MonoBehaviour
 
     private void Start()
     {
+        condition = GameManager.Instance.queen.condition;
         queenController = GameManager.Instance.queen.controller;
         evolutionNodeDic = new Dictionary<int, EvolutionNode>();
+
+        condition.EvolutionPoint.AddAction(UpdateEvolutionPointText);
+        UpdateEvolutionPointText(condition.EvolutionPoint.Value);
 
         foreach (EvolutionNode node in evolutionNodeList)
         {
@@ -58,6 +64,11 @@ public class EvolutionTree : MonoBehaviour
         attackText.text = string.Empty;
     }
 
+    private void UpdateEvolutionPointText(float evolutionPoint)
+    {
+        evolutionPointText.text = $"Ep. {evolutionPoint}";
+    }
+
     // 진화 버튼을 누르면 진화 확정
     public void OnClickEvolutionButton()
     {
@@ -68,7 +79,14 @@ public class EvolutionTree : MonoBehaviour
             return;
         }
 
+        if(condition.EvolutionPoint.Value <= 0)
+        {
+            // 진화 포인트가 부족하다는 팝업창 있으면 좋을 것 같음
+            return;
+        }
+
         selectedNode.isUnlock = true;
+        condition.AdjustEvolutionPoint(-1f);
 
         // 한쪽 노드를 진화시키면 다른 쪽 노드 잠금
         int parentNodeId = selectedNode.monsterInfo.preNode;
