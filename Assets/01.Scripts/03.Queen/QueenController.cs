@@ -144,11 +144,13 @@ public class QueenController : MonoBehaviour
             return;
         }
 
-        int layerMask = ~(1 << LayerMask.NameToLayer("Cursor"));
+        ContactFilter2D layerFilter = new ContactFilter2D();
+        layerFilter.SetLayerMask(~LayerMask.GetMask("Cursor", "MiniMapCollider"));
+        Collider2D[] results = new Collider2D[1];
 
-        Collider2D hit = Physics2D.OverlapCircle(worldMousePos, 0.5f, layerMask);
+        int hitCount = Physics2D.OverlapCircle(worldMousePos, 0.5f, layerFilter, results);
 
-        if (hit != null)
+        if (hitCount > 0)
         {
             return;
         }
