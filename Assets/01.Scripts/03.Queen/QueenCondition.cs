@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class QueenCondition : MonoBehaviour
 {
-    [SerializeField] private float summonGaugeRecoverySpeed = 10f;
+    [Header("초기 설정")]
+    public float initSummonGaugeRecoverySpeed = 10f;
+    public float initMagicGaugeRecoverySpeed = 5f;
+    public float initCurMagicGauge = 100f;
+    public float initMaxMagicGauge = 100f;
+    public float initCurSummonGauge = 100f;
+    public float initMaxSummonGauge = 100f;
+
     public float SummonGaugeRecoverySpeed { get; private set; }
-
-    [SerializeField] private float magicGaugeRecoverySpeed = 5f;
     public float MagicGaugeRecoverySpeed { get; private set; }
-
     public ReactiveProperty<float> CurMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurSummonGauge { get; private set; } = new ReactiveProperty<float>();
@@ -15,13 +19,13 @@ public class QueenCondition : MonoBehaviour
 
     private void Awake()
     {
-        CurMagicGauge.Value = 100f;
-        MaxMagicGauge.Value = 100f;
-        CurSummonGauge.Value = 100f;
-        MaxSummonGauge.Value = 100f;
+        CurMagicGauge.Value = initCurMagicGauge;
+        MaxMagicGauge.Value = initMaxMagicGauge;
+        CurSummonGauge.Value = initCurSummonGauge;
+        MaxSummonGauge.Value = initMaxSummonGauge;
 
-        SummonGaugeRecoverySpeed = summonGaugeRecoverySpeed;
-        MagicGaugeRecoverySpeed = magicGaugeRecoverySpeed;
+        SummonGaugeRecoverySpeed = initSummonGaugeRecoverySpeed;
+        MagicGaugeRecoverySpeed = initMagicGaugeRecoverySpeed;
     }
 
     /// <summary>
