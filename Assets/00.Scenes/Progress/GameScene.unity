@@ -1307,7 +1307,7 @@ GameObject:
   - component: {fileID: 90943529}
   m_Layer: 0
   m_Name: CursorIcon
-  m_TagString: Untagged
+  m_TagString: Cursor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3367,8 +3367,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1852587806}
   - {fileID: 481940891}
+  - {fileID: 1852587806}
   m_Father: {fileID: 1819578967}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3789,7 +3789,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1527
+    m_Bits: 3575
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -10440,7 +10440,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.size
-      value: 19
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].key
@@ -10519,6 +10519,10 @@ PrefabInstance:
       value: Axe
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[19].key
+      value: ExpReward
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].prefab
       value: 
       objectReference: {fileID: 4227891616735513516, guid: 93dee373ed3430d4dbde3d7d85765d71, type: 3}
@@ -10595,6 +10599,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2280146202302374381, guid: d6d36977799f4b64a80a7ed7a7665407, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[19].prefab
+      value: 
+      objectReference: {fileID: 2528428153407058580, guid: 6678e225dad21634b8f48012e72a69cb, type: 3}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].initPoolSize
       value: 5
       objectReference: {fileID: 0}
@@ -10668,6 +10676,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[18].initPoolSize
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[19].initPoolSize
       value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -25424,10 +25436,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9485df42008725546a903a3df4782177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelText: {fileID: 0}
+  levelText: {fileID: 1571584373}
   magicGaugeUI: {fileID: 1952195696}
   summonGaugeUI: {fileID: 621515135}
-  expGaugeUI: {fileID: 0}
+  expGaugeUI: {fileID: 1852587807}
   timerUI: {fileID: 1311935696}
   limitTime: 1800
   evolutionTreeWindow: {fileID: 1832957528}

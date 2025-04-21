@@ -34,6 +34,7 @@ public class IngameUI : MonoBehaviour
         condition = GameManager.Instance.queen.condition;
 
         condition.Level.AddAction(UpdateLevelText);
+        UpdateLevelText(condition.Level.Value);
 
         summonGaugeUI.Bind(condition.CurSummonGauge, condition.MaxSummonGauge);
         magicGaugeUI.Bind(condition.CurMagicGauge, condition.MaxMagicGauge);

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class RewardBase : MonoBehaviour,IPoolable
+public abstract class RewardBase : MonoBehaviour, IPoolable
 {
     #region IPoolable
     private Action<Component> returnToPool;
@@ -23,7 +23,13 @@ public abstract class RewardBase : MonoBehaviour,IPoolable
     }
     #endregion 
 
+    protected QueenCondition condition;
     public float rewardAmount;
+
+    private void Start()
+    {
+        condition = GameManager.Instance.queen.condition;
+    }
 
     protected abstract void GainReward();
 
