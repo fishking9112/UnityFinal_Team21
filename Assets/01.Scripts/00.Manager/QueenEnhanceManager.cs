@@ -88,7 +88,7 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
                 break;
 
             case QueenEnhanceType.Point:
-                // TODO: 진화 포인트 증가 등 추가 처리
+                GameManager.Instance.queen.condition.AdjustEvolutionPoint(1f);
                 break;
         }
     }
