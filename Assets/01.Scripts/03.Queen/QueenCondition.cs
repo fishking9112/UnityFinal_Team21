@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class QueenCondition : MonoBehaviour
@@ -9,6 +10,8 @@ public class QueenCondition : MonoBehaviour
     public float initMaxMagicGauge = 100f;
     public float initCurSummonGauge = 100f;
     public float initMaxSummonGauge = 100f;
+    public float initCurExpGauge = 0f;
+    public float initMaxExpGauge = 100f;
 
     public float SummonGaugeRecoverySpeed { get; private set; }
     public float MagicGaugeRecoverySpeed { get; private set; }
@@ -16,16 +19,22 @@ public class QueenCondition : MonoBehaviour
     public ReactiveProperty<float> MaxMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurSummonGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxSummonGauge { get; private set; } = new ReactiveProperty<float>();
+    public ReactiveProperty<float> Level { get; private set; } = new ReactiveProperty<float>();
+    public ReactiveProperty<float> CurExpGauge { get; private set; } = new ReactiveProperty<float>();
+    public ReactiveProperty<float> MaxExpGauge { get; private set; } = new ReactiveProperty<float>();
 
     private void Awake()
     {
+        SummonGaugeRecoverySpeed = initSummonGaugeRecoverySpeed;
+        MagicGaugeRecoverySpeed = initMagicGaugeRecoverySpeed;
+
         CurMagicGauge.Value = initCurMagicGauge;
         MaxMagicGauge.Value = initMaxMagicGauge;
         CurSummonGauge.Value = initCurSummonGauge;
         MaxSummonGauge.Value = initMaxSummonGauge;
-
-        SummonGaugeRecoverySpeed = initSummonGaugeRecoverySpeed;
-        MagicGaugeRecoverySpeed = initMagicGaugeRecoverySpeed;
+        Level.Value = 1f;
+        CurExpGauge.Value = initCurExpGauge;
+        MaxExpGauge.Value = initMaxExpGauge;
     }
 
     /// <summary>
@@ -82,6 +91,29 @@ public class QueenCondition : MonoBehaviour
     public void AdjustMagicGaugeRecoverySpeed(float amount)
     {
         MagicGaugeRecoverySpeed = AdjustValue(MagicGaugeRecoverySpeed, amount, float.MaxValue);
+    }
+
+    /// <summary>
+    /// 경험치 저정
+    /// </summary>
+    /// <param name="amount"> 조정할 수치 </param>
+    public void AdjustCurExpGauge(float amount)
+    {
+        float temp = CurExpGauge.Value + amount;
+
+        while(temp >= MaxExpGauge.Value)
+        {
+            LevelUp();
+            temp -= MaxExpGauge.Value;
+        }
+
+        CurExpGauge.Value = temp;
+    }
+
+    private void LevelUp()
+    {
+        Level.Value++;
+        // 레벨업 시 증가할 것들
     }
 
     // 값 조정
