@@ -17,16 +17,6 @@ public class GameManager : MonoSingleton<GameManager>
     {
         base.Awake();
 
-        if(queen == null)
-        {
-            queen = GameObject.Find("Queen").GetComponent<Queen>();
-        }
-
-        if(castle == null)
-        {
-            castle = GameObject.Find("Castle").GetComponent<Castle>();
-        }
-
         curCursorState = CursorState.CONFINED;
     }
 
