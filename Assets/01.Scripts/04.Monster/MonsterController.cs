@@ -41,6 +41,7 @@ public class MonsterController : BaseController, IPoolable
     [NonSerialized] public MonsterStateMachine stateMachine;
     [NonSerialized] public Vector2 projectileSize = Vector2.zero;
     [NonSerialized] public List<SpriteRenderer> renderers;
+    [NonSerialized] public Collider2D _collider;
 
     private SortingGroup group;
     private int sortingOffset = 0;
@@ -72,9 +73,15 @@ public class MonsterController : BaseController, IPoolable
 
         if (navMeshAgent == null)
             navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.enabled = true;
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
-        navMeshAgent.enabled = true;
+
+        if (_collider == null)
+        {
+            _collider = GetComponent<Collider2D>();
+        }
+        _collider.enabled = true;
 
         if (pivot == null)
             pivot = transform.GetChild(0);
