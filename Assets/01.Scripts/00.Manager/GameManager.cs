@@ -18,11 +18,17 @@ public class GameManager : MonoSingleton<GameManager>
         base.Awake();
 
         curCursorState = CursorState.CONFINED;
+        Time.timeScale = 1f;
     }
 
     private void Update()
     {
         ApplyCursorState();
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            castle.TakeDamaged(100f);
+        }
     }
 
     private void ApplyCursorState()
@@ -52,7 +58,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (pause)
         {
-            if(pauseController != null)
+            if (pauseController != null)
             {
                 pauseController.ForcePause();
             }
@@ -62,11 +68,13 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void GameClear()
     {
-        // 결과창 켜기
+        GameObject.Find("GameResultCanvas").transform.Find("ResultWindow").gameObject.SetActive(true);
+        Time.timeScale = 0f;
     }
 
     public void GameOver()
     {
-        // 결과창 켜기
+        GameObject.Find("GameResultCanvas").transform.Find("ResultWindow").gameObject.SetActive(true);
+        Time.timeScale = 0f;
     }
 }

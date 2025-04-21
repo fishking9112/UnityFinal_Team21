@@ -144,7 +144,9 @@ public class QueenController : MonoBehaviour
             return;
         }
 
-        Collider2D hit = Physics2D.OverlapCircle(worldMousePos, 0.5f);
+        int layerMask = ~(1 << LayerMask.NameToLayer("Cursor"));
+
+        Collider2D hit = Physics2D.OverlapCircle(worldMousePos, 0.5f, layerMask);
 
         if (hit != null)
         {
