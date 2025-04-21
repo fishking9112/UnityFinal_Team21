@@ -13,16 +13,17 @@ public class HeroAbilityMissile : HeroAbilitySystem
     /// <summary>
     /// 선언과 동시에 호출하기. 값 입력
     /// </summary>
-    protected override void Start()
+    public override void Initialize(int id)
     {
-        heroAbilityInfo = DataManager.Instance.heroAbilityDic[102];
+        base.Initialize(id);
 
-        base.Start();
+    }
 
+    private void Start()
+    {
         hero = this.GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
         token = new CancellationTokenSource();
-
         AddAbility();
     }
 
@@ -53,7 +54,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
         for (int i = 0; i < count; i++)
         {
             var bullet = objectPoolManager.GetObject<HeroBullet>("Bullet", hero.transform.position);
-            bullet.SetBullet(heroAbilityInfo.duration_Base, pierce, damage, speed,0);
+            bullet.SetBullet(duration, pierce, damage, speed,0);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
             
             await UniTask.Delay(TimeSpan.FromSeconds(delay),false,PlayerLoopTiming.Update,cancellationToken:tk);

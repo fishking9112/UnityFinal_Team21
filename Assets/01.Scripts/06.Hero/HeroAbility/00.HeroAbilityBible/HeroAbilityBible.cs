@@ -10,22 +10,24 @@ public class HeroAbilityBible : HeroAbilitySystem
 
     private bool maxUpgrade;
 
-    protected override void Start()
+    public override void Initialize(int id)
     {
-        heroAbilityInfo = DataManager.Instance.heroAbilityDic[103];
+        base.Initialize(id);
 
-        base.Start();
 
+    }
+
+    private void Start()
+    {
         objectPoolManager = ObjectPoolManager.Instance;
 
         maxUpgrade = false;
-
         AddAbility();
 
-        // 테스트 레벨업
-        AbilityLevelUp();
-        AbilityLevelUp();
-        AbilityLevelUp();
+        //// 테스트 레벨업
+        //AbilityLevelUp();
+        //AbilityLevelUp();
+        //AbilityLevelUp();
     }
 
     protected override void ActionAbility()

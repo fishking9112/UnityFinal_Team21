@@ -89,5 +89,32 @@ public class MyKebabMenu
                 return FontStyles.Normal;
         }
     }
+
+
+    /// <summary>
+    /// CanvasScaler 1920 x 1080
+    /// </summary>
+    /// <param name="command"></param>
+    [MenuItem("CONTEXT/SPUM_Prefabs/MaterialShare")]
+    private static void SPUM_PrefabsMaterialShare(MenuCommand command)
+    {
+        // Load Main Material
+        Material spriteDiffuseMaterial = AssetDatabase.LoadAssetAtPath("Assets/98.ThirdParty/SPUM/Basic_Resources/Materials/SpriteDiffuse.mat", typeof(Material)) as Material;
+
+        // GameObject로 변환
+        SPUM_Prefabs obj = (SPUM_Prefabs)command.context;
+
+
+        // Update SpriteRenderer Material
+        SpriteRenderer[] renderers = obj.GetComponentsInChildren<SpriteRenderer>();
+        foreach (SpriteRenderer sr in renderers)
+        {
+            sr.sharedMaterial = spriteDiffuseMaterial;
+            EditorUtility.SetDirty(sr);
+        }
+
+        AssetDatabase.SaveAssets();
+    }
+
 }
 #endif

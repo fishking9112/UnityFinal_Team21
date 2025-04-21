@@ -10,6 +10,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     protected GameObject target;
 
     [Header("Base Stat")]
+    [SerializeField] protected int id;
     [SerializeField] protected int maxLevel;
     [SerializeField] protected Vector3 pivot;
     [SerializeField] protected float damage;
@@ -34,13 +35,16 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     [SerializeField] protected float knockback;
     [SerializeField] protected int curLevel;
 
-    protected virtual void Start()
+    public virtual void Initialize(int id)
     {
+        heroAbilityInfo = DataManager.Instance.heroAbilityDic[id];
+
         Init();
     }
 
     private void Init()
     {
+        id = heroAbilityInfo.id;
         delay = heroAbilityInfo.delay_Base;
         delay_LevelUp = heroAbilityInfo.delay_LevelUp;
         damage = heroAbilityInfo.damage_Base;
@@ -124,5 +128,10 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         {
             AbilityLevelUp();
         }
+    }
+
+    public int GetID()
+    {
+        return id;
     }
 }

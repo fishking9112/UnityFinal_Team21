@@ -12,12 +12,15 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     private CancellationTokenSource token;
     
 
-    protected override void Start()
+    public override void Initialize(int id)
     {
-        heroAbilityInfo = DataManager.Instance.heroAbilityDic[101];
-        base.Start();
+        base.Initialize(id);
 
+      
+    }
 
+    private void Start()
+    {
         hero = transform.GetComponent<Hero>();
 
         animator = this.GetComponentInChildren<Animator>();

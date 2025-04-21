@@ -7,14 +7,15 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     private Hero hero;
 
     private LayerMask layer;
-    protected override void Start()
+    public override void Initialize(int id)
     {
-        heroAbilityInfo = DataManager.Instance.heroAbilityDic[104];
+        base.Initialize(id);
+    }
 
-        base.Start();
+    private void Start()
+    {
         hero = this.GetComponent<Hero>();
         layer = LayerMask.GetMask("Monster");
-
         AddAbility();
     }
 

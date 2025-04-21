@@ -4,6 +4,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 public class HeroBullet : MonoBehaviour , IPoolable
 {
@@ -20,7 +21,6 @@ public class HeroBullet : MonoBehaviour , IPoolable
     private Action<Component> returnToPool;
     CancellationTokenSource cancel = new CancellationTokenSource();
 
-    CancellationToken token;
 
     public void SetBullet(float time,float pierceCnt,float dmg,float spd,float rSpeed)
     {
@@ -29,21 +29,22 @@ public class HeroBullet : MonoBehaviour , IPoolable
         damage = dmg;
         speed = spd;
         rotateSpeed = rSpeed;
-        Move().Forget();
+        cancel = new CancellationTokenSource();
+        Move(cancel.Token).Forget();
     }
 
     public void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
         targetLayer = 7;
-        token = this.GetCancellationTokenOnDestroy();
     }
 
     public void OnDespawn()
     {
         time = 0f;
 
-        cancel.Cancel();
+        cancel?.Cancel();
+        cancel?.Dispose();
         returnToPool?.Invoke(this);
     }
 
@@ -57,7 +58,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     /// 5초간 이동하다가 오브젝트풀 릴리즈 하기
     /// </summary>
     /// <returns></returns>
-    private async UniTaskVoid Move()
+    private async UniTaskVoid Move(CancellationToken token)
     {
         
         while (time < limitTime)

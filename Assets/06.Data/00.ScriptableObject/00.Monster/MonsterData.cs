@@ -15,6 +15,7 @@ public enum MonsterBrood
     NULL,
     None,
     Smile,
+    Orc,
     Skeleton,
 }
 
