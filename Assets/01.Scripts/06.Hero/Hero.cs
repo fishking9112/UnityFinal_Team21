@@ -42,10 +42,10 @@ public class Hero : MonoBehaviour
             return null;
 
         float minVal = float.MaxValue;
-
+        float distance;
         foreach (Collider2D c in col)
         {
-            float distance = Vector2.Distance(c.transform.position, transform.position);
+            distance = Vector2.Distance(c.transform.position, transform.position);
             if (minVal > distance)
             {
                 minVal = distance;

@@ -15,6 +15,7 @@ public class HeroController : BaseController
     [SerializeField]private Hero hero;
 
 
+
     public void InitHero()
     {
         stateMachine = new HeroState(hero);
@@ -24,6 +25,8 @@ public class HeroController : BaseController
 
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
+
+        healthHandler.Init(100);
     }
 
     public void InitAbility(List<int> abList, List<int> abLev)

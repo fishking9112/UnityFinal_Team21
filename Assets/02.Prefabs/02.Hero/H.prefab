@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -8899919222466052609}
   - component: {fileID: -6065295390783855606}
   - component: {fileID: -1041513511482003167}
+  - component: {fileID: 7958608897836801452}
   m_Layer: 6
   m_Name: H
   m_TagString: Untagged
@@ -72,7 +73,7 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1024
-  healthHandler: {fileID: 0}
+  healthHandler: {fileID: 7958608897836801452}
   navMeshAgent: {fileID: 2788587879810130101}
   hero: {fileID: 1140399341762152338}
 --- !u!195 &2788587879810130101
@@ -407,3 +408,16 @@ MonoBehaviour:
   countDelay_LevelUp: 0
   knockback: 1
   curLevel: 1
+--- !u!114 &7958608897836801452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3469463355210438680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5359e5e6a8f2fe84d8301ed5bc412b40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthUI: {fileID: 0}

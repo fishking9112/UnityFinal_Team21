@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using Unity.VisualScripting.Antlr3.Runtime;
+using System.ComponentModel.Design;
 
 public class HeroBullet : MonoBehaviour , IPoolable
 {
@@ -12,6 +13,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     private float speed;
     private float damage;
     private LayerMask targetLayer;
+    private LayerMask obstacleLayer;
 
     Rigidbody2D rigid;
     float time;
@@ -37,6 +39,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     {
         returnToPool = returnAction;
         targetLayer = 7;
+        obstacleLayer = 10;
     }
 
     public void OnDespawn()
@@ -87,6 +90,10 @@ public class HeroBullet : MonoBehaviour , IPoolable
             {
                 OnDespawn();
             }
+        }
+        else if(collision.gameObject.layer == obstacleLayer)
+        {
+            OnDespawn();
         }
     }
 
