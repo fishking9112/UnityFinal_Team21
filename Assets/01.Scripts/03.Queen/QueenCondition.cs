@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class QueenCondition : MonoBehaviour
 {
-    [SerializeField] private float summonGaugeRecoverySpeed = 10f;
+    [SerializeField] private float initSummonGaugeRecoverySpeed = 10f;
     public float SummonGaugeRecoverySpeed { get; private set; }
 
-    [SerializeField] private float magicGaugeRecoverySpeed = 5f;
+    [SerializeField] private float initMagicGaugeRecoverySpeed = 5f;
     public float MagicGaugeRecoverySpeed { get; private set; }
 
     public ReactiveProperty<float> CurMagicGauge { get; private set; } = new ReactiveProperty<float>();
@@ -20,8 +20,8 @@ public class QueenCondition : MonoBehaviour
         CurSummonGauge.Value = 100f;
         MaxSummonGauge.Value = 100f;
 
-        SummonGaugeRecoverySpeed = summonGaugeRecoverySpeed;
-        MagicGaugeRecoverySpeed = magicGaugeRecoverySpeed;
+        SummonGaugeRecoverySpeed = initSummonGaugeRecoverySpeed;
+        MagicGaugeRecoverySpeed = initMagicGaugeRecoverySpeed;
     }
 
     /// <summary>
