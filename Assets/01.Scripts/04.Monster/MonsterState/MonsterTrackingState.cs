@@ -25,7 +25,7 @@ public class MonsterTrackingState : MonsterBaseState
         ctsAllSearch?.Cancel();
         ctsAllSearch?.Dispose(); // 메모리 누수 방지
         ctsAllSearch = new CancellationTokenSource();
-        // 0.1 초마다 움직임
+        // 3 초마다 검사
         TargetAllSearchAsync(ctsAllSearch.Token).Forget();
     }
     public override void Exit()
@@ -41,35 +41,13 @@ public class MonsterTrackingState : MonsterBaseState
         ctsAllSearch = null;
     }
 
-    public override void Update()
-    {
-        base.Update();
-
-        //타겟이 없다면 전체검색을 위한 
-        if (target == null || !target.gameObject.activeSelf)
-        {
-            // 1초 이후 전체 탐색
-            searchTimer += Time.deltaTime;
-            if (searchTimer < 1f)
-            {
-                searchTimer = 0f;
-                TargetAllSearch();
-            }
-        }
-        else if (searchTimer != 0f) // 타겟 있다면 타이머 초기화
-        {
-            searchTimer = 0f;
-        }
-
-    }
-
     private async UniTaskVoid TargetAllSearchAsync(CancellationToken token)
     {
         while (true)
         {
             token.ThrowIfCancellationRequested(); // 취소되면 예외 발생
 
-            MoveTarget();
+            TargetAllSearch();
 
             // 3초 대기 Task
             var delayTask = UniTask.Delay(3000, cancellationToken: token);
@@ -101,6 +79,7 @@ public class MonsterTrackingState : MonsterBaseState
         TargetAreaSearch();
 
         // 타겟이 없다면 전체적으로 찾을 수도 있음
+        Debug.Log(target);
 
         //타겟이 없다면 움직임 없음 (0.1초마다 반복되게 여기서 return)
         if (target == null || !target.gameObject.activeSelf)
@@ -111,8 +90,8 @@ public class MonsterTrackingState : MonsterBaseState
         // 움직임-----
         spum.PlayAnimation(PlayerState.MOVE, 0);
         // 속도 0.1f 곱해서 너프시킴
-        spum.SetMoveSpeed(stateMachine.Controller.monsterInfo.moveSpeed * 0.1f);
-        navMeshAgent.speed = stateMachine.Controller.monsterInfo.moveSpeed * 0.1f;
+        spum.SetMoveSpeed(stateMachine.Controller.monsterInfo.moveSpeed);
+        navMeshAgent.speed = stateMachine.Controller.monsterInfo.moveSpeed;
 
         // 타겟과의 거리
         targetDistance = (target.position - navMeshAgent.transform.position).magnitude;
@@ -192,7 +171,6 @@ public class MonsterTrackingState : MonsterBaseState
         {
             // TODO : GetComponent?
             stateMachine.Controller.target = nearHit.gameObject.transform;
-            nearHit.gameObject.GetComponent<BaseController>().TakeDamaged(stateMachine.Controller.statData.attack);
         }
     }
 

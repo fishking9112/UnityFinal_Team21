@@ -43,7 +43,7 @@ public class BaseController : MonoBehaviour
     /// <param name="damage">공격 들어온 데미지 수치</param>
     public virtual void TakeDamaged(float damage)
     {
-        float finalDamage = Mathf.Max(0, damage - statData.defence);
+        float finalDamage = damage;//Mathf.Max(0, damage - statData.defence);
         healthHandler.Damage(finalDamage);
 
         if (healthHandler.IsDie())
