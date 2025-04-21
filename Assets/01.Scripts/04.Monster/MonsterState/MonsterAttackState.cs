@@ -45,6 +45,14 @@ public class MonsterAttackState : MonsterBaseState
     public override void Update()
     {
         base.Update();
+
+        // 타겟이 꺼져있다면 null로
+        if (!target.gameObject.activeSelf)
+        {
+            stateMachine.Controller.target = null;
+            stateMachine.ChangeState(stateMachine.Tracking);
+        }
+
         // 공격 이후 애니메이션이 끝나거나 공격 딜레이를 기다림
         attackTimer += Time.deltaTime;
         if (attackTimer < (1f / stateMachine.Controller.monsterInfo.attackSpeed)) return;

@@ -79,10 +79,15 @@ public class MonsterTrackingState : MonsterBaseState
         TargetAreaSearch();
 
         // 타겟이 없다면 전체적으로 찾을 수도 있음
-        Debug.Log(target);
 
-        //타겟이 없다면 움직임 없음 (0.1초마다 반복되게 여기서 return)
-        if (target == null || !target.gameObject.activeSelf)
+        // 타겟이 꺼져있다면 null로
+        if (!target.gameObject.activeSelf)
+        {
+            stateMachine.Controller.target = null;
+        }
+
+        // 타겟이 없다면 움직임 없음 (0.1초마다 반복되게 여기서 return)
+        if (target == null)
         {
             return;
         }
