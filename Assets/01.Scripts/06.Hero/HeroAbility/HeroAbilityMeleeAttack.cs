@@ -9,14 +9,13 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     private Animator animator;
 
-    private CancellationTokenSource token;
-    
+
 
     public override void Initialize(int id)
     {
         base.Initialize(id);
 
-      
+
     }
 
     private void Start()
@@ -24,19 +23,15 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         hero = transform.GetComponent<Hero>();
 
         animator = this.GetComponentInChildren<Animator>();
-        token = new CancellationTokenSource();
-        AddAbility();
     }
 
     protected override void ActionAbility()
     {
         target = hero.FindNearestTarget();
-
-        SwingSword(token.Token).Forget();
+            SwingSword().Forget();
     }
 
-
-    private async UniTaskVoid SwingSword(CancellationToken tk)
+    private async UniTaskVoid SwingSword()
     {
         float angle;
 
@@ -50,12 +45,12 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
                 target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
         }
         animator.SetBool("2_Attack", true);
-        await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=0.5f,cancellationToken: tk);
+        await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=0.5f);
 
         // 충돌처리
         OverlapCheck(angle);
 
-        await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=1f,cancellationToken: tk);
+        await UniTask.WaitUntil(()=> animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=1f);
 
     }
 
@@ -90,5 +85,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     public override void SetAbilityLevel(int level)
     {
         base.SetAbilityLevel(level);
+        token = new CancellationTokenSource();
+
     }
 }

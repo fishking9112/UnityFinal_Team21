@@ -9,6 +9,7 @@ using System.ComponentModel.Design;
 
 public class HeroBullet : MonoBehaviour , IPoolable
 {
+    
     private Vector2 dir;
     private float speed;
     private float damage;
@@ -22,6 +23,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     float rotateSpeed;
     private Action<Component> returnToPool;
     CancellationTokenSource cancel = new CancellationTokenSource();
+    private bool isDispose;
 
 
     public void SetBullet(float time,float pierceCnt,float dmg,float spd,float rSpeed)
@@ -31,7 +33,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
         damage = dmg;
         speed = spd;
         rotateSpeed = rSpeed;
-        cancel = new CancellationTokenSource();
+        isDispose = false;
         Move(cancel.Token).Forget();
     }
 
@@ -45,7 +47,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     public void OnDespawn()
     {
         time = 0f;
-
+        isDispose = true;
         cancel?.Cancel();
         cancel?.Dispose();
         returnToPool?.Invoke(this);
@@ -53,7 +55,9 @@ public class HeroBullet : MonoBehaviour , IPoolable
 
     public void OnSpawn()
     {
-        
+        isDispose = false;
+        cancel = new CancellationTokenSource();
+
     }
 
 
@@ -64,7 +68,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     private async UniTaskVoid Move(CancellationToken token)
     {
         
-        while (time < limitTime)
+        while (time < limitTime && !token.IsCancellationRequested)
         {
             transform.Rotate(0,0, rotateSpeed * Time.deltaTime);
             transform.position = (Vector2)transform.position + speed * Time.deltaTime * (Vector2)transform.up;
@@ -79,16 +83,17 @@ public class HeroBullet : MonoBehaviour , IPoolable
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // 딕셔너리 통해서 GetComponent 없이 쓰기
-        if (collision.gameObject.layer == targetLayer)
+        if (collision.gameObject.layer == targetLayer && !isDispose)
         {
             if (MonsterManager.Instance.monsters.TryGetValue(collision.gameObject, out var monster))
             {
                 monster.TakeDamaged(damage);
-            }
-            pierce--;
-            if (pierce <= 0)
-            {
-                OnDespawn();
+
+                pierce--;
+                if (pierce <= 0)
+                {
+                    OnDespawn();
+                }
             }
         }
         else if(collision.gameObject.layer == obstacleLayer)

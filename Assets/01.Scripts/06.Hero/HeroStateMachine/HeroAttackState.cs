@@ -30,7 +30,7 @@ public class HeroAttackState : HeroBaseState
                 if (state.navMeshAgent.remainingDistance < state.navMeshAgent.stoppingDistance)
                 {
                     state.navMeshAgent.ResetPath();
-                    await UniTask.WaitUntil(() => enemy.activeSelf == false);
+                    await UniTask.WaitUntil(() => enemy.activeSelf == false,PlayerLoopTiming.Update,tk);
                     GetEnemyDir();
                     break;
                 }

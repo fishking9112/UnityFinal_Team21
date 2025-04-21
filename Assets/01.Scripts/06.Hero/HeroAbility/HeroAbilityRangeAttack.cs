@@ -16,7 +16,6 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     {
         hero = this.GetComponent<Hero>();
         layer = LayerMask.GetMask("Monster");
-        AddAbility();
     }
 
     protected override void ActionAbility()
@@ -28,10 +27,8 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
         {
             if (MonsterManager.Instance.monsters.TryGetValue(c.gameObject, out var monster))
             {
-                Utils.Log("마늘공격");
                 monster.TakeDamaged(damage);
             }
-            // 딕셔너리로 GetComponent없이 대미지 입히기
         }
     }
 

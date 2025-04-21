@@ -31,6 +31,8 @@ public class HeroController : BaseController
 
     public void InitAbility(List<int> abList, List<int> abLev)
     {
+        healthHandler.Init(100);
+
         DeadCheck().Forget();
         stateMachine.ChangeState(stateMachine.moveState);
 
@@ -51,7 +53,7 @@ public class HeroController : BaseController
     private async UniTaskVoid DeadCheck()
     {
         // 사망 체크로 수정 핋요
-        await UniTask.WaitUntil(() => gameObject.activeSelf == false);
+        await UniTask.WaitUntil(() => healthHandler.IsDie());
         stateMachine.ChangeState(stateMachine.deadState);
         ResetObj();
     }
@@ -59,7 +61,6 @@ public class HeroController : BaseController
 
     private void ResetObj()
     {
-        stateMachine = null;
         HeroPoolManager.Instance.ReturnObject(this);
     }
 }

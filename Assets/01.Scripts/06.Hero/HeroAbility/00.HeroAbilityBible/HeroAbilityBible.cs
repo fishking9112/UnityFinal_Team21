@@ -1,6 +1,8 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class HeroAbilityBible : HeroAbilitySystem
@@ -9,6 +11,8 @@ public class HeroAbilityBible : HeroAbilitySystem
     private List<IPoolable> bibleList = new List<IPoolable>();
 
     private bool maxUpgrade;
+
+    private CancellationTokenSource cancel;
 
     public override void Initialize(int id)
     {
@@ -22,7 +26,6 @@ public class HeroAbilityBible : HeroAbilitySystem
         objectPoolManager = ObjectPoolManager.Instance;
 
         maxUpgrade = false;
-        AddAbility();
 
         //// 테스트 레벨업
         //AbilityLevelUp();
@@ -32,7 +35,7 @@ public class HeroAbilityBible : HeroAbilitySystem
 
     protected override void ActionAbility()
     {
-        SummonBible();
+            SummonBible();
     }
 
     // 성경책 생성
@@ -70,14 +73,14 @@ public class HeroAbilityBible : HeroAbilitySystem
             else
             {
                 // 만렙이 아닐 경우 지속시간이 지나면 디스폰
-                DespawnBible(bible, duration).Forget();
+                DespawnBible(bible, duration,cancel.Token).Forget();
             }
         }
     }
 
-    private async UniTaskVoid DespawnBible(IPoolable bible, float delay)
+    private async UniTaskVoid DespawnBible(IPoolable bible, float delay,CancellationToken tk)
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(delay));
+        await UniTask.Delay(TimeSpan.FromSeconds(delay),false,PlayerLoopTiming.Update,tk);
         bible?.OnDespawn();
         bibleList.Remove(bible);
     }
@@ -94,11 +97,13 @@ public class HeroAbilityBible : HeroAbilitySystem
         {
             bible?.OnDespawn();
         }
-
+        token?.Cancel();
+        token?.Dispose();
         bibleList.Clear();
     }
     public override void SetAbilityLevel(int level)
     {
         base.SetAbilityLevel(level);
+        cancel = new CancellationTokenSource();
     }
 }

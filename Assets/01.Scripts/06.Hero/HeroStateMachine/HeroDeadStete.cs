@@ -10,7 +10,7 @@ public class HeroDeadStete : HeroBaseState
         // 사망 애니메이션, 사운드
 
         // 전투(자동전투 포함) 중지
-        hero.ResetAbility();
+        state.hero.ResetAbility();
         // 보상 떨구기/획득하기
     }
 
