@@ -9,6 +9,7 @@ public enum CursorState
 public class GameManager : MonoSingleton<GameManager>
 {
     public Queen queen;
+    public Castle castle;
     private CursorState curCursorState;
     private PauseController pauseController;
 
@@ -56,5 +57,15 @@ public class GameManager : MonoSingleton<GameManager>
             }
             //_ = UGSManager.Instance.SaveLoad.SaveAsync();
         }
+    }
+
+    public void GameClear()
+    {
+        // 결과창 켜기
+    }
+
+    public void GameOver()
+    {
+        // 결과창 켜기
     }
 }

@@ -5,9 +5,6 @@ using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    [Header("마왕성")]
-    public GameObject castle;
-
     [Header("버츄얼 카메라")]
     public CinemachineVirtualCamera virtualCamera;
 
@@ -31,6 +28,8 @@ public class CameraController : MonoBehaviour
     public float maxZoom;
     public float zoomSmoothValue;
 
+    private Transform castleTransform;
+
     private float targetZoom;
     private float zoomVelocity;
     private Vector3 curSpeed;
@@ -40,6 +39,7 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
+        castleTransform = GameManager.Instance.castle.transform;
         cameraTransform = virtualCamera.transform;
         targetZoom = virtualCamera.m_Lens.OrthographicSize;
     }
@@ -137,7 +137,7 @@ public class CameraController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            cameraTransform.position = castle.transform.position;
+            cameraTransform.position = castleTransform.position;
             cameraTransform.position += new Vector3(0, 0, -10);
         }
     }
