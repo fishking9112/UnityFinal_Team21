@@ -15,20 +15,6 @@ public class HeroManager : MonoSingleton<HeroManager>
     float rand;
     float rand2;
 
-    int weapon1;
-    int weapon2;
-    int weapon3;
-
-    int level1;
-    int level2;
-    int level3;
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     private void Update()
     {
@@ -56,7 +42,7 @@ public class HeroManager : MonoSingleton<HeroManager>
             idList.Add(102);
             levelList.Add(1);
 
-            GameObject hero = HeroPoolManager.Instance.GetObject(new Vector2(rand,rand2));
+            HeroController hero = HeroPoolManager.Instance.GetObject(new Vector2(rand,rand2));
             hero.GetComponent<HeroController>().InitAbility(idList, levelList);
         }
     }

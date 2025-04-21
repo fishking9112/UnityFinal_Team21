@@ -14,12 +14,6 @@ public class Hero : MonoBehaviour
 
     public List<HeroAbilitySystem> allAbility;
 
-    private void Start()
-    {
-
-
-    }
-
     public void Init()
     {
         abilityList.Clear();

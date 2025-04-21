@@ -7,27 +7,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.XR;
 
-public class HeroController : BaseController , IPoolable
+public class HeroController : BaseController
 {
-    #region IPoolable
-    private Action<Component> returnToPool;
-
-    public void Init(Action<Component> returnAction)
-    {
-        returnToPool = returnAction;
-    }
-
-    public void OnSpawn() // GetObject 이후
-    {
-        HeroManager.Instance.hero.Add(gameObject,this);
-    }
-
-    public void OnDespawn() // 실행하면 자동으로 반환
-    {
-        returnToPool?.Invoke(this);
-        HeroManager.Instance.hero.Remove(gameObject);
-    }
-    #endregion
     [SerializeField]private HeroState stateMachine;
 
     public NavMeshAgent navMeshAgent;
@@ -69,5 +50,13 @@ public class HeroController : BaseController , IPoolable
         // 사망 체크로 수정 핋요
         await UniTask.WaitUntil(() => gameObject.activeSelf == false);
         stateMachine.ChangeState(stateMachine.deadState);
+        ResetObj();
+    }
+
+
+    private void ResetObj()
+    {
+        stateMachine = null;
+        HeroPoolManager.Instance.ReturnObject(this);
     }
 }

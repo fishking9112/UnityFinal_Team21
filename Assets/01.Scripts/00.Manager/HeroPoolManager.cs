@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class HeroObj
 {
-    public GameObject obj;
+    public HeroController obj;
     public int poolSize;
 }
 
@@ -15,9 +15,9 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
 {
     [SerializeField] private HeroObj heroObj;
 
-    private List<GameObject> list;
+    private List<HeroController> list;
 
-    private List<GameObject> poolList = new List<GameObject>();
+    private List<HeroController> poolList = new List<HeroController>();
 
     protected override void Awake()
     {
@@ -27,30 +27,30 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
     // Start is called before the first frame update
     void Start()
     {
-        list = Resources.LoadAll<GameObject>("HeroPrefabs").ToList();
+        list = Resources.LoadAll<HeroController>("HeroPrefabs").ToList();
         System.Random rand = new System.Random();
         list = list.OrderBy(x => rand.Next()).ToList();
         int min = Mathf.Min(list.Count, heroObj.poolSize);
 
         for(int i=0; i<min; i++)
         {
-            GameObject hObj = Instantiate(heroObj.obj, transform);
-            GameObject hPrefab = Instantiate(list.ElementAt(i), Vector3.zero, Quaternion.identity, hObj.transform);
-            hObj.GetComponent<HeroController>().InitHero();
-            hObj.SetActive(false);
+            HeroController hObj = Instantiate(heroObj.obj, transform);
+            HeroController hPrefab = Instantiate(list.ElementAt(i), Vector3.zero, Quaternion.identity, hObj.transform);
+            hObj.InitHero();
+            hObj.gameObject.SetActive(false);
             poolList.Add(hObj);
         }
     }
 
-    public GameObject GetObject(Vector2 pos)
+    public HeroController GetObject(Vector2 pos)
     {
         foreach (var obj in poolList)
         {
-            if (!obj.activeSelf)
+            if (!obj.gameObject.activeSelf)
             {
                 // 세팅은 받은 쪽에서 하기
                 obj.transform.position = pos;
-                obj.SetActive(true);
+                obj.gameObject.SetActive(true);
                 return obj;
             }
         }
@@ -60,11 +60,9 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         return null;
     }
 
-    public void ReturnObject(GameObject obj)
+    public void ReturnObject(HeroController obj)
     {
-        obj.SetActive(false);
+        obj.gameObject.SetActive(false);
     }
-
-
 
 }

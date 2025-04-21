@@ -11,7 +11,6 @@ public class HeroDeadStete : HeroBaseState
 
         // 전투(자동전투 포함) 중지
         hero.ResetAbility();
-
         // 보상 떨구기/획득하기
     }
 
