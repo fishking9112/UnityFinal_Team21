@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class QueenCondition : MonoBehaviour
@@ -10,11 +9,14 @@ public class QueenCondition : MonoBehaviour
     public float initMaxMagicGauge = 100f;
     public float initCurSummonGauge = 100f;
     public float initMaxSummonGauge = 100f;
+    public float initLevel = 1f;
     public float initCurExpGauge = 0f;
     public float initMaxExpGauge = 100f;
+    public float initEvolutionPoint = 0f;
 
     public float SummonGaugeRecoverySpeed { get; private set; }
     public float MagicGaugeRecoverySpeed { get; private set; }
+    public float Gold { get; private set; }
     public ReactiveProperty<float> CurMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurSummonGauge { get; private set; } = new ReactiveProperty<float>();
@@ -22,6 +24,7 @@ public class QueenCondition : MonoBehaviour
     public ReactiveProperty<float> Level { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurExpGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxExpGauge { get; private set; } = new ReactiveProperty<float>();
+    public ReactiveProperty<float> EvolutionPoint { get; private set; } = new ReactiveProperty<float>();
 
     private void Awake()
     {
@@ -32,9 +35,10 @@ public class QueenCondition : MonoBehaviour
         MaxMagicGauge.Value = initMaxMagicGauge;
         CurSummonGauge.Value = initCurSummonGauge;
         MaxSummonGauge.Value = initMaxSummonGauge;
-        Level.Value = 1f;
+        Level.Value = initLevel;
         CurExpGauge.Value = initCurExpGauge;
         MaxExpGauge.Value = initMaxExpGauge;
+        EvolutionPoint.Value = initEvolutionPoint;
     }
 
     /// <summary>
@@ -94,7 +98,7 @@ public class QueenCondition : MonoBehaviour
     }
 
     /// <summary>
-    /// 경험치 저정
+    /// 경험치 조정
     /// </summary>
     /// <param name="amount"> 조정할 수치 </param>
     public void AdjustCurExpGauge(float amount)
@@ -113,7 +117,26 @@ public class QueenCondition : MonoBehaviour
     private void LevelUp()
     {
         Level.Value++;
+        AdjustEvolutionPoint(1f);
         // 레벨업 시 증가할 것들
+    }
+
+    /// <summary>
+    /// 진화 포인트 조정
+    /// </summary>
+    /// <param name="amount"> 조정할 수치 </param>
+    public void AdjustEvolutionPoint(float amount)
+    {
+        EvolutionPoint.Value = AdjustValue(EvolutionPoint.Value, amount, float.MaxValue);
+    }
+
+    /// <summary>
+    /// 골드 조정
+    /// </summary>
+    /// <param name="amount"> 조정할 수치 </param>
+    public void AdjustGold(float amount)
+    {
+        Gold = AdjustValue(Gold, amount, float.MaxValue);
     }
 
     // 값 조정
