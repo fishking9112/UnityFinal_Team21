@@ -22,7 +22,7 @@ public class GaugeUI : MonoBehaviour
         cur.AddAction(UpdateFill);
         max.AddAction(UpdateFill);
 
-        UpdateFill(cur.Value);
+        UpdateFill(0);
     }
 
     // 반응형 프로퍼티의 값이 변경되면 실행할 함수. 값에 따라 이미지의 fillAmount가 바뀜

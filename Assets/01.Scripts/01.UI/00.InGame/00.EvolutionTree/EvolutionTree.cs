@@ -112,8 +112,8 @@ public class EvolutionTree : MonoBehaviour
         descriptionImage.enabled = true;
         descriptionImage.sprite = node.image.sprite;
         description.text = info.description;
-        healthText.text = $"체력 : {info.health}";
-        attackText.text = $"공격력 : {info.attack}";
+        healthText.text = $"기본 체력 : {info.health}";
+        attackText.text = $"기본 공격력 : {info.attack}";
         costText.text = $"소환 비용 : {info.cost}";
     }
 
