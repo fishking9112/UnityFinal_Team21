@@ -7,9 +7,8 @@ using System.Threading;
 using Unity.VisualScripting.Antlr3.Runtime;
 using System.ComponentModel.Design;
 
-public class HeroBullet : MonoBehaviour , IPoolable
+public class HeroBullet : MonoBehaviour, IPoolable
 {
-    
     private Vector2 dir;
     private float speed;
     private float damage;
@@ -23,31 +22,30 @@ public class HeroBullet : MonoBehaviour , IPoolable
     float rotateSpeed;
     private Action<Component> returnToPool;
     CancellationTokenSource cancel = new CancellationTokenSource();
-    private bool isDispose;
 
 
-    public void SetBullet(float time,float pierceCnt,float dmg,float spd,float rSpeed)
+    public void SetBullet(float time, float pierceCnt, float dmg, float spd, float rSpeed)
     {
         limitTime = time;
         pierce = pierceCnt;
         damage = dmg;
         speed = spd;
         rotateSpeed = rSpeed;
-        isDispose = false;
+        cancel = new CancellationTokenSource();
         Move(cancel.Token).Forget();
     }
 
     public void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
-        targetLayer = 7;
+        targetLayer = LayerMask.GetMask("Monster", "Castle");
         obstacleLayer = 10;
     }
 
     public void OnDespawn()
     {
         time = 0f;
-        isDispose = true;
+
         cancel?.Cancel();
         cancel?.Dispose();
         returnToPool?.Invoke(this);
@@ -55,8 +53,6 @@ public class HeroBullet : MonoBehaviour , IPoolable
 
     public void OnSpawn()
     {
-        isDispose = false;
-        cancel = new CancellationTokenSource();
 
     }
 
@@ -67,14 +63,14 @@ public class HeroBullet : MonoBehaviour , IPoolable
     /// <returns></returns>
     private async UniTaskVoid Move(CancellationToken token)
     {
-        
-        while (time < limitTime && !token.IsCancellationRequested)
+
+        while (time < limitTime)
         {
-            transform.Rotate(0,0, rotateSpeed * Time.deltaTime);
+            transform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
             transform.position = (Vector2)transform.position + speed * Time.deltaTime * (Vector2)transform.up;
             time += Time.deltaTime;
 
-            await UniTask.Yield(cancellationToken:token);
+            await UniTask.Yield(cancellationToken: token);
         }
 
         OnDespawn();
@@ -82,23 +78,25 @@ public class HeroBullet : MonoBehaviour , IPoolable
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (isDispose)
-            return;
-
-        if (collision.gameObject.layer == targetLayer)
+        // 딕셔너리 통해서 GetComponent 없이 쓰기
+        if (((1 << collision.gameObject.layer) & targetLayer) != 0)
         {
             if (MonsterManager.Instance.monsters.TryGetValue(collision.gameObject, out var monster))
             {
                 monster.TakeDamaged(damage);
+            }
+            else if (GameManager.Instance.castle.gameObject == collision.gameObject)
+            {
+                GameManager.Instance.castle.TakeDamaged(damage);
+            }
 
-                pierce--;
-                if (pierce <= 0)
-                {
-                    OnDespawn();
-                }
+            pierce--;
+            if (pierce <= 0)
+            {
+                OnDespawn();
             }
         }
-        else if(collision.gameObject.layer == obstacleLayer)
+        else if (collision.gameObject.layer == obstacleLayer)
         {
             OnDespawn();
         }
