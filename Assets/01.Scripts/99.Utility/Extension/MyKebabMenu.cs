@@ -92,7 +92,7 @@ public class MyKebabMenu
 
 
     /// <summary>
-    /// CanvasScaler 1920 x 1080
+    /// SPUM 프리팹 Batching 조정
     /// </summary>
     /// <param name="command"></param>
     [MenuItem("CONTEXT/SPUM_Prefabs/MaterialShare")]
@@ -111,6 +111,13 @@ public class MyKebabMenu
         {
             sr.sharedMaterial = spriteDiffuseMaterial;
             EditorUtility.SetDirty(sr);
+        }
+
+        SpritePos[] deleteScripts = obj.GetComponentsInChildren<SpritePos>();
+        foreach (SpritePos ds in deleteScripts)
+        {
+            Undo.DestroyObjectImmediate(ds); // 에디터 상에서 즉시 삭제
+            // EditorUtility.SetDirty(ds);
         }
 
         AssetDatabase.SaveAssets();
