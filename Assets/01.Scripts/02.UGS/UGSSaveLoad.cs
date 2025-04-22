@@ -83,13 +83,27 @@ public class UGSSaveLoad : MonoBehaviour
     {
         try
         {
-            var playerData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { SaveKey }, new LoadOptions(new PublicReadAccessClassOptions()));
+            var playerData = await CloudSaveService.Instance.Data.Player.LoadAsync(
+                new HashSet<string> { SaveKey },
+                new LoadOptions(new PublicReadAccessClassOptions())
+            );
 
             if (playerData.TryGetValue(SaveKey, out var savedValue))
             {
                 var json = savedValue.Value.GetAsString();
-                var saveData = JsonConvert.DeserializeObject<SaveData>(json);
 
+                SaveData saveData;
+                try
+                {
+                    saveData = JsonConvert.DeserializeObject<SaveData>(json);
+                }
+                catch (Exception ex)
+                {
+                    Utils.Log($"역직렬화 실패: {ex.Message}");
+                    return;
+                }
+
+                // 역직렬화가 성공한 후에 적용
                 OnLoadComplete(saveData);
             }
             else
@@ -99,7 +113,7 @@ public class UGSSaveLoad : MonoBehaviour
         }
         catch (Exception e)
         {
-            Utils.Log($"로드 실패: {e.Message}");
+            Utils.Log($"클라우드 로드 실패: {e.Message}");
         }
     }
 
@@ -108,15 +122,36 @@ public class UGSSaveLoad : MonoBehaviour
     /// </summary>
     private void OnLoadComplete(SaveData saveData)
     {
-        // gold
-        GameManager.Instance.SetGold(saveData.player.gold);
+        try
+        {
+            GameManager.Instance.SetGold(saveData.player.gold);
+            Utils.Log($"Gold 적용 완료: {saveData.player.gold}");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"Gold 적용 실패: {e}");
+        }
 
-        // sound
-        SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
-        SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
+        try
+        {
+            SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
+            SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
+            Utils.Log("사운드 설정 적용 완료");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"사운드 설정 적용 실패: {e}");
+        }
 
-        // QueenAbilityUpgrade
-        QueenAbilityUpgradeManager.Instance.ApplyUpgradeData(saveData.queenUpgrades);
+        try
+        {
+            QueenAbilityUpgradeManager.Instance.ApplyUpgradeData(saveData.queenUpgrades);
+            Utils.Log("여왕 강화 데이터 적용 완료");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"여왕 강화 적용 실패: {e}");
+        }
     }
 
     #endregion
