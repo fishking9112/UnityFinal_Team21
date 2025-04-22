@@ -13,8 +13,7 @@ public struct SaveData
 public struct PlayerData
 {
     public string nickName;
-    public int level;
-    public int coin;
+    public int gold;
 }
 
 [Serializable]
