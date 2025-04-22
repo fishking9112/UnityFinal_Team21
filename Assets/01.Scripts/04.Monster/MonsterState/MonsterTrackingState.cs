@@ -89,18 +89,12 @@ public class MonsterTrackingState : MonsterBaseState
         // 타겟이 없다면 움직임 없음 (0.1초마다 반복되게 여기서 return)
         if (target == null)
         {
-            if (navMeshAgent.enabled)
+            if (navMeshAgent.speed > 0f)
             {
                 spum.PlayAnimation(PlayerState.IDLE, 0);
-                navMeshAgent.enabled = false;
+                navMeshAgent.speed = 0f;
             }
             return;
-        }
-
-        // 움직임 시작
-        if (!navMeshAgent.enabled)
-        {
-            navMeshAgent.enabled = true;
         }
 
         // 움직임-----
