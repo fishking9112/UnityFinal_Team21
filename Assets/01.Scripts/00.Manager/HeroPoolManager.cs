@@ -15,7 +15,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
 {
     [SerializeField] private HeroObj heroObj;
 
-    private List<HeroController> list;
+    private List<GameObject> list;
 
     private List<HeroController> poolList = new List<HeroController>();
 
@@ -27,7 +27,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
     // Start is called before the first frame update
     void Start()
     {
-        list = Resources.LoadAll<HeroController>("HeroPrefabs").ToList();
+        list = Resources.LoadAll<GameObject>("HeroPrefabs").ToList();
         System.Random rand = new System.Random();
         list = list.OrderBy(x => rand.Next()).ToList();
         int min = Mathf.Min(list.Count, heroObj.poolSize);
@@ -35,7 +35,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         for(int i=0; i<min; i++)
         {
             HeroController hObj = Instantiate(heroObj.obj, transform);
-            HeroController hPrefab = Instantiate(list.ElementAt(i), Vector3.zero, Quaternion.identity, hObj.transform);
+            GameObject hPrefab = Instantiate(list.ElementAt(i), Vector3.zero, Quaternion.identity, hObj.transform);
             hObj.InitHero();
             hObj.gameObject.SetActive(false);
             poolList.Add(hObj);
