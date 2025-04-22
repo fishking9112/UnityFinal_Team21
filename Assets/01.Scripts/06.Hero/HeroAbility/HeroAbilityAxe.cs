@@ -9,7 +9,6 @@ public class HeroAbilityAxe : HeroAbilitySystem
 {
     private ObjectPoolManager objectPoolManager;
     private Hero hero;
-    private CancellationTokenSource token;
 
     // Start is called before the first frame update
     public override void Initialize(int id)
@@ -19,21 +18,18 @@ public class HeroAbilityAxe : HeroAbilitySystem
 
     private void Start()
     {
-
-
         hero = GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
-        token = new CancellationTokenSource();
-        AddAbility();
     }
+
 
     protected override void ActionAbility()
     {
         target = hero.FindNearestTarget();
-        ShootAxe(token.Token).Forget();
+        ShootAxe().Forget();
     }
 
-    private async UniTaskVoid ShootAxe(CancellationToken tk)
+    private async UniTaskVoid ShootAxe()
     {
         float angle;
 
@@ -53,7 +49,7 @@ public class HeroAbilityAxe : HeroAbilitySystem
             bullet.SetBullet(duration, pierce, damage, speed, rotateSpeed);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, cancellationToken: tk);
+            await UniTask.Delay(TimeSpan.FromSeconds(delay));
         }
     }
 
@@ -73,5 +69,6 @@ public class HeroAbilityAxe : HeroAbilitySystem
     public override void SetAbilityLevel(int level)
     {
         base.SetAbilityLevel(level);
+        token = new CancellationTokenSource();
     }
 }
