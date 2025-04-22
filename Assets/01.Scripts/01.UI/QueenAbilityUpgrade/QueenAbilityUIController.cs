@@ -10,12 +10,12 @@ public class QueenAbilityUIController : MonoBehaviour
 
     [SerializeField] private Button resetButton;
     [SerializeField] private RectTransform descriptionPopupUI;
-    private TextMeshProUGUI popupUIAbilityName;
-    private TextMeshProUGUI popupUIAbilityDec;
-    private TextMeshProUGUI popupUIAbilityCost;
-    private Image popupUIAbilityImage;
+    [SerializeField] private TextMeshProUGUI popupUIAbilityName;
+    [SerializeField] private TextMeshProUGUI popupUIAbilityDec;
+    [SerializeField] private TextMeshProUGUI popupUIAbilityCost;
+    [SerializeField] private Image popupUIAbilityImage;
 
-    private GameObject uiQueenAbilityPanelRoot;
+    [SerializeField] private GameObject uiQueenAbilityPanelRoot;
     private bool isFollowingMouse = false;
 
 
