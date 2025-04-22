@@ -51,6 +51,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
                 // 세팅은 받은 쪽에서 하기
                 obj.transform.position = pos;
                 obj.gameObject.SetActive(true);
+                HeroManager.Instance.hero[obj.gameObject] = obj;
                 return obj;
             }
         }
@@ -62,6 +63,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
 
     public void ReturnObject(HeroController obj)
     {
+        HeroManager.Instance.hero.Remove(obj.gameObject);
         obj.gameObject.SetActive(false);
     }
 

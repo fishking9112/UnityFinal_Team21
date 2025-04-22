@@ -36,7 +36,7 @@ public class Hero : MonoBehaviour
         pointA = (Vector2)transform.position - off / 2;
         pointB = (Vector2)transform.position + off / 2;
 
-        Collider2D[] col = Physics2D.OverlapAreaAll(pointA, pointB, 1<<7);
+        Collider2D[] col = Physics2D.OverlapAreaAll(pointA, pointB, 1<<7 || 1<<);
 
         if (col.Length == 0)
             return null;
