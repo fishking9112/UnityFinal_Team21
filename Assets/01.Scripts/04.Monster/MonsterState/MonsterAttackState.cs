@@ -45,6 +45,15 @@ public class MonsterAttackState : MonsterBaseState
     public override void Update()
     {
         base.Update();
+
+        // 타겟이 꺼져있다면 null로
+        if (target != null && !target.gameObject.activeSelf)
+        {
+            stateMachine.Controller.target = null;
+            stateMachine.ChangeState(stateMachine.Tracking);
+            return;
+        }
+
         // 공격 이후 애니메이션이 끝나거나 공격 딜레이를 기다림
         attackTimer += Time.deltaTime;
         if (attackTimer < (1f / stateMachine.Controller.monsterInfo.attackSpeed)) return;
@@ -101,7 +110,6 @@ public class MonsterAttackState : MonsterBaseState
 
             foreach (var hit in hits)
             {
-                //? LATE : 제일 가까운 적 한명만?
                 float dist = Vector2.Distance(origin, hit.transform.position);
                 if (dist < minDist)
                 {
@@ -112,8 +120,11 @@ public class MonsterAttackState : MonsterBaseState
 
             if (nearHit != null)
             {
-                //? LATE : GetComponent?
-                nearHit.gameObject.GetComponent<BaseController>().TakeDamaged(stateMachine.Controller.statData.attack);
+                if (HeroManager.Instance.hero.ContainsKey(nearHit.gameObject))
+                {
+                    HeroManager.Instance.hero[nearHit.gameObject].TakeDamaged(stateMachine.Controller.statData.attack);
+                }
+                // nearHit.gameObject.GetComponent<BaseController>().TakeDamaged(stateMachine.Controller.statData.attack);
             }
         });
     }

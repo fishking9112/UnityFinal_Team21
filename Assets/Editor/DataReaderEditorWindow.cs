@@ -15,7 +15,7 @@ public class DataReaderEditorWindow : EditorWindow
         public ScriptableObject dataSo;
         public SheetDataReaderBase sheetData => dataSo as SheetDataReaderBase;
 
-        public DataInfo(string buttonName,string addressableKey)
+        public DataInfo(string buttonName, string addressableKey)
         {
             this.buttonName = buttonName;
             this.addressableKey = addressableKey;
@@ -37,7 +37,8 @@ public class DataReaderEditorWindow : EditorWindow
             new DataInfo("Monster 데이터", "MonsterData"),
             new DataInfo("QueenAbility 데이터", "QueenAbilityData"),
             new DataInfo("HeroAbility 데이터", "HeroAbilityData"),
-            new DataInfo("Enhance 데이터", "QueenEnhanceData")
+            new DataInfo("Enhance 데이터", "QueenEnhanceData"),
+            new DataInfo("HeroStatus 데이터","HeroStatusData"),
         };
 
         foreach (var info in dataInfo)

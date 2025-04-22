@@ -26,7 +26,6 @@ public class MonsterController : BaseController, IPoolable
 
     public void OnDespawn() // 실행하면 자동으로 반환
     {
-        // TODO : 죽을 때 크리스탈 반환?
         returnToPool?.Invoke(this);
     }
     #endregion

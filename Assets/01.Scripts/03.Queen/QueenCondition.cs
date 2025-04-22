@@ -117,8 +117,7 @@ public class QueenCondition : MonoBehaviour
     private void LevelUp()
     {
         Level.Value++;
-        AdjustEvolutionPoint(1f);
-        // 레벨업 시 증가할 것들
+        QueenEnhanceManager.Instance.ActivateEnhance();
     }
 
     /// <summary>

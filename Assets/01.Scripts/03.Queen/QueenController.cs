@@ -85,6 +85,12 @@ public class QueenController : MonoBehaviour
         }
     }
 
+    // 슬롯 버튼을 클릭했을 때 해당 슬롯 선택
+    public void OnClickSlotButton(int index)
+    {
+        SelectSlot(index);
+    }
+
     // 클릭 시 처리
     public void OnClick(InputAction.CallbackContext context)
     {
@@ -144,9 +150,13 @@ public class QueenController : MonoBehaviour
             return;
         }
 
-        Collider2D hit = Physics2D.OverlapCircle(worldMousePos, 0.5f);
+        ContactFilter2D layerFilter = new ContactFilter2D();
+        layerFilter.SetLayerMask(~LayerMask.GetMask("Cursor", "MiniMapCollider"));
+        Collider2D[] results = new Collider2D[1];
 
-        if (hit != null)
+        int hitCount = Physics2D.OverlapCircle(worldMousePos, 0.5f, layerFilter, results);
+
+        if (hitCount > 0)
         {
             return;
         }
