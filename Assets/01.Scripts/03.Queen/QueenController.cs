@@ -29,6 +29,9 @@ public class QueenController : MonoBehaviour
 
     private bool isDrag;
 
+    [SerializeField] private float summonDistance = 0.5f;
+    private Vector3 lastSummonPosition = Vector3.positiveInfinity;
+
     private void Start()
     {
         condition = GameManager.Instance.queen.condition;
@@ -158,6 +161,10 @@ public class QueenController : MonoBehaviour
         {
             return;
         }
+        if(Vector3.Distance(worldMousePos,lastSummonPosition) < summonDistance)
+        {
+            return;
+        }
 
         ContactFilter2D layerFilter = new ContactFilter2D();
         layerFilter.SetLayerMask(~LayerMask.GetMask("Cursor", "MiniMapCollider"));
@@ -171,9 +178,10 @@ public class QueenController : MonoBehaviour
         }
 
         condition.AdjustCurSummonGauge(-selectedMonster.cost);
-        Utils.Log($"{selectedMonster.outfit}");
         var monster = objectPoolManager.GetObject<MonsterController>(selectedMonster.outfit, worldMousePos);
         monster.StatInit(selectedMonster);
+
+        lastSummonPosition = worldMousePos;
     }
 
     // 퀸의 액티브 스킬 사용

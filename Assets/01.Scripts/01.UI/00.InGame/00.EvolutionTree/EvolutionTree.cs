@@ -57,6 +57,7 @@ public class EvolutionTree : MonoBehaviour
             slotList[i].slotIndex = i;
         }
 
+        selectedNode = evolutionNodeList[0];
         UpdateDescriptionWindow(evolutionNodeList[0]);
     }
 

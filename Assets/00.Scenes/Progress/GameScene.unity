@@ -2468,8 +2468,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSlotUI: {fileID: 916721692}
-  magicSlotUI: {fileID: 736249064}
-  selectedMagic: {fileID: 0}
+  queenActiveSkillSlotUI: {fileID: 0}
+  selectedQueenActiveSkill: {fileID: 0}
   cursorIcon: {fileID: 90943526}
   curSlot: 0
   monsterList: []
@@ -2517,9 +2517,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initSummonGaugeRecoverySpeed: 10
-  initMagicGaugeRecoverySpeed: 5
-  initCurMagicGauge: 100
-  initMaxMagicGauge: 100
+  initQueenActiveSkillGaugeRecoverySpeed: 5
+  initCurQueenActiveSkillGauge: 100
+  initMaxQueenActiveSkillGauge: 100
   initCurSummonGauge: 100
   initMaxSummonGauge: 100
   initCurExpGauge: 0
@@ -4359,7 +4359,7 @@ GameObject:
   - component: {fileID: 327313557}
   - component: {fileID: 327313558}
   m_Layer: 5
-  m_Name: MagicGroup
+  m_Name: QueenActiveSkillGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7836,7 +7836,7 @@ GameObject:
   - component: {fileID: 736249061}
   - component: {fileID: 736249064}
   m_Layer: 5
-  m_Name: MagicSlot
+  m_Name: QueenActiveSkillSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13894,13 +13894,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 738274fe98af4574897e451943581984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  magicGroup: {fileID: 327313558}
+  queenActiveSkillGroup: {fileID: 327313558}
   monsterGroup: {fileID: 1790566608}
-  magicGroupTransform: {fileID: 327313557}
+  queenActiveSkillGroupTransform: {fileID: 327313557}
   monsterGroupTransform: {fileID: 1790566607}
-  magicSlotTransform: {fileID: 736249060}
+  queenActiveSkillSlotTransform: {fileID: 736249060}
   monsterSlotTransform: {fileID: 916721688}
-  magicGauge: {fileID: 1952195692}
+  queenActiveSkillGauge: {fileID: 1952195692}
   summonGauge: {fileID: 621515131}
   duration: 0.5
   arcHeight: 50
@@ -22123,7 +22123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelText: {fileID: 1571584373}
   goldText: {fileID: 1489270840}
-  magicGaugeUI: {fileID: 1952195696}
+  queenActiveSkillGaugeUI: {fileID: 1952195696}
   summonGaugeUI: {fileID: 621515135}
   expGaugeUI: {fileID: 1852587807}
   timerUI: {fileID: 1311935696}
@@ -24007,7 +24007,7 @@ GameObject:
   - component: {fileID: 1952195694}
   - component: {fileID: 1952195696}
   m_Layer: 5
-  m_Name: MagicGauge
+  m_Name: QueenActiveSkillGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
