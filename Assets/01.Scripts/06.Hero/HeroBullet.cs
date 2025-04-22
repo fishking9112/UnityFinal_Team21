@@ -7,7 +7,7 @@ using System.Threading;
 using Unity.VisualScripting.Antlr3.Runtime;
 using System.ComponentModel.Design;
 
-public class HeroBullet : MonoBehaviour , IPoolable
+public class HeroBullet : MonoBehaviour, IPoolable
 {
     private Vector2 dir;
     private float speed;
@@ -24,7 +24,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     CancellationTokenSource cancel = new CancellationTokenSource();
 
 
-    public void SetBullet(float time,float pierceCnt,float dmg,float spd,float rSpeed)
+    public void SetBullet(float time, float pierceCnt, float dmg, float spd, float rSpeed)
     {
         limitTime = time;
         pierce = pierceCnt;
@@ -38,7 +38,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
     public void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
-        targetLayer = 7;
+        targetLayer = LayerMask.GetMask("Monster", "Castle");
         obstacleLayer = 10;
     }
 
@@ -53,7 +53,7 @@ public class HeroBullet : MonoBehaviour , IPoolable
 
     public void OnSpawn()
     {
-        
+
     }
 
 
@@ -63,14 +63,14 @@ public class HeroBullet : MonoBehaviour , IPoolable
     /// <returns></returns>
     private async UniTaskVoid Move(CancellationToken token)
     {
-        
+
         while (time < limitTime)
         {
-            transform.Rotate(0,0, rotateSpeed * Time.deltaTime);
+            transform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
             transform.position = (Vector2)transform.position + speed * Time.deltaTime * (Vector2)transform.up;
             time += Time.deltaTime;
 
-            await UniTask.Yield(cancellationToken:token);
+            await UniTask.Yield(cancellationToken: token);
         }
 
         OnDespawn();
@@ -79,19 +79,24 @@ public class HeroBullet : MonoBehaviour , IPoolable
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // 딕셔너리 통해서 GetComponent 없이 쓰기
-        if (collision.gameObject.layer == targetLayer)
+        if (((1 << collision.gameObject.layer) & targetLayer) != 0)
         {
             if (MonsterManager.Instance.monsters.TryGetValue(collision.gameObject, out var monster))
             {
                 monster.TakeDamaged(damage);
             }
+            else if (GameManager.Instance.castle.gameObject == collision.gameObject)
+            {
+                GameManager.Instance.castle.TakeDamaged(damage);
+            }
+
             pierce--;
             if (pierce <= 0)
             {
                 OnDespawn();
             }
         }
-        else if(collision.gameObject.layer == obstacleLayer)
+        else if (collision.gameObject.layer == obstacleLayer)
         {
             OnDespawn();
         }
