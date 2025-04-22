@@ -41,7 +41,7 @@ public class HeroManager : MonoSingleton<HeroManager>
             //    Utils.Log(i.ToString());
             //}
 
-            idList.Add(101);
+            idList.Add(102);
             levelList.Add(1);
             HeroController hero = HeroPoolManager.Instance.GetObject(new Vector2(rand, rand2));
             hero.InitAbility(idList, levelList);
