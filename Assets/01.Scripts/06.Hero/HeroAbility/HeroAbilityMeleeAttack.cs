@@ -9,6 +9,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     private Animator animator;
 
+    private LayerMask targetLayer;
 
 
     public override void Initialize(int id)
@@ -23,6 +24,9 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         hero = transform.GetComponent<Hero>();
 
         animator = this.GetComponentInChildren<Animator>();
+
+        targetLayer = LayerMask.GetMask("Monster", "Castle");
+
     }
 
     protected override void ActionAbility()
@@ -64,14 +68,17 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         float angleRad = angle * Mathf.Deg2Rad;
         Vector2 local= (Vector2)transform.position+ new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
 
-        Collider2D[] col = Physics2D.OverlapCircleAll(local, size.x,1<<7);
+        Collider2D[] col = Physics2D.OverlapCircleAll(local, size.x, targetLayer);
         Utils.DrawOverlapCircle(local, 1, Color.red);
         foreach(var c in col)
         {
             if (MonsterManager.Instance.monsters.TryGetValue(c.gameObject, out var monster))
             {
                 monster.TakeDamaged(damage);
-                Utils.Log("맞음");
+            }
+            else if (GameManager.Instance.castle.gameObject == c.gameObject)
+            {
+                GameManager.Instance.castle.TakeDamaged(damage);
             }
         }
     }

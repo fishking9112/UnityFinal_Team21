@@ -23,6 +23,7 @@ public class Hero : MonoBehaviour
 
         abilityList = new List<HeroAbilitySystem>();
         allAbility = GetComponents<HeroAbilitySystem>().ToList();
+        mask = 1 << 7 | 1 << 13;
 
     }
 
@@ -37,7 +38,6 @@ public class Hero : MonoBehaviour
 
         pointA = (Vector2)transform.position - off / 2;
         pointB = (Vector2)transform.position + off / 2;
-        mask = 1 << 7 | 1 << 13;
         Collider2D[] col = Physics2D.OverlapAreaAll(pointA, pointB, mask);
 
         if (col.Length == 0)

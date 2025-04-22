@@ -15,7 +15,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     private void Start()
     {
         hero = this.GetComponent<Hero>();
-        layer = LayerMask.GetMask("Monster");
+        targetLayer = LayerMask.GetMask("Monster", "Castle");
     }
 
     protected override void ActionAbility()
@@ -28,6 +28,10 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
             if (MonsterManager.Instance.monsters.TryGetValue(c.gameObject, out var monster))
             {
                 monster.TakeDamaged(damage);
+            }
+            else if (GameManager.Instance.castle.gameObject == c.gameObject)
+            {
+                GameManager.Instance.castle.TakeDamaged(damage);
             }
         }
     }

@@ -63,6 +63,7 @@ public class HeroAbilityBible : HeroAbilitySystem
             bible.radius = pivot.magnitude;
             bible.speed = speed;
             bible.angle = summonAngle;
+            bible.damage = damage; 
 
             bibleList.Add(bible);
 

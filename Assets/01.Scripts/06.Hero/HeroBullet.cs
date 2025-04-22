@@ -78,7 +78,6 @@ public class HeroBullet : MonoBehaviour, IPoolable
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // 딕셔너리 통해서 GetComponent 없이 쓰기
         if (((1 << collision.gameObject.layer) & targetLayer) != 0)
         {
             if (MonsterManager.Instance.monsters.TryGetValue(collision.gameObject, out var monster))
