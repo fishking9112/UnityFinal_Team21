@@ -22,7 +22,7 @@ public class HeroBullet : MonoBehaviour, IPoolable
     float rotateSpeed;
     private Action<Component> returnToPool;
     CancellationTokenSource cancel = new CancellationTokenSource();
-
+    private bool isDispose;
 
     public void SetBullet(float time, float pierceCnt, float dmg, float spd, float rSpeed)
     {
@@ -32,6 +32,7 @@ public class HeroBullet : MonoBehaviour, IPoolable
         speed = spd;
         rotateSpeed = rSpeed;
         cancel = new CancellationTokenSource();
+        isDispose = false;
         Move(cancel.Token).Forget();
     }
 
@@ -46,6 +47,7 @@ public class HeroBullet : MonoBehaviour, IPoolable
     {
         time = 0f;
 
+        isDispose = true;
         cancel?.Cancel();
         cancel?.Dispose();
         returnToPool?.Invoke(this);
@@ -53,6 +55,7 @@ public class HeroBullet : MonoBehaviour, IPoolable
 
     public void OnSpawn()
     {
+        isDispose = false;
 
     }
 
@@ -78,6 +81,11 @@ public class HeroBullet : MonoBehaviour, IPoolable
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (isDispose)
+        {
+            return;
+        }
+
         if (((1 << collision.gameObject.layer) & targetLayer) != 0)
         {
             if (MonsterManager.Instance.monsters.TryGetValue(collision.gameObject, out var monster))
