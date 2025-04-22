@@ -106,7 +106,7 @@ public class UGSSaveLoad : MonoBehaviour
     /// <summary>
     /// 불러온 내용 실제 적용 시키는 함수
     /// </summary>
-    private async void OnLoadComplete(SaveData saveData)
+    private void OnLoadComplete(SaveData saveData)
     {
         // gold
         GameManager.Instance.SetGold(saveData.player.gold);
