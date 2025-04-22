@@ -15,7 +15,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     private void Start()
     {
         hero = this.GetComponent<Hero>();
-        targetLayer = LayerMask.GetMask("Monster", "Castle");
+        layer = LayerMask.GetMask("Monster", "Castle");
     }
 
     protected override void ActionAbility()
