@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class SlotChange : MonoBehaviour
 {
-    public CanvasGroup magicGroup;
+    public CanvasGroup queenActiveSkillGroup;
     public CanvasGroup monsterGroup;
-    public RectTransform magicGroupTransform;
+    public RectTransform queenActiveSkillGroupTransform;
     public RectTransform monsterGroupTransform;
-    public RectTransform magicSlotTransform;
+    public RectTransform queenActiveSkillSlotTransform;
     public RectTransform monsterSlotTransform;
 
-    public GameObject magicGauge;
+    public GameObject queenActiveSkillGauge;
     public GameObject summonGauge;
 
     public float duration;
@@ -30,9 +30,9 @@ public class SlotChange : MonoBehaviour
     {
         monsterGroupTransform.SetAsLastSibling();
         summonGauge.SetActive(true);
-        magicGauge.SetActive(false);
+        queenActiveSkillGauge.SetActive(false);
         monsterGroup.alpha = 1f;
-        magicGroup.alpha = 0.5f;
+        queenActiveSkillGroup.alpha = 0.5f;
     }
 
     // 버튼에 등록할 함수. 버튼을 누르면 몬스터슬롯과 권능 슬롯이 변경됨
@@ -45,16 +45,16 @@ public class SlotChange : MonoBehaviour
 
         isChange = true;
 
-        Vector3 magicPos = magicSlotTransform.localPosition;
+        Vector3 queenActiveSkillPos = queenActiveSkillSlotTransform.localPosition;
         Vector3 monsterPos = monsterSlotTransform.localPosition;
 
-        Vector3[] magicPath = CreateArc(magicPos, monsterPos, controller.curSlot == QueenSlot.MONSTER ? arcHeight : -arcHeight);
-        Vector3[] monsterPath = CreateArc(monsterPos, magicPos, controller.curSlot == QueenSlot.MONSTER ? -arcHeight : arcHeight);
+        Vector3[] queenActiveSkillPath = CreateArc(queenActiveSkillPos, monsterPos, controller.curSlot == QueenSlot.MONSTER ? arcHeight : -arcHeight);
+        Vector3[] monsterPath = CreateArc(monsterPos, queenActiveSkillPos, controller.curSlot == QueenSlot.MONSTER ? -arcHeight : arcHeight);
 
         Sequence seq = DOTween.Sequence();
 
         // 시작할 때
-        seq.Append(magicSlotTransform.DOLocalPath(magicPath, duration, PathType.CatmullRom).SetEase(Ease.InOutQuad))
+        seq.Append(queenActiveSkillSlotTransform.DOLocalPath(queenActiveSkillPath, duration, PathType.CatmullRom).SetEase(Ease.InOutQuad))
            .Join(monsterSlotTransform.DOLocalPath(monsterPath, duration, PathType.CatmullRom).SetEase(Ease.InOutQuad));
 
         // 포물선 최고점에 이르렀을 때
@@ -68,23 +68,23 @@ public class SlotChange : MonoBehaviour
     private void SetOrder()
     {
         controller.selectedMonster = null;
-        controller.selectedMagic = null;
+        controller.selectedQueenActiveSkill = null;
         controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = null;
 
         if (controller.curSlot == QueenSlot.MONSTER)
         {
             monsterGroupTransform.SetAsFirstSibling();
             summonGauge.SetActive(false);
-            magicGauge.SetActive(true);
-            magicGroup.DOFade(1f, 0.2f);
+            queenActiveSkillGauge.SetActive(true);
+            queenActiveSkillGroup.DOFade(1f, 0.2f);
             monsterGroup.DOFade(0.5f, 0.2f);
         }
-        else if (controller.curSlot == QueenSlot.MAGIC)
+        else if (controller.curSlot == QueenSlot.QueenActiveSkill)
         {
             monsterGroupTransform.SetAsLastSibling();
             summonGauge.SetActive(true);
-            magicGauge.SetActive(false);
-            magicGroup.DOFade(0.5f, 0.2f);
+            queenActiveSkillGauge.SetActive(false);
+            queenActiveSkillGroup.DOFade(0.5f, 0.2f);
             monsterGroup.DOFade(1f, 0.2f);
         }
     }
@@ -92,7 +92,7 @@ public class SlotChange : MonoBehaviour
     // 슬롯 변경이 끝날 때 호출. 현재 슬롯의 상태를 바꿔줌
     private void CheangeEnd()
     {
-        controller.curSlot = controller.curSlot == QueenSlot.MONSTER ? QueenSlot.MAGIC : QueenSlot.MONSTER;
+        controller.curSlot = controller.curSlot == QueenSlot.MONSTER ? QueenSlot.QueenActiveSkill : QueenSlot.MONSTER;
         isChange = false;
     }
 

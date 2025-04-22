@@ -26,7 +26,7 @@ public class EvolutionTree : MonoBehaviour
     public EvolutionNode selectedNode;
     private QueenController queenController;
 
-    private void Start()
+    private void Awake()
     {
         condition = GameManager.Instance.queen.condition;
         queenController = GameManager.Instance.queen.controller;
@@ -57,11 +57,7 @@ public class EvolutionTree : MonoBehaviour
             slotList[i].slotIndex = i;
         }
 
-        descriptionImage.enabled = false;
-        description.text = string.Empty;
-        healthText.text = string.Empty;
-        costText.text = string.Empty;
-        attackText.text = string.Empty;
+        UpdateDescriptionWindow(evolutionNodeList[0]);
     }
 
     private void UpdateEvolutionPointText(float evolutionPoint)
