@@ -14,6 +14,7 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private QueenAbilityData queenAbilityData;
     [SerializeField] private HeroAbilityData heroAbilityData;
     [SerializeField] private QueenEnhanceData queenEnhanceData;
+    [SerializeField] private HeroStatusData heroStatusData;
 
     // iconData는 id값으로 초기화 하지 않으므로, iconData 안에 Dictionary 존재
     public IconData iconData;
@@ -23,6 +24,7 @@ public class DataManager : MonoSingleton<DataManager>
     public Dictionary<int, QueenAbilityInfo> queenAbilityDic = new Dictionary<int, QueenAbilityInfo>();
     public Dictionary<int, HeroAbilityInfo> heroAbilityDic = new Dictionary<int, HeroAbilityInfo>();
     public Dictionary<int, QueenEnhanceInfo> queenEnhanceDic = new Dictionary<int, QueenEnhanceInfo>();
+    public Dictionary<int, HeroStatusInfo> heroStatusDic = new Dictionary<int, HeroStatusInfo>();
 
     protected override void Awake()
     {
@@ -32,6 +34,7 @@ public class DataManager : MonoSingleton<DataManager>
         Init<QueenAbilityInfo>(queenAbilityData.infoList, queenAbilityDic);
         Init<HeroAbilityInfo>(heroAbilityData.infoList, heroAbilityDic);
         Init<QueenEnhanceInfo>(queenEnhanceData.infoList, queenEnhanceDic);
+        Init<HeroStatusInfo>(heroStatusData.infoList, heroStatusDic);
     }
 
     // 딕셔너리 초기화

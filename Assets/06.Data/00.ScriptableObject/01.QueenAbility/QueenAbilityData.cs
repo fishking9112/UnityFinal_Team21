@@ -35,7 +35,6 @@ public class QueenAbilityData : SheetDataReaderBase
 
         foreach (var cell in list)
         {
-
             switch (cell.columnId)
             {
                 case "id":

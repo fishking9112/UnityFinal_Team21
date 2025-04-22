@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Utils
@@ -114,10 +115,34 @@ public class Utils
     /// </summary>
     /// <typeparam name="T"> Enum 타입 </typeparam>
     /// <param name="value"> Enum으로 바꿀 문자열 </param>
-    /// <returns></returns>
     public static T StringToEnum<T>(string value, T defaultValue) where T : struct
     {
         return Enum.TryParse(value, out T result) ? result : defaultValue;
+    }
+
+    /// <summary>
+    /// string 타입을 int형 배열로 바꿔주는 함수
+    /// </summary>
+    /// <param name="value"> int형 배열로 바꿀 문자열. 101,102,103 <- 이런 형식이어야 됨 </param>
+    /// <returns></returns>
+    public static int[] StringToIntArr(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return Array.Empty<int>();
+        }
+
+        List<int> result = new List<int>();
+
+        foreach(string str in value.Split(","))
+        {
+            if(int.TryParse(str,out int num))
+            {
+                result.Add(num);
+            }
+        }
+
+        return result.ToArray();
     }
 
     /// <summary>
