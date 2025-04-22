@@ -55,8 +55,7 @@ public class UGSSaveLoad : MonoBehaviour
         {
             // TODO: 실제 저장 내용 넣기
             nickName = "GameManager.instance.playerName",
-            level = 151,
-            coin = 500
+            gold = GameManager.Instance.GetGold()
         };
     }
     private SettingsData CollectSettingsData()
@@ -107,8 +106,11 @@ public class UGSSaveLoad : MonoBehaviour
     /// <summary>
     /// 불러온 내용 실제 적용 시키는 함수
     /// </summary>
-    private async void OnLoadComplete(SaveData saveData)
+    private void OnLoadComplete(SaveData saveData)
     {
+        // gold
+        GameManager.Instance.SetGold(saveData.player.gold);
+
         // sound
         SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
         SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);

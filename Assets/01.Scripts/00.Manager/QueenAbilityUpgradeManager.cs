@@ -21,10 +21,32 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     private QueenAbilityUIController queenAbilityUIController;
     public QueenAbilityUIController QueenAbilityUIController => queenAbilityUIController;
 
+    // 능력 효과 적용 딕셔너리
+    private Dictionary<int, Action<int>> applyEffectActions;
+
     protected override void Awake()
     {
         base.Awake();
+        InitializeEffectActions();
         Initialize();
+    }
+
+    private void InitializeEffectActions()
+    {
+       /* applyEffectActions = new Dictionary<int, Action<int>>
+        {
+            { 0, value => ApplyAttackPowerBuff(value) },
+            { 1, value => ApplyMoveSpeedBuff(value) },
+            { 2, value => PlayerStat.GoldGainRate += value },
+            { 3, value => PlayerStat.ExpGainRate += value },
+            { 4, value => CastleManager.MaxHealth += value },
+            { 5, value => CastleManager.RecoveryAmount += value },
+            { 6, value => GameManager.Instance.queen.condition.AdjustSummonGaugeRecoverySpeed(value) },
+            { 7, value => GameManager.Instance.queen.condition.AdjustMaxSummonGauge(value) },
+            { 8, value => GameManager.Instance.queen.condition.AdjustMagicGaugeRecoverySpeed(value) },
+            { 9, value => GameManager.Instance.queen.condition.AdjustMaxMagicGauge(value) },
+            { 10, value => GameManager.StartEvolutionPoint += value }
+        };*/
     }
 
     /// <summary>
@@ -60,10 +82,18 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         if (currentLevel >= ability.maxLevel) return;
 
         int cost = ability.levelInfo[currentLevel].cost;
-        // TODO: 자원 확인 및 차감
+
+        // 골드가 부족하면 업그레이드 실패
+        if (!GameManager.Instance.TrySpendGold(cost))
+        {
+            Utils.Log("골드가 부족으로 업그레이드 실패");
+            return;
+        }
 
         upgradeLevels[id]++;
         queenAbilityUIController.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
+
+        ApplyAbilityEffect(id);
     }
 
     /// <summary>
@@ -77,11 +107,15 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         int currentLevel = upgradeLevels[id];
         if (currentLevel <= 0) return;
 
-        // TODO: 자원 반환 처리
-        RefundCurrency(0);
+        int refund = ability.levelInfo[currentLevel - 1].cost;
+
+        // 골드 환급
+        RefundCurrency(refund);
 
         upgradeLevels[id]--;
         queenAbilityUIController.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
+
+        ApplyAbilityEffect(id);
     }
 
     /// <summary>
@@ -141,7 +175,6 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         {
             var ability = kvp.Value;
             int id = ability.ID;
-
             int currentLevel = upgradeLevels[id];
 
             // 레벨이 1 이상일 경우, 누적 비용 계산
@@ -161,6 +194,12 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         RefundCurrency(totalRefundCost);
 
         Utils.Log($"모든 능력을 초기화하고 {totalRefundCost}만큼 재화를 반환받음.");
+
+        // 전체 능력 재적용
+        foreach (var id in upgradeLevels.Keys)
+        {
+            ApplyAbilityEffect(id);
+        }
     }
 
     /// <summary>
@@ -192,15 +231,15 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// <param name="amount"></param>
     private void RefundCurrency(int amount)
     {
-        // TODO: 실제 게임 내 재화 시스템에 따라 처리
-        // GameManager.Instance.AddGold(amount);
+        GameManager.Instance.AddGold(amount);
     }
+
 
 
     /// <summary>
     /// 능력 목록을 순회하며 각 능력의 UI 아이템을 생성합니다.
     /// </summary>
-    private void CreateAbilityItems()
+    private void CreateAbilityItems()     
     {
         abilityItemDict.Clear();
 
@@ -264,6 +303,50 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
         // UI 갱신
         RefreshAllAbilityItems();
+
+        // 모든 효과 재적용
+        foreach (var id in upgradeLevels.Keys)
+        {
+            ApplyAbilityEffect(id);
+        }
     }
 
+    /// <summary>
+    /// 특정 ID의 강화 효과를 적용합니다.
+    /// 현재 레벨을 기준으로 효과 값을 계산해 적용합니다.
+    /// </summary>
+    private void ApplyAbilityEffect(int id)
+    {
+        if (!applyEffectActions.TryGetValue(id, out var action))
+        {
+            Utils.LogWarning($"강화 효과 함수가 등록되지 않음 {id}");
+            return;
+        }
+
+        int value = GetEffectValue(id);
+        action.Invoke(value);
+    }
+
+
+    #region 강화 적용 함수
+
+    // ID 0번 강화: 몬스터 공격력 증가
+    private void ApplyAttackPowerBuff(int value)
+    {
+        foreach (var kvp in DataManager.Instance.monsterDic)
+        {
+            kvp.Value.attack += value;
+        }
+    }
+
+    // ID 1번 강화: 몬스터 이동 속도 증가
+    private void ApplyMoveSpeedBuff(int value)
+    {
+        foreach (var kvp in DataManager.Instance.monsterDic)
+        {
+            kvp.Value.moveSpeed += value;
+        }
+    }
+
+    #endregion
 }

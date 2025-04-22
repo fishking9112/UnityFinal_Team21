@@ -8,6 +8,8 @@ public enum CursorState
 
 public class GameManager : MonoSingleton<GameManager>
 {
+    public int Gold { get; private set; }
+
     public Queen queen;
     public Castle castle;
     private CursorState curCursorState;
@@ -76,5 +78,32 @@ public class GameManager : MonoSingleton<GameManager>
     {
         GameObject.Find("GameResultCanvas").transform.Find("ResultWindow").gameObject.SetActive(true);
         Time.timeScale = 0f;
+    }
+
+
+    public void AddGold(int amount)
+    {
+        Gold += amount;
+        // 골드 UI 업데이트도 여기서 호출해도 됨
+    }
+
+    public bool TrySpendGold(int amount)
+    {
+        if (Gold >= amount)
+        {
+            Gold -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public void SetGold(int amount)
+    {
+        Gold = Mathf.Max(0, amount);
+    }
+
+    public int GetGold()
+    {
+        return Gold;
     }
 }
