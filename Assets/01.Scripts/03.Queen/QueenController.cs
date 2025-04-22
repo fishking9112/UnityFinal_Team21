@@ -85,6 +85,12 @@ public class QueenController : MonoBehaviour
         }
     }
 
+    // 슬롯 버튼을 클릭했을 때 해당 슬롯 선택
+    public void OnClickSlotButton(int index)
+    {
+        SelectSlot(index);
+    }
+
     // 클릭 시 처리
     public void OnClick(InputAction.CallbackContext context)
     {
