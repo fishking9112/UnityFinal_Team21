@@ -54,12 +54,12 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendManaStatus(StringBuilder builder)
     {
-        float curMana = queenCondition.CurMagicGauge.Value;
-        float maxMana = queenCondition.MaxMagicGauge.Value;
+        float curMana = queenCondition.CurQueenActiveSkillGauge.Value;
+        float maxMana = queenCondition.MaxQueenActiveSkillGauge.Value;
         builder.AppendLine($"마나 : ({(int)curMana} / {(int)maxMana})");
 
         // 마나 회복량 = 기본 회복량 + 강화 효과
-        float manaRegenBase = queenCondition.MagicGaugeRecoverySpeed;
+        float manaRegenBase = queenCondition.QueenActiveSkillGaugeRecoverySpeed;
         float manaRegenEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(1002);
         builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / sec");
     }

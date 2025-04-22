@@ -11,7 +11,7 @@ public class IngameUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI goldText;
 
     [Header("게이지")]
-    [SerializeField] private GaugeUI magicGaugeUI;
+    [SerializeField] private GaugeUI queenActiveSkillGaugeUI;
     [SerializeField] private GaugeUI summonGaugeUI;
     [SerializeField] private GaugeUI expGaugeUI;
 
@@ -43,7 +43,7 @@ public class IngameUI : MonoBehaviour
         UpdateGoldText(condition.Gold.Value);
 
         summonGaugeUI.Bind(condition.CurSummonGauge, condition.MaxSummonGauge);
-        magicGaugeUI.Bind(condition.CurMagicGauge, condition.MaxMagicGauge);
+        queenActiveSkillGaugeUI.Bind(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
 
         CurTime.Value = limitTime;
