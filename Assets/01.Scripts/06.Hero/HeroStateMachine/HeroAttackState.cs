@@ -30,9 +30,8 @@ public class HeroAttackState : HeroBaseState
                 if (state.navMeshAgent.remainingDistance < state.navMeshAgent.stoppingDistance)
                 {
                     state.navMeshAgent.ResetPath();
-                    await UniTask.WaitUntil(() => enemy.activeSelf == false);
+                    await UniTask.WaitUntil(() => enemy.activeSelf == false,PlayerLoopTiming.Update,tk);
                     GetEnemyDir();
-
                     break;
                 }
                 else
@@ -50,6 +49,7 @@ public class HeroAttackState : HeroBaseState
     {
         base.Exit();
         token?.Cancel();
+        token?.Dispose();
         token = null;
         enemy = null;
     }
@@ -66,6 +66,8 @@ public class HeroAttackState : HeroBaseState
         {
             enemy = col.gameObject;
             state.dir = col.transform.position;
+            state.navMeshAgent.SetDestination(state.dir);
+
             return state.dir;
         }
 

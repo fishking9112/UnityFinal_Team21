@@ -8,7 +8,6 @@ public class HeroAbilityMissile : HeroAbilitySystem
     private Hero hero;
 
     private ObjectPoolManager objectPoolManager;
-    private CancellationTokenSource token;
 
     /// <summary>
     /// 선언과 동시에 호출하기. 값 입력
@@ -23,9 +22,9 @@ public class HeroAbilityMissile : HeroAbilitySystem
     {
         hero = this.GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
-        token = new CancellationTokenSource();
-        AddAbility();
+        
     }
+
 
     /// <summary>
     /// 어떤 능력인지 구현하는 곳
@@ -34,10 +33,10 @@ public class HeroAbilityMissile : HeroAbilitySystem
     protected override void ActionAbility()
     {
         target = hero.FindNearestTarget();
-        ShootBullet(token.Token).Forget();
+            ShootBullet().Forget();
     }
 
-    private async UniTaskVoid ShootBullet(CancellationToken tk)
+    private async UniTaskVoid ShootBullet()
     {
         float angle;
 
@@ -57,7 +56,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
             bullet.SetBullet(duration, pierce, damage, speed,0);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
             
-            await UniTask.Delay(TimeSpan.FromSeconds(delay),false,PlayerLoopTiming.Update,cancellationToken:tk);
+            await UniTask.Delay(TimeSpan.FromSeconds(delay));
         }
     }
 
@@ -74,5 +73,6 @@ public class HeroAbilityMissile : HeroAbilitySystem
     public override void SetAbilityLevel(int level)
     {
         base.SetAbilityLevel(level);
+        token = new CancellationTokenSource();
     }
 }

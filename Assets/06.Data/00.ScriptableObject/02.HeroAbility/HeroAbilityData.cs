@@ -27,7 +27,7 @@ public class HeroAbilityInfo : IInfo
     public float delay_Base;
     public float delay_LevelUp;
     public int piercing_Base;
-    public int piercing_LevelUp;
+    public float piercing_LevelUp;
     public Vector3 size_Base;
     public Vector3 size_LevelUp;
 
@@ -40,7 +40,7 @@ public class HeroAbilityInfo : IInfo
     public float duration_LevelUp;
 
     public int count_Base;
-    public int count_LevelUp;
+    public float count_LevelUp;
     public float countDelay_Base;
     public float countDelay_LevelUp;
 
@@ -96,7 +96,7 @@ public class HeroAbilityData : SheetDataReaderBase
                     heroAbilityInfo.piercing_Base = Utils.StringToInt(cell.value);
                     break;
                 case "piercing_LevelUp":
-                    heroAbilityInfo.piercing_LevelUp = Utils.StringToInt(cell.value);
+                    heroAbilityInfo.piercing_LevelUp = Utils.StringToFloat(cell.value);
                     break;
                 case "size_Base":
                     heroAbilityInfo.size_Base = Utils.StringToVector3(cell.value);
@@ -129,7 +129,7 @@ public class HeroAbilityData : SheetDataReaderBase
                     heroAbilityInfo.count_Base = Utils.StringToInt(cell.value);
                     break;
                 case "count_LevelUp":
-                    heroAbilityInfo.count_LevelUp = Utils.StringToInt(cell.value);
+                    heroAbilityInfo.count_LevelUp = Utils.StringToFloat(cell.value);
                     break;
                 case "countDelay_Base":
                     heroAbilityInfo.countDelay_Base = Utils.StringToFloat(cell.value);

@@ -1,6 +1,7 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 
 
 public abstract class HeroAbilitySystem : MonoBehaviour
@@ -34,6 +35,9 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     [SerializeField] protected float countDelay_LevelUp;
     [SerializeField] protected float knockback;
     [SerializeField] protected int curLevel;
+
+
+    protected CancellationTokenSource token;
 
     public virtual void Initialize(int id)
     {
@@ -75,20 +79,21 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     /// </summary>
     protected virtual void AddAbility()
     {
-        AutoAction().Forget();
-    }
+        token = new CancellationTokenSource();
 
+        AutoAction(token.Token).Forget();
+    }
 
     /// <summary>
     /// delayTime간격으로 ActionAbility 호출
     /// </summary>
     /// <returns></returns>
-    protected async UniTaskVoid AutoAction()
+    protected async UniTaskVoid AutoAction(CancellationToken tk)
     {
 
         while (this.gameObject.activeSelf)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(delay));
+            await UniTask.Delay(TimeSpan.FromSeconds(delay),false,PlayerLoopTiming.Update,tk);
             ActionAbility();
         }
 
@@ -128,6 +133,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         {
             AbilityLevelUp();
         }
+        AddAbility();
     }
 
     public int GetID()

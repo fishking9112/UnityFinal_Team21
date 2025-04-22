@@ -13,7 +13,6 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
 
     public void OnSpawn()
     {
-        throw new NotImplementedException();
 
     }
 

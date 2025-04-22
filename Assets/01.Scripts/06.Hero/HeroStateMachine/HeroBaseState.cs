@@ -8,8 +8,6 @@ public class HeroBaseState : IState
 {
     protected HeroState state;
 
-    protected Hero hero;
-
     public HeroBaseState(HeroState state)
     {
         this.state = state;

@@ -15,8 +15,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     private void Start()
     {
         hero = this.GetComponent<Hero>();
-        layer = LayerMask.GetMask("Monster");
-        AddAbility();
+        layer = LayerMask.GetMask("Monster", "Castle");
     }
 
     protected override void ActionAbility()
@@ -28,10 +27,12 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
         {
             if (MonsterManager.Instance.monsters.TryGetValue(c.gameObject, out var monster))
             {
-                Utils.Log("마늘공격");
                 monster.TakeDamaged(damage);
             }
-            // 딕셔너리로 GetComponent없이 대미지 입히기
+            else if (GameManager.Instance.castle.gameObject == c.gameObject)
+            {
+                GameManager.Instance.castle.TakeDamaged(damage);
+            }
         }
     }
 
