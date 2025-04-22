@@ -103,7 +103,7 @@ public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
         switch (id)
         {
             case 1002: // 마나 회복 속도 증가
-                condition.AdjustMagicGaugeRecoverySpeed(value);
+                condition.AdjustQueenActiveSkillGaugeRecoverySpeed(value);
                 break;
 
             case 1003: // 소환 게이지 회복 속도 증가

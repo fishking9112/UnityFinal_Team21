@@ -4,9 +4,9 @@ public class QueenCondition : MonoBehaviour
 {
     [Header("초기 설정")]
     public float initSummonGaugeRecoverySpeed = 10f;
-    public float initMagicGaugeRecoverySpeed = 5f;
-    public float initCurMagicGauge = 100f;
-    public float initMaxMagicGauge = 100f;
+    public float initQueenActiveSkillGaugeRecoverySpeed = 5f;
+    public float initCurQueenActiveSkillGauge = 100f;
+    public float initMaxQueenActiveSkillGauge = 100f;
     public float initCurSummonGauge = 100f;
     public float initMaxSummonGauge = 100f;
     public float initCurExpGauge = 0f;
@@ -16,9 +16,9 @@ public class QueenCondition : MonoBehaviour
     public float initGold = 0f;
 
     public float SummonGaugeRecoverySpeed { get; private set; }
-    public float MagicGaugeRecoverySpeed { get; private set; }
-    public ReactiveProperty<float> CurMagicGauge { get; private set; } = new ReactiveProperty<float>();
-    public ReactiveProperty<float> MaxMagicGauge { get; private set; } = new ReactiveProperty<float>();
+    public float QueenActiveSkillGaugeRecoverySpeed { get; private set; }
+    public ReactiveProperty<float> CurQueenActiveSkillGauge { get; private set; } = new ReactiveProperty<float>();
+    public ReactiveProperty<float> MaxQueenActiveSkillGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurSummonGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxSummonGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurExpGauge { get; private set; } = new ReactiveProperty<float>();
@@ -30,10 +30,10 @@ public class QueenCondition : MonoBehaviour
     private void Awake()
     {
         SummonGaugeRecoverySpeed = initSummonGaugeRecoverySpeed;
-        MagicGaugeRecoverySpeed = initMagicGaugeRecoverySpeed;
+        QueenActiveSkillGaugeRecoverySpeed = initQueenActiveSkillGaugeRecoverySpeed;
 
-        CurMagicGauge.Value = initCurMagicGauge;
-        MaxMagicGauge.Value = initMaxMagicGauge;
+        CurQueenActiveSkillGauge.Value = initCurQueenActiveSkillGauge;
+        MaxQueenActiveSkillGauge.Value = initMaxQueenActiveSkillGauge;
         CurSummonGauge.Value = initCurSummonGauge;
         MaxSummonGauge.Value = initMaxSummonGauge;
         Level.Value = initLevel;
@@ -63,22 +63,22 @@ public class QueenCondition : MonoBehaviour
     }
 
     /// <summary>
-    /// 현재 권능 게이지 조정
+    /// 현재 액티브 스킬 게이지 조정
     /// </summary>
     /// <param name="amount"> 조정할 수치 </param>
-    public void AdjustCurMagicGauge(float amount)
+    public void AdjustCurQueenActiveSkillGauge(float amount)
     {
-        CurMagicGauge.Value = AdjustValue(CurMagicGauge.Value, amount, MaxMagicGauge.Value);
+        CurQueenActiveSkillGauge.Value = AdjustValue(CurQueenActiveSkillGauge.Value, amount, MaxQueenActiveSkillGauge.Value);
     }
 
     /// <summary>
-    /// 최대 권능 게이지 조정
+    /// 최대 액티브 스킬 게이지 조정
     /// </summary>
     /// <param name="amount"> 조정할 수치 </param>
-    public void AdjustMaxMagicGauge(float amount)
+    public void AdjustMaxQueenActiveSkillGauge(float amount)
     {
-        MaxMagicGauge.Value = AdjustValue(MaxMagicGauge.Value, amount, float.MaxValue);
-        CurMagicGauge.Value = AdjustValue(CurMagicGauge.Value, 0, MaxMagicGauge.Value);
+        MaxQueenActiveSkillGauge.Value = AdjustValue(MaxQueenActiveSkillGauge.Value, amount, float.MaxValue);
+        CurQueenActiveSkillGauge.Value = AdjustValue(CurQueenActiveSkillGauge.Value, 0, MaxQueenActiveSkillGauge.Value);
     }
 
     /// <summary>
@@ -113,9 +113,9 @@ public class QueenCondition : MonoBehaviour
     /// 마나 게이지 회복 속도 조정
     /// </summary>
     /// <param name="amount"> 조정할 수치 </param>
-    public void AdjustMagicGaugeRecoverySpeed(float amount)
+    public void AdjustQueenActiveSkillGaugeRecoverySpeed(float amount)
     {
-        MagicGaugeRecoverySpeed = AdjustValue(MagicGaugeRecoverySpeed, amount, float.MaxValue);
+        QueenActiveSkillGaugeRecoverySpeed = AdjustValue(QueenActiveSkillGaugeRecoverySpeed, amount, float.MaxValue);
     }
 
     /// <summary>

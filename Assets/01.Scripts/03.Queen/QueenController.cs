@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public enum QueenSlot
 {
     MONSTER,
-    MAGIC,
+    QueenActiveSkill,
 }
 
 public class QueenController : MonoBehaviour
@@ -18,9 +18,9 @@ public class QueenController : MonoBehaviour
     private Vector3 worldMousePos;
 
     public MonsterSlotUI monsterSlotUI;
-    public MagicSlotUI magicSlotUI;
+    public QueenActiveSkillSlotUI queenActiveSkillSlotUI;
 
-    public Magic selectedMagic;
+    public QueenActiveSkillBase selectedQueenActiveSkill;
     [NonSerialized] public MonsterInfo selectedMonster;
     public GameObject cursorIcon;
     public QueenSlot curSlot = QueenSlot.MONSTER;
@@ -79,7 +79,7 @@ public class QueenController : MonoBehaviour
             selectedMonster = monster;
             cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(selectedMonster.outfit);
         }
-        else if (curSlot == QueenSlot.MAGIC)
+        else if (curSlot == QueenSlot.QueenActiveSkill)
         {
             // 매직 슬롯일 경우 처리
         }
@@ -109,7 +109,16 @@ public class QueenController : MonoBehaviour
                 }
                 break;
             // 현재 슬롯이 매직 슬롯이면 스킬 발동
-            case QueenSlot.MAGIC:
+            case QueenSlot.QueenActiveSkill:
+                if (context.phase == InputActionPhase.Started)
+                {
+                    isDrag = true;
+                    UseQueenActiveSkill();
+                }
+                else if (context.phase == InputActionPhase.Canceled)
+                {
+                    isDrag = false;
+                }
                 break;
         }
     }
@@ -130,7 +139,7 @@ public class QueenController : MonoBehaviour
                     SummonMonster();
                 }
                 break;
-            case QueenSlot.MAGIC:
+            case QueenSlot.QueenActiveSkill:
                 break;
         }
     }
@@ -167,13 +176,14 @@ public class QueenController : MonoBehaviour
         monster.StatInit(selectedMonster);
     }
 
-    private void UseMagic()
+    // 퀸의 액티브 스킬 사용
+    private void UseQueenActiveSkill()
     {
         if (!Pointer.current.press.isPressed)
         {
             return;
         }
-        if (selectedMagic == null)
+        if (selectedQueenActiveSkill == null)
         {
             return;
         }
@@ -182,13 +192,12 @@ public class QueenController : MonoBehaviour
             return;
         }
 
-        // 슬롯에 따라 다른 권능 구현
     }
 
     // 자동 게이지 회복
     private void RecoveryGauge()
     {
-        condition.AdjustCurMagicGauge(condition.MagicGaugeRecoverySpeed * Time.deltaTime);
+        condition.AdjustCurQueenActiveSkillGauge(condition.QueenActiveSkillGaugeRecoverySpeed * Time.deltaTime);
         condition.AdjustCurSummonGauge(condition.SummonGaugeRecoverySpeed * Time.deltaTime);
     }
 }
