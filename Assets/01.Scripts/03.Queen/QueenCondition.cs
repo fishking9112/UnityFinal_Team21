@@ -40,6 +40,25 @@ public class QueenCondition : MonoBehaviour
         MaxExpGauge.Value = initMaxExpGauge;
         EvolutionPoint.Value = initEvolutionPoint;
     }
+    private void Start()
+    {
+        ApplyAbilityUpgradeData();
+    }
+
+    /// <summary>
+    /// 여왕 권능 강화 데이터 적용
+    /// </summary>
+    private void ApplyAbilityUpgradeData()
+    {
+       /* var upgrades = QueenAbilityUpgradeManager.Instance.GetAllStoredUpgrades();
+        foreach (var upgrade in upgrades)
+        {
+            if (QueenAbilityUpgradeManager.Instance.TryGetApplyAction(upgrade.Key, out var action))
+            {
+                action.Invoke(upgrade.Value);
+            }
+        }*/
+    }
 
     /// <summary>
     /// 현재 권능 게이지 조정
