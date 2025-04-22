@@ -14,7 +14,7 @@ public class PauseController : MonoBehaviour
     [SerializeField] private Button optionButton;
     [SerializeField] private Button exitButton;
 
-    private bool isPaused = false;
+    public bool isPaused = false;
 
     /// <summary>
     /// 초기화 및 버튼 이벤트 등록

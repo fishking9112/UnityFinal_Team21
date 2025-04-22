@@ -14,8 +14,9 @@ public class GameManager : MonoSingleton<GameManager>
     public Queen queen;
     public Castle castle;
     private CursorState curCursorState;
-    private PauseController pauseController;
     private MainUI mainUI;
+    private PauseController pauseController;
+
 
     protected override void Awake()
     {
@@ -68,14 +69,16 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void OnApplicationPause(bool pause)
     {
-        if (pause)
-        {
-            if (pauseController != null)
-            {
-                pauseController.ForcePause();
-            }
-            //_ = UGSManager.Instance.SaveLoad.SaveAsync();
-        }
+        // if (pause)
+        // {
+        //     // if (GameManager.Instance.IsPaused()) return;
+
+        //     if (pauseController != null)
+        //     {
+        //         pauseController.ForcePause();
+        //     }
+        //     //_ = UGSManager.Instance.SaveLoad.SaveAsync();
+        // }
     }
 
     public void GameClear()
@@ -121,7 +124,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void RefreshGoldText()
     {
-        if(mainUI != null)
+        if (mainUI != null)
         {
             mainUI.RefreshGoldText();
         }
@@ -130,5 +133,10 @@ public class GameManager : MonoSingleton<GameManager>
     public void SetMainUI(MainUI mainUI)
     {
         this.mainUI = mainUI;
+    }
+
+    public bool IsPaused()
+    {
+        return pauseController.isPaused;
     }
 }

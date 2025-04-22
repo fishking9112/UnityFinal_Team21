@@ -123,6 +123,7 @@ public class MonsterAttackState : MonsterBaseState
                 if (HeroManager.Instance.hero.ContainsKey(nearHit.gameObject))
                 {
                     HeroManager.Instance.hero[nearHit.gameObject].TakeDamaged(stateMachine.Controller.statData.attack);
+                    GameResultManager.Instance.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += stateMachine.Controller.statData.attack;
                 }
                 // nearHit.gameObject.GetComponent<BaseController>().TakeDamaged(stateMachine.Controller.statData.attack);
             }

@@ -91,7 +91,9 @@ public class IngameUI : MonoBehaviour
 
     public void OnEvolutionWindow(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started)
+        if (GameManager.Instance.IsPaused()) return;
+
+        if (context.phase == InputActionPhase.Started)
         {
             evolutionTreeWindow.SetActive(!evolutionTreeWindow.activeInHierarchy);
         }
@@ -101,5 +103,10 @@ public class IngameUI : MonoBehaviour
     private void OnDestroy()
     {
         condition.Level.RemoveAction(UpdateLevelText);
+    }
+
+    public float GetTimer()
+    {
+        return CurTime.Value;
     }
 }
