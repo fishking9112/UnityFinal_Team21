@@ -92,6 +92,10 @@ public class ProjectileObject : MonoBehaviour, IPoolable
         else if (baseController.attackLayer.value == (baseController.attackLayer.value | (1 << collision.gameObject.layer)))
         {
             //? LATE : 나중에 한곳에 몰아야 할 듯(Hero나 Monster나)
+            if (HeroManager.Instance.hero.ContainsKey(collision.gameObject))
+            {
+                HeroManager.Instance.hero[collision.gameObject].TakeDamaged(baseController.statData.attack);
+            }
             // BaseController target = MonsterManager.Instance.testTarget.GetComponent<BaseController>();
             // if (target != null)
             // {

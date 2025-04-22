@@ -26,6 +26,9 @@ public class MonsterDieState : MonsterBaseState
 
         // 2초뒤 자원반납
         DieProccess().Forget();
+
+        // TODO : 죽을 때 크리스탈 반환?
+        RewardExp gainCristal = ObjectPoolManager.Instance.GetObject<RewardExp>("ExpReward", stateMachine.Controller.gameObject.transform.position);
     }
 
     public override void Exit()

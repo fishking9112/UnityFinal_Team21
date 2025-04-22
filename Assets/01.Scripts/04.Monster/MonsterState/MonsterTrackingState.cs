@@ -81,7 +81,7 @@ public class MonsterTrackingState : MonsterBaseState
         // 타겟이 없다면 전체적으로 찾을 수도 있음
 
         // 타겟이 꺼져있다면 null로
-        if (!target.gameObject.activeSelf)
+        if (target != null && !target.gameObject.activeSelf)
         {
             stateMachine.Controller.target = null;
         }
@@ -163,7 +163,6 @@ public class MonsterTrackingState : MonsterBaseState
 
         foreach (var hit in hits)
         {
-            //? LATE : 제일 가까운 적 한명만?
             float dist = Vector2.Distance(origin, hit.transform.position);
             if (dist < minDist)
             {
@@ -174,7 +173,6 @@ public class MonsterTrackingState : MonsterBaseState
 
         if (nearHit != null)
         {
-            // TODO : GetComponent?
             stateMachine.Controller.target = nearHit.gameObject.transform;
         }
     }
@@ -184,7 +182,23 @@ public class MonsterTrackingState : MonsterBaseState
     /// </summary>
     public void TargetAllSearch()
     {
-        // TODO : HeroManager에 전체 Dictonary가 있다면 전체 검색
+        float minDist = float.MaxValue;
+        Vector2 origin = navMeshAgent.transform.position;
+        GameObject nearHero = null;
 
+        foreach (var hero in HeroManager.Instance.hero.Keys)
+        {
+            float dist = Vector2.Distance(origin, hero.transform.position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                nearHero = hero;
+            }
+        }
+
+        if (nearHero != null)
+        {
+            stateMachine.Controller.target = nearHero.gameObject.transform;
+        }
     }
 }
