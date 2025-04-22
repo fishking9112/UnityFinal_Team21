@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,7 @@ public class MainUI : MonoBehaviour
     public Button backBtn;
 
     public GameObject goldPannel;
+    public TextMeshProUGUI goldText;
     public GameObject upgradePointPannel;
 
     private GameObject goActive;
@@ -59,6 +61,13 @@ public class MainUI : MonoBehaviour
                 }
             });
         }
+
+        GameManager.Instance.SetMainUI(this);
+        RefreshGoldText();
     }
 
+    public void RefreshGoldText()
+    {
+        goldText.text = Utils.GetThousandCommaText(GameManager.Instance.Gold);
+    }
 }

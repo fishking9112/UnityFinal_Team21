@@ -9,22 +9,23 @@ public class QueenCondition : MonoBehaviour
     public float initMaxMagicGauge = 100f;
     public float initCurSummonGauge = 100f;
     public float initMaxSummonGauge = 100f;
-    public float initLevel = 1f;
     public float initCurExpGauge = 0f;
     public float initMaxExpGauge = 100f;
     public float initEvolutionPoint = 0f;
+    public float initLevel = 1f;
+    public float initGold = 0f;
 
     public float SummonGaugeRecoverySpeed { get; private set; }
     public float MagicGaugeRecoverySpeed { get; private set; }
-    public float Gold { get; private set; }
     public ReactiveProperty<float> CurMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxMagicGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurSummonGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxSummonGauge { get; private set; } = new ReactiveProperty<float>();
-    public ReactiveProperty<float> Level { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurExpGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxExpGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> EvolutionPoint { get; private set; } = new ReactiveProperty<float>();
+    public ReactiveProperty<float> Level { get; private set; } = new ReactiveProperty<float>();
+    public ReactiveProperty<float> Gold { get; private set; } = new ReactiveProperty<float>();
 
     private void Awake()
     {
@@ -39,6 +40,7 @@ public class QueenCondition : MonoBehaviour
         CurExpGauge.Value = initCurExpGauge;
         MaxExpGauge.Value = initMaxExpGauge;
         EvolutionPoint.Value = initEvolutionPoint;
+        Gold.Value = initGold;
     }
     private void Start()
     {
@@ -154,7 +156,7 @@ public class QueenCondition : MonoBehaviour
     /// <param name="amount"> 조정할 수치 </param>
     public void AdjustGold(float amount)
     {
-        Gold = AdjustValue(Gold, amount, float.MaxValue);
+        Gold.Value = AdjustValue(Gold.Value, amount, float.MaxValue);
     }
 
     // 값 조정
