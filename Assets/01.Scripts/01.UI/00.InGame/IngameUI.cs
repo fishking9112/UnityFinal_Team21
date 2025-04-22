@@ -7,6 +7,9 @@ public class IngameUI : MonoBehaviour
     [Header("레벨")]
     [SerializeField] private TextMeshProUGUI levelText;
 
+    [Header("골드")]
+    [SerializeField] private TextMeshProUGUI goldText;
+
     [Header("게이지")]
     [SerializeField] private GaugeUI magicGaugeUI;
     [SerializeField] private GaugeUI summonGaugeUI;
@@ -36,6 +39,9 @@ public class IngameUI : MonoBehaviour
         condition.Level.AddAction(UpdateLevelText);
         UpdateLevelText(condition.Level.Value);
 
+        condition.Gold.AddAction(UpdateGoldText);
+        UpdateGoldText(condition.Gold.Value);
+
         summonGaugeUI.Bind(condition.CurSummonGauge, condition.MaxSummonGauge);
         magicGaugeUI.Bind(condition.CurMagicGauge, condition.MaxMagicGauge);
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
@@ -52,6 +58,11 @@ public class IngameUI : MonoBehaviour
     private void UpdateLevelText(float level)
     {
         levelText.text = $"LV. {level}";
+    }
+
+    private void UpdateGoldText(float gold)
+    {
+        goldText.text = $"Gold. {gold}";
     }
 
     // 제한 시간에서 점점 시간이 줄어들고 시간이 0이 됐을 때 클리어 판정
