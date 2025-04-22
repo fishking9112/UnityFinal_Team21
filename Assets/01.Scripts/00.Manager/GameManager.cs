@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public enum CursorState
@@ -14,6 +15,7 @@ public class GameManager : MonoSingleton<GameManager>
     public Castle castle;
     private CursorState curCursorState;
     private PauseController pauseController;
+    private MainUI mainUI;
 
     protected override void Awake()
     {
@@ -30,6 +32,14 @@ public class GameManager : MonoSingleton<GameManager>
         if (Input.GetKeyDown(KeyCode.H))
         {
             castle.TakeDamaged(100f);
+        }
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            AddGold(100);
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            UGSManager.Instance.SaveLoad.SaveAsync().Forget();
         }
     }
 
@@ -84,7 +94,7 @@ public class GameManager : MonoSingleton<GameManager>
     public void AddGold(int amount)
     {
         Gold += amount;
-        // 골드 UI 업데이트도 여기서 호출해도 됨
+        RefreshGoldText();
     }
 
     public bool TrySpendGold(int amount)
@@ -92,6 +102,7 @@ public class GameManager : MonoSingleton<GameManager>
         if (Gold >= amount)
         {
             Gold -= amount;
+            RefreshGoldText();
             return true;
         }
         return false;
@@ -100,10 +111,24 @@ public class GameManager : MonoSingleton<GameManager>
     public void SetGold(int amount)
     {
         Gold = Mathf.Max(0, amount);
+        RefreshGoldText();
     }
 
     public int GetGold()
     {
         return Gold;
+    }
+
+    private void RefreshGoldText()
+    {
+        if(mainUI != null)
+        {
+            mainUI.RefreshGoldText();
+        }
+    }
+
+    public void SetMainUI(MainUI mainUI)
+    {
+        this.mainUI = mainUI;
     }
 }
