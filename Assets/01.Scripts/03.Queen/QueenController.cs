@@ -15,13 +15,13 @@ public class QueenController : MonoBehaviour
     private QueenCondition condition;
     private ObjectPoolManager objectPoolManager;
 
-    private Vector3 worldMousePos;
+    public Vector3 worldMousePos;
 
     public MonsterSlotUI monsterSlotUI;
     public QueenActiveSkillSlotUI queenActiveSkillSlotUI;
 
-    public QueenActiveSkillBase selectedQueenActiveSkill;
     [NonSerialized] public MonsterInfo selectedMonster;
+    [NonSerialized] public QueenActiveSkillBase selectedQueenActiveSkill;
     public GameObject cursorIcon;
     public QueenSlot curSlot = QueenSlot.MONSTER;
 
@@ -32,10 +32,15 @@ public class QueenController : MonoBehaviour
     [SerializeField] private float summonDistance = 0.5f;
     private Vector3 lastSummonPosition = Vector3.positiveInfinity;
 
+    public List<QueenActiveSkillBase> queenActiveSkillList = new List<QueenActiveSkillBase>();
+
     private void Start()
     {
         condition = GameManager.Instance.queen.condition;
         objectPoolManager = ObjectPoolManager.Instance;
+
+        //테스트 코드
+        queenActiveSkillSlotUI.AddSlot(0, queenActiveSkillList[0]);
     }
 
     private void Update()
@@ -67,6 +72,12 @@ public class QueenController : MonoBehaviour
         SelectSlot(index);
     }
 
+    // 슬롯 버튼을 클릭했을 때 해당 슬롯 선택
+    public void OnClickSlotButton(int index)
+    {
+        SelectSlot(index);
+    }
+
     // 슬롯에 따라 다른 처리
     public void SelectSlot(int index)
     {
@@ -84,14 +95,17 @@ public class QueenController : MonoBehaviour
         }
         else if (curSlot == QueenSlot.QueenActiveSkill)
         {
-            // 매직 슬롯일 경우 처리
-        }
-    }
+            QueenActiveSkillBase skill = queenActiveSkillSlotUI.GetValue(index);
 
-    // 슬롯 버튼을 클릭했을 때 해당 슬롯 선택
-    public void OnClickSlotButton(int index)
-    {
-        SelectSlot(index);
+            if(skill == null)
+            {
+                return;
+            }
+
+            selectedQueenActiveSkill = skill;
+            //스킬 아이콘 처리
+            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(selectedQueenActiveSkill.outfit);
+        }
     }
 
     // 클릭 시 처리
@@ -115,12 +129,7 @@ public class QueenController : MonoBehaviour
             case QueenSlot.QueenActiveSkill:
                 if (context.phase == InputActionPhase.Started)
                 {
-                    isDrag = true;
                     UseQueenActiveSkill();
-                }
-                else if (context.phase == InputActionPhase.Canceled)
-                {
-                    isDrag = false;
                 }
                 break;
         }
@@ -147,6 +156,7 @@ public class QueenController : MonoBehaviour
         }
     }
 
+    // 몬스터 소환
     private void SummonMonster()
     {
         if (selectedMonster == null)
@@ -161,11 +171,13 @@ public class QueenController : MonoBehaviour
         {
             return;
         }
+        // 마지막 생성위치에서 일정 거리 이상 떨어져야 소환가능
         if(Vector3.Distance(worldMousePos,lastSummonPosition) < summonDistance)
         {
             return;
         }
 
+        // 커서, 미니맵콜라이더 레이어를 제외한 레이어와 충돌 처리가 일어나면 몬스터 소환 불가
         ContactFilter2D layerFilter = new ContactFilter2D();
         layerFilter.SetLayerMask(~LayerMask.GetMask("Cursor", "MiniMapCollider"));
         Collider2D[] results = new Collider2D[1];
@@ -181,16 +193,13 @@ public class QueenController : MonoBehaviour
         var monster = objectPoolManager.GetObject<MonsterController>(selectedMonster.outfit, worldMousePos);
         monster.StatInit(selectedMonster);
 
+        // 마지막 생성위치 갱신
         lastSummonPosition = worldMousePos;
     }
 
     // 퀸의 액티브 스킬 사용
     private void UseQueenActiveSkill()
     {
-        if (!Pointer.current.press.isPressed)
-        {
-            return;
-        }
         if (selectedQueenActiveSkill == null)
         {
             return;
@@ -199,7 +208,13 @@ public class QueenController : MonoBehaviour
         {
             return;
         }
+        if (condition.CurQueenActiveSkillGauge.Value < selectedQueenActiveSkill.cost)
+        {
+            return;
+        }
 
+        condition.AdjustCurQueenActiveSkillGauge(-selectedQueenActiveSkill.cost);
+        selectedQueenActiveSkill.UseSkill();
     }
 
     // 자동 게이지 회복

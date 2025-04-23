@@ -1,16 +1,18 @@
 using UnityEngine;
 
-public class QueenActiveSkillBase : MonoBehaviour
+public abstract class QueenActiveSkillBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public int id;
+    public string skillName;
+    public float cost;
+    public string outfit;
+
+    protected QueenController controller;
+
+    protected virtual void Start()
     {
-        
+        controller = GameManager.Instance.queen.controller;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void UseSkill();
 }
