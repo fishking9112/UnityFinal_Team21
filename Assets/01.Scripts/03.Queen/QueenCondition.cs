@@ -13,7 +13,10 @@ public class QueenCondition : MonoBehaviour
     public float initMaxExpGauge = 100f;
     public float initEvolutionPoint = 0f;
     public float initLevel = 1f;
-    public float initGold = 0f;
+    public float initGold = 0f; 
+
+    private float expGainMultiplierPercent = 0f;
+    private float goldGainMultiplierPercent = 0f;
 
     public float SummonGaugeRecoverySpeed { get; private set; }
     public float QueenActiveSkillGaugeRecoverySpeed { get; private set; }
@@ -26,6 +29,9 @@ public class QueenCondition : MonoBehaviour
     public ReactiveProperty<float> EvolutionPoint { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> Level { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> Gold { get; private set; } = new ReactiveProperty<float>();
+
+    private float ExpGainMultiplier => 1f + (expGainMultiplierPercent * 0.01f);
+    private float GoldGainMultiplier => 1f + (goldGainMultiplierPercent * 0.01f);
 
     private void Awake()
     {
@@ -41,25 +47,6 @@ public class QueenCondition : MonoBehaviour
         MaxExpGauge.Value = initMaxExpGauge;
         EvolutionPoint.Value = initEvolutionPoint;
         Gold.Value = initGold;
-    }
-    private void Start()
-    {
-        ApplyAbilityUpgradeData();
-    }
-
-    /// <summary>
-    /// 여왕 권능 강화 데이터 적용
-    /// </summary>
-    private void ApplyAbilityUpgradeData()
-    {
-       /* var upgrades = QueenAbilityUpgradeManager.Instance.GetAllStoredUpgrades();
-        foreach (var upgrade in upgrades)
-        {
-            if (QueenAbilityUpgradeManager.Instance.TryGetApplyAction(upgrade.Key, out var action))
-            {
-                action.Invoke(upgrade.Value);
-            }
-        }*/
     }
 
     /// <summary>
@@ -124,9 +111,10 @@ public class QueenCondition : MonoBehaviour
     /// <param name="amount"> 조정할 수치 </param>
     public void AdjustCurExpGauge(float amount)
     {
-        float temp = CurExpGauge.Value + amount;
+        float adjustedAmount = amount * ExpGainMultiplier;
+        float temp = CurExpGauge.Value + adjustedAmount;
 
-        while(temp >= MaxExpGauge.Value)
+        while (temp >= MaxExpGauge.Value)
         {
             LevelUp();
             temp -= MaxExpGauge.Value;
@@ -135,6 +123,9 @@ public class QueenCondition : MonoBehaviour
         CurExpGauge.Value = temp;
     }
 
+    /// <summary>
+    /// 레벨업 처리 및 강화 트리거 호출
+    /// </summary>
     private void LevelUp()
     {
         Level.Value++;
@@ -156,8 +147,26 @@ public class QueenCondition : MonoBehaviour
     /// <param name="amount"> 조정할 수치 </param>
     public void AdjustGold(float amount)
     {
-        Gold.Value = AdjustValue(Gold.Value, amount, float.MaxValue);
+        float adjustedAmount = amount * GoldGainMultiplier;
+        Gold.Value = AdjustValue(Gold.Value, adjustedAmount, float.MaxValue);
     }
+
+    /// <summary>
+    /// 경험치 획득량 증가 비율 설정 (% 단위)
+    /// </summary>
+    public void SetExpGainMultiplierPercent(float percent)
+    {
+        expGainMultiplierPercent = Mathf.Max(0f, percent);
+    }
+
+    /// <summary>
+    /// 골드 획득량 증가 비율 설정 (% 단위)
+    /// </summary>
+    public void SetGoldGainMultiplierPercent(float percent)
+    {
+        goldGainMultiplierPercent = Mathf.Max(0f, percent);
+    }
+
 
     // 값 조정
     private float AdjustValue(float cur, float amount, float max)
