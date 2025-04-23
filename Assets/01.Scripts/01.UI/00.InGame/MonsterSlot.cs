@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MonsterSlotUI : BaseSlotUI<MonsterInfo>
+public class MonsterSlot : BaseSlot<MonsterInfo>
 {
     // Queen의 몬스터 슬롯에 정보 추가
     public override void AddSlot(int index, MonsterInfo monster)

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class BaseSlotUI<T> : MonoBehaviour
+public abstract class BaseSlot<T> : MonoBehaviour
 {
     [SerializeField] protected List<Image> slotIcon;
 

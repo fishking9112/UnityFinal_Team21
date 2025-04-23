@@ -1,4 +1,4 @@
-public class QueenActiveSkillSlotUI : BaseSlotUI<QueenActiveSkillBase>
+public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
 {
     public override void AddSlot(int index, QueenActiveSkillBase skill)
     {

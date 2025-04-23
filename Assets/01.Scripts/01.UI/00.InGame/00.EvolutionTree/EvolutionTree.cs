@@ -165,12 +165,12 @@ public class EvolutionTree : MonoBehaviour
     // 진화 트리 슬롯에 등록한 몬스터를 퀸 슬롯에도 등록
     public void AddQueenSlot(MonsterInfo monster, int index)
     {
-        queenController.monsterSlotUI.AddSlot(index, monster);
+        queenController.monsterSlot.AddSlot(index, monster);
     }
 
     // 진화 트리 슬롯에 제거한 몬스터를 퀸 슬롯에도 제거
     public void RemoveQueenSlot(int index)
     {
-        queenController.monsterSlotUI.RemoveSlot(index);
+        queenController.monsterSlot.RemoveSlot(index);
     }
 }
