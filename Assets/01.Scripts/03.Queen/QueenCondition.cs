@@ -11,7 +11,7 @@ public class QueenCondition : MonoBehaviour
     public float initMaxExpGauge = 100f;
     public float initEvolutionPoint = 0f;
     public float initLevel = 1f;
-    public float initGold = 0f; 
+    public float initGold = 0f;
 
     private float expGainMultiplierPercent = 0f;
     private float goldGainMultiplierPercent = 0f;
@@ -127,7 +127,7 @@ public class QueenCondition : MonoBehaviour
     private void LevelUp()
     {
         Level.Value++;
-        QueenEnhanceManager.Instance.ActivateEnhance();
+        InGameUIManager.Instance.ShowWindow<QueenEnhanceController>();
     }
 
     /// <summary>
