@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class HeroStatusInfo: IInfo
+public class HeroStatusInfo: BaseStatData, IInfo
 {
     public int id;
     public string name;
@@ -12,12 +12,24 @@ public class HeroStatusInfo: IInfo
     public int startLevel;
     public int[] weapon;
     public int[] weaponLevel;
-    public float hp;
     public float detectedRange;
-    public float moveSpeed;
     public float reward;
     public int custom;
-
+    public HeroStatusInfo() { }
+    public HeroStatusInfo(HeroStatusInfo other) : base(other)
+    {
+        id = other.id;
+        name = other.name;
+        description = other.description;
+        startLevel = other.startLevel;
+        weapon = other.weapon;
+        weaponLevel = other.weaponLevel;
+        health = other.health;
+        detectedRange = other.detectedRange;
+        moveSpeed = other.moveSpeed;
+        reward = other.reward;
+        custom = other.custom;
+    }
     public int ID => id;
 }
 
@@ -55,7 +67,7 @@ public class HeroStatusData : SheetDataReaderBase
                     heroStatusInfo.weaponLevel = Utils.StringToIntArr(cell.value);
                     break;
                 case "hp":
-                    heroStatusInfo.hp = Utils.StringToFloat(cell.value);
+                    heroStatusInfo.health = Utils.StringToFloat(cell.value);
                     break;
                 case "detectedRange":
                     heroStatusInfo.detectedRange = Utils.StringToFloat(cell.value);

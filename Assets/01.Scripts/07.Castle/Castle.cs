@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 public class Castle : MonoBehaviour
 {
-    [SerializeField] Image fillImage;
-    [SerializeField] CastleCondition condition;
+    [SerializeField] private Image fillImage;
+    public CastleCondition condition;
 
     private ReactiveProperty<float> cur;
     private ReactiveProperty<float> max;

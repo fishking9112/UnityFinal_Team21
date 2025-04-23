@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [Serializable]
 public class QueenAbilityUpgradeInfo
 {
@@ -13,16 +14,16 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 {
     [SerializeField] private QueenAbilityUpgradeItem abilityItemPrefab;
 
-    private readonly Dictionary<int, QueenAbilityUpgradeItem> abilityItemDict = new();
-    public IReadOnlyDictionary<int, QueenAbilityUpgradeItem> AbilityItemDict => abilityItemDict;
-
-
-    private Dictionary<int, int> upgradeLevels = new();
     private QueenAbilityUIController queenAbilityUIController;
     public QueenAbilityUIController QueenAbilityUIController => queenAbilityUIController;
+    private Dictionary<int, int> upgradeLevels = new();
+    
 
-    // 능력 효과 적용 딕셔너리
-    private Dictionary<int, Action<int>> applyEffectActions;
+    private readonly Dictionary<int, QueenAbilityUpgradeItem> abilityItemDict = new();
+
+    private Dictionary<int, Action<float>> applyEffectActions;
+
+
 
     protected override void Awake()
     {
@@ -31,33 +32,37 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         Initialize();
     }
 
+    #region 초기화
+
+    /// <summary>
+    /// 능력 효과에 대한 델리게이트를 초기화합니다.
+    /// </summary>
     private void InitializeEffectActions()
     {
-       /* applyEffectActions = new Dictionary<int, Action<int>>
+        applyEffectActions = new Dictionary<int, Action<float>>
         {
-            { 0, value => ApplyAttackPowerBuff(value) },
-            { 1, value => ApplyMoveSpeedBuff(value) },
-            { 2, value => PlayerStat.GoldGainRate += value },
-            { 3, value => PlayerStat.ExpGainRate += value },
-            { 4, value => CastleManager.MaxHealth += value },
-            { 5, value => CastleManager.RecoveryAmount += value },
+            { 0, value => ApplyAttackPowerBuff(value) }, 
+            { 1, value => ApplyMoveSpeedBuff(value) }, 
+            { 2, value => GameManager.Instance.queen.condition.SetGoldGainMultiplierPercent(value) }, 
+            { 3, value => GameManager.Instance.queen.condition.SetExpGainMultiplierPercent(value) }, 
+            { 4, value => GameManager.Instance.castle.condition.AdjustMaxHealth(value) },
+            { 5, value => GameManager.Instance.castle.condition.AdjustCastleHealthRecoverySpeed(value) }, 
             { 6, value => GameManager.Instance.queen.condition.AdjustSummonGaugeRecoverySpeed(value) },
             { 7, value => GameManager.Instance.queen.condition.AdjustMaxSummonGauge(value) },
-            { 8, value => GameManager.Instance.queen.condition.AdjustMagicGaugeRecoverySpeed(value) },
-            { 9, value => GameManager.Instance.queen.condition.AdjustMaxMagicGauge(value) },
-            { 10, value => GameManager.StartEvolutionPoint += value }
-        };*/
+            { 8, value => GameManager.Instance.queen.condition.AdjustQueenActiveSkillGaugeRecoverySpeed(value) },
+            { 9, value => GameManager.Instance.queen.condition.AdjustMaxQueenActiveSkillGauge(value) },
+            { 10, value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value) }
+        };
     }
 
     /// <summary>
-    /// 업그레이드 데이터를 초기화합니다.
-    /// 게임 시작 시 호출되며, 각 능력의 레벨을 0으로 설정합니다.
+    /// 업그레이드 레벨 정보를 초기화합니다.
     /// </summary>
     public void Initialize()
     {
         if (DataManager.Instance.queenAbilityDic == null)
         {
-            Utils.LogError("DataManager의 queenAilityDic 없음");
+            Utils.LogError("DataManager의 queenAbilityDic 없음");
             return;
         }
 
@@ -69,11 +74,13 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         }
     }
 
+    #endregion
+
+    #region 강화 시도
+
     /// <summary>
-    /// 능력 업그레이드 시도
-    /// 자원 조건이 충족되면 레벨을 증가시키고 UI를 갱신합니다.
+    /// 능력 업그레이드를 시도합니다.
     /// </summary>
-    /// <param name="id">강화할 능력의 ID</param>
     public void TryUpgrade(int id)
     {
         if (!IsValidAbility(id, out var ability)) return;
@@ -82,24 +89,21 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         if (currentLevel >= ability.maxLevel) return;
 
         int cost = ability.levelInfo[currentLevel].cost;
-
-        // 골드가 부족하면 업그레이드 실패
         if (!GameManager.Instance.TrySpendGold(cost))
         {
-            Utils.Log("골드가 부족으로 업그레이드 실패");
+            Utils.Log("골드 부족으로 업그레이드 실패");
             return;
         }
 
         upgradeLevels[id]++;
         queenAbilityUIController.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
 
-        ApplyAbilityEffect(id);
+
     }
 
     /// <summary>
-    /// 능력 다운그레이드 시도
+    /// 능력 다운그레이드를 시도합니다.
     /// </summary>
-    /// <param name="id">다운그레이드할 능력의 ID</param>
     public void TryDowngrade(int id)
     {
         if (!IsValidAbility(id, out var ability)) return;
@@ -108,64 +112,82 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         if (currentLevel <= 0) return;
 
         int refund = ability.levelInfo[currentLevel - 1].cost;
-
-        // 골드 환급
         RefundCurrency(refund);
 
         upgradeLevels[id]--;
         queenAbilityUIController.SetPopupQueenAbilityInfo(ability, upgradeLevels[id]);
 
-        ApplyAbilityEffect(id);
     }
 
+    #endregion
+
+    #region 효과 적용 
+
     /// <summary>
-    /// 지정된 ID의 능력이 유효한지 검사하고 해당 정보를 반환합니다.
+    /// 저장된 강화 수치를 기반으로 모든 강화 효과를 적용합니다.
     /// </summary>
-    /// <returns>유효한 경우 true, 그렇지 않으면 false</returns>
-    private bool IsValidAbility(int id, out QueenAbilityInfo ability)
+    public void ApplyAllEffects()
     {
-        ability = GetAbilityById(id);
-        return upgradeLevels.ContainsKey(id) && ability != null;
+        // 이제 다른 스크립트에서 내가 원하는 타이밍에 이 함수를 작동시킬껀데 
+        // upgradeLevels를 토대로 레벨이 1이상인것들을 확인하고 applyEffectActions 중에 id에 일치하는 것들만
+        // 실행시키는 거지. value값은 level에 따라 적용 값이 달라지니깐 바꿔줘서 적용해야대.
+
+        foreach (var kvp in upgradeLevels)
+        {
+            int id = kvp.Key;
+            int level = kvp.Value;
+
+            if (level <= 0 || !applyEffectActions.ContainsKey(id)) continue;
+
+            var ability = GetAbilityById(id);
+            if (ability == null) continue;
+
+            float value = ability.levelInfo[level - 1].eff;
+            applyEffectActions[id].Invoke(value);
+        }
     }
 
-    /// <summary>
-    /// 능력 데이터 리스트에서 ID에 해당하는 능력 정보를 찾습니다.
-    /// </summary>
-    /// <returns>QueenAbilityInfo 객체 또는 null</returns>
-    private QueenAbilityInfo GetAbilityById(int id)
+    public void ResetQueenAbilityMonsterValues()
     {
-        DataManager.Instance.queenAbilityDic.TryGetValue(id, out var ability);
-        return ability;
+        // 공격력 감소
+        if (upgradeLevels.TryGetValue(0, out int atkLevel) && atkLevel > 0)
+        {
+            var atkAbility = GetAbilityById(0);
+            float atkValue = atkAbility.levelInfo[atkLevel - 1].eff;
+            ApplyAttackPowerBuff(-atkValue);
+        }
+
+        // 이동속도 감소
+        if (upgradeLevels.TryGetValue(1, out int speedLevel) && speedLevel > 0)
+        {
+            var speedAbility = GetAbilityById(1);
+            float speedValue = speedAbility.levelInfo[speedLevel - 1].eff;
+            ApplyMoveSpeedBuff(-speedValue);
+        }
+
     }
 
-    /// <summary>
-    /// 현재 레벨 기준으로 주어진 능력의 효과 값을 반환합니다.
-    /// 레벨이 0일 경우 0을 반환합니다.
-    /// </summary>
-    /// <param name="id">효과 값을 조회할 능력 ID</param>
-    /// <returns>현재 레벨 기준 효과 값</returns>
-    public int GetEffectValue(int id)
+    private void ApplyAttackPowerBuff(float value)
     {
-        if (!upgradeLevels.TryGetValue(id, out int level) || level <= 0)
-            return 0;
-
-        var ability = GetAbilityById(id);
-        return ability?.levelInfo[level - 1].eff ?? 0;
+        foreach (var kvp in DataManager.Instance.monsterDic)
+        {
+            kvp.Value.attack += value;
+        }
     }
 
-    /// <summary>
-    /// 특정 능력의 현재 레벨을 반환합니다.
-    /// </summary>
-    /// <param name="id">능력 ID</param>
-    /// <returns>현재 강화 레벨</returns>
-    public int GetLevel(int id)
+    private void ApplyMoveSpeedBuff(float value)
     {
-        return upgradeLevels.TryGetValue(id, out int level) ? level : 0;
+        foreach (var kvp in DataManager.Instance.monsterDic)
+        {
+            kvp.Value.moveSpeed += value;
+        }
     }
+    #endregion
+
+    #region 리셋
 
     /// <summary>
-    /// 모든 능력의 업그레이드 레벨을 초기화하고,
-    /// 소모된 재화를 반환한 뒤, UI를 갱신합니다.
+    /// 모든 능력을 초기화하고, 소모된 재화를 반환합니다.
     /// </summary>
     public void ResetAllAbilities()
     {
@@ -177,86 +199,27 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             int id = ability.ID;
             int currentLevel = upgradeLevels[id];
 
-            // 레벨이 1 이상일 경우, 누적 비용 계산
             for (int i = 0; i < currentLevel; i++)
             {
                 totalRefundCost += ability.levelInfo[i].cost;
             }
 
-            // 레벨 초기화
             upgradeLevels[id] = 0;
         }
 
-        // UI갱신
         RefreshAllAbilityItems();
-
-        // 재화 반환 처리
         RefundCurrency(totalRefundCost);
 
         Utils.Log($"모든 능력을 초기화하고 {totalRefundCost}만큼 재화를 반환받음.");
-
-        // 전체 능력 재적용
-        foreach (var id in upgradeLevels.Keys)
-        {
-            ApplyAbilityEffect(id);
-        }
     }
 
-    /// <summary>
-    /// 권능 UI 전체 갱신
-    /// </summary>
-    public void RefreshAllAbilityItems()
-    {
-        foreach (var kvp in abilityItemDict)
-        {
-            int id = kvp.Key;
-            var item = kvp.Value;
-            item.Refresh(GetLevel(id));
-        }
-    }
+    #endregion
+
+    #region 저장, 불러오기
 
     /// <summary>
-    /// UI 스크립트를 등록하고 능력 목록 UI 아이템을 생성합니다.
+    /// 현재 상태를 저장 데이터 형태로 변환합니다.
     /// </summary>
-    /// <param name="script">UI 패널 스크립트</param>
-    public void SetQueenAbilityUIController(QueenAbilityUIController script)
-    {
-        queenAbilityUIController = script;
-        CreateAbilityItems();
-    }
-
-    /// <summary>
-    /// 업그레이드에 사용된 재화를 반환합니다.
-    /// </summary>
-    /// <param name="amount"></param>
-    private void RefundCurrency(int amount)
-    {
-        GameManager.Instance.AddGold(amount);
-    }
-
-
-
-    /// <summary>
-    /// 능력 목록을 순회하며 각 능력의 UI 아이템을 생성합니다.
-    /// </summary>
-    private void CreateAbilityItems()     
-    {
-        abilityItemDict.Clear();
-
-        foreach (var kvp in DataManager.Instance.queenAbilityDic)
-        {
-            var ability = kvp.Value;
-
-            var item = Instantiate(abilityItemPrefab, QueenAbilityUIController.ContentTransform);
-            item.Initialize(ability, GetLevel(ability.ID));
-            abilityItemDict[ability.ID] = item;
-        }
-    }
-
-    /// <summary>
-    /// 현재 강화 상태를 저장 데이터 형태로 변환합니다.
-    /// </summary>
-    /// <returns>강화 정보가 담긴 QueenAbilityUpgradeData 객체</returns>
     public QueenAbilityUpgradeData SetSaveData()
     {
         var saveData = new QueenAbilityUpgradeData
@@ -277,9 +240,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     }
 
     /// <summary>
-    /// 저장된 강화 데이터를 적용하고 UI를 갱신합니다.
+    /// 저장된 데이터를 불러와 적용합니다.
     /// </summary>
-    /// <param name="data">적용할 강화 데이터</param>
     public void ApplyUpgradeData(QueenAbilityUpgradeData data)
     {
         if (data.upgrades == null)
@@ -292,7 +254,6 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         {
             if (upgradeLevels.ContainsKey(info.id))
             {
-                // 유효한 범위인지 체크
                 var ability = GetAbilityById(info.id);
                 if (ability != null && info.level <= ability.maxLevel)
                 {
@@ -301,52 +262,87 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             }
         }
 
-        // UI 갱신
         RefreshAllAbilityItems();
 
-        // 모든 효과 재적용
-        foreach (var id in upgradeLevels.Keys)
+    }
+
+    #endregion
+
+
+    #region UI 연동
+
+    /// <summary>
+    /// UI 컨트롤러를 설정하고 아이템을 생성합니다. 메인메뉴씬 들어올때마다 ui컨트롤러에서 실행
+    /// </summary>
+    public void SetQueenAbilityUIController(QueenAbilityUIController script)
+    {
+        queenAbilityUIController = script;
+        
+    }
+
+    /// <summary>
+    /// 능력 UI 아이템을 생성합니다.
+    /// </summary>
+    public void CreateAbilityItems()
+    {
+        abilityItemDict.Clear();
+
+        foreach (var kvp in DataManager.Instance.queenAbilityDic)
         {
-            ApplyAbilityEffect(id);
+            var ability = kvp.Value;
+            var item = Instantiate(abilityItemPrefab, QueenAbilityUIController.ContentTransform);
+            item.Initialize(ability, GetLevel(ability.ID));
+            abilityItemDict[ability.ID] = item;
         }
     }
 
     /// <summary>
-    /// 특정 ID의 강화 효과를 적용합니다.
-    /// 현재 레벨을 기준으로 효과 값을 계산해 적용합니다.
+    /// 모든 능력 아이템 UI를 갱신합니다.
     /// </summary>
-    private void ApplyAbilityEffect(int id)
+    public void RefreshAllAbilityItems()
     {
-        if (!applyEffectActions.TryGetValue(id, out var action))
+        foreach (var kvp in abilityItemDict)
         {
-            Utils.LogWarning($"강화 효과 함수가 등록되지 않음 {id}");
-            return;
-        }
-
-        int value = GetEffectValue(id);
-        action.Invoke(value);
-    }
-
-
-    #region 강화 적용 함수
-
-    // ID 0번 강화: 몬스터 공격력 증가
-    private void ApplyAttackPowerBuff(int value)
-    {
-        foreach (var kvp in DataManager.Instance.monsterDic)
-        {
-            kvp.Value.attack += value;
-        }
-    }
-
-    // ID 1번 강화: 몬스터 이동 속도 증가
-    private void ApplyMoveSpeedBuff(int value)
-    {
-        foreach (var kvp in DataManager.Instance.monsterDic)
-        {
-            kvp.Value.moveSpeed += value;
+            int id = kvp.Key;
+            kvp.Value.Refresh(GetLevel(id));
         }
     }
 
     #endregion
+
+    #region 보조 
+
+    private void RefundCurrency(int amount)
+    {
+        GameManager.Instance.AddGold(amount);
+    }
+
+    private bool IsValidAbility(int id, out QueenAbilityInfo ability)
+    {
+        ability = GetAbilityById(id);
+        return upgradeLevels.ContainsKey(id) && ability != null;
+    }
+
+    private QueenAbilityInfo GetAbilityById(int id)
+    {
+        DataManager.Instance.queenAbilityDic.TryGetValue(id, out var ability);
+        return ability;
+    }
+
+    public int GetLevel(int id)
+    {
+        return upgradeLevels.TryGetValue(id, out int level) ? level : 0;
+    }
+
+    public int GetEffectValue(int id)
+    {
+        if (!upgradeLevels.TryGetValue(id, out int level) || level <= 0)
+            return 0;
+
+        var ability = GetAbilityById(id);
+        return ability?.levelInfo[level - 1].eff ?? 0;
+    }
+
+    #endregion
+
 }
