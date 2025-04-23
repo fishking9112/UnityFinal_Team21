@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -13,34 +12,31 @@ public enum QueenSlot
 public class QueenController : MonoBehaviour
 {
     private QueenCondition condition;
+    private QueenActiveSkillManager queenActiveSkillManager;
     private ObjectPoolManager objectPoolManager;
 
-    public Vector3 worldMousePos;
-
-    public MonsterSlotUI monsterSlotUI;
-    public QueenActiveSkillSlotUI queenActiveSkillSlotUI;
+    public MonsterSlot monsterSlot;
+    public QueenActiveSkillSlot queenActiveSkillSlot;
 
     [NonSerialized] public MonsterInfo selectedMonster;
     [NonSerialized] public QueenActiveSkillBase selectedQueenActiveSkill;
+
+    public Vector3 worldMousePos;
     public GameObject cursorIcon;
     public QueenSlot curSlot = QueenSlot.MONSTER;
 
-    public List<MonsterInfo> monsterList;
-
     private bool isDrag;
-
-    [SerializeField] private float summonDistance = 0.5f;
-    private Vector3 lastSummonPosition = Vector3.positiveInfinity;
-
-    public List<QueenActiveSkillBase> queenActiveSkillList = new List<QueenActiveSkillBase>();
+    private float summonDistance;
+    private Vector3 lastSummonPosition;
 
     private void Start()
     {
         condition = GameManager.Instance.queen.condition;
+        queenActiveSkillManager = GameManager.Instance.queen.queenActiveSkillManager;
         objectPoolManager = ObjectPoolManager.Instance;
 
-        //테스트 코드
-        queenActiveSkillSlotUI.AddSlot(0, queenActiveSkillList[0]);
+        summonDistance = 0.5f;
+        lastSummonPosition = Vector3.positiveInfinity;
     }
 
     private void Update()
@@ -83,7 +79,7 @@ public class QueenController : MonoBehaviour
     {
         if (curSlot == QueenSlot.MONSTER)
         {
-            MonsterInfo monster = monsterSlotUI.GetValue(index);
+            MonsterInfo monster = monsterSlot.GetValue(index);
 
             if (monster == null)
             {
@@ -95,7 +91,7 @@ public class QueenController : MonoBehaviour
         }
         else if (curSlot == QueenSlot.QueenActiveSkill)
         {
-            QueenActiveSkillBase skill = queenActiveSkillSlotUI.GetValue(index);
+            QueenActiveSkillBase skill = queenActiveSkillSlot.GetValue(index);
 
             if(skill == null)
             {
