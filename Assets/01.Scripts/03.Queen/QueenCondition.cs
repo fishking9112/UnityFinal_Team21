@@ -5,9 +5,7 @@ public class QueenCondition : MonoBehaviour
     [Header("초기 설정")]
     public float initSummonGaugeRecoverySpeed = 10f;
     public float initQueenActiveSkillGaugeRecoverySpeed = 5f;
-    public float initCurQueenActiveSkillGauge = 100f;
     public float initMaxQueenActiveSkillGauge = 100f;
-    public float initCurSummonGauge = 100f;
     public float initMaxSummonGauge = 100f;
     public float initCurExpGauge = 0f;
     public float initMaxExpGauge = 100f;
@@ -32,9 +30,9 @@ public class QueenCondition : MonoBehaviour
         SummonGaugeRecoverySpeed = initSummonGaugeRecoverySpeed;
         QueenActiveSkillGaugeRecoverySpeed = initQueenActiveSkillGaugeRecoverySpeed;
 
-        CurQueenActiveSkillGauge.Value = initCurQueenActiveSkillGauge;
+        CurQueenActiveSkillGauge.Value = initMaxQueenActiveSkillGauge;
         MaxQueenActiveSkillGauge.Value = initMaxQueenActiveSkillGauge;
-        CurSummonGauge.Value = initCurSummonGauge;
+        CurSummonGauge.Value = initMaxSummonGauge;
         MaxSummonGauge.Value = initMaxSummonGauge;
         Level.Value = initLevel;
         CurExpGauge.Value = initCurExpGauge;
@@ -78,7 +76,7 @@ public class QueenCondition : MonoBehaviour
     public void AdjustMaxQueenActiveSkillGauge(float amount)
     {
         MaxQueenActiveSkillGauge.Value = AdjustValue(MaxQueenActiveSkillGauge.Value, amount, float.MaxValue);
-        CurQueenActiveSkillGauge.Value = AdjustValue(CurQueenActiveSkillGauge.Value, 0, MaxQueenActiveSkillGauge.Value);
+        CurQueenActiveSkillGauge.Value = AdjustValue(CurQueenActiveSkillGauge.Value, amount, MaxQueenActiveSkillGauge.Value);
     }
 
     /// <summary>
@@ -97,7 +95,7 @@ public class QueenCondition : MonoBehaviour
     public void AdjustMaxSummonGauge(float amount)
     {
         MaxSummonGauge.Value = AdjustValue(MaxSummonGauge.Value, amount, float.MaxValue);
-        CurSummonGauge.Value = AdjustValue(CurSummonGauge.Value, 0, MaxSummonGauge.Value);
+        CurSummonGauge.Value = AdjustValue(CurSummonGauge.Value, amount, MaxSummonGauge.Value);
     }
 
     /// <summary>
