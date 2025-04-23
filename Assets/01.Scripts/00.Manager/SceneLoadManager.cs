@@ -58,8 +58,10 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
         await LoadSceneAsync(sceneName);      // 씬 로드
         await UniTask.Delay(3000, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update);            // 1초 대기
 
-        fadeCanvasGroup.interactable = false;
-        fadeCanvasGroup.blocksRaycasts = false;
+        // 특정 씬이면 클릭 막지 않기
+        bool isSpecialScene = sceneName == "MenuScene";
+        fadeCanvasGroup.interactable = isSpecialScene;
+        fadeCanvasGroup.blocksRaycasts = isSpecialScene;
 
         isAnimatingLoadingText = false;       // 점 애니메이션 종료
         await UniTask.Delay(500, DelayType.UnscaledDeltaTime, PlayerLoopTiming.Update);             // 점 애니메이션 종료 대기
