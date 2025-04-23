@@ -57,11 +57,6 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-    public void SetPauseController(PauseController pauseController)
-    {
-        this.pauseController = pauseController;
-    }
-
     private async void OnApplicationQuit()
     {
         //await UGSManager.Instance.SaveLoad.SaveAsync();
@@ -89,8 +84,9 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void GameOver()
     {
-        GameObject.Find("GameResultCanvas").transform.Find("ResultWindow").gameObject.SetActive(true);
-        Time.timeScale = 0f;
+        InGameUIManager.Instance.ShowWindow<GameResultController>();
+        // GameObject.Find("GameResultCanvas").transform.Find("ResultWindow").gameObject.SetActive(true);
+        // Time.timeScale = 0f;
     }
 
 
@@ -133,10 +129,5 @@ public class GameManager : MonoSingleton<GameManager>
     public void SetMainUI(MainUI mainUI)
     {
         this.mainUI = mainUI;
-    }
-
-    public bool IsPaused()
-    {
-        return pauseController.isPaused;
     }
 }

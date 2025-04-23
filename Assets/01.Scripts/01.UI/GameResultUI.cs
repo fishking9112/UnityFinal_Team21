@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Cysharp.Threading.Tasks;
+using UnityEngine.UI;
 
 public class GameResultUI : MonoBehaviour
 {
@@ -13,29 +14,18 @@ public class GameResultUI : MonoBehaviour
 
     public Transform unitListParent;
     public GameUnitResultUI gameUnitResultUI;
-    public IngameUI ingameUI;
+    public Button titleMenuBtn;
 
 
-    /// <summary>   
-    /// 시작 시 UI를 초기화합니다.
-    /// </summary>
-    private void Start()
+    public void InitMiddlePanel()
     {
-        GameResultManager.Instance.SetUI(this);
-    }
-
-    public void OnClickTitleMenu()
-    {
-        GameResultManager.Instance.ReturnToTitle();
-    }
-
-
-    public void ShowUnitResult()
-    {
-        gameTimeText.text = Utils.GetMMSSTime((int)(1800f - ingameUI.GetTimer())); // TODO : 1800f 수정 필요 (UI 리펙토링 하면서 수정)
+        gameTimeText.text = Utils.GetMMSSTime((int)(1800f - InGameUIManager.Instance.inGameHUD.GetTimer())); // TODO : 1800f 수정 필요 (UI 리펙토링 하면서 수정)
         resourceText.text = GameManager.Instance.queen.condition.Gold.Value.ToString();// + GameManager.Instance.GetGold();
+    }
 
-        foreach (var data in GameResultManager.Instance.resultDatas)
+    public void InitUnitResult()
+    {
+        foreach (var data in InGameUIManager.Instance.gameResult.resultDatas)
         {
             GameUnitResultUI unitResultPanel = Instantiate(gameUnitResultUI, unitListParent);
             string unitName = DataManager.Instance.monsterDic[data.Key].name;

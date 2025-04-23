@@ -52,14 +52,14 @@ public class QueenCondition : MonoBehaviour
     /// </summary>
     private void ApplyAbilityUpgradeData()
     {
-       /* var upgrades = QueenAbilityUpgradeManager.Instance.GetAllStoredUpgrades();
-        foreach (var upgrade in upgrades)
-        {
-            if (QueenAbilityUpgradeManager.Instance.TryGetApplyAction(upgrade.Key, out var action))
-            {
-                action.Invoke(upgrade.Value);
-            }
-        }*/
+        /* var upgrades = QueenAbilityUpgradeManager.Instance.GetAllStoredUpgrades();
+         foreach (var upgrade in upgrades)
+         {
+             if (QueenAbilityUpgradeManager.Instance.TryGetApplyAction(upgrade.Key, out var action))
+             {
+                 action.Invoke(upgrade.Value);
+             }
+         }*/
     }
 
     /// <summary>
@@ -126,7 +126,7 @@ public class QueenCondition : MonoBehaviour
     {
         float temp = CurExpGauge.Value + amount;
 
-        while(temp >= MaxExpGauge.Value)
+        while (temp >= MaxExpGauge.Value)
         {
             LevelUp();
             temp -= MaxExpGauge.Value;
@@ -138,7 +138,7 @@ public class QueenCondition : MonoBehaviour
     private void LevelUp()
     {
         Level.Value++;
-        QueenEnhanceManager.Instance.ActivateEnhance();
+        InGameUIManager.Instance.ShowWindow<QueenEnhanceController>();
     }
 
     /// <summary>

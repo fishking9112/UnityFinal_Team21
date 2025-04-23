@@ -26,7 +26,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     /// </summary>
     private void Awake()
     {
-        if (targetTransform == null) 
+        if (targetTransform == null)
             targetTransform = transform;
 
         originalScale = targetTransform.localScale;
@@ -40,7 +40,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         currentInfo = info;
 
-        int currentLevel = QueenEnhanceManager.Instance.GetEnhanceLevel(info.ID);
+        int currentLevel = InGameUIManager.Instance.queenEnhance.GetEnhanceLevel(info.ID);
         int nextLevel = currentLevel + 1;
 
         iconImage.sprite = null;
@@ -102,7 +102,8 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         isSelected = true;
         targetTransform.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutBounce).SetUpdate(true)
-            .OnComplete(() => {
+            .OnComplete(() =>
+            {
                 Utils.Log("능력 선택됨");
 
                 // 선택된 후 원래 크기로 복원 (UI가 닫히기 전에)
@@ -113,8 +114,8 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 // 연출을 위해 0.1초 정도 텀을 주고 종료
                 DOVirtual.DelayedCall(0.1f, () =>
                 {
-                    QueenEnhanceManager.Instance.ApplyInhance(currentInfo);
-                    QueenEnhanceManager.Instance.QueenEnhanceUIController.CloseUI();
+                    InGameUIManager.Instance.queenEnhance.ApplyInhance(currentInfo);
+                    InGameUIManager.Instance.queenEnhance.queenEnhanceUI.CloseUI();
 
                 });
             });

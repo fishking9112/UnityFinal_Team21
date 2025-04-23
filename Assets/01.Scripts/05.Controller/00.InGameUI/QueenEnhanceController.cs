@@ -1,31 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QueenEnhanceManager : MonoSingleton<QueenEnhanceManager>
+[RequireComponent(typeof(QueenEnhanceUI))]
+public class QueenEnhanceController : MonoBehaviour
 {
     private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
     public IReadOnlyDictionary<int, int> AcquiredEnhanceLevels => acquiredEnhanceLevels;
 
-    private QueenEnhanceUIController queenEnhanceUIController;
-    public QueenEnhanceUIController QueenEnhanceUIController => queenEnhanceUIController;
+    public QueenEnhanceUI queenEnhanceUI;
 
     /// <summary>
-    /// 외부에서 호출되는 강화 진입 함수
+    /// 창이 뜨면 매번 랜덤으로 호출됨
     /// </summary>
-    public void ActivateEnhance()
+    private void OnEnable()
     {
-        Time.timeScale = 0;
         var randomOptions = GetRandomInhanceOptions();
-        QueenEnhanceUIController.ShowSelectUI(randomOptions);
-    }
-
-    /// <summary>
-    /// UI 패널 스크립트 등록
-    /// </summary>
-    /// <param name="script">강화 UI 컨트롤러</param>
-    public void SetQueenInhanceUIController(QueenEnhanceUIController script)
-    {
-        queenEnhanceUIController = script;
+        queenEnhanceUI.ShowSelectUI(randomOptions);
     }
 
     /// <summary>
