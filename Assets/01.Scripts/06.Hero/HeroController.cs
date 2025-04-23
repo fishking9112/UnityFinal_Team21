@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem.XR;
 
 public class HeroController : BaseController
 {
@@ -26,25 +25,23 @@ public class HeroController : BaseController
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
 
-        healthHandler.Init(100);
     }
 
-    public void InitAbility(List<int> abList, List<int> abLev)
+    public void StatInit(HeroStatusInfo stat)
     {
-        healthHandler.Init(100);
-
         DeadCheck().Forget();
         stateMachine.ChangeState(stateMachine.moveState);
 
         hero.Init();
+        base.StatInit(stat);
+
         hero.ResetAbility();
 
-        for(int i=0;i<abList.Count;i++)
+        for(int i=0;i<stat.weapon.Length;i++)
         {
-            hero.SetAbilityLevel(abList[i], abLev[i]);
+            hero.SetAbilityLevel(stat.weapon[i], stat.weaponLevel[i]);
         }
     }
-
 
     public override void TakeDamaged(float damage)
     {
@@ -52,7 +49,6 @@ public class HeroController : BaseController
     }
     private async UniTaskVoid DeadCheck()
     {
-        // 사망 체크로 수정 핋요
         await UniTask.WaitUntil(() => healthHandler.IsDie());
         stateMachine.ChangeState(stateMachine.deadState);
         ResetObj();

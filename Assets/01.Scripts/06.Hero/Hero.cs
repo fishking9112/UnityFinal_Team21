@@ -91,17 +91,6 @@ public class Hero : MonoBehaviour
 
             a.SetAbilityLevel(level);
         }
-
-
-        //if (HeroManager.Instance.allAbilityDic.TryGetValue(id, out HeroAbilitySystem ability))
-        //{
-        //    if (!abilityList.Contains(ability))
-        //    {
-        //        ability.enabled = true;
-        //        abilityList.Add(ability);
-        //    }
-        //    ability.SetAbilityLevel(level);
-        //}
     }
 
     /// <summary>
@@ -120,16 +109,6 @@ public class Hero : MonoBehaviour
             a.DespawnAbility();
             abilityList.Remove(a);
         }
-
-        //if (HeroManager.Instance.allAbilityDic.TryGetValue(id, out HeroAbilitySystem ability))
-        //{
-        //    if (abilityList.Contains(ability))
-        //    {
-        //        ability.enabled = false;
-        //        ability.DespawnAbility();
-        //        abilityList.Remove(ability);
-        //    }
-        //}
     }
 
     /// <summary>
