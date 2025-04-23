@@ -83,6 +83,12 @@ public class InGameUIManager : MonoSingleton<InGameUIManager>
         }
     }
 
+    // 테스트 버튼
+    public void OnClickTestLevelUp()
+    {
+        ShowWindow(queenEnhance);
+    }
+
     public void OnEvolutionWindow(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)

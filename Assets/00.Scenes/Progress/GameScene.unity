@@ -2562,15 +2562,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73028f2f860e01e42b32de8cf58cb8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterSlot: {fileID: 0}
+  queenActiveSkillSlot: {fileID: 0}
   worldMousePos: {x: 0, y: 0, z: 0}
-  monsterSlotUI: {fileID: 916721692}
-  queenActiveSkillSlotUI: {fileID: 736249064}
   cursorIcon: {fileID: 90943526}
   curSlot: 0
-  monsterList: []
-  summonDistance: 0.5
-  queenActiveSkillList:
-  - {fileID: 6097810350040145548, guid: a2670f1c028b2144c803c231da246748, type: 3}
 --- !u!114 &166616948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2585,6 +2581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   condition: {fileID: 166616950}
   controller: {fileID: 166616946}
+  queenActiveSkillManager: {fileID: 0}
   input: {fileID: 0}
 --- !u!4 &166616949
 Transform:
@@ -2616,9 +2613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initSummonGaugeRecoverySpeed: 10
   initQueenActiveSkillGaugeRecoverySpeed: 5
-  initCurQueenActiveSkillGauge: 100
   initMaxQueenActiveSkillGauge: 100
-  initCurSummonGauge: 100
   initMaxSummonGauge: 100
   initCurExpGauge: 0
   initMaxExpGauge: 100
@@ -13213,11 +13208,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 680959675}
         m_TargetAssemblyTypeName: InGameUIManager, Assembly-CSharp
-        m_MethodName: ShowWindow
-        m_Mode: 2
+        m_MethodName: OnClickTestLevelUp
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 727351731}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -34038,7 +34033,6 @@ SceneRoots:
   - {fileID: 175794783}
   - {fileID: 166616949}
   - {fileID: 1932398056}
-  - {fileID: 680959674}
   - {fileID: 1757310222}
   - {fileID: 1761321323}
   - {fileID: 865419240}
@@ -34047,6 +34041,7 @@ SceneRoots:
   - {fileID: 1913553826}
   - {fileID: 821742977}
   - {fileID: 1291729696}
+  - {fileID: 680959674}
   - {fileID: 637948746}
   - {fileID: 878322906}
   - {fileID: 952452708}
