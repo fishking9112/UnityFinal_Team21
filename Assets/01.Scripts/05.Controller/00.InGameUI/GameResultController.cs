@@ -29,6 +29,7 @@ public class GameResultController : MonoBehaviour
         resultUI.InitMiddlePanel();
         resultUI.InitUnitResult();
         ApplyStageGold();
+        QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
     }
 
     /// <summary>
