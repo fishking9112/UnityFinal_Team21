@@ -114,19 +114,24 @@ public class QueenEnhanceController : MonoBehaviour
 
             if (name.Contains("체력"))
             {
-                monster.health += value;
                 foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
                 {
-                    monsterController.HealthStatUpdate();
+                    monsterController.UpgradeHealth(value);
                 }
             }
             else if (name.Contains("공격력"))
             {
-                monster.attack += value;
+                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
+                {
+                    monsterController.UpgradeAttack(value);
+                }
             }
             else if (name.Contains("이동속도"))
             {
-                monster.moveSpeed += value;
+                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
+                {
+                    monsterController.UpgradeMoveSpeed(value);
+                }
             }
         }
     }
