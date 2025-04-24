@@ -22,7 +22,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     public void RefreshStatus()
     {
-        if(queenCondition == null)
+        if (queenCondition == null)
             SetQueenCondition(GameManager.Instance.queen.condition);
 
         var builder = new StringBuilder();
@@ -60,7 +60,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
 
         // 마나 회복량 = 기본 회복량 + 강화 효과
         float manaRegenBase = queenCondition.QueenActiveSkillGaugeRecoverySpeed;
-        float manaRegenEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(1002);
+        float manaRegenEnhance = InGameUIManager.Instance.queenEnhance.GetEnhanceValueByID(1002);
         builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / sec");
     }
 
@@ -70,7 +70,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     private void AppendSummonGaugeStatus(StringBuilder builder)
     {
         float maxSummonBase = queenCondition.MaxSummonGauge.Value;
-        float maxSummonEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(1003);
+        float maxSummonEnhance = InGameUIManager.Instance.queenEnhance.GetEnhanceValueByID(1003);
         float maxSummonGauge = maxSummonBase + maxSummonEnhance;
         builder.AppendLine($"소환 게이지 : {FormatNumber(maxSummonBase)} + {FormatNumber(maxSummonEnhance)} / {FormatNumber(maxSummonGauge)}");
     }
@@ -81,7 +81,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     private void AppendSummonRegenStatus(StringBuilder builder)
     {
         float summonRegenBase = queenCondition.SummonGaugeRecoverySpeed;
-        float summonRegenEnhance = QueenEnhanceManager.Instance.GetEnhanceValueByID(-1);
+        float summonRegenEnhance = InGameUIManager.Instance.queenEnhance.GetEnhanceValueByID(-1);
         builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / sec");
     }
 
@@ -90,10 +90,9 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendCastleHpStatus(StringBuilder builder)
     {
-        float castleHpBase = 100;
-        float castleHpEnhance = 100;
-        float maxCastleHp = castleHpBase + castleHpEnhance;
-        builder.AppendLine($"캐슬 체력 : {FormatNumber(castleHpBase)} + {FormatNumber(castleHpEnhance)} / {FormatNumber(maxCastleHp)}");
+        float curCastleHp = GameManager.Instance.castle.condition.CurCastleHealth.Value;
+        float maxCastleHp = GameManager.Instance.castle.condition.MaxCastleHealth.Value;
+        builder.AppendLine($"캐슬 체력 : {FormatNumber(curCastleHp)} / {FormatNumber(maxCastleHp)}");
     }
 
     /// <summary>
@@ -101,7 +100,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendBroodEnhanceStatus(StringBuilder builder)
     {
-        var acquiredEnhances = QueenEnhanceManager.Instance.AcquiredEnhanceLevels;
+        var acquiredEnhances = InGameUIManager.Instance.queenEnhance.AcquiredEnhanceLevels;
         var orderedBroods = new List<string>();
 
         // 종족별 강화 항목을 추출
@@ -127,7 +126,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
             {
                 if (info.brood.ToString() != brood || info.type != QueenEnhanceType.MonsterPassive) continue;
 
-                int level = QueenEnhanceManager.Instance.GetEnhanceLevel(info.ID);
+                int level = InGameUIManager.Instance.queenEnhance.GetEnhanceLevel(info.ID);
                 if (level <= 0) continue;
 
                 int value = 0;
