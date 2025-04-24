@@ -49,7 +49,7 @@ public class HeroController : BaseController
     }
     private async UniTaskVoid DeadCheck()
     {
-        await UniTask.WaitUntil(() => healthHandler.IsDie());
+        await UniTask.WaitUntil(() => healthHandler.IsDie(),cancellationToken:this.GetCancellationTokenOnDestroy());
         stateMachine.ChangeState(stateMachine.deadState);
         ResetObj();
     }
