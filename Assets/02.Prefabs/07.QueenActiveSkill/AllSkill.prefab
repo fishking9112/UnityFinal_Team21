@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4108513907352303291}
-  - component: {fileID: 6097810350040145548}
   - component: {fileID: -3454783522632082060}
   m_Layer: 0
   m_Name: AllSkill
@@ -33,24 +32,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6097810350040145548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3449543277398582152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b7265c60add2dc439974b711fccdca2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
-  skillName: "\uC2A4\uCF08\uB808\uD1A4 \uC18C\uD658"
-  cost: 50
-  outfit: Skeleton_Normal
-  summonRadius: 10
-  summonCount: 30
 --- !u!114 &-3454783522632082060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9b1c71f013e564583b0ea402ed9707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
+  id: 0
   skillName: "\uBC84\uD504"
   cost: 10
   outfit: Orc_Normal

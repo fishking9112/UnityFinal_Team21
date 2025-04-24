@@ -277,7 +277,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     public void SetQueenAbilityUIController(QueenAbilityUIController script)
     {
         queenAbilityUIController = script;
-        
+        CreateAbilityItems();
     }
 
     /// <summary>
