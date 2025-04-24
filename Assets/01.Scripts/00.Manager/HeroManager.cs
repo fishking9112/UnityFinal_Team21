@@ -18,6 +18,8 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     float rand;
     float rand2;
+    float rand3;
+    float rand4;
 
     private void Start()
     {
@@ -51,11 +53,35 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private void SummonHero()
     {
-        rand = UnityEngine.Random.Range(-45, 45);
-        rand2 = UnityEngine.Random.Range(-45, 45);
-
-        HeroController hero = HeroPoolManager.Instance.GetObject(new Vector2(rand, rand2));
+        HeroController hero = HeroPoolManager.Instance.GetObject(RandomSummonPos(98,98));
         hero.StatInit(statusInfo);
     }
 
+
+    private Vector2 RandomSummonPos(float width, float height, float edge=5f)
+    {
+        int edgeType = UnityEngine.Random.Range(0, 4);
+        float halfW = width * 0.5f;
+        float halfH = height * 0.5f;
+
+        float x = 0f, z = 0f;
+
+        if (edgeType < 2) // 상(0), 하(1)
+        {
+            x = UnityEngine.Random.Range(-halfW, halfW);
+            z = (edgeType == 0)
+                ? UnityEngine.Random.Range(halfH - edge, halfH)      // 상단
+                : UnityEngine.Random.Range(-halfH, -halfH + edge);   // 하단
+        }
+        else // 좌(2), 우(3)
+        {
+            z = UnityEngine.Random.Range(-halfH, halfH);
+            x = (edgeType == 2)
+                ? UnityEngine.Random.Range(-halfW, -halfW + edge)    // 좌측
+                : UnityEngine.Random.Range(halfW - edge, halfW);     // 우측
+        }
+
+        return new Vector2(x, z);
+
+    }
 }

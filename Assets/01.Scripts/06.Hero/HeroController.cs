@@ -20,7 +20,7 @@ public class HeroController : BaseController
     private int currentDir;
     private int lastDir;
 
-    private CancellationTokenSource token;
+    private CancellationTokenSource token = new CancellationTokenSource();
 
     public void InitHero()
     {
