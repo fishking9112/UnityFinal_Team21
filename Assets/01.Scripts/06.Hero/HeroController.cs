@@ -32,8 +32,8 @@ public class HeroController : BaseController
         DeadCheck().Forget();
         stateMachine.ChangeState(stateMachine.moveState);
 
-        hero.Init();
         base.StatInit(stat);
+        hero.Init(stat.reward);
 
         hero.ResetAbility();
 
