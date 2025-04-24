@@ -29,11 +29,11 @@ public class HeroController : BaseController
 
     public void StatInit(HeroStatusInfo stat)
     {
+        hero.Init(stat);
         DeadCheck().Forget();
         stateMachine.ChangeState(stateMachine.moveState);
 
         base.StatInit(stat);
-        hero.Init(stat.reward);
 
         hero.ResetAbility();
 

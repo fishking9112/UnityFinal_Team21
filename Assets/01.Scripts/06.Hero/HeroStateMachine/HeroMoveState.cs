@@ -10,6 +10,7 @@ public class HeroMoveState : HeroBaseState
     private bool isMove;
     private CancellationTokenSource token;
 
+    private float detectedRange;
     public HeroMoveState(HeroState state) : base(state)
     {
     }
@@ -21,7 +22,7 @@ public class HeroMoveState : HeroBaseState
         state.dir = state.GetDir();
         isMove = true;
         MoveAndSearch(token.Token).Forget();
-
+        detectedRange = state.hero.statusInfo.detectedRange;
     }
 
     private async UniTaskVoid MoveAndSearch(CancellationToken tk)
@@ -52,8 +53,8 @@ public class HeroMoveState : HeroBaseState
     private void Search()
     {
         // Find Enemy that inside check area
-        Utils.DrawOverlapCircle(state.hero.transform.position, 3, Color.red);
-        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, 3,1<<7);
+        Utils.DrawOverlapCircle(state.hero.transform.position, detectedRange, Color.red);
+        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, detectedRange,1<<7|1<<13);
         if (col == null)
         {
             return;
