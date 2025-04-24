@@ -93,9 +93,6 @@ public class MonsterData : SheetDataReaderBase
                 case "health":
                     monsterInfo.health = Utils.StringToFloat(cell.value);
                     break;
-                case "defence":
-                    monsterInfo.defence = Utils.StringToFloat(cell.value);
-                    break;
                 case "cost":
                     monsterInfo.cost = Utils.StringToFloat(cell.value);
                     break;
