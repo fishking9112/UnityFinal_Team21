@@ -170,23 +170,23 @@ public class MonsterController : BaseController, IPoolable
     /// 업그레이드
     /// </summary>
     /// <param name="amount"></param>
-    public void UpgradeHealth(int amount)
+    public void UpgradeHealth(float amount)
     {
         monsterInfo.health += amount;
         HealthStatUpdate();
     }
 
-    public void UpgradeAttack(int amount)
+    public void UpgradeAttack(float amount)
     {
         monsterInfo.attack += amount;
     }
 
-    public void UpgradeAttackSpeed(int amount)
+    public void UpgradeAttackSpeed(float amount)
     {
         monsterInfo.attackSpeed += amount;
     }
 
-    public void UpgradeMoveSpeed(int amount)
+    public void UpgradeMoveSpeed(float amount)
     {
         monsterInfo.moveSpeed += amount;
     }

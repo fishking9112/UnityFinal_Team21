@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -10,16 +12,22 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[12];
     }
 
-    public override void UseSkill()
+    public override async void UseSkill()
     {
+        // 마우스 위치를 기준으로 size만큼 충돌 검사
         Vector3 mousePos = controller.worldMousePos;
-
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
+        // 충돌한 모든 몬스터에게 버프 적용
+        List<UniTask> tasks = new List<UniTask>();
         foreach (var hit in hits)
         {
-            Utils.Log("충돌 " + hit.name);
-            // 몬스터 공격력 증가 버프
+            if (MonsterManager.Instance.monsters[hit.gameObject])
+            {
+                UniTask task = BuffManager.Instance.ApplyBuff(MonsterManager.Instance.monsters[hit.gameObject], 1001, info.buff_Level);
+                tasks.Add(task);
+            }
         }
+        await UniTask.WhenAll(tasks);
     }
 }

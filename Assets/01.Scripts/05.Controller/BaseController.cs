@@ -1,7 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
-using UnityEngine.AI;
+
 
 public class BaseController : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class BaseController : MonoBehaviour
 
     [Header("핸들러")]
     [SerializeField] protected HealthHandler healthHandler;
+
+    public Dictionary<int, int> buffDic = new Dictionary<int, int>();
+    public Dictionary<int, CancellationTokenSource> buffTokenDic = new Dictionary<int, CancellationTokenSource>();
 
     protected virtual void Start()
     {
@@ -69,5 +73,29 @@ public class BaseController : MonoBehaviour
     protected virtual void Die()
     {
         // Destroy(this.gameObject);
+    }
+
+    public void AddBuffToken(int id, CancellationTokenSource token)
+    {
+        if(buffTokenDic.TryGetValue(id,out var exist))
+        {
+            exist?.Cancel();
+            exist?.Dispose();
+            exist = null;
+        }
+        buffTokenDic[id] = token;
+    }
+
+    public void RemoveBuffToken(int id)
+    {
+        if (buffTokenDic.TryGetValue(id, out var exist))
+        {
+            exist?.Cancel();
+            exist?.Dispose();
+            exist = null;
+            buffTokenDic.Remove(id);
+        }
+
+        buffDic.Remove(id);
     }
 }
