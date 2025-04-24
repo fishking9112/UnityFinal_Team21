@@ -28,6 +28,16 @@ public class GameResultController : MonoBehaviour
     {
         resultUI.InitMiddlePanel();
         resultUI.InitUnitResult();
+        ApplyStageGold();
+    }
+
+    /// <summary>
+    /// 스테이지에서 획득한 gold를 GameManager의 골드에 추가
+    /// </summary>
+    private void ApplyStageGold()
+    {
+        int goldToAdd = Mathf.FloorToInt(GameManager.Instance.queen.condition.Gold.Value);
+        GameManager.Instance.AddGold(goldToAdd);
     }
 
     /// <summary>
