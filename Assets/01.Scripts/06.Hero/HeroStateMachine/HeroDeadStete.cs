@@ -13,7 +13,8 @@ public class HeroDeadStete : HeroBaseState
         state.hero.ResetAbility();
         // 보상 떨구기/획득하기
 
-        ObjectPoolManager.Instance.GetObject<RewardExp>("GoldReward", state.hero.gameObject.transform.position);
+        RewardGold gold= ObjectPoolManager.Instance.GetObject<RewardGold>("GoldReward", state.hero.gameObject.transform.position);
+        gold.rewardAmount = state.hero.reward;
     }
 
     public override void Exit()

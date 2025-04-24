@@ -6,6 +6,7 @@ public class PauseUI : MonoBehaviour
 {
     [Header("패널들")]
     public GameObject optionPanel;
+    [SerializeField] private QueenEnhanceStatusUI queenEnhanceStatusUI;
 
     [Header("UI 버튼들")]
     public Button continueButton;
@@ -18,4 +19,8 @@ public class PauseUI : MonoBehaviour
         optionPanel?.SetActive(active);
     }
 
+    public void RefreshStatus()
+    {
+        queenEnhanceStatusUI.RefreshStatus();
+    }
 }

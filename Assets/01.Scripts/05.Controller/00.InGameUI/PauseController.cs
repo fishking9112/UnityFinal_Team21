@@ -5,14 +5,17 @@ using UnityEngine;
 public class PauseController : MonoBehaviour
 {
     [SerializeField] private PauseUI ui;
-    [SerializeField] private QueenEnhanceStatusUI queenEnhanceStatusUI;
-
 
     private void Awake()
     {
         ui.continueButton.onClick.AddListener(CloseUI);
         ui.optionButton.onClick.AddListener(OnClickOption);
         ui.exitButton.onClick.AddListener(OnClickGameResult);
+    }
+
+    public void OnEnable()
+    {
+        ui.RefreshStatus();
     }
 
     private void CloseUI()

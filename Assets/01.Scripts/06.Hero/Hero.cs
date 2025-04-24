@@ -8,7 +8,7 @@ public class Hero : MonoBehaviour
 {
     public GameObject target;
 
-    private int enemyLayer;
+    public float reward;
 
     public List<HeroAbilitySystem> abilityList;
 
@@ -16,15 +16,16 @@ public class Hero : MonoBehaviour
 
     private LayerMask mask;
 
-    public void Init()
+    public void Init(float rewardAmount)
     {
         abilityList.Clear();
         allAbility.Clear();
 
         abilityList = new List<HeroAbilitySystem>();
         allAbility = GetComponents<HeroAbilitySystem>().ToList();
-        mask = 1 << 7 | 1 << 13;
 
+        mask = 1 << 7 | 1 << 13;
+        reward = rewardAmount;
     }
 
     public GameObject FindNearestTarget()

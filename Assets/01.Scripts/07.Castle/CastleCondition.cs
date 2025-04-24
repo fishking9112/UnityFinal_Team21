@@ -34,7 +34,7 @@ public class CastleCondition : MonoBehaviour
     public void AdjustMaxHealth(float amount)
     {
         MaxCastleHealth.Value = AdjustValue(MaxCastleHealth.Value, amount, float.MaxValue);
-        CurCastleHealth.Value = AdjustValue(CurCastleHealth.Value, 0, MaxCastleHealth.Value);
+        CurCastleHealth.Value = AdjustValue(CurCastleHealth.Value, amount, MaxCastleHealth.Value);
     } 
 
     public void AdjustCastleHealthRecoverySpeed(float amount)
