@@ -11,19 +11,23 @@ public enum QueenSlot
 
 public class QueenController : MonoBehaviour
 {
-    private QueenCondition condition;
-    private QueenActiveSkillManager queenActiveSkillManager;
-    private ObjectPoolManager objectPoolManager;
-
+    [Header("UI")]
     public MonsterSlot monsterSlot;
     public QueenActiveSkillSlot queenActiveSkillSlot;
 
-    [NonSerialized] public MonsterInfo selectedMonster;
-    [NonSerialized] public QueenActiveSkillBase selectedQueenActiveSkill;
-
+    [Header("스킬 범위")]
+    public GameObject rangeObject;
+    
+    [Header("내부 값")]
     public Vector3 worldMousePos;
     public GameObject cursorIcon;
     public QueenSlot curSlot = QueenSlot.MONSTER;
+
+    private QueenCondition condition;
+    private ObjectPoolManager objectPoolManager;
+
+    [NonSerialized] public MonsterInfo selectedMonster;
+    [NonSerialized] public QueenActiveSkillBase selectedQueenActiveSkill;
 
     private bool isDrag;
     private float summonDistance;
@@ -32,7 +36,6 @@ public class QueenController : MonoBehaviour
     private void Start()
     {
         condition = GameManager.Instance.queen.condition;
-        queenActiveSkillManager = GameManager.Instance.queen.queenActiveSkillManager;
         objectPoolManager = ObjectPoolManager.Instance;
 
         summonDistance = 0.5f;
@@ -43,6 +46,23 @@ public class QueenController : MonoBehaviour
     {
         ImageFollowCursor();
         RecoveryGauge();
+        SkillRangeView();
+    }
+
+    private void SkillRangeView()
+    {
+        if (curSlot == QueenSlot.QueenActiveSkill && selectedQueenActiveSkill != null)
+        {
+            rangeObject.SetActive(true);
+            rangeObject.transform.position = worldMousePos;
+
+            float radius = selectedQueenActiveSkill.info.size;
+            rangeObject.transform.localScale = new Vector3(radius * 2f, radius * 2f, 1f);
+        }
+        else
+        {
+            rangeObject.SetActive(false);
+        }
     }
 
     // 선택한 슬롯의 이미지를 마우스커서에 붙힘
@@ -58,10 +78,11 @@ public class QueenController : MonoBehaviour
     // 번호 키를 누르면 해당 슬롯의 인덱스를 토대로 슬롯 선택
     public void OnPressSlotNumber(InputAction.CallbackContext context)
     {
-        if (context.phase != InputActionPhase.Started)
-        {
+        if (InGameUIManager.Instance.isPaused)
             return;
-        }
+
+        if (context.phase != InputActionPhase.Started)
+            return;
 
         int index = Mathf.RoundToInt(context.ReadValue<float>()) - 1;
 
@@ -93,14 +114,14 @@ public class QueenController : MonoBehaviour
         {
             QueenActiveSkillBase skill = queenActiveSkillSlot.GetValue(index);
 
-            if(skill == null)
+            if (skill == null)
             {
                 return;
             }
 
             selectedQueenActiveSkill = skill;
             //스킬 아이콘 처리
-            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(selectedQueenActiveSkill.outfit);
+            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(selectedQueenActiveSkill.info.icon);
         }
     }
 
@@ -168,7 +189,7 @@ public class QueenController : MonoBehaviour
             return;
         }
         // 마지막 생성위치에서 일정 거리 이상 떨어져야 소환가능
-        if(Vector3.Distance(worldMousePos,lastSummonPosition) < summonDistance)
+        if (Vector3.Distance(worldMousePos, lastSummonPosition) < summonDistance)
         {
             return;
         }
@@ -204,12 +225,22 @@ public class QueenController : MonoBehaviour
         {
             return;
         }
-        if (condition.CurQueenActiveSkillGauge.Value < selectedQueenActiveSkill.cost)
+        if (condition.CurQueenActiveSkillGauge.Value < selectedQueenActiveSkill.info.cost)
         {
             return;
         }
+        if(selectedQueenActiveSkill.info.range != -1f)
+        {
+            if (Vector3.Distance(worldMousePos, GameManager.Instance.castle.transform.position) > selectedQueenActiveSkill.info.range)
+            {
+                Utils.Log($"{selectedQueenActiveSkill.info.range}");
+                Utils.Log($"{Vector3.Distance(worldMousePos, GameManager.Instance.castle.transform.position)}");
+                Utils.Log("범위 밖");
+                return;
+            }
+        }
 
-        condition.AdjustCurQueenActiveSkillGauge(-selectedQueenActiveSkill.cost);
+        condition.AdjustCurQueenActiveSkillGauge(-selectedQueenActiveSkill.info.cost);
         selectedQueenActiveSkill.UseSkill();
     }
 

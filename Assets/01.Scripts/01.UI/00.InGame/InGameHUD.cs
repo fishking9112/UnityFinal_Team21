@@ -29,7 +29,7 @@ public class InGameHUD : MonoBehaviour
 
     public void UpdateGoldText(float gold)
     {
-        goldText.text = $"Gold. {gold}";
+        goldText.text = $"Gold. {Utils.GetThousandCommaText((int)gold)}";
     }
 
     public void BindGauges(QueenCondition condition)

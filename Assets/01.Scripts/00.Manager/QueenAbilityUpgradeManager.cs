@@ -128,10 +128,6 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// </summary>
     public void ApplyAllEffects()
     {
-        // 이제 다른 스크립트에서 내가 원하는 타이밍에 이 함수를 작동시킬껀데 
-        // upgradeLevels를 토대로 레벨이 1이상인것들을 확인하고 applyEffectActions 중에 id에 일치하는 것들만
-        // 실행시키는 거지. value값은 level에 따라 적용 값이 달라지니깐 바꿔줘서 적용해야대.
-
         foreach (var kvp in upgradeLevels)
         {
             int id = kvp.Key;

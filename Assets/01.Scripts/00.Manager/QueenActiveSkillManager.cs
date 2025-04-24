@@ -6,9 +6,12 @@ public class QueenActiveSkillManager : MonoBehaviour
     public GameObject allSkill;
     public Dictionary<int, QueenActiveSkillBase> queenActiveSkillDic;
 
-    private void Awake()
+    private void Start()
     {
         Init();
+
+        // 테스트 코드
+        GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(0, queenActiveSkillDic[12]);
     }
 
     private void Init()
@@ -19,16 +22,12 @@ public class QueenActiveSkillManager : MonoBehaviour
 
         foreach (QueenActiveSkillBase skill in skills)
         {
-            if (!queenActiveSkillDic.TryGetValue(skill.id, out var exist))
+            skill.Init();
+
+            if (!queenActiveSkillDic.TryGetValue(skill.info.id, out var exist))
             {
-                queenActiveSkillDic[skill.id] = skill;
+                queenActiveSkillDic[skill.info.id] = skill;
             }
         }
-
-    }
-
-    private void Start()
-    {
-        
     }
 }

@@ -16,7 +16,7 @@ public class InGameUIManager : MonoSingleton<InGameUIManager>
 
 
     [Header("현재 상태")]
-    // public bool isPaused = false;
+    public bool isPaused = false;
     [NonSerialized] GameObject openWindow = null;
 
     /// <summary>
@@ -59,6 +59,7 @@ public class InGameUIManager : MonoSingleton<InGameUIManager>
 
         openWindow.SetActive(true);
         Time.timeScale = 0f; // 시간 멈춤
+        isPaused = true;
         Cursor.lockState = CursorLockMode.None;
     }
 
@@ -69,6 +70,7 @@ public class InGameUIManager : MonoSingleton<InGameUIManager>
         openWindow.SetActive(false);
         openWindow = null;
         Time.timeScale = 1f; // 시간 흐름
+        isPaused = false;
         Cursor.lockState = CursorLockMode.Confined;
     }
 
