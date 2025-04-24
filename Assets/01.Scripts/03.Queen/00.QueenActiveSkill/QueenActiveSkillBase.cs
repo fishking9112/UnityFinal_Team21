@@ -2,14 +2,12 @@ using UnityEngine;
 
 public abstract class QueenActiveSkillBase : MonoBehaviour
 {
-    public int id;
-    public string skillName;
-    public float cost;
-    public string outfit;
+    [SerializeField] private GameObject rangeObject;
+    public QueenActiveSkillInfo info;
 
     protected QueenController controller;
 
-    protected virtual void Start()
+    public virtual void Init()
     {
         controller = GameManager.Instance.queen.controller;
     }
