@@ -58,10 +58,11 @@ public class QueenController : MonoBehaviour
     // 번호 키를 누르면 해당 슬롯의 인덱스를 토대로 슬롯 선택
     public void OnPressSlotNumber(InputAction.CallbackContext context)
     {
-        if (context.phase != InputActionPhase.Started)
-        {
+        if (InGameUIManager.Instance.isPaused)
             return;
-        }
+
+        if (context.phase != InputActionPhase.Started)
+            return;
 
         int index = Mathf.RoundToInt(context.ReadValue<float>()) - 1;
 
@@ -93,7 +94,7 @@ public class QueenController : MonoBehaviour
         {
             QueenActiveSkillBase skill = queenActiveSkillSlot.GetValue(index);
 
-            if(skill == null)
+            if (skill == null)
             {
                 return;
             }
@@ -168,7 +169,7 @@ public class QueenController : MonoBehaviour
             return;
         }
         // 마지막 생성위치에서 일정 거리 이상 떨어져야 소환가능
-        if(Vector3.Distance(worldMousePos,lastSummonPosition) < summonDistance)
+        if (Vector3.Distance(worldMousePos, lastSummonPosition) < summonDistance)
         {
             return;
         }
