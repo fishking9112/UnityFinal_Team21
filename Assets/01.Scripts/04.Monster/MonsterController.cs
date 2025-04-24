@@ -75,7 +75,7 @@ public class MonsterController : BaseController, IPoolable
 
         if (this.monsterInfo == null)
         {
-            this.monsterInfo = new MonsterInfo();
+            this.monsterInfo = new MonsterInfo(monsterInfo);
             base.StatInit(this.monsterInfo);
         }
         else
