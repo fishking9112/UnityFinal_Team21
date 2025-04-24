@@ -32,7 +32,7 @@ public class BaseController : MonoBehaviour
     /// (중요) 체력이 늘어나면 늘어난 만큼 최대 체력 수정할 수 있게 실행 할 것
     /// </summary>
     /// <param name="statInfo">참조 할 수치 데이터</param>
-    public void HealthStatUpdate()
+    protected void HealthStatUpdate()
     {
         healthHandler.SetMaxPoint(statData.health);
     }

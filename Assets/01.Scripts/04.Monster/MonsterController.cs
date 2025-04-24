@@ -73,8 +73,15 @@ public class MonsterController : BaseController, IPoolable
         }
         InGameUIManager.Instance.gameResult.resultDatas[monsterInfo.id].spawnCount++;
 
-        this.monsterInfo = monsterInfo;
-        base.StatInit(this.monsterInfo);
+        if (this.monsterInfo == null)
+        {
+            this.monsterInfo = new MonsterInfo();
+            base.StatInit(this.monsterInfo);
+        }
+        else
+        {
+            this.monsterInfo.Copy(monsterInfo);
+        }
 
         if (navMeshAgent == null)
             navMeshAgent = GetComponent<NavMeshAgent>();
@@ -156,5 +163,31 @@ public class MonsterController : BaseController, IPoolable
 
         stateMachine.ChangeState(stateMachine.Die); // 사망
         // OnDespawn();
+    }
+
+
+    /// <summary>
+    /// 업그레이드
+    /// </summary>
+    /// <param name="amount"></param>
+    public void UpgradeHealth(int amount)
+    {
+        monsterInfo.health += amount;
+        HealthStatUpdate();
+    }
+
+    public void UpgradeAttack(int amount)
+    {
+        monsterInfo.attack += amount;
+    }
+
+    public void UpgradeAttackSpeed(int amount)
+    {
+        monsterInfo.attackSpeed += amount;
+    }
+
+    public void UpgradeMoveSpeed(int amount)
+    {
+        monsterInfo.moveSpeed += amount;
     }
 }
