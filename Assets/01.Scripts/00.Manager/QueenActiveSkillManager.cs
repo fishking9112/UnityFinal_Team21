@@ -12,6 +12,7 @@ public class QueenActiveSkillManager : MonoBehaviour
 
         // 테스트 코드
         GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(0, queenActiveSkillDic[12]);
+        GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(1, queenActiveSkillDic[14]);
     }
 
     private void Init()

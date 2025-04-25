@@ -77,7 +77,7 @@ public class BaseController : MonoBehaviour
 
     public void AddBuffToken(int id, CancellationTokenSource token)
     {
-        if(buffTokenDic.TryGetValue(id,out var exist))
+        if (buffTokenDic.TryGetValue(id, out var exist))
         {
             exist?.Cancel();
             exist?.Dispose();
@@ -86,16 +86,19 @@ public class BaseController : MonoBehaviour
         buffTokenDic[id] = token;
     }
 
-    public void RemoveBuffToken(int id)
+    public void RemoveBuffToken(int id, bool cancel = false)
     {
         if (buffTokenDic.TryGetValue(id, out var exist))
         {
             exist?.Cancel();
-            exist?.Dispose();
-            exist = null;
-            buffTokenDic.Remove(id);
-        }
 
-        buffDic.Remove(id);
+            if (!cancel)
+            {
+                exist?.Dispose();
+                exist = null;
+                buffTokenDic.Remove(id);
+                buffDic.Remove(id);
+            }
+        }
     }
 }

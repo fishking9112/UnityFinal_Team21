@@ -25,14 +25,19 @@ public class BuffManager : MonoSingleton<BuffManager>
 
         if (target.buffDic.TryGetValue(id, out int curBuffLevel))
         {
-            // 현재 적용되어 있는 버프가 지금 적용하려는 버프보다 레벨이 높은 경우 무시
             if (curBuffLevel > level)
             {
+                // 현재 적용되어 있는 버프가 지금 적용하려는 버프보다 레벨이 높은 경우 무시
                 return;
             }
-            else if (curBuffLevel == level)
+            else if(curBuffLevel == level)
             {
-                DurationUpdate(target, buffInfo);
+                // 현재 적용되어 있는 버프가 지금 적용하려는 버프랑 레벨이 같을 경우 시간만 갱신(새로운 토큰으로 변경)
+                target.RemoveBuffToken(id, true);
+                var updateToken = new CancellationTokenSource();
+                target.AddBuffToken(id, updateToken);
+
+                _ = ApplyBuffDurationTime(target, buffInfo, updateToken);
                 return;
             }
             else
@@ -42,17 +47,16 @@ public class BuffManager : MonoSingleton<BuffManager>
             }
         }
 
-        // 버프 적용
+        // 버프 적용(최초 적용 or 더높은 레벨의 동일 버프가 들어올 때 적용)
         CancellationTokenSource token = AddBuff(target, buffInfo, level);
-
         await ApplyBuffDurationTime(target, buffInfo, token);
     }
 
+    // 버프 지속 시간 적용
     private async UniTask ApplyBuffDurationTime(MonsterController target, BuffInfo info, CancellationTokenSource token)
     {
         try
         {
-            // 버프 지속 시간
             await UniTask.Delay(TimeSpan.FromSeconds(info.durationTime), false, PlayerLoopTiming.Update, token.Token);
 
             // 버프 해제
@@ -67,16 +71,6 @@ public class BuffManager : MonoSingleton<BuffManager>
         }
     }
 
-    private void DurationUpdate(MonsterController target, BuffInfo info)
-    {
-        target.RemoveBuffToken(info.id);
-
-        CancellationTokenSource token = new CancellationTokenSource();
-        target.AddBuffToken(info.id, token);
-
-        ApplyBuffDurationTime(target, info, token).Forget();
-    }
-
     // 버프 추가
     private CancellationTokenSource AddBuff(MonsterController target, BuffInfo info, int level)
     {
@@ -85,8 +79,22 @@ public class BuffManager : MonoSingleton<BuffManager>
         target.AddBuffToken(info.id, token);
         target.buffDic[info.id] = level;
 
-        //switch(info.type)
-        //target.UpgradeAttack(GetAmountByLevel(info, level));
+        switch (info.type)
+        {
+            case BuffType.ATTACK_DMG:
+                target.UpgradeAttack(GetAmountByLevel(info, level));
+                break;
+            case BuffType.ATTACK_SPEED:
+                target.UpgradeAttackSpeed(GetAmountByLevel(info, level));
+                break;
+            case BuffType.MOVE_SPEED:
+                target.UpgradeMoveSpeed(GetAmountByLevel(info, level));
+                break;
+            case BuffType.POISON:
+                break;
+            case BuffType.BURN:
+                break;
+        }
 
         return token;
     }
@@ -99,8 +107,22 @@ public class BuffManager : MonoSingleton<BuffManager>
             target.RemoveBuffToken(info.id);
             target.buffDic.Remove(info.id);
 
-            //switch(info.type)
-            //target.UpgradeAttack(-GetAmountByLevel(info, level));
+            switch (info.type)
+            {
+                case BuffType.ATTACK_DMG:
+                    target.UpgradeAttack(-GetAmountByLevel(info, level));
+                    break;
+                case BuffType.ATTACK_SPEED:
+                    target.UpgradeAttackSpeed(-GetAmountByLevel(info, level));
+                    break;
+                case BuffType.MOVE_SPEED:
+                    target.UpgradeMoveSpeed(-GetAmountByLevel(info, level));
+                    break;
+                case BuffType.POISON:
+                    break;
+                case BuffType.BURN:
+                    break;
+            }
         }
     }
 
