@@ -30,7 +30,7 @@ public class BuffManager : MonoSingleton<BuffManager>
                 // 현재 적용되어 있는 버프가 지금 적용하려는 버프보다 레벨이 높은 경우 무시
                 return;
             }
-            else if(curBuffLevel == level)
+            else if (curBuffLevel == level)
             {
                 // 현재 적용되어 있는 버프가 지금 적용하려는 버프랑 레벨이 같을 경우 시간만 갱신(새로운 토큰으로 변경)
                 target.RemoveBuffToken(id, true);
@@ -79,20 +79,23 @@ public class BuffManager : MonoSingleton<BuffManager>
         target.AddBuffToken(info.id, token);
         target.buffDic[info.id] = level;
 
+        float amount = GetAmountByLevel(info, level);
+
         switch (info.type)
         {
             case BuffType.ATTACK_DMG:
-                target.UpgradeAttack(GetAmountByLevel(info, level));
+                target.UpgradeAttack(amount);
                 break;
             case BuffType.ATTACK_SPEED:
-                target.UpgradeAttackSpeed(GetAmountByLevel(info, level));
+                target.UpgradeAttackSpeed(amount);
                 break;
             case BuffType.MOVE_SPEED:
-                target.UpgradeMoveSpeed(GetAmountByLevel(info, level));
+                target.UpgradeMoveSpeed(amount);
                 break;
             case BuffType.POISON:
                 break;
             case BuffType.BURN:
+                _ = TakeTickDamaged(target, info, token, level);
                 break;
         }
 
@@ -123,6 +126,29 @@ public class BuffManager : MonoSingleton<BuffManager>
                 case BuffType.BURN:
                     break;
             }
+        }
+    }
+
+    private async UniTask TakeTickDamaged(BaseController target, BuffInfo info, CancellationTokenSource token, int level)
+    {
+        int tickCount = (int)MathF.Floor(info.durationTime / info.tick);
+        float tickDamage = GetAmountByLevel(info, level);
+
+        try
+        {
+            for (int i = 0; i < tickCount; i++)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(info.tick), false, PlayerLoopTiming.Update, token.Token);
+                if (target == null || !target.buffDic.ContainsKey(info.id))
+                {
+                    break;
+                }
+                target.TakeDamaged(tickDamage);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+
         }
     }
 
