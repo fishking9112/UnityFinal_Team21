@@ -21,9 +21,9 @@ public class HeroSlowSKill : QueenActiveSkillBase
         List<UniTask> tasks = new List<UniTask>();
         foreach (var hit in hits)
         {
-            if (MonsterManager.Instance.monsters[hit.gameObject])
+            if (HeroManager.Instance.hero.TryGetValue(hit.gameObject, out var hero))
             {
-                UniTask task = BuffManager.Instance.ApplyBuff(MonsterManager.Instance.monsters[hit.gameObject], info.buff_ID, info.buff_Level);
+                UniTask task = BuffManager.Instance.ApplyBuff(hero, info.buff_ID, info.buff_Level);
                 tasks.Add(task);
             }
         }
