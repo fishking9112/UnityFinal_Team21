@@ -12,7 +12,7 @@ public class BuffManager : MonoSingleton<BuffManager>
         buffDic = DataManager.Instance.buffDic;
     }
 
-    public async UniTask ApplyBuff(MonsterController target, int id, int level)
+    public async UniTask ApplyBuff(BaseController target, int id, int level)
     {
         if (target == null)
         {
@@ -53,7 +53,7 @@ public class BuffManager : MonoSingleton<BuffManager>
     }
 
     // 버프 지속 시간 적용
-    private async UniTask ApplyBuffDurationTime(MonsterController target, BuffInfo info, CancellationTokenSource token)
+    private async UniTask ApplyBuffDurationTime(BaseController target, BuffInfo info, CancellationTokenSource token)
     {
         try
         {
@@ -72,7 +72,7 @@ public class BuffManager : MonoSingleton<BuffManager>
     }
 
     // 버프 추가
-    private CancellationTokenSource AddBuff(MonsterController target, BuffInfo info, int level)
+    private CancellationTokenSource AddBuff(BaseController target, BuffInfo info, int level)
     {
         CancellationTokenSource token = new CancellationTokenSource();
 
@@ -100,7 +100,7 @@ public class BuffManager : MonoSingleton<BuffManager>
     }
 
     // 버프 제거
-    private void RemoveBuff(MonsterController target, BuffInfo info)
+    public void RemoveBuff(BaseController target, BuffInfo info)
     {
         if (target.buffDic.TryGetValue(info.id, out int level))
         {

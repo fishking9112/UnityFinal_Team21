@@ -103,6 +103,8 @@ public class MonsterTrackingState : MonsterBaseState
         spum.SetMoveSpeed(stateMachine.Controller.monsterInfo.moveSpeed);
         navMeshAgent.speed = stateMachine.Controller.monsterInfo.moveSpeed;
 
+        Utils.Log($"monstertracking : {navMeshAgent.speed}");
+
         // 타겟과의 거리
         targetDistance = (target.position - navMeshAgent.transform.position).magnitude;
 

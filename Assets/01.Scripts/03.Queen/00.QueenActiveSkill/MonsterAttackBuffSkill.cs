@@ -24,7 +24,7 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
         {
             if (MonsterManager.Instance.monsters[hit.gameObject])
             {
-                UniTask task = BuffManager.Instance.ApplyBuff(MonsterManager.Instance.monsters[hit.gameObject], 1001, info.buff_Level);
+                UniTask task = BuffManager.Instance.ApplyBuff(MonsterManager.Instance.monsters[hit.gameObject], info.buff_ID, info.buff_Level);
                 tasks.Add(task);
             }
         }

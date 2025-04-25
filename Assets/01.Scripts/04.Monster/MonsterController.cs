@@ -170,24 +170,26 @@ public class MonsterController : BaseController, IPoolable
     /// 업그레이드
     /// </summary>
     /// <param name="amount"></param>
-    public void UpgradeHealth(float amount)
+    public override void UpgradeHealth(float amount)
     {
         monsterInfo.health += amount;
         HealthStatUpdate();
     }
 
-    public void UpgradeAttack(float amount)
+    public override void UpgradeAttack(float amount)
     {
         monsterInfo.attack += amount;
     }
 
-    public void UpgradeAttackSpeed(float amount)
+    public override void UpgradeAttackSpeed(float amount)
     {
         monsterInfo.attackSpeed += amount;
     }
 
-    public void UpgradeMoveSpeed(float amount)
+    public override void UpgradeMoveSpeed(float amount)
     {
+        Utils.Log("이속 감소");
         monsterInfo.moveSpeed += amount;
+        Utils.Log($"{monsterInfo.moveSpeed}");
     }
 }

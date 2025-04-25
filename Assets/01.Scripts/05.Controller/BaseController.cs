@@ -4,7 +4,7 @@ using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 
-public class BaseController : MonoBehaviour
+public abstract class BaseController : MonoBehaviour
 {
     [Header("현재 데이터")]
     public BaseStatData statData;
@@ -100,5 +100,47 @@ public class BaseController : MonoBehaviour
                 buffDic.Remove(id);
             }
         }
+    }
+
+    /// <summary>
+    /// 업그레이드
+    /// </summary>
+    /// <param name="amount"></param>
+    public virtual void UpgradeHealth(float amount)
+    {
+
+    }
+    public virtual void UpgradeAttack(float amount)
+    {
+
+    }
+    public virtual void UpgradeAttackSpeed(float amount)
+    {
+
+    }
+    public virtual void UpgradeMoveSpeed(float amount)
+    {
+
+    }
+
+    // 모든 버프 제거
+    public void ClearAllBuff()
+    {
+        foreach (var pair in buffDic)
+        {
+            if (DataManager.Instance.buffDic.TryGetValue(pair.Key, out var buffInfo))
+            {
+                BuffManager.Instance.RemoveBuff(this, buffInfo);
+            }
+        }
+
+        foreach (var token in buffTokenDic)
+        {
+            token.Value?.Cancel();
+            token.Value?.Dispose();
+        }
+
+        buffDic.Clear();
+        buffTokenDic.Clear();
     }
 }
