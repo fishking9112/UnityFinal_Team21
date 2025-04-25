@@ -158,6 +158,8 @@ public class MonsterController : BaseController, IPoolable
     /// </summary>
     protected override void Die()
     {
+        base.Die();
+
         MonsterManager.Instance.monsters.Remove(gameObject);
         MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Remove(this);
 

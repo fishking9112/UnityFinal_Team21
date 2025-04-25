@@ -73,6 +73,7 @@ public abstract class BaseController : MonoBehaviour
     protected virtual void Die()
     {
         // Destroy(this.gameObject);
+        ClearAllBuff();
     }
 
     public void AddBuffToken(int id, CancellationTokenSource token)
