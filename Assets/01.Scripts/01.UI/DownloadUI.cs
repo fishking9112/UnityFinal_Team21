@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 /// 다운로드 바와 다운로드 용량을 나타내는 UI (BaseUI 아님)
 /// </summary>
-public class DownloadUI : MonoBehaviour //! BaseUI 아님
+public class DownloadUI : MonoBehaviour
 {
     [SerializeField] private Image progressImg;
     [SerializeField] private TextMeshProUGUI progressInfoText;

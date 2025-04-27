@@ -69,14 +69,14 @@ public class EvolutionTree : MonoBehaviour
     // 진화 버튼을 누르면 진화 확정
     public void OnClickEvolutionButton()
     {
-        if(selectedNode == null
+        if (selectedNode == null
             || selectedNode.isUnlock
             || selectedNode.nodeLock)
         {
             return;
         }
 
-        if(condition.EvolutionPoint.Value <= 0)
+        if (condition.EvolutionPoint.Value <= 0)
         {
             // 진화 포인트가 부족하다는 팝업창 있으면 좋을 것 같음
             return;
@@ -87,10 +87,10 @@ public class EvolutionTree : MonoBehaviour
 
         // 한쪽 노드를 진화시키면 다른 쪽 노드 잠금
         int parentNodeId = selectedNode.monsterInfo.preNode;
-        
-        foreach(EvolutionNode node in evolutionNodeList)
+
+        foreach (EvolutionNode node in evolutionNodeList)
         {
-            if(node.monsterInfo.preNode == parentNodeId && node != selectedNode)
+            if (node.monsterInfo.preNode == parentNodeId && node != selectedNode)
             {
                 node.nodeLock = true;
             }
@@ -104,7 +104,7 @@ public class EvolutionTree : MonoBehaviour
     // 모든 노드 업데이트
     private void UpdateAllNode()
     {
-        foreach(EvolutionNode node in evolutionNodeList)
+        foreach (EvolutionNode node in evolutionNodeList)
         {
             node.UpdateButtonState();
         }

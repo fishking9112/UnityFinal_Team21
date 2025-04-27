@@ -1,0 +1,64 @@
+using Cysharp.Threading.Tasks;
+using System;
+using UnityEngine;
+
+public class HUDLayer : MonoBehaviour
+{
+    [NonSerialized] private HUDUI currentHUD; // 인스턴스화된 HUD (HUDUI를 부모로 둔 자식 인스턴스)
+
+    public async UniTask LoadHUD(string sceneName)
+    {
+        // 활성화 되어 있던 HUD 반납
+        await UnloadCurrentHUD();
+
+        switch (sceneName)
+        {
+            case "LoginScene":
+                break;
+            case "MenuScene":
+                MenuHUD menuHUD = await LoadCurrentHUD("MenuHUD") as MenuHUD;
+                // menuHUD.Setup();
+
+                break;
+            case "GameScene":
+                GameHUD gameHUD = await LoadCurrentHUD("GameHUD") as GameHUD;
+                gameHUD.Setup(GameManager.Instance.cameraController);
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    public async UniTask<HUDUI> LoadCurrentHUD(string hudName)
+    {
+        var hudPrefab = await AddressableManager.Instance.LoadAssetAsync<HUDUI>($"{hudName}.prefab", ResourcePath.HUD);
+        if (hudPrefab != null)
+        {
+            currentHUD = Instantiate(hudPrefab, this.transform);
+            currentHUD.Initialize();
+        }
+        else
+        {
+            Utils.LogError($"HUD 로드 실패: {ResourcePath.HUD}/{hudName}.prefab");
+        }
+
+        return hudPrefab;
+    }
+
+    public async UniTask UnloadCurrentHUD()
+    {
+        if (currentHUD != null)
+        {
+            Destroy(currentHUD.gameObject);
+            currentHUD = null;
+        }
+
+        await UniTask.Yield();
+    }
+
+    public T GetHUD<T>() where T : HUDUI
+    {
+        return currentHUD as T;
+    }
+}

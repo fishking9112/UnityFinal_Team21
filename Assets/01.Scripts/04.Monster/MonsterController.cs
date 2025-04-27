@@ -67,11 +67,11 @@ public class MonsterController : BaseController, IPoolable
     /// <param name="monsterInfo">참조 할 수치 데이터</param>
     public void StatInit(MonsterInfo monsterInfo)
     {
-        if (!InGameUIManager.Instance.gameResult.resultDatas.ContainsKey(monsterInfo.id))
+        if (!StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas.ContainsKey(monsterInfo.id))
         {
-            InGameUIManager.Instance.gameResult.resultDatas[monsterInfo.id] = new GameResultUnitData { spawnCount = 0, allDamage = 0 };
+            StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[monsterInfo.id] = new GameResultUnitData { spawnCount = 0, allDamage = 0 };
         }
-        InGameUIManager.Instance.gameResult.resultDatas[monsterInfo.id].spawnCount++;
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[monsterInfo.id].spawnCount++;
 
         if (this.monsterInfo == null)
         {
