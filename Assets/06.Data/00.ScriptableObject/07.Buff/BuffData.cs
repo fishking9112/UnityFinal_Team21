@@ -21,6 +21,7 @@ public class BuffInfo : IInfo
     public string description;
     public string icon;
     public BuffType type;
+    public bool isStack;
     public float tick;
     public float durationTime;
     public int lv_1;
@@ -59,6 +60,9 @@ public class BuffData : SheetDataReaderBase
                     break;
                 case "type":
                     buffInfo.type = Utils.StringToEnum<BuffType>(cell.value, BuffType.NULL);
+                    break;
+                case "isStack":
+                    buffInfo.isStack = Utils.StringToBool(cell.value);
                     break;
                 case "tick":
                     buffInfo.tick = Utils.StringToInt(cell.value);
