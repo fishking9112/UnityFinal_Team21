@@ -17,7 +17,11 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
         hero = this.GetComponent<Hero>();
         layer = LayerMask.GetMask("Monster", "Castle");
     }
+    private void OnEnable()
+    {
+        Initialize(104);
 
+    }
     protected override void ActionAbility()
     {
         Collider2D[] rangedTarget = Physics2D.OverlapCircleAll(hero.transform.position, size.x, layer);

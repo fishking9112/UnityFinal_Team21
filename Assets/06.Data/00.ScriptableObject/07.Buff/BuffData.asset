@@ -15,7 +15,7 @@ MonoBehaviour:
   sheetURL: 1Of0EBz6S6NjUCNtNGPNnWgAcb5RdXT_xJnsCn-1LZ4w
   sheetName: Buff
   startRowIndex: 3
-  endRowIndex: 5
+  endRowIndex: 7
   infoList:
   - id: 1001
     name: "\uACF5\uACA9\uB825 \uC99D\uAC00"
@@ -23,28 +23,53 @@ MonoBehaviour:
       \uC785\uB2C8\uB2E4."
     icon: 
     type: 1
+    isStack: 0
     tick: 0
     durationTime: 10
-    lv_1: 5
-    lv_2: 10
-    lv_3: 20
+    lv_1: 0.3
+    lv_2: 0.5
+    lv_3: 0.7
   - id: 1002
     name: "\uC2AC\uB85C\uC6B0"
     description: "\uC774\uB3D9\uC18D\uB3C4\uAC00 \uAC10\uC18C \uD569\uB2C8\uB2E4."
     icon: 
     type: 3
+    isStack: 0
     tick: 0
     durationTime: 5
-    lv_1: -10
-    lv_2: -20
-    lv_3: -30
+    lv_1: -0.3
+    lv_2: -0.5
+    lv_3: -0.7
   - id: 1003
     name: "\uD654\uC0C1"
     description: "\uC9C0\uC18D\uC801\uC73C\uB85C \uB370\uBBF8\uC9C0"
     icon: 
     type: 5
-    tick: 0
+    isStack: 1
+    tick: 1
     durationTime: 3
-    lv_1: 10
-    lv_2: 20
-    lv_3: 40
+    lv_1: 5
+    lv_2: 10
+    lv_3: 15
+  - id: 1004
+    name: "\uB3C5"
+    description: "\uC9C0\uC18D\uC801\uC73C\uB85C \uB370\uBBF8\uC9C0"
+    icon: 
+    type: 4
+    isStack: 1
+    tick: 0
+    durationTime: 5
+    lv_1: 1
+    lv_2: 2
+    lv_3: 3
+  - id: 1005
+    name: "\uD5E4\uC774\uC2A4\uD2B8"
+    description: "\uC774\uB3D9\uC18D\uB3C4 \uC99D\uAC00"
+    icon: 
+    type: 3
+    isStack: 0
+    tick: 0
+    durationTime: 5
+    lv_1: 0.3
+    lv_2: 0.5
+    lv_3: 0.7

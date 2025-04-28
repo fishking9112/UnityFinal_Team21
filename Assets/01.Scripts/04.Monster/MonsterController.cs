@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -190,8 +189,6 @@ public class MonsterController : BaseController, IPoolable
 
     public override void UpgradeMoveSpeed(float amount)
     {
-        Utils.Log("이속 감소");
-        monsterInfo.moveSpeed += amount;
-        Utils.Log($"{monsterInfo.moveSpeed}");
+        monsterInfo.moveSpeed *= (1 + amount);
     }
 }

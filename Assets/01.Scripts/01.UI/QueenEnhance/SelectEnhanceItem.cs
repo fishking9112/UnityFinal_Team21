@@ -57,11 +57,15 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         enhanceTypeText.text = info.type.ToString();
 
-        int previewValue = currentLevel == 0
+        float previewValue = currentLevel == 0
             ? info.state_Base
             : info.state_Base + (info.state_LevelUp * currentLevel);
 
-        enhanceDecText.text = info.description.Replace("n", previewValue.ToString());
+
+        string formattedValue = QueenEnhanceStatusUI.PercentValueTypes.Contains(info.valueType) ? $"{previewValue * 100:F0}%" : $"{previewValue}";
+
+        enhanceDecText.text = info.description.Replace("n", formattedValue.ToString());
+
     }
 
     /// <summary>

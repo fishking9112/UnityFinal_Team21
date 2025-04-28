@@ -10,6 +10,14 @@ public enum QueenEnhanceType
     QueenPassive,
     MonsterPassive
 }
+public enum ValueType
+{
+    NULL,
+    Queen,
+    Hp,
+    Attack,
+    MoveSpeed
+}
 
 [Serializable]
 public class QueenEnhanceInfo : IInfo
@@ -19,10 +27,11 @@ public class QueenEnhanceInfo : IInfo
     public string description;
     public int icon;
     public int maxLevel;
-    public int state_Base;
+    public float state_Base;
     public int state_LevelUp;
     public QueenEnhanceType type;
     public MonsterBrood brood;
+    public ValueType valueType;
 
     public int ID => id;
 }
@@ -58,7 +67,7 @@ public class QueenEnhanceData : SheetDataReaderBase
                     queenEnhanceInfo.maxLevel = Utils.StringToInt(cell.value);
                     break;
                 case "state_Base":
-                    queenEnhanceInfo.state_Base = Utils.StringToInt(cell.value);
+                    queenEnhanceInfo.state_Base = Utils.StringToFloat(cell.value);
                     break;
                 case "state_LevelUp":
                     queenEnhanceInfo.state_LevelUp = Utils.StringToInt(cell.value);
@@ -68,6 +77,9 @@ public class QueenEnhanceData : SheetDataReaderBase
                     break;
                 case "brood":
                     queenEnhanceInfo.brood = Utils.StringToEnum<MonsterBrood>(cell.value, MonsterBrood.NULL);
+                    break;
+                case "valueType":
+                    queenEnhanceInfo.valueType = Utils.StringToEnum<ValueType>(cell.value, ValueType.NULL);
                     break;
             }
         }
