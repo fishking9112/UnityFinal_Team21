@@ -44,8 +44,10 @@ public class HealthHandler : MonoBehaviour
 
     public void Heal(float heal)
     {
+        Utils.Log($"회복 전 HP : {currentPoint.Value}");
         currentPoint.Value += heal;
         if (currentPoint.Value >= maxPoint) currentPoint.Value = maxPoint;
+        Utils.Log($"회복 후 HP : {currentPoint.Value}");
     }
 
     public void RefrashUI()
