@@ -57,7 +57,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         enhanceTypeText.text = info.type.ToString();
 
-        int previewValue = currentLevel == 0
+        float previewValue = currentLevel == 0
             ? info.state_Base
             : info.state_Base + (info.state_LevelUp * currentLevel);
 

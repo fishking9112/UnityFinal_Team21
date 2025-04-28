@@ -58,7 +58,7 @@ public class QueenEnhanceUI : SingleUI
 
         Utils.Log($"{info.name} 강화 적용, 현재 레벨: {level}");
 
-        int value = info.state_Base + info.state_LevelUp * (level - 1);
+        float value = info.state_Base + info.state_LevelUp * (level - 1);
 
         switch (info.type)
         {
@@ -79,7 +79,7 @@ public class QueenEnhanceUI : SingleUI
     /// <summary>
     /// 여왕 강화 패시브 적용
     /// </summary>
-    private void ApplyQueenPassive(int id, int value)
+    private void ApplyQueenPassive(int id, float value)
     {
         var condition = GameManager.Instance.queen.condition;
 
@@ -98,7 +98,7 @@ public class QueenEnhanceUI : SingleUI
     /// <summary>
     /// 몬스터 강화 패시브 적용
     /// </summary>
-    private void ApplyMonsterPassive(MonsterBrood brood, string name, int value)
+    private void ApplyMonsterPassive(MonsterBrood brood, string name, float value)
     {
         foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
         {
@@ -162,7 +162,7 @@ public class QueenEnhanceUI : SingleUI
     /// <summary>
     /// 특정 강화 ID의 현재 강화 수치 총합을 계산
     /// </summary>
-    public int GetEnhanceValueByID(int id)
+    public float GetEnhanceValueByID(int id)
     {
         if (!acquiredEnhanceLevels.TryGetValue(id, out int level) || level <= 0)
             return 0;
@@ -170,7 +170,7 @@ public class QueenEnhanceUI : SingleUI
         if (!DataManager.Instance.queenEnhanceDic.TryGetValue(id, out var info))
             return 0;
 
-        int total = 0;
+        float total = 0;
         for (int i = 1; i <= level; i++)
         {
             total += info.state_Base + info.state_LevelUp * (i - 1);

@@ -129,7 +129,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
                 int level = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
                 if (level <= 0) continue;
 
-                int value = 0;
+                float value = 0;
                 for (int i = 1; i <= level; i++)
                 {
                     value += info.state_Base + info.state_LevelUp * (i - 1);
