@@ -3,16 +3,8 @@ using UnityEngine;
 
 public class MiniMapClick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    public CameraController cameraController;
+    public CameraController cameraController => GameManager.Instance.cameraController;
     private bool isDragging = false;
-
-    private void Start()
-    {
-        if(cameraController == null)
-        {
-            cameraController = GameObject.Find("QueenCamera").GetComponent<CameraController>();
-        }
-    }
 
     public void OnPointerDown(PointerEventData eventData)
     {

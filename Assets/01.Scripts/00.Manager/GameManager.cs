@@ -9,13 +9,20 @@ public enum CursorState
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    public int Gold { get; private set; }
+    public ReactiveProperty<int> Gold { get; private set; } = new();
 
     public Queen queen;
     public Castle castle;
     private CursorState curCursorState;
-    private MainUI mainUI;
-    private PauseController pauseController;
+    public CameraController cameraController;
+
+    // 곧 지워 질 것(?)
+    public float gameLimitTime = 1800f;
+    private bool isTimeOver = true;
+    public ReactiveProperty<float> curTime = new ReactiveProperty<float>();
+
+
+    // private PauseController pauseController;
 
 
     protected override void Awake()
@@ -42,8 +49,23 @@ public class GameManager : MonoSingleton<GameManager>
         {
             UGSManager.Instance.SaveLoad.SaveAsync().Forget();
         }
+
+        OnTimer(); // TODO : 임시로 달아둠 나중에 반드시 옮기기
     }
 
+    private void OnTimer() // TODO : 임시로 달아둠 나중에 반드시 옮기기
+    {
+        if (isTimeOver) return;
+
+        curTime.Value -= Time.deltaTime;
+
+        if (curTime.Value <= 0f)
+        {
+            curTime.Value = 0f;
+            isTimeOver = true;
+            GameClear();
+        }
+    }
     private void ApplyCursorState()
     {
         switch (curCursorState)
@@ -76,58 +98,47 @@ public class GameManager : MonoSingleton<GameManager>
         // }
     }
 
+    // 씬로드에서 불러내기?
+    public void GameStart()  // TODO : 임시로 달아둠 나중에 반드시 옮기기(?) 이건 미정
+    {
+        curTime.Value = gameLimitTime;
+        isTimeOver = false;
+    }
+
     public void GameClear()
     {
-        GameObject.Find("GameResultCanvas").transform.Find("ResultWindow").gameObject.SetActive(true);
-        Time.timeScale = 0f;
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
+        // Time.timeScale = 0f;
     }
 
     public void GameOver()
     {
-        InGameUIManager.Instance.ShowWindow<GameResultController>();
-        // GameObject.Find("GameResultCanvas").transform.Find("ResultWindow").gameObject.SetActive(true);
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
-    }
-
-
-    public void AddGold(int amount)
-    {
-        Gold += amount;
-        RefreshGoldText();
     }
 
     public bool TrySpendGold(int amount)
     {
-        if (Gold >= amount)
+        if (Gold.Value >= amount)
         {
-            Gold -= amount;
-            RefreshGoldText();
+            Gold.Value -= amount;
             return true;
         }
         return false;
     }
 
+    public void AddGold(int amount)
+    {
+        Gold.Value += amount;
+    }
+
     public void SetGold(int amount)
     {
-        Gold = Mathf.Max(0, amount);
-        RefreshGoldText();
+        Gold.Value = Mathf.Max(0, amount);
     }
 
     public int GetGold()
     {
-        return Gold;
-    }
-
-    private void RefreshGoldText()
-    {
-        if (mainUI != null)
-        {
-            mainUI.RefreshGoldText();
-        }
-    }
-
-    public void SetMainUI(MainUI mainUI)
-    {
-        this.mainUI = mainUI;
+        return Gold.Value;
     }
 }

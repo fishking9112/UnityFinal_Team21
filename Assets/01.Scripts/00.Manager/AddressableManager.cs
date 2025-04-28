@@ -1,13 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.UI;
-
 
 public class ResourcePath
 {
@@ -18,133 +14,214 @@ public class ResourcePath
     public const string Thumbnail = "Thumbnail";
     public const string Scene = "Scene";
     public const string UI = "UI";
+    public const string HUD = "HUD";
+    public const string SINGLE = "Single";
 }
 
 /// <summary>
-/// Addressable 에셋들 관리
+/// Addressable 에셋 관리
 /// </summary>
 public class AddressableManager : MonoSingleton<AddressableManager>
 {
-    [SerializeField] private DownloadUI downloadUI; // 다운 받을게 있는 경우 활성화
-    [HideInInspector] public bool isInitDownload = false; // InitDownload 로드 시 true
-    private float allDownloadSize = 0; // 총 다운로드 받을 크기
+    private DownloadUI downloadUI => StaticUIManager.Instance.downloadUI;
+    [HideInInspector] public bool isInitDownload = false;
+    private float allDownloadSize = 0;
 
     protected override void Awake()
     {
         base.Awake();
-        DownloadAssets("InitDownload").Forget();
+    }
+
+    public async UniTask InitDownloadAsync()
+    {
+        await DownloadAssets("InitDownload");
     }
 
     /// <summary>
-    /// 에셋 로드
+    /// 에셋 동기 로드
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="key">실제 파일 이름(ex, myPrefab.prefab)</param>
-    /// <param name="type">addressable 설정 경로(ex, ResourcePath.UI)</param>
-    /// <returns></returns>
     public T LoadAsset<T>(string key, string type) where T : UnityEngine.Object
     {
         var path = $"{type}/{key}";
+        AsyncOperationHandle<T> handle = default;
+
         try
         {
             if (typeof(T).IsSubclassOf(typeof(MonoBehaviour)))
             {
-                var obj = Addressables.LoadAssetAsync<GameObject>(path).WaitForCompletion();
-                return obj.GetComponent<T>();
+                var goHandle = Addressables.LoadAssetAsync<GameObject>(path);
+                var gameObject = goHandle.WaitForCompletion();
+                return gameObject.GetComponent<T>();
             }
             else
-                return Addressables.LoadAssetAsync<T>(path).WaitForCompletion();
+            {
+                handle = Addressables.LoadAssetAsync<T>(path);
+                var result = handle.WaitForCompletion();
+                return result;
+            }
         }
         catch (Exception e)
         {
-            Utils.Log($"로드 중 오류 발생: {e.Message}");
+            Utils.Log($"로드 중 오류 발생: {path}, {e.Message}");
+            return default;
         }
-        return default;
-    }
-
-    // T는 에셋 타입 (예: GameObject, Sprite 등)
-    public List<T> LoadDataAssets<T>(string label)
-    {
-        try
+        finally
         {
-            var loadList = new List<T>(Addressables.LoadAssetsAsync<T>(label, null).WaitForCompletion());
-            return loadList;
+            if (handle.IsValid())
+                Addressables.Release(handle);
         }
-        catch (Exception e)
-        {
-            Utils.Log($"로드 중 오류 발생: {e.Message}");
-        }
-        return default;
     }
 
     /// <summary>
-    /// Addressable 에셋을 미리 다운로드 받아야 LoadAssetAsync 시 다운받는 딜레이 없이 사용 가능
-    /// 다운받을 에셋 용량 확인
+    /// 라벨로 에셋 리스트 동기 로드
     /// </summary>
-    /// <param name="label">다운받을 에셋의 라벨</param>
-    /// <returns></returns>
-    private async UniTask DownloadAssets(string label)
+    public List<T> LoadDataAssets<T>(string label)
     {
+        AsyncOperationHandle<IList<T>> handle = default;
         try
         {
-            // label에 대해 다운받을 에셋 번들이 있는 지 용량 확인을 위함 
-            var sizeHandle = Addressables.GetDownloadSizeAsync(label);
+            handle = Addressables.LoadAssetsAsync<T>(label, null);
+            var result = handle.WaitForCompletion();
+            return new List<T>(result);
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"로드 중 오류 발생: {label}, {e.Message}");
+            return default;
+        }
+        finally
+        {
+            if (handle.IsValid())
+                Addressables.Release(handle);
+        }
+    }
+    /// <summary>
+    /// 에셋 비동기 로드
+    /// </summary>
+    public async UniTask<T> LoadAssetAsync<T>(string key, string type) where T : UnityEngine.Object
+    {
+        var path = $"{type}/{key}";
+        AsyncOperationHandle<T> handle = default;
 
-            // 다운로드 받을 Addressable 에셋들 확인
+        try
+        {
+            if (typeof(T).IsSubclassOf(typeof(MonoBehaviour)))
+            {
+                var goHandle = Addressables.LoadAssetAsync<GameObject>(path);
+                var gameObject = await goHandle.ToUniTask();
+                return gameObject.GetComponent<T>();
+            }
+            else
+            {
+                handle = Addressables.LoadAssetAsync<T>(path);
+                var result = await handle.ToUniTask();
+                return result;
+            }
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"로드 중 오류 발생: {path}, {e.Message}");
+            return null;
+        }
+        finally
+        {
+            if (handle.IsValid())
+                Addressables.Release(handle);
+        }
+    }
+
+    /// <summary>
+    /// 라벨로 에셋 리스트 비동기 로드
+    /// </summary>
+    public async UniTask<List<T>> LoadDataAssetsAsync<T>(string label)
+    {
+        AsyncOperationHandle<IList<T>> handle = default;
+        try
+        {
+            handle = Addressables.LoadAssetsAsync<T>(label, null);
+            var result = await handle.ToUniTask();
+            return new List<T>(result);
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"로드 중 오류 발생: {label}, {e.Message}");
+            return null;
+        }
+        finally
+        {
+            if (handle.IsValid())
+                Addressables.Release(handle);
+        }
+    }
+
+    /// <summary>
+    /// 에셋 다운로드
+    /// </summary>
+    private async UniTask DownloadAssets(string label)
+    {
+        if (downloadUI == null)
+        {
+            Utils.LogError("DownloadUI is not assigned!");
+            return;
+        }
+
+        try
+        {
+            var sizeHandle = Addressables.GetDownloadSizeAsync(label);
             await sizeHandle.ToUniTask();
 
-            // 다운 받을 수 있을 경우
             if (sizeHandle.Status == AsyncOperationStatus.Succeeded)
             {
-                downloadUI?.gameObject.SetActive(true);
-                // 다운 받아야 할 에셋에 대한 크기가 0 이상인 경우
+                downloadUI.gameObject.SetActive(true);
                 if (sizeHandle.Result > 0)
                 {
-                    allDownloadSize = sizeHandle.Result / (1024f * 1024f); // MB로 변환
+                    allDownloadSize = sizeHandle.Result / (1024f * 1024f); // MB
                     await ProgressForDownloadAssets(label);
                 }
-                else // 이미 다 다운 받은 경우
+                else
                 {
-                    Utils.Log("이미 모든 애셋이 다운로드됨!");
+                    Utils.Log("이미 모든 에셋이 다운로드됨!");
                 }
                 isInitDownload = true;
-                downloadUI?.gameObject.SetActive(false);
             }
         }
         catch (Exception e)
         {
             Utils.Log($"다운로드 크기 확인 중 오류 발생: {e.Message}");
         }
+        finally
+        {
+            downloadUI.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
-    /// Addressable 에셋을 미리 다운로드 받아야 LoadAssetAsync 시 다운받는 딜레이 없이 사용 가능
-    /// 에셋 실 다운로드
+    /// 에셋 실제 다운로드 및 진행률 업데이트
     /// </summary>
-    /// <param name="label">다운받을 에셋의 라벨</param>
-    /// <returns></returns>
     private async UniTask ProgressForDownloadAssets(string label)
     {
-        // label에 대해 에셋 번들 다운로드
         var downloadHandle = Addressables.DownloadDependenciesAsync(label);
+        float lastProgress = -1f;
+
         try
         {
-            // 다운로드가 끝날 때 까지 대기
             while (!downloadHandle.IsDone)
             {
-                // 다운로드 진행률:progress로 표시
-                downloadUI?.SetProgress(downloadHandle.PercentComplete, allDownloadSize);
+                float progress = downloadHandle.PercentComplete;
+                if (Mathf.Abs(progress - lastProgress) > 0.01f) // 1% 이상 변경 시 UI 업데이트
+                {
+                    downloadUI.SetProgress(progress, allDownloadSize);
+                    lastProgress = progress;
+                }
                 await UniTask.Yield();
             }
 
             if (downloadHandle.Status == AsyncOperationStatus.Succeeded)
             {
-                // 다운로드 완료 시
                 Utils.Log("다운로드 완료!");
             }
             else
             {
-                // 다운로드 실패 시
                 Utils.Log("다운로드 실패!");
             }
         }
@@ -154,8 +231,66 @@ public class AddressableManager : MonoSingleton<AddressableManager>
         }
         finally
         {
-            Addressables.Release(downloadHandle); // 리소스에 대한 참조를 메모리가 해제하기
+            Addressables.Release(downloadHandle);
         }
     }
 
+    /// <summary>
+    /// 비동기적으로 개별 에셋 언로드
+    /// </summary>
+    public async UniTask UnloadAssetAsync<T>(T asset) where T : UnityEngine.Object
+    {
+        if (asset == null) return;
+
+        try
+        {
+            // 비동기적으로 에셋 언로드
+            await UniTask.RunOnThreadPool(() => Addressables.Release(asset));
+            Utils.Log($"에셋 언로드 완료: {asset.name}");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"에셋 언로드 중 오류 발생: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 비동기적으로 여러 에셋 언로드
+    /// </summary>
+    public async UniTask UnloadAssetsAsync<T>(List<T> assets) where T : UnityEngine.Object
+    {
+        foreach (var asset in assets)
+        {
+            await UnloadAssetAsync(asset);
+        }
+    }
+
+    /// <summary>
+    /// 라벨로 비동기적으로 에셋 리스트 언로드
+    /// </summary>
+    public async UniTask UnloadAssetsByLabelAsync(string label)
+    {
+        try
+        {
+            var handle = Addressables.LoadAssetsAsync<UnityEngine.Object>(label, null);
+            var assets = await handle.ToUniTask();
+
+            foreach (var asset in assets)
+            {
+                await UnloadAssetAsync(asset); // 비동기적으로 언로드
+            }
+
+            Utils.Log($"라벨로 에셋 언로드 완료: {label}");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"라벨로 에셋 언로드 중 오류 발생: {e.Message}");
+        }
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        // 추가 정리 작업이 필요하면 여기에 구현
+    }
 }

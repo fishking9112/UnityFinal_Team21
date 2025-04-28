@@ -30,7 +30,7 @@ public class UGSManager : MonoSingleton<UGSManager>
         }
 
     }
-    private async void Start()
+    public async UniTask InitAsync()
     {
         await InitializeUGS();
         await StartGameFlowAsync();
@@ -55,7 +55,6 @@ public class UGSManager : MonoSingleton<UGSManager>
         }
 
         await LoadPlayerDataAsync();
-        SceneLoadManager.Instance.LoadScene("MenuScene");
     }
 
     /// <summary>

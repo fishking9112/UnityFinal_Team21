@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class QueenActiveSkillManager : MonoBehaviour
@@ -11,8 +13,11 @@ public class QueenActiveSkillManager : MonoBehaviour
         Init();
 
         // 테스트 코드
-        GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(0, queenActiveSkillDic[12]);
-        GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(1, queenActiveSkillDic[14]);
+        Utils.DelayedTimeAction(() =>
+        {
+            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(0, queenActiveSkillDic[12]);
+            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(1, queenActiveSkillDic[14]);
+        }, 3);
     }
 
     private void Init()

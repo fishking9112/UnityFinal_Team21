@@ -60,7 +60,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
 
         // 마나 회복량 = 기본 회복량 + 강화 효과
         float manaRegenBase = queenCondition.QueenActiveSkillGaugeRecoverySpeed;
-        float manaRegenEnhance = InGameUIManager.Instance.queenEnhance.GetEnhanceValueByID(1002);
+        float manaRegenEnhance = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceValueByID(1002);
         builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / sec");
     }
 
@@ -70,7 +70,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     private void AppendSummonGaugeStatus(StringBuilder builder)
     {
         float maxSummonBase = queenCondition.MaxSummonGauge.Value;
-        float maxSummonEnhance = InGameUIManager.Instance.queenEnhance.GetEnhanceValueByID(1003);
+        float maxSummonEnhance = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceValueByID(1003);
         float maxSummonGauge = maxSummonBase + maxSummonEnhance;
         builder.AppendLine($"소환 게이지 : {FormatNumber(maxSummonBase)} + {FormatNumber(maxSummonEnhance)} / {FormatNumber(maxSummonGauge)}");
     }
@@ -81,7 +81,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     private void AppendSummonRegenStatus(StringBuilder builder)
     {
         float summonRegenBase = queenCondition.SummonGaugeRecoverySpeed;
-        float summonRegenEnhance = InGameUIManager.Instance.queenEnhance.GetEnhanceValueByID(-1);
+        float summonRegenEnhance = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceValueByID(-1);
         builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / sec");
     }
 
@@ -100,7 +100,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendBroodEnhanceStatus(StringBuilder builder)
     {
-        var acquiredEnhances = InGameUIManager.Instance.queenEnhance.AcquiredEnhanceLevels;
+        var acquiredEnhances = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.AcquiredEnhanceLevels;
         var orderedBroods = new List<string>();
 
         // 종족별 강화 항목을 추출
@@ -126,7 +126,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
             {
                 if (info.brood.ToString() != brood || info.type != QueenEnhanceType.MonsterPassive) continue;
 
-                int level = InGameUIManager.Instance.queenEnhance.GetEnhanceLevel(info.ID);
+                int level = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
                 if (level <= 0) continue;
 
                 int value = 0;

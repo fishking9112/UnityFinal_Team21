@@ -127,7 +127,7 @@ public class QueenCondition : MonoBehaviour
     private void LevelUp()
     {
         Level.Value++;
-        InGameUIManager.Instance.ShowWindow<QueenEnhanceController>();
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<QueenEnhanceUI>();
     }
 
     /// <summary>

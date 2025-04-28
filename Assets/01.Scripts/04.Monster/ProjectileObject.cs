@@ -96,7 +96,7 @@ public class ProjectileObject : MonoBehaviour, IPoolable
             {
                 HeroManager.Instance.hero[collision.gameObject].TakeDamaged(baseController.statData.attack);
                 var id = MonsterManager.Instance.monsters[baseController.gameObject].monsterInfo.id;
-                InGameUIManager.Instance.gameResult.resultDatas[id].allDamage += baseController.statData.attack;
+                StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[id].allDamage += baseController.statData.attack;
             }
             // BaseController target = MonsterManager.Instance.testTarget.GetComponent<BaseController>();
             // if (target != null)

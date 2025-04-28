@@ -143,9 +143,9 @@ public class Utils
 
         List<int> result = new List<int>();
 
-        foreach(string str in value.Split(","))
+        foreach (string str in value.Split(","))
         {
-            if(int.TryParse(str,out int num))
+            if (int.TryParse(str, out int num))
             {
                 result.Add(num);
             }

@@ -11,13 +11,12 @@ public enum QueenSlot
 
 public class QueenController : MonoBehaviour
 {
-    [Header("UI")]
-    public MonsterSlot monsterSlot;
-    public QueenActiveSkillSlot queenActiveSkillSlot;
+    public MonsterSlot monsterSlot => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().monsterSlot;
+    public QueenActiveSkillSlot queenActiveSkillSlot => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenActiveSkillSlot;
 
     [Header("스킬 범위")]
     public GameObject rangeObject;
-    
+
     [Header("내부 값")]
     public Vector3 worldMousePos;
     public GameObject cursorIcon;
@@ -32,6 +31,8 @@ public class QueenController : MonoBehaviour
     private bool isDrag;
     private float summonDistance;
     private Vector3 lastSummonPosition;
+
+    private GameHUD gameHUD => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>();
 
     private void Start()
     {
@@ -78,7 +79,7 @@ public class QueenController : MonoBehaviour
     // 번호 키를 누르면 해당 슬롯의 인덱스를 토대로 슬롯 선택
     public void OnPressSlotNumber(InputAction.CallbackContext context)
     {
-        if (InGameUIManager.Instance.isPaused)
+        if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused)
             return;
 
         if (context.phase != InputActionPhase.Started)
@@ -229,7 +230,7 @@ public class QueenController : MonoBehaviour
         {
             return;
         }
-        if(selectedQueenActiveSkill.info.range != -1f)
+        if (selectedQueenActiveSkill.info.range != -1f)
         {
             if (Vector3.Distance(worldMousePos, GameManager.Instance.castle.transform.position) > selectedQueenActiveSkill.info.range)
             {
@@ -249,5 +250,17 @@ public class QueenController : MonoBehaviour
     {
         condition.AdjustCurQueenActiveSkillGauge(condition.QueenActiveSkillGaugeRecoverySpeed * Time.deltaTime);
         condition.AdjustCurSummonGauge(condition.SummonGaugeRecoverySpeed * Time.deltaTime);
+    }
+
+    public void OnEvolutionWindow(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            // 참조값을 비교해서 성능상 빠름
+            if (!ReferenceEquals(gameHUD.openWindow, gameHUD.evolutionTreeUI.gameObject))
+                gameHUD.ShowWindow<EvolutionTreeUI>();
+            else
+                gameHUD.HideWindow();
+        }
     }
 }
