@@ -8,6 +8,11 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     [SerializeField] private QueenCondition queenCondition;
     [SerializeField] private TextMeshProUGUI statusText;
 
+    // 앞으로 추가될 퍼센트 타입들도 여기 넣으면 됨
+    public static readonly HashSet<ValueType> PercentValueTypes = new HashSet<ValueType>
+    {
+        ValueType.MoveSpeed,
+    };
 
     /// <summary>
     /// 퀸의 상태 정보를 설정합니다.
@@ -129,13 +134,15 @@ public class QueenEnhanceStatusUI : MonoBehaviour
                 int level = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
                 if (level <= 0) continue;
 
-                int value = 0;
+                float value = 0;
                 for (int i = 1; i <= level; i++)
                 {
                     value += info.state_Base + info.state_LevelUp * (i - 1);
                 }
 
-                builder.AppendLine($"- {info.name} : Lv.{level} (+{value})");
+                string formattedValue = PercentValueTypes.Contains(info.valueType) ? $"+{value * 100:F0}%" : $"+{value}";
+
+                builder.AppendLine($"- {info.name} : Lv.{level} ({formattedValue})");
             }
 
             builder.AppendLine();

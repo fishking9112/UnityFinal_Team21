@@ -45,6 +45,9 @@ public class GameHUD : HUDUI
     public bool isPaused = false;
     [NonSerialized] public GameObject openWindow = null;
 
+    [Header("레벨업 테스트 버튼")]
+    public Button LevelUPTestButton;
+
     public override void Initialize()
     {
         condition.Level.AddAction(UpdateLevelText);
@@ -63,6 +66,10 @@ public class GameHUD : HUDUI
         pauseButton.onClick.AddListener(() => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<PauseUI>());
 
         GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
+
+
+        // 레벨업 테스트 버튼
+        LevelUPTestButton.onClick.AddListener(() => GameManager.Instance.queen.condition.AdjustCurExpGauge(100));
     }
 
 
