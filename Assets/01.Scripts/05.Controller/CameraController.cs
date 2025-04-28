@@ -36,6 +36,11 @@ public class CameraController : MonoBehaviour
 
     private Vector2 keyboardMoveDir;
 
+    private void Awake()
+    {
+        GameManager.Instance.cameraController = this;
+    }
+
     private void Start()
     {
         castleTransform = GameManager.Instance.castle.transform;

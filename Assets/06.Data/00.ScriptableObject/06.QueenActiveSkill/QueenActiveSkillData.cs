@@ -25,6 +25,8 @@ public class QueenActiveSkillInfo : IInfo
     public float size;
     public LayerMask target;
     public int required_Level;
+    public int buff_ID;
+    public int buff_Level;
 
     public int ID => id;
 }
@@ -76,6 +78,12 @@ public class QueenActiveSkillData : SheetDataReaderBase
                     break;
                 case "required_Level":
                     queenActiveSkillInfo.required_Level = Utils.StringToInt(cell.value);
+                    break;
+                case "buff_ID":
+                    queenActiveSkillInfo.buff_ID = Utils.StringToInt(cell.value);
+                    break;
+                case "buff_Level":
+                    queenActiveSkillInfo.buff_Level = Utils.StringToInt(cell.value);
                     break;
             }
         }

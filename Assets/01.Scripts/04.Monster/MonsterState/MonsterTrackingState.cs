@@ -100,8 +100,10 @@ public class MonsterTrackingState : MonsterBaseState
         // 움직임-----
         spum.PlayAnimation(PlayerState.MOVE, 0);
         // 속도 0.1f 곱해서 너프시킴
-        spum.SetMoveSpeed(stateMachine.Controller.monsterInfo.moveSpeed);
+        float animationSpeed = Mathf.Clamp(stateMachine.Controller.monsterInfo.moveSpeed, 0.1f, float.MaxValue);
+        spum.SetMoveSpeed(animationSpeed);
         navMeshAgent.speed = stateMachine.Controller.monsterInfo.moveSpeed;
+
 
         // 타겟과의 거리
         targetDistance = (target.position - navMeshAgent.transform.position).magnitude;
@@ -115,7 +117,7 @@ public class MonsterTrackingState : MonsterBaseState
                 navMeshAgent.SetDestination(target.position); // 이동 업데이트
 
                 // 방향 바꾸기 0.04f 이상의 속도가 나올 때 움직여야 버버벅임 없음
-                if (navMeshAgent.velocity.magnitude >= stateMachine.Controller.monsterInfo.moveSpeed * 0.04f)
+                if (navMeshAgent.velocity.magnitude >= stateMachine.Controller.monsterInfo.moveSpeed * 0.04f && navMeshAgent.speed != 0)
                     pivot.localScale = new Vector3(0 <= navMeshAgent.velocity.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
             }
             else
@@ -128,7 +130,7 @@ public class MonsterTrackingState : MonsterBaseState
             navMeshAgent.SetDestination(target.position); // 이동 업데이트
 
             // 방향 바꾸기 0.04f 이상의 속도가 나올 때 움직여야 버버벅임 없음
-            if (navMeshAgent.velocity.magnitude >= stateMachine.Controller.monsterInfo.moveSpeed * 0.04f)
+            if (navMeshAgent.velocity.magnitude >= stateMachine.Controller.monsterInfo.moveSpeed * 0.04f && navMeshAgent.speed != 0)
                 pivot.localScale = new Vector3(0 <= navMeshAgent.velocity.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
         }
     }

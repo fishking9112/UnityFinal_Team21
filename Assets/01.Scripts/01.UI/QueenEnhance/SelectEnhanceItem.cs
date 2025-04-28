@@ -40,7 +40,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         currentInfo = info;
 
-        int currentLevel = InGameUIManager.Instance.queenEnhance.GetEnhanceLevel(info.ID);
+        int currentLevel = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
         int nextLevel = currentLevel + 1;
 
         iconImage.sprite = null;
@@ -114,8 +114,8 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 // 연출을 위해 0.1초 정도 텀을 주고 종료
                 DOVirtual.DelayedCall(0.1f, () =>
                 {
-                    InGameUIManager.Instance.queenEnhance.ApplyInhance(currentInfo);
-                    InGameUIManager.Instance.queenEnhance.queenEnhanceUI.CloseUI();
+                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.ApplyInhance(currentInfo);
+                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.CloseUI();
 
                 });
             });

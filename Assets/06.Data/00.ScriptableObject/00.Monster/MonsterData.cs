@@ -47,7 +47,18 @@ public class MonsterInfo : BaseStatData, IInfo
         monsterBrood = other.monsterBrood;
         projectile = other.projectile;
     }
-
+    public void Copy(MonsterInfo other)
+    {
+        id = other.id;
+        name = other.name;
+        description = other.description;
+        cost = other.cost;
+        reward = other.reward;
+        outfit = other.outfit;
+        monsterAttackType = other.monsterAttackType;
+        monsterBrood = other.monsterBrood;
+        projectile = other.projectile;
+    }
     public int ID => id;
 }
 
@@ -81,9 +92,6 @@ public class MonsterData : SheetDataReaderBase
                     break;
                 case "health":
                     monsterInfo.health = Utils.StringToFloat(cell.value);
-                    break;
-                case "defence":
-                    monsterInfo.defence = Utils.StringToFloat(cell.value);
                     break;
                 case "cost":
                     monsterInfo.cost = Utils.StringToFloat(cell.value);

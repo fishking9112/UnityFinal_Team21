@@ -67,14 +67,21 @@ public class MonsterController : BaseController, IPoolable
     /// <param name="monsterInfo">참조 할 수치 데이터</param>
     public void StatInit(MonsterInfo monsterInfo)
     {
-        if (!InGameUIManager.Instance.gameResult.resultDatas.ContainsKey(monsterInfo.id))
+        if (!StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas.ContainsKey(monsterInfo.id))
         {
-            InGameUIManager.Instance.gameResult.resultDatas[monsterInfo.id] = new GameResultUnitData { spawnCount = 0, allDamage = 0 };
+            StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[monsterInfo.id] = new GameResultUnitData { spawnCount = 0, allDamage = 0 };
         }
-        InGameUIManager.Instance.gameResult.resultDatas[monsterInfo.id].spawnCount++;
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[monsterInfo.id].spawnCount++;
 
-        this.monsterInfo = monsterInfo;
-        base.StatInit(this.monsterInfo);
+        if (this.monsterInfo == null)
+        {
+            this.monsterInfo = new MonsterInfo(monsterInfo);
+            base.StatInit(this.monsterInfo);
+        }
+        else
+        {
+            this.monsterInfo.Copy(monsterInfo);
+        }
 
         if (navMeshAgent == null)
             navMeshAgent = GetComponent<NavMeshAgent>();
@@ -151,10 +158,40 @@ public class MonsterController : BaseController, IPoolable
     /// </summary>
     protected override void Die()
     {
+        base.Die();
+
         MonsterManager.Instance.monsters.Remove(gameObject);
         MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Remove(this);
 
         stateMachine.ChangeState(stateMachine.Die); // 사망
         // OnDespawn();
+    }
+
+
+    /// <summary>
+    /// 업그레이드
+    /// </summary>
+    /// <param name="amount"></param>
+    public override void UpgradeHealth(float amount)
+    {
+        monsterInfo.health += amount;
+        HealthStatUpdate();
+    }
+
+    public override void UpgradeAttack(float amount)
+    {
+        monsterInfo.attack += amount;
+    }
+
+    public override void UpgradeAttackSpeed(float amount)
+    {
+        monsterInfo.attackSpeed += amount;
+    }
+
+    public override void UpgradeMoveSpeed(float amount)
+    {
+        Utils.Log("이속 감소");
+        monsterInfo.moveSpeed += amount;
+        Utils.Log($"{monsterInfo.moveSpeed}");
     }
 }

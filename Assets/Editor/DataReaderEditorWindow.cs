@@ -40,6 +40,7 @@ public class DataReaderEditorWindow : EditorWindow
             new DataInfo("Enhance 데이터", "QueenEnhanceData"),
             new DataInfo("HeroStatus 데이터", "HeroStatusData"),
             new DataInfo("QueenActiveSkill 데이터", "QueenActiveSkillData"),
+            new DataInfo("Buff 데이터", "BuffData"),
         };
 
         foreach (var info in dataInfo)

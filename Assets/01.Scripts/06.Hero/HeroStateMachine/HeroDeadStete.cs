@@ -14,7 +14,7 @@ public class HeroDeadStete : HeroBaseState
         // 보상 떨구기/획득하기
 
         RewardGold gold= ObjectPoolManager.Instance.GetObject<RewardGold>("GoldReward", state.hero.gameObject.transform.position);
-        gold.rewardAmount = state.hero.reward;
+        gold.rewardAmount = state.controller.statusInfo.reward;
     }
 
     public override void Exit()

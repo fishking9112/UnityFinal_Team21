@@ -6,6 +6,9 @@ using System.Collections.Generic;
 [Serializable]
 public struct SaveData
 {
+    [JsonProperty("version")]
+    public int version;
+
     [JsonProperty("player")]
     public PlayerData player;
 
@@ -15,7 +18,6 @@ public struct SaveData
     [JsonProperty("queenUpgrades")]
     public QueenAbilityUpgradeData queenUpgrades;
 
-
     [JsonExtensionData]
     public Dictionary<string, JToken> extraRootFields;
 }
@@ -23,9 +25,6 @@ public struct SaveData
 [Serializable]
 public struct PlayerData
 {
-    [JsonProperty("nickName")]
-    public string nickName;
-
     [JsonProperty("gold")]
     public int gold;
 

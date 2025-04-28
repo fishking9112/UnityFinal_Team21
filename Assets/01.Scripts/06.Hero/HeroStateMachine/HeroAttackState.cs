@@ -8,6 +8,7 @@ public class HeroAttackState : HeroBaseState
 {
     private GameObject enemy;
     private CancellationTokenSource token;
+    private float detectedRange;
 
     public HeroAttackState(HeroState state) : base(state)
     {
@@ -17,6 +18,7 @@ public class HeroAttackState : HeroBaseState
     {
         base.Enter();
         token = new CancellationTokenSource();
+        detectedRange = state.controller.statusInfo.detectedRange;
         state.dir = GetEnemyDir();
         Move(token.Token).Forget();
     }
@@ -56,7 +58,7 @@ public class HeroAttackState : HeroBaseState
 
     private Vector2 GetEnemyDir()
     {
-        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, 3,1<<7);
+        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, detectedRange, 1<<7|1<<13);
         if (col == null)
         {
             state.ChangeState(state.moveState);

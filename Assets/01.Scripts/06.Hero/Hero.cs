@@ -8,41 +8,33 @@ public class Hero : MonoBehaviour
 {
     public GameObject target;
 
-    public float reward;
-
     public List<HeroAbilitySystem> abilityList;
 
     public List<HeroAbilitySystem> allAbility;
 
     private LayerMask mask;
 
-    public void Init(float rewardAmount)
+    private float detectedRange;
+
+    public void Init(float range)
     {
         abilityList.Clear();
         allAbility.Clear();
-
         abilityList = new List<HeroAbilitySystem>();
         allAbility = GetComponents<HeroAbilitySystem>().ToList();
-
+        detectedRange = range;
         mask = 1 << 7 | 1 << 13;
-        reward = rewardAmount;
     }
 
     public GameObject FindNearestTarget()
     {
         target = null;
 
-        Vector2 pointA = Camera.main.ScreenToWorldPoint(Vector3.zero);
-        Vector2 pointB = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height)); ;
-
-        Vector2 off = pointA - pointB;
-
-        pointA = (Vector2)transform.position - off / 2;
-        pointB = (Vector2)transform.position + off / 2;
-        Collider2D[] col = Physics2D.OverlapAreaAll(pointA, pointB, mask);
-
-        if (col.Length == 0)
-            return null;
+        Collider2D[] col = Physics2D.OverlapCircleAll (transform.position, detectedRange, 1 << 7|1<<13);
+        if (col.Length==0)
+        {
+            return target;
+        }
 
         float minVal = float.MaxValue;
         float distance;
@@ -55,7 +47,6 @@ public class Hero : MonoBehaviour
                 target = c.gameObject;
             }
         }
-
         return target;
     }
 
