@@ -59,6 +59,14 @@ public abstract class BaseController : MonoBehaviour
             Die();
         }
     }
+    
+    /// <summary>
+    /// 현재 체력 회복
+    /// </summary>
+    public void Heal(float amount)
+    {
+        healthHandler.Heal(amount);
+    }
 
     /// <summary>
     /// 넉백을 입음

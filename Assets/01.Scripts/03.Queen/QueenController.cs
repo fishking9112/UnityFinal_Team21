@@ -121,6 +121,14 @@ public class QueenController : MonoBehaviour
             }
 
             selectedQueenActiveSkill = skill;
+
+            if (selectedQueenActiveSkill.info.size == -1)
+            {
+                UseQueenActiveSkill();
+                selectedQueenActiveSkill = null;
+                return;
+            }
+
             //스킬 아이콘 처리
             cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(selectedQueenActiveSkill.info.icon);
         }

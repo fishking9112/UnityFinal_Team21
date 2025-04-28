@@ -17,8 +17,10 @@ public class MonsterHealSkill : QueenActiveSkillBase
 
         foreach (var hit in hits)
         {
-            Utils.Log("충돌 " + hit.name);
-            // 몬스터 체력 회복
+            if(MonsterManager.Instance.monsters.TryGetValue(hit.gameObject,out var monster))
+            {
+                monster.Heal(info.value);
+            }
         }
     }
 }
