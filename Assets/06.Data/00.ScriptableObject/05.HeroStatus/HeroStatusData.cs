@@ -30,6 +30,21 @@ public class HeroStatusInfo: BaseStatData, IInfo
         reward = other.reward;
         custom = other.custom;
     }
+    public void Copy(HeroStatusInfo other)
+    {
+        id = other.id;
+        name = other.name;
+        description = other.description;
+        startLevel = other.startLevel;
+        weapon = other.weapon;
+        weaponLevel = other.weaponLevel;
+        health = other.health;
+        detectedRange = other.detectedRange;
+        moveSpeed = other.moveSpeed;
+        reward = other.reward;
+        custom = other.custom;
+    }
+
     public int ID => id;
 }
 
