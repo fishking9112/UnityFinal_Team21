@@ -9,6 +9,8 @@ public class HeroState : StateMachine
 {
     public Hero hero { get; private set; }
 
+    public HeroController controller { get; private set; }
+
     public HeroMoveState moveState { get; private set; }
     public HeroAttackState attackState { get; private set; }
     public HeroDeadStete deadState { get; private set; }
@@ -23,9 +25,10 @@ public class HeroState : StateMachine
     // 강화 관련 추가
 
 
-    public HeroState(Hero hero)
+    public HeroState(Hero hero, HeroController controller)
     {
         this.hero = hero;
+        this.controller = controller;
 
         moveState = new HeroMoveState(this);
         attackState = new HeroAttackState(this);

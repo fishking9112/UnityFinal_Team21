@@ -18,7 +18,7 @@ public class HeroAttackState : HeroBaseState
     {
         base.Enter();
         token = new CancellationTokenSource();
-        detectedRange = state.hero.statusInfo.detectedRange;
+        detectedRange = state.controller.statusInfo.detectedRange;
         state.dir = GetEnemyDir();
         Move(token.Token).Forget();
     }

@@ -28,7 +28,11 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         targetLayer = LayerMask.GetMask("Monster", "Castle");
 
     }
+    private void OnEnable()
+    {
+        Initialize(101);
 
+    }
     protected override void ActionAbility()
     {
         target = hero.FindNearestTarget();

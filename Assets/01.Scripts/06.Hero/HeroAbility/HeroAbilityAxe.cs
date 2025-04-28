@@ -22,6 +22,12 @@ public class HeroAbilityAxe : HeroAbilitySystem
         objectPoolManager = ObjectPoolManager.Instance;
     }
 
+    private void OnEnable()
+    {
+        Initialize(105);
+        
+    }
+
 
     protected override void ActionAbility()
     {
