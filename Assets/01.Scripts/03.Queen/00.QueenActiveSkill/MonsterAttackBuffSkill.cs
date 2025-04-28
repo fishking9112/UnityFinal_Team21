@@ -9,7 +9,7 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[12];
+        info = DataManager.Instance.queenActiveSkillDic[203];
     }
 
     public override async void UseSkill()

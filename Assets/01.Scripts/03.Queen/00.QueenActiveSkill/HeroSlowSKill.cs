@@ -8,7 +8,7 @@ public class HeroSlowSKill : QueenActiveSkillBase
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[14];
+        info = DataManager.Instance.queenActiveSkillDic[205];
     }
 
     public override async void UseSkill()
@@ -17,7 +17,7 @@ public class HeroSlowSKill : QueenActiveSkillBase
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
-        // 충돌한 모든 몬스터에게 버프 적용
+        // 충돌한 모든 용사에게 디버프 적용
         List<UniTask> tasks = new List<UniTask>();
         foreach (var hit in hits)
         {

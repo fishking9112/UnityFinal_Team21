@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 
@@ -14,8 +13,11 @@ public abstract class BaseController : MonoBehaviour
     [Header("핸들러")]
     [SerializeField] protected HealthHandler healthHandler;
 
-    public Dictionary<int, int> buffDic = new Dictionary<int, int>();
-    public Dictionary<int, CancellationTokenSource> buffTokenDic = new Dictionary<int, CancellationTokenSource>();
+    public Dictionary<int, List<Buff>> buffDic = new Dictionary<int, List<Buff>>();
+    public float buffMoveSpeed = 1;
+    public float buffAttackDamage = 1;
+    public float buffAttackSpeed = 1;
+
 
     protected virtual void Start()
     {
@@ -76,33 +78,6 @@ public abstract class BaseController : MonoBehaviour
         ClearAllBuff();
     }
 
-    public void AddBuffToken(int id, CancellationTokenSource token)
-    {
-        if (buffTokenDic.TryGetValue(id, out var exist))
-        {
-            exist?.Cancel();
-            exist?.Dispose();
-            exist = null;
-        }
-        buffTokenDic[id] = token;
-    }
-
-    public void RemoveBuffToken(int id, bool cancel = false)
-    {
-        if (buffTokenDic.TryGetValue(id, out var exist))
-        {
-            exist?.Cancel();
-
-            if (!cancel)
-            {
-                exist?.Dispose();
-                exist = null;
-                buffTokenDic.Remove(id);
-                buffDic.Remove(id);
-            }
-        }
-    }
-
     /// <summary>
     /// 업그레이드
     /// </summary>
@@ -124,24 +99,52 @@ public abstract class BaseController : MonoBehaviour
 
     }
 
+
+    // =================================================================================
+    //                               버프 관련 코드
+    // =================================================================================
+
+
+    // 버프 추가
+    public void AddBuff(int id, int level, CancellationTokenSource token)
+    {
+        if (!buffDic.TryGetValue(id, out var exist))
+        {
+            buffDic[id] = new List<Buff>();
+        }
+        buffDic[id].Add(new Buff(id, level, token));
+    }
+
+    // 버프 제거
+    public void RemoveBuff(int id, bool cancel = false)
+    {
+        if (buffDic.TryGetValue(id, out var buffList))
+        {
+            foreach (var buff in buffList)
+            {
+                if (cancel)
+                {
+                    buff.token?.Cancel();
+                    buff.token?.Dispose();
+                }
+            }
+            buffDic[id].Clear();
+        }
+
+        if (!cancel)
+        {
+            buffDic.Remove(id);
+        }
+    }
+
     // 모든 버프 제거
     public void ClearAllBuff()
     {
-        foreach (var pair in buffDic)
+        foreach(var key in new List<int>(buffDic.Keys))
         {
-            if (DataManager.Instance.buffDic.TryGetValue(pair.Key, out var buffInfo))
-            {
-                BuffManager.Instance.RemoveBuff(this, buffInfo);
-            }
-        }
-
-        foreach (var token in buffTokenDic)
-        {
-            token.Value?.Cancel();
-            token.Value?.Dispose();
+            RemoveBuff(key, false);
         }
 
         buffDic.Clear();
-        buffTokenDic.Clear();
     }
 }

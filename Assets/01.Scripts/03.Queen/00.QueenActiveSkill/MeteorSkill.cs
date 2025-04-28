@@ -8,8 +8,9 @@ public class MeteorSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[10];
+        info = DataManager.Instance.queenActiveSkillDic[206];
     }
+
 
     public override async void UseSkill()
     {

@@ -2,6 +2,21 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using static Cinemachine.DocumentationSortingAttribute;
+
+public class Buff
+{
+    public int id;
+    public int level;
+    public CancellationTokenSource token;
+
+    public Buff(int id, int level, CancellationTokenSource token)
+    {
+        this.id = id;
+        this.level = level;
+        this.token = token;
+    }
+}
 
 public class BuffManager : MonoSingleton<BuffManager>
 {
@@ -23,33 +38,53 @@ public class BuffManager : MonoSingleton<BuffManager>
             return;
         }
 
-        if (target.buffDic.TryGetValue(id, out int curBuffLevel))
-        {
-            if (curBuffLevel > level)
-            {
-                // 현재 적용되어 있는 버프가 지금 적용하려는 버프보다 레벨이 높은 경우 무시
-                return;
-            }
-            else if (curBuffLevel == level)
-            {
-                // 현재 적용되어 있는 버프가 지금 적용하려는 버프랑 레벨이 같을 경우 시간만 갱신(새로운 토큰으로 변경)
-                target.RemoveBuffToken(id, true);
-                var updateToken = new CancellationTokenSource();
-                target.AddBuffToken(id, updateToken);
+        Utils.Log($"버프 적용 : {buffInfo.name} (ID: {id}, Level: {level})");
 
-                _ = ApplyBuffDurationTime(target, buffInfo, updateToken);
-                return;
-            }
-            else
-            {
-                // 이전에 적용되어 있는 동일 버프 제거
-                RemoveBuff(target, buffInfo);
-            }
+        if (target.buffDic.TryGetValue(id, out var existingBuffs))
+        {
+            Utils.Log($"현재 중첩된 {buffInfo.name} 버프 개수: {existingBuffs.Count}");
         }
 
-        // 버프 적용(최초 적용 or 더높은 레벨의 동일 버프가 들어올 때 적용)
-        CancellationTokenSource token = AddBuff(target, buffInfo, level);
-        await ApplyBuffDurationTime(target, buffInfo, token);
+        if (!buffInfo.isStack)
+        {
+            if (target.buffDic.TryGetValue(id, out var buffList) && buffList.Count > 0)
+            {
+                var curBuffLevel = buffList[0].level;
+
+                if (curBuffLevel > level)
+                {
+                    // 현재 적용되어 있는 버프가 지금 적용하려는 버프보다 레벨이 높은 경우 무시
+                    return;
+                }
+                else if (curBuffLevel == level)
+                {
+                    // 현재 적용되어 있는 버프가 지금 적용하려는 버프랑 레벨이 같을 경우 시간만 갱신(새로운 토큰으로 변경)
+                    Utils.Log($"{buffInfo.name} : 동일 버프 적용 중 시간 갱신");
+
+                    target.RemoveBuff(id, true);
+                    var updateToken = new CancellationTokenSource();
+                    target.AddBuff(id, level, updateToken);
+
+                    await ApplyBuffDurationTime(target, buffInfo, updateToken);
+                    return;
+                }
+                else
+                {
+                    // 이전에 적용되어 있는 동일 버프 제거
+                    RemoveBuff(target, buffInfo);
+                }
+            }
+
+            // 버프 적용(최초 적용 or 더높은 레벨의 동일 버프가 들어올 때 적용)
+            CancellationTokenSource token = AddBuff(target, buffInfo, level);
+            await ApplyBuffDurationTime(target, buffInfo, token);
+        }
+        else
+        {
+            // 버프 적용 (이미 버프가 걸려있는 지는 중요하지 않음)
+            CancellationTokenSource token = AddBuff(target, buffInfo, level);
+            await ApplyBuffDurationTime(target, buffInfo, token);
+        }
     }
 
     // 버프 지속 시간 적용
@@ -69,15 +104,17 @@ public class BuffManager : MonoSingleton<BuffManager>
         {
             // 버프가 중간에 끊겼을 때 예외. 무시해도 됨
         }
+        catch (ObjectDisposedException)
+        {
+            // 버프가 중간에 끊겼을 때 예외. 무시해도 됨
+        }
     }
 
     // 버프 추가
     private CancellationTokenSource AddBuff(BaseController target, BuffInfo info, int level)
     {
         CancellationTokenSource token = new CancellationTokenSource();
-
-        target.AddBuffToken(info.id, token);
-        target.buffDic[info.id] = level;
+        target.AddBuff(info.id, level, token);
 
         float amount = GetAmountByLevel(info, level);
 
@@ -105,73 +142,92 @@ public class BuffManager : MonoSingleton<BuffManager>
     // 버프 제거
     public void RemoveBuff(BaseController target, BuffInfo info)
     {
-        if (target.buffDic.TryGetValue(info.id, out int level))
+        if (target.buffDic.TryGetValue(info.id, out var buffList))
         {
-            target.RemoveBuffToken(info.id);
-            target.buffDic.Remove(info.id);
-
-            switch (info.type)
+            for (int i = buffList.Count - 1; i >= 0; i--)
             {
-                case BuffType.ATTACK_DMG:
-                    target.UpgradeAttack(-GetAmountByLevel(info, level));
-                    break;
-                case BuffType.ATTACK_SPEED:
-                    target.UpgradeAttackSpeed(-GetAmountByLevel(info, level));
-                    break;
-                case BuffType.MOVE_SPEED:
-                    target.UpgradeMoveSpeed(-GetAmountByLevel(info, level));
-                    break;
-                case BuffType.POISON:
-                    break;
-                case BuffType.BURN:
-                    break;
+                var buff = buffList[i];
+
+                if (buff == null)
+                {
+                    continue;
+                }
+
+                target.RemoveBuff(info.id);
+
+                float amount = GetAmountByLevel(info, buff.level);
+
+                switch (info.type)
+                {
+                    case BuffType.ATTACK_DMG:
+                        target.UpgradeAttack(-amount);
+                        break;
+                    case BuffType.ATTACK_SPEED:
+                        target.UpgradeAttackSpeed(-amount);
+                        break;
+                    case BuffType.MOVE_SPEED:
+                        target.UpgradeMoveSpeed(-amount);
+                        break;
+                    case BuffType.POISON:
+                        break;
+                    case BuffType.BURN:
+                        break;
+                }
+
+                // 유효 인덱스일 경우에만 제거
+                if (i >= 0 && i < buffList.Count)
+                {
+                    buffList.RemoveAt(i);
+                }
             }
         }
     }
 
+    // 틱 데미지
     private async UniTask TakeTickDamaged(BaseController target, BuffInfo info, CancellationTokenSource token, int level)
     {
-        int tickCount = (int)MathF.Floor(info.durationTime / info.tick);
+        int tickCount = (int)(info.durationTime / info.tick);
         float tickDamage = GetAmountByLevel(info, level);
 
         try
         {
+            Utils.Log($"틱 데미지 {tickDamage}씩 {tickCount}번 적용");
+
             for (int i = 0; i < tickCount; i++)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(info.tick), false, PlayerLoopTiming.Update, token.Token);
                 if (target == null || !target.buffDic.ContainsKey(info.id))
                 {
                     break;
                 }
+                Utils.Log($"틱 데미지 적용 {tickDamage}");
                 target.TakeDamaged(tickDamage);
+
+                await UniTask.Delay(TimeSpan.FromSeconds(info.tick), false, PlayerLoopTiming.Update, token.Token);
             }
         }
         catch (OperationCanceledException)
         {
-
+            // 버프가 중간에 끊겼을 때 예외. 무시해도 됨
+        }
+        catch (ObjectDisposedException)
+        {
+            // 버프가 중간에 끊겼을 때 예외. 무시해도 됨
         }
     }
 
     // 레벨에 따른 버프 수치를 가져오는 함수
     private float GetAmountByLevel(BuffInfo info, int level)
     {
-        float amount;
-
         switch (level)
         {
             case 1:
-                amount = info.lv_1;
-                break;
+                return info.lv_1;
             case 2:
-                amount = info.lv_2;
-                break;
+                return info.lv_2;
             case 3:
-                amount = info.lv_3;
-                break;
+                return info.lv_3;
             default:
-                amount = 0;
-                break;
+                return 0f;
         }
-        return amount;
     }
 }
