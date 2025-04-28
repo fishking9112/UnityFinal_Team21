@@ -111,6 +111,15 @@ public class Utils
     }
 
     /// <summary>
+    /// string 타입을 Bool로 바꿔주는 함수
+    /// </summary>
+    /// <param name="value"> Bool로 바꿀 문자열 </param>
+    public static bool StringToBool(string value, bool defaultValue = false)
+    {
+        return bool.TryParse(value, out var result) ? result : defaultValue;
+    }
+
+    /// <summary>
     /// string 타입을 Enum으로 바꿔주는 함수
     /// </summary>
     /// <typeparam name="T"> Enum 타입 </typeparam>
