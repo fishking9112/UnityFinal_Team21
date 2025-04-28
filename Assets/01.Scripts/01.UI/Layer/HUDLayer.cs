@@ -22,7 +22,6 @@ public class HUDLayer : MonoBehaviour
                 break;
             case "GameScene":
                 GameHUD gameHUD = await LoadCurrentHUD("GameHUD") as GameHUD;
-                gameHUD.Setup(GameManager.Instance.cameraController);
 
                 break;
             default:

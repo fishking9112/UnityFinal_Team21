@@ -40,15 +40,15 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
             case "MenuScene": // 메뉴 씬 일 경우
                 await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
                 await LoadSceneAsync(sceneName); // 메뉴 씬으로 이동
-                await UniTask.Delay(1000); // 1초 기다리기
                 await StaticUIManager.Instance.LoadUI(sceneName);
+                await UniTask.Delay(1000); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
                 break;
             case "GameScene": // 게임 씬 일 경우
                 await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
                 await LoadSceneAsync(sceneName);
-                await UniTask.Delay(1000); // 1초 기다리기
                 await StaticUIManager.Instance.LoadUI(sceneName);
+                await UniTask.Delay(1000); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
                 GameManager.Instance.GameStart(); // 게임 스타트(?)
                 break;
@@ -72,6 +72,11 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
         return false;
     }
 
+    /// <summary>
+    /// 씬을 비동기로 로드
+    /// </summary>
+    /// <param name="sceneName"></param>
+    /// <returns></returns>
     private async UniTask LoadSceneAsync(string sceneName)
     {
         var loadOp = SceneManager.LoadSceneAsync(sceneName);

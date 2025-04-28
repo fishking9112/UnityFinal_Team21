@@ -8,6 +8,9 @@ public class PauseUI : SingleUI
     [SerializeField] private QueenEnhanceStatusUI queenEnhanceStatusUI;
 
     [Header("UI 버튼들")]
+    public RectTransform cameraRect;
+
+    [Header("UI 버튼들")]
     public Button continueButton;
     public Button optionButton;
     public Button exitButton;

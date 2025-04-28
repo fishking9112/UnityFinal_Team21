@@ -61,11 +61,8 @@ public class GameHUD : HUDUI
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
 
         pauseButton.onClick.AddListener(() => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<PauseUI>());
-    }
 
-    public void Setup(CameraController cameraController)
-    {
-        miniMap.SetMiniMapCamera(cameraController);
+        GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
     }
 
 
@@ -97,6 +94,7 @@ public class GameHUD : HUDUI
         else if (typeof(T) == typeof(PauseUI))
         {
             openWindow = pauseUI.gameObject;
+            GameManager.Instance.cameraController.miniMapRect = pauseUI.cameraRect;
         }
         else if (typeof(T) == typeof(GameResultUI))
         {
@@ -122,6 +120,7 @@ public class GameHUD : HUDUI
         openWindow = null;
         Time.timeScale = 1f; // 시간 흐름
         isPaused = false;
+        GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
         Cursor.lockState = CursorLockMode.Confined;
     }
 

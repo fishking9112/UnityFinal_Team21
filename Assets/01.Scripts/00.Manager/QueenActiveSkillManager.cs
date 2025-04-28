@@ -13,7 +13,11 @@ public class QueenActiveSkillManager : MonoBehaviour
         Init();
 
         // 테스트 코드
-        TestCode().Forget();
+        Utils.DelayedTimeAction(() =>
+        {
+            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(0, queenActiveSkillDic[12]);
+            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(1, queenActiveSkillDic[14]);
+        }, 3);
     }
 
     private void Init()
@@ -31,13 +35,5 @@ public class QueenActiveSkillManager : MonoBehaviour
                 queenActiveSkillDic[skill.info.id] = skill;
             }
         }
-    }
-
-    private async UniTaskVoid TestCode()
-    {
-        // await UniTask.WaitUntil(() => GameManager.Instance.queen.controller.queenActiveSkillSlot != null);
-        await UniTask.Delay(3000);
-        GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(0, queenActiveSkillDic[12]);
-        GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(1, queenActiveSkillDic[14]);
     }
 }
