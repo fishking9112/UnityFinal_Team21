@@ -158,6 +158,8 @@ public class MonsterController : BaseController, IPoolable
     /// </summary>
     protected override void Die()
     {
+        base.Die();
+
         MonsterManager.Instance.monsters.Remove(gameObject);
         MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Remove(this);
 
@@ -170,24 +172,26 @@ public class MonsterController : BaseController, IPoolable
     /// 업그레이드
     /// </summary>
     /// <param name="amount"></param>
-    public void UpgradeHealth(int amount)
+    public override void UpgradeHealth(float amount)
     {
         monsterInfo.health += amount;
         HealthStatUpdate();
     }
 
-    public void UpgradeAttack(int amount)
+    public override void UpgradeAttack(float amount)
     {
         monsterInfo.attack += amount;
     }
 
-    public void UpgradeAttackSpeed(int amount)
+    public override void UpgradeAttackSpeed(float amount)
     {
         monsterInfo.attackSpeed += amount;
     }
 
-    public void UpgradeMoveSpeed(int amount)
+    public override void UpgradeMoveSpeed(float amount)
     {
+        Utils.Log("이속 감소");
         monsterInfo.moveSpeed += amount;
+        Utils.Log($"{monsterInfo.moveSpeed}");
     }
 }

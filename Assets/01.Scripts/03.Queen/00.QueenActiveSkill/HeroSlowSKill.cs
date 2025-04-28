@@ -2,14 +2,13 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class MonsterAttackBuffSkill : QueenActiveSkillBase
+public class HeroSlowSKill : QueenActiveSkillBase
 {
     public override void Init()
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[12];
+        info = DataManager.Instance.queenActiveSkillDic[14];
     }
 
     public override async void UseSkill()

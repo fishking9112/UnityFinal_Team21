@@ -15,7 +15,7 @@ MonoBehaviour:
   sheetURL: 1Of0EBz6S6NjUCNtNGPNnWgAcb5RdXT_xJnsCn-1LZ4w
   sheetName: QueenActiveSkill
   startRowIndex: 3
-  endRowIndex: 6
+  endRowIndex: 8
   infoList:
   - id: 10
     name: "\uAE30\uBCF8\uC2A4\uD0AC_1"
@@ -30,6 +30,8 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 64
     required_Level: 1
+    buff_ID: 0
+    buff_Level: 0
   - id: 11
     name: "\uAE30\uBCF8\uC2A4\uD0AC_2"
     description: "\uAE30\uBCF8\uC2A4\uD0AC \uC785\uB2C8\uB2E4."
@@ -43,9 +45,11 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 1
     required_Level: 1
+    buff_ID: 0
+    buff_Level: 0
   - id: 12
     name: "\uAE30\uBCF8\uC2A4\uD0AC_3"
-    description: "\uAE30\uBCF8\uC2A4\uD0AC \uC785\uB2C8\uB2E4."
+    description: "\uACF5\uACA9\uB825 \uC99D\uAC00 \uC608\uC2DC \uC2A4\uD0AC"
     icon: 
     type: 3
     cost: 10
@@ -56,6 +60,8 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 128
     required_Level: 1
+    buff_ID: 1001
+    buff_Level: 2
   - id: 13
     name: "\uAE30\uBCF8\uC2A4\uD0AC_4"
     description: "\uAE30\uBCF8\uC2A4\uD0AC \uC785\uB2C8\uB2E4."
@@ -69,3 +75,36 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 128
     required_Level: 1
+    buff_ID: 0
+    buff_Level: 0
+  - id: 14
+    name: "\uBC94\uC704 \uC2AC\uB85C\uC6B0"
+    description: "\uD574\uB2F9 \uBC94\uC704\uC5D0 lv 1 \uC2AC\uB85C\uC6B0 \uC801\uC6A9"
+    icon: 
+    type: 3
+    cost: 10
+    value: 0
+    range: -1
+    size: 10
+    target:
+      serializedVersion: 2
+      m_Bits: 128
+    required_Level: 5
+    buff_ID: 1002
+    buff_Level: 1
+  - id: 15
+    name: "\uBA54\uD14C\uC624"
+    description: "\uD574\uB2F9 \uBC94\uC704\uC5D0 50\uC758 \uB370\uBBF8\uC9C0\uB97C
+      \uC8FC\uACE0 \uD654\uC0C1 2\uB808\uBCA8 \uC801\uC6A9"
+    icon: 
+    type: 1
+    cost: 50
+    value: 50
+    range: -1
+    size: 30
+    target:
+      serializedVersion: 2
+      m_Bits: 64
+    required_Level: 5
+    buff_ID: 1003
+    buff_Level: 2

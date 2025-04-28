@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4108513907352303291}
   - component: {fileID: -3454783522632082060}
   - component: {fileID: 5861958974445726821}
+  - component: {fileID: 8096152510419001192}
   m_Layer: 0
   m_Name: AllSkill
   m_TagString: Untagged
@@ -45,21 +46,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9b1c71f013e564583b0ea402ed9707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeObject: {fileID: 0}
   info:
-    id: 12
-    name: "\uAE30\uBCF8\uC2A4\uD0AC_3"
+    id: 13
+    name: "\uAE30\uBCF8\uC2A4\uD0AC_4"
     description: "\uAE30\uBCF8\uC2A4\uD0AC \uC785\uB2C8\uB2E4."
     icon: 
     type: 3
     cost: 10
-    value: 10
+    value: 50
     range: -1
     size: 10
     target:
       serializedVersion: 2
       m_Bits: 128
     required_Level: 1
+    buff_ID: 0
+    buff_Level: 0
 --- !u!114 &5861958974445726821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,7 +74,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62e2d1197d2f294aae0cbf7901eb3a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeObject: {fileID: 0}
+  info:
+    id: 12
+    name: "\uAE30\uBCF8\uC2A4\uD0AC_3"
+    description: "\uACF5\uACA9\uB825 \uC99D\uAC00 \uC608\uC2DC \uC2A4\uD0AC"
+    icon: 
+    type: 3
+    cost: 10
+    value: 10
+    range: -1
+    size: 10
+    target:
+      serializedVersion: 2
+      m_Bits: 128
+    required_Level: 1
+    buff_ID: 1001
+    buff_Level: 2
+--- !u!114 &8096152510419001192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3449543277398582152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a14128869795424ebdea6f00b3ccfdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   info:
     id: 0
     name: 
@@ -87,3 +116,5 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 0
     required_Level: 0
+    buff_ID: 0
+    buff_Level: 0

@@ -1,9 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class BaseController : MonoBehaviour
+
+public abstract class BaseController : MonoBehaviour
 {
     [Header("현재 데이터")]
     public BaseStatData statData;
@@ -12,6 +13,9 @@ public class BaseController : MonoBehaviour
 
     [Header("핸들러")]
     [SerializeField] protected HealthHandler healthHandler;
+
+    public Dictionary<int, int> buffDic = new Dictionary<int, int>();
+    public Dictionary<int, CancellationTokenSource> buffTokenDic = new Dictionary<int, CancellationTokenSource>();
 
     protected virtual void Start()
     {
@@ -69,5 +73,75 @@ public class BaseController : MonoBehaviour
     protected virtual void Die()
     {
         // Destroy(this.gameObject);
+        ClearAllBuff();
+    }
+
+    public void AddBuffToken(int id, CancellationTokenSource token)
+    {
+        if (buffTokenDic.TryGetValue(id, out var exist))
+        {
+            exist?.Cancel();
+            exist?.Dispose();
+            exist = null;
+        }
+        buffTokenDic[id] = token;
+    }
+
+    public void RemoveBuffToken(int id, bool cancel = false)
+    {
+        if (buffTokenDic.TryGetValue(id, out var exist))
+        {
+            exist?.Cancel();
+
+            if (!cancel)
+            {
+                exist?.Dispose();
+                exist = null;
+                buffTokenDic.Remove(id);
+                buffDic.Remove(id);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 업그레이드
+    /// </summary>
+    /// <param name="amount"></param>
+    public virtual void UpgradeHealth(float amount)
+    {
+
+    }
+    public virtual void UpgradeAttack(float amount)
+    {
+
+    }
+    public virtual void UpgradeAttackSpeed(float amount)
+    {
+
+    }
+    public virtual void UpgradeMoveSpeed(float amount)
+    {
+
+    }
+
+    // 모든 버프 제거
+    public void ClearAllBuff()
+    {
+        foreach (var pair in buffDic)
+        {
+            if (DataManager.Instance.buffDic.TryGetValue(pair.Key, out var buffInfo))
+            {
+                BuffManager.Instance.RemoveBuff(this, buffInfo);
+            }
+        }
+
+        foreach (var token in buffTokenDic)
+        {
+            token.Value?.Cancel();
+            token.Value?.Dispose();
+        }
+
+        buffDic.Clear();
+        buffTokenDic.Clear();
     }
 }
