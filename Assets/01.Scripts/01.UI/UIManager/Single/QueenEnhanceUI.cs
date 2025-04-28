@@ -107,6 +107,7 @@ public class QueenEnhanceUI : SingleUI
 
             if (name.Contains("체력"))
             {
+                MonsterManager.Instance.monsterInfoList[monster.id].health += value;
                 foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
                 {
                     monsterController.UpgradeHealth(value);
@@ -114,6 +115,7 @@ public class QueenEnhanceUI : SingleUI
             }
             else if (name.Contains("공격력"))
             {
+                MonsterManager.Instance.monsterInfoList[monster.id].attack += value;
                 foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
                 {
                     monsterController.UpgradeAttack(value);
@@ -121,6 +123,7 @@ public class QueenEnhanceUI : SingleUI
             }
             else if (name.Contains("이동속도"))
             {
+                MonsterManager.Instance.monsterInfoList[monster.id].moveSpeed += value;
                 foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
                 {
                     monsterController.UpgradeMoveSpeed(value);

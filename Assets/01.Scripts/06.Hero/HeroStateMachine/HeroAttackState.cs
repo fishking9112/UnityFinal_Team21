@@ -32,7 +32,7 @@ public class HeroAttackState : HeroBaseState
                 if (state.navMeshAgent.remainingDistance < state.navMeshAgent.stoppingDistance)
                 {
                     state.navMeshAgent.ResetPath();
-                    await UniTask.WaitUntil(() => enemy.activeSelf == false,PlayerLoopTiming.Update,tk);
+                    await UniTask.WaitUntil(() => enemy.activeSelf == false, PlayerLoopTiming.Update, tk);
                     GetEnemyDir();
                     break;
                 }
@@ -58,10 +58,10 @@ public class HeroAttackState : HeroBaseState
 
     private Vector2 GetEnemyDir()
     {
-        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, detectedRange, 1<<7|1<<13);
+        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, detectedRange, 1 << 7 | 1 << 13);
         if (col == null)
         {
-            state.ChangeState(state.moveState);
+            // state.ChangeState(state.moveState);
             return state.GetDir();
         }
         else

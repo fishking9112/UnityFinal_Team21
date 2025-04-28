@@ -25,7 +25,7 @@ public class QueenController : MonoBehaviour
     private QueenCondition condition;
     private ObjectPoolManager objectPoolManager;
 
-    [NonSerialized] public MonsterInfo selectedMonster;
+    [NonSerialized] public int selectedMonsterId = -1;
     [NonSerialized] public QueenActiveSkillBase selectedQueenActiveSkill;
 
     private bool isDrag;
@@ -108,8 +108,9 @@ public class QueenController : MonoBehaviour
                 return;
             }
 
-            selectedMonster = monster;
-            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(selectedMonster.outfit);
+            selectedMonsterId = monster.id;
+            var tempMonster = MonsterManager.Instance.monsterInfoList[selectedMonsterId];
+            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(tempMonster.outfit);
         }
         else if (curSlot == QueenSlot.QueenActiveSkill)
         {
@@ -177,15 +178,18 @@ public class QueenController : MonoBehaviour
     // 몬스터 소환
     private void SummonMonster()
     {
-        if (selectedMonster == null)
+        if (selectedMonsterId == -1)
         {
             return;
         }
+
+        var tempMonster = MonsterManager.Instance.monsterInfoList[selectedMonsterId];
+
         if (EventSystem.current.IsPointerOverGameObject())
         {
             return;
         }
-        if (condition.CurSummonGauge.Value < selectedMonster.cost)
+        if (condition.CurSummonGauge.Value < tempMonster.cost)
         {
             return;
         }
@@ -207,9 +211,9 @@ public class QueenController : MonoBehaviour
             return;
         }
 
-        condition.AdjustCurSummonGauge(-selectedMonster.cost);
-        var monster = objectPoolManager.GetObject<MonsterController>(selectedMonster.outfit, worldMousePos);
-        monster.StatInit(selectedMonster);
+        condition.AdjustCurSummonGauge(-tempMonster.cost);
+        var monster = objectPoolManager.GetObject<MonsterController>(tempMonster.outfit, worldMousePos);
+        monster.StatInit(tempMonster);
 
         // 마지막 생성위치 갱신
         lastSummonPosition = worldMousePos;
