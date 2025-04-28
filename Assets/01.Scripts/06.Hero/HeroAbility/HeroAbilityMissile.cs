@@ -24,7 +24,11 @@ public class HeroAbilityMissile : HeroAbilitySystem
         objectPoolManager = ObjectPoolManager.Instance;
         
     }
+    private void OnEnable()
+    {
+        Initialize(102);
 
+    }
 
     /// <summary>
     /// 어떤 능력인지 구현하는 곳

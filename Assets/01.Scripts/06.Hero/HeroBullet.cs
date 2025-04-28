@@ -24,6 +24,8 @@ public class HeroBullet : MonoBehaviour, IPoolable
     CancellationTokenSource cancel = new CancellationTokenSource();
     private bool isDispose;
 
+    private Transform bulletTransform;
+
     public void SetBullet(float time, float pierceCnt, float dmg, float spd, float rSpeed)
     {
         limitTime = time;
@@ -40,6 +42,7 @@ public class HeroBullet : MonoBehaviour, IPoolable
     {
         returnToPool = returnAction;
         targetLayer = LayerMask.GetMask("Monster", "Castle");
+        bulletTransform = GetComponentInChildren<SpriteRenderer>().transform;
         obstacleLayer = 10;
     }
 
@@ -69,7 +72,7 @@ public class HeroBullet : MonoBehaviour, IPoolable
 
         while (time < limitTime)
         {
-            transform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
+            bulletTransform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
             transform.position = (Vector2)transform.position + speed * Time.deltaTime * (Vector2)transform.up;
             time += Time.deltaTime;
 

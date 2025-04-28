@@ -20,6 +20,11 @@ public class HeroAbilityBible : HeroAbilitySystem
 
 
     }
+    private void OnEnable()
+    {
+        Initialize(103);
+
+    }
 
     private void Start()
     {
