@@ -22,7 +22,7 @@ public class HeroMoveState : HeroBaseState
         state.dir = state.GetDir();
         isMove = true;
         MoveAndSearch(token.Token).Forget();
-        detectedRange = state.hero.statusInfo.detectedRange;
+        detectedRange = state.controller.statusInfo.detectedRange;
     }
 
     private async UniTaskVoid MoveAndSearch(CancellationToken tk)

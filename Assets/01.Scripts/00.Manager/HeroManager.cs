@@ -54,7 +54,7 @@ public class HeroManager : MonoSingleton<HeroManager>
     private void SummonHero()
     {
         HeroController hero = HeroPoolManager.Instance.GetObject(RandomSummonPos(98,98));
-        hero.StatInit(statusInfo);
+        hero?.StatInit(statusInfo);
     }
 
 

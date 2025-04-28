@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Hero : MonoBehaviour
 {
-    public HeroStatusInfo statusInfo;
     public GameObject target;
 
     public List<HeroAbilitySystem> abilityList;
@@ -15,14 +14,15 @@ public class Hero : MonoBehaviour
 
     private LayerMask mask;
 
-    public void Init(HeroStatusInfo status)
+    private float detectedRange;
+
+    public void Init(float range)
     {
         abilityList.Clear();
         allAbility.Clear();
-        statusInfo = status;
         abilityList = new List<HeroAbilitySystem>();
         allAbility = GetComponents<HeroAbilitySystem>().ToList();
-
+        detectedRange = range;
         mask = 1 << 7 | 1 << 13;
     }
 
@@ -30,7 +30,7 @@ public class Hero : MonoBehaviour
     {
         target = null;
 
-        Collider2D[] col = Physics2D.OverlapCircleAll (transform.position, statusInfo.detectedRange, 1 << 7|1<<13);
+        Collider2D[] col = Physics2D.OverlapCircleAll (transform.position, detectedRange, 1 << 7|1<<13);
         if (col.Length==0)
         {
             return target;

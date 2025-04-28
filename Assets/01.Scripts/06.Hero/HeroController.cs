@@ -22,9 +22,11 @@ public class HeroController : BaseController
 
     private CancellationTokenSource token = new CancellationTokenSource();
 
+    [SerializeField] public HeroStatusInfo statusInfo;
+
     public void InitHero()
     {
-        stateMachine = new HeroState(hero);
+        stateMachine = new HeroState(hero,this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         stateMachine.navMeshAgent = navMeshAgent;
         pivot = transform.GetChild(0);
@@ -38,12 +40,13 @@ public class HeroController : BaseController
 
     public void StatInit(HeroStatusInfo stat)
     {
-        hero.Init(stat);
+        hero.Init(stat.detectedRange);
         navMeshAgent.speed = stat.moveSpeed;
         DeadCheck().Forget();
         stateMachine.ChangeState(stateMachine.moveState);
 
         base.StatInit(stat);
+        this.statusInfo.Copy(stat);
 
         hero.ResetAbility();
 
