@@ -24,9 +24,9 @@ public class BuffInfo : IInfo
     public bool isStack;
     public float tick;
     public float durationTime;
-    public int lv_1;
-    public int lv_2;
-    public int lv_3;
+    public float lv_1;
+    public float lv_2;
+    public float lv_3;
 
     public int ID => id;
 }
@@ -71,13 +71,13 @@ public class BuffData : SheetDataReaderBase
                     buffInfo.durationTime = Utils.StringToFloat(cell.value);
                     break;
                 case "lv_1":
-                    buffInfo.lv_1 = Utils.StringToInt(cell.value);
+                    buffInfo.lv_1 = Utils.StringToFloat(cell.value);
                     break;
                 case "lv_2":
-                    buffInfo.lv_2 = Utils.StringToInt(cell.value);
+                    buffInfo.lv_2 = Utils.StringToFloat(cell.value);
                     break;
                 case "lv_3":
-                    buffInfo.lv_3 = Utils.StringToInt(cell.value);
+                    buffInfo.lv_3 = Utils.StringToFloat(cell.value);
                     break;
             }
         }

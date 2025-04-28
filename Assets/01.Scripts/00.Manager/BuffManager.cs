@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class Buff
 {
@@ -121,13 +120,14 @@ public class BuffManager : MonoSingleton<BuffManager>
         switch (info.type)
         {
             case BuffType.ATTACK_DMG:
-                target.UpgradeAttack(amount);
+                target.AttackDamageBuff(amount);
                 break;
             case BuffType.ATTACK_SPEED:
-                target.UpgradeAttackSpeed(amount);
+                target.AttackSpeedBuff(amount);
                 break;
             case BuffType.MOVE_SPEED:
-                target.UpgradeMoveSpeed(amount);
+                target.MoveSpeedBuff(amount);
+                Utils.Log($"적용된 이동속도 버프 수치 : {target.buffMoveSpeed}");
                 break;
             case BuffType.POISON:
                 break;
@@ -160,13 +160,13 @@ public class BuffManager : MonoSingleton<BuffManager>
                 switch (info.type)
                 {
                     case BuffType.ATTACK_DMG:
-                        target.UpgradeAttack(-amount);
+                        target.EndAttackDamageBuff();
                         break;
                     case BuffType.ATTACK_SPEED:
-                        target.UpgradeAttackSpeed(-amount);
+                        target.EndAttackSpeedBuff();
                         break;
                     case BuffType.MOVE_SPEED:
-                        target.UpgradeMoveSpeed(-amount);
+                        target.EndMoveSpeedBuff();
                         break;
                     case BuffType.POISON:
                         break;

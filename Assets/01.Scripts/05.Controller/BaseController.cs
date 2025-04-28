@@ -13,10 +13,12 @@ public abstract class BaseController : MonoBehaviour
     [Header("핸들러")]
     [SerializeField] protected HealthHandler healthHandler;
 
+    [Header("버프")]
+    public float buffMoveSpeed = 1f;
+    public float buffAttackDamage = 1f;
+    public float buffAttackSpeed = 1f;
+
     public Dictionary<int, List<Buff>> buffDic = new Dictionary<int, List<Buff>>();
-    public float buffMoveSpeed = 1;
-    public float buffAttackDamage = 1;
-    public float buffAttackSpeed = 1;
 
 
     protected virtual void Start()
@@ -105,6 +107,38 @@ public abstract class BaseController : MonoBehaviour
     // =================================================================================
 
 
+    /// <summary>
+    /// 버프로 인한 수치 조정
+    /// </summary>
+    public void AttackDamageBuff(float amount)
+    {
+        buffAttackDamage *= (1 + amount);
+    }
+    public void AttackSpeedBuff(float amount)
+    {
+        buffAttackSpeed *= (1 + amount);
+    }
+    public void MoveSpeedBuff(float amount)
+    {
+        buffMoveSpeed *= (1 + amount);
+    }
+
+    /// <summary>
+    /// 버프가 끝날 때 수치 되돌리기
+    /// </summary>
+    public void EndAttackDamageBuff()
+    {
+        buffAttackDamage = 1f;
+    }
+    public void EndAttackSpeedBuff()
+    {
+        buffAttackSpeed = 1f;
+    }
+    public void EndMoveSpeedBuff()
+    {
+        buffMoveSpeed = 1f;
+    }
+
     // 버프 추가
     public void AddBuff(int id, int level, CancellationTokenSource token)
     {
@@ -140,7 +174,7 @@ public abstract class BaseController : MonoBehaviour
     // 모든 버프 제거
     public void ClearAllBuff()
     {
-        foreach(var key in new List<int>(buffDic.Keys))
+        foreach (var key in new List<int>(buffDic.Keys))
         {
             RemoveBuff(key, false);
         }
