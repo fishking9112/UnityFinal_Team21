@@ -190,8 +190,8 @@ public class MonsterController : BaseController, IPoolable
 
     public override void UpgradeMoveSpeed(float amount)
     {
-        Utils.Log("이속 감소");
-        monsterInfo.moveSpeed += amount;
+        Utils.Log("이속 증가");
+        monsterInfo.moveSpeed *= (1 + amount);
         Utils.Log($"{monsterInfo.moveSpeed}");
     }
 }
