@@ -14,6 +14,10 @@ public class HealthHandler : MonoBehaviour
     {
         currentPoint.AddAction(_ => RefrashUI());
     }
+    public void ActiveHealthUI(bool isFlag)
+    {
+        healthUI?.gameObject.SetActive(isFlag);
+    }
 
     public void Init(float maxPoint)
     {

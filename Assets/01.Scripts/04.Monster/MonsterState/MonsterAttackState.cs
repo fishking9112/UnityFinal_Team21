@@ -9,6 +9,8 @@ public class MonsterAttackState : MonsterBaseState
     private CancellationTokenSource cts;
 
     private float attackTimer;
+    private float finalAttackSpeed => stateMachine.Controller.statData.attackSpeed * stateMachine.Controller.buffAttackSpeed;
+    private float finalAttackDamage => stateMachine.Controller.statData.attack * stateMachine.Controller.buffAttackDamage;
 
     public override void Enter()
     {
@@ -16,7 +18,7 @@ public class MonsterAttackState : MonsterBaseState
         navMeshAgent.ResetPath();
         navMeshAgent.velocity = Vector2.zero;
         spum.PlayAnimation(PlayerState.ATTACK, 0);
-        spum.SetAttackSpeed(stateMachine.Controller.monsterInfo.attackSpeed);
+        spum.SetAttackSpeed(finalAttackSpeed);
 
         // 원거리 공격은 projectile 생성
         if (stateMachine.Controller.monsterInfo.monsterAttackType == MonsterAttackType.RANGED)
@@ -56,7 +58,7 @@ public class MonsterAttackState : MonsterBaseState
 
         // 공격 이후 애니메이션이 끝나거나 공격 딜레이를 기다림
         attackTimer += Time.deltaTime;
-        if (attackTimer < (1f / stateMachine.Controller.monsterInfo.attackSpeed)) return;
+        if (attackTimer < (1f / finalAttackSpeed)) return;
 
         targetDistance = (target.position - navMeshAgent.transform.position).magnitude;
 
@@ -100,7 +102,7 @@ public class MonsterAttackState : MonsterBaseState
         cts = new CancellationTokenSource();
 
         // 1초 프레임에서 0.55때 공격됨
-        UniTask.Delay((int)(550 * (1f / stateMachine.Controller.monsterInfo.attackSpeed)), cancellationToken: cts.Token).ContinueWith(() =>
+        UniTask.Delay((int)(550 * (1f / finalAttackSpeed)), cancellationToken: cts.Token).ContinueWith(() =>
         {
             float minDist = float.MaxValue;
             Vector2 origin = navMeshAgent.transform.position;
@@ -122,10 +124,9 @@ public class MonsterAttackState : MonsterBaseState
             {
                 if (HeroManager.Instance.hero.ContainsKey(nearHit.gameObject))
                 {
-                    HeroManager.Instance.hero[nearHit.gameObject].TakeDamaged(stateMachine.Controller.statData.attack);
-                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += stateMachine.Controller.statData.attack;
+                    HeroManager.Instance.hero[nearHit.gameObject].TakeDamaged(finalAttackDamage);
+                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += finalAttackDamage;
                 }
-                // nearHit.gameObject.GetComponent<BaseController>().TakeDamaged(stateMachine.Controller.statData.attack);
             }
         });
     }
@@ -140,7 +141,7 @@ public class MonsterAttackState : MonsterBaseState
         cts = new CancellationTokenSource();
 
         // 1초 프레임에서 0.65때 발사
-        UniTask.Delay((int)(650 * (1f / stateMachine.Controller.monsterInfo.attackSpeed)), cancellationToken: cts.Token).ContinueWith(() =>
+        UniTask.Delay((int)(650 * (1f / finalAttackSpeed)), cancellationToken: cts.Token).ContinueWith(() =>
         {
             var projectileObject = ObjectPoolManager.Instance.GetObject<ProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
             projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);

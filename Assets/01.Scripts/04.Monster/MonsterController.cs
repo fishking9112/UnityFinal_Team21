@@ -64,7 +64,7 @@ public class MonsterController : BaseController, IPoolable
     /// 최초 생성 시 한번만 실행(참조해서 수치 자동 수정)
     /// </summary>
     /// <param name="monsterInfo">참조 할 수치 데이터</param>
-    public void StatInit(MonsterInfo monsterInfo)
+    public void StatInit(MonsterInfo monsterInfo, bool isHealthUI)
     {
         if (!StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas.ContainsKey(monsterInfo.id))
         {
@@ -75,12 +75,13 @@ public class MonsterController : BaseController, IPoolable
         if (this.monsterInfo == null)
         {
             this.monsterInfo = new MonsterInfo(monsterInfo);
-            base.StatInit(this.monsterInfo);
         }
         else
         {
             this.monsterInfo.Copy(monsterInfo);
         }
+        Debug.Log(isHealthUI);
+        base.StatInit(this.monsterInfo, isHealthUI);
 
         if (navMeshAgent == null)
             navMeshAgent = GetComponent<NavMeshAgent>();

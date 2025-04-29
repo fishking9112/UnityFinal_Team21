@@ -12,12 +12,23 @@ public class MonsterManager : MonoSingleton<MonsterManager>
     // Health값 바뀌면 BaseController의 HealthStatUpdate 실행 필요
     public Dictionary<int, List<MonsterController>> idByMonsters = new(); // 몬스터가 나오면 자동으로 이곳에 저장(종류별)
 
+    public bool isHealthUI = false;
+
     void Start()
     {
         foreach (var monsterdata in DataManager.Instance.monsterDic.Values)
         {
             monsterInfoList[monsterdata.ID] = new MonsterInfo(monsterdata);
             idByMonsters[monsterdata.ID] = new List<MonsterController>();
+        }
+    }
+
+    public void OnClickHealthUITest()
+    {
+        isHealthUI = !isHealthUI;
+        foreach (var monster in monsters)
+        {
+            monster.Value.SetHealthUI(isHealthUI);
         }
     }
 

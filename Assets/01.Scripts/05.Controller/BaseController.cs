@@ -30,10 +30,17 @@ public abstract class BaseController : MonoBehaviour
     /// 최초 생성 시 한번만 실행(참조해서 수치 자동 수정)
     /// </summary>
     /// <param name="statInfo">참조 할 수치 데이터</param>
-    public void StatInit(BaseStatData statData)
+    public void StatInit(BaseStatData statData, bool isHealthUI = false)
     {
         this.statData = statData;
         healthHandler.Init(statData.health);
+        SetHealthUI(isHealthUI);
+    }
+
+    public void SetHealthUI(bool isHealthUI)
+    {
+        Debug.Log(isHealthUI);
+        healthHandler.ActiveHealthUI(isHealthUI);
     }
 
     /// <summary>
@@ -59,7 +66,7 @@ public abstract class BaseController : MonoBehaviour
             Die();
         }
     }
-    
+
     /// <summary>
     /// 현재 체력 회복
     /// </summary>
@@ -87,6 +94,7 @@ public abstract class BaseController : MonoBehaviour
         // Destroy(this.gameObject);
         ClearAllBuff();
     }
+
 
     /// <summary>
     /// 업그레이드

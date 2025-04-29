@@ -221,7 +221,7 @@ public class QueenController : MonoBehaviour
 
         condition.AdjustCurSummonGauge(-tempMonster.cost);
         var monster = objectPoolManager.GetObject<MonsterController>(tempMonster.outfit, worldMousePos);
-        monster.StatInit(tempMonster);
+        monster.StatInit(tempMonster, MonsterManager.Instance.isHealthUI);
 
         // 마지막 생성위치 갱신
         lastSummonPosition = worldMousePos;
