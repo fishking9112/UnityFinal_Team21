@@ -23,6 +23,7 @@ public class MenuHUD : HUDUI
     public TextMeshProUGUI goldText;
     public GameObject buttonMenu;
     public GameObject uiMenu;
+    public Transform BlackBackground;
     private GameObject activePanel;
 
 
@@ -48,6 +49,9 @@ public class MenuHUD : HUDUI
         });
 
         GameManager.Instance.Gold.AddAction(value => RefreshGoldText(value));
+
+        BlackBackground.SetAsFirstSibling();
+        BlackBackground.gameObject.SetActive(false);
     }
 
     public void RefreshGoldText(int gold)
