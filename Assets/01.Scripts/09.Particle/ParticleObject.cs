@@ -6,7 +6,6 @@ public class ParticleObject : MonoBehaviour, IPoolable
 {
     private Action<Component> returnToPool;
     private ParticleSystem particle;
-
     private Transform poolParent;
 
     private void Awake()
@@ -22,6 +21,7 @@ public class ParticleObject : MonoBehaviour, IPoolable
 
     public void OnSpawn()
     {
+        particle.Clear();
         particle.Play();
         FinishedReturnToPool().Forget();
     }

@@ -29,7 +29,7 @@ public abstract class BaseController : MonoBehaviour
     /// 최초 생성 시 한번만 실행(참조해서 수치 자동 수정)
     /// </summary>
     /// <param name="statInfo">참조 할 수치 데이터</param>
-    public void StatInit(BaseStatData statData, bool isHealthUI)
+    public void StatInit(BaseStatData statData, bool isHealthUI = false)
     {
         this.statData = statData;
         healthHandler.Init(statData.health);
@@ -127,7 +127,9 @@ public abstract class BaseController : MonoBehaviour
     /// </summary>
     public void AttackDamageBuff(float amount)
     {
+        Utils.Log("버프 전 공계수" + buffAttackDamage);
         buffAttackDamage *= (1 + amount);
+        Utils.Log("버프 후 공계수" + buffAttackDamage);
     }
     public void AttackSpeedBuff(float amount)
     {
@@ -177,7 +179,13 @@ public abstract class BaseController : MonoBehaviour
                     buff.token?.Dispose();
                 }
             }
+
             buffDic[id].Clear();
+
+            if (buffDic[id].Count == 0)
+            {
+                buffDic.Remove(id);
+            }
         }
 
         if (!cancel)
@@ -202,7 +210,7 @@ public abstract class BaseController : MonoBehaviour
                     }
                 }
             }
-            RemoveBuff(key, false);
+            RemoveBuff(key);
         }
         buffDic.Clear();
     }

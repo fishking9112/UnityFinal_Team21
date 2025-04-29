@@ -14,7 +14,6 @@ public class ParticleManager : MonoSingleton<ParticleManager>
     /// <summary>
     /// 파티클 생성
     /// </summary>
-    /// <param name="key"> 생성할 파티클 </param>
     /// <param name="position"> 생성할 위치 </param>
     /// <param name="rotation"> 생성할 때 회전 값. 입력안하면 identity </param>
     /// <param name="scale"> 파티클 크기. 입력안하면 1 </param>

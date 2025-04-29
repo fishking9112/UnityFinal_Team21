@@ -497,6 +497,8 @@ MonoBehaviour:
   initEvolutionPoint: 0
   initLevel: 1
   initGold: 0
+  initEnhnacePoint: 0
+  EnhancePoint: 0
 --- !u!114 &166616951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1102,6 +1104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDontDestroy: 0
+  isHealthUI: 0
 --- !u!4 &637948746
 Transform:
   m_ObjectHideFlags: 0
@@ -1516,7 +1519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.size
-      value: 24
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].key
@@ -1612,7 +1615,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[23].key
-      value: AttackDMG
+      value: AttackDMG_Light
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[24].key
+      value: AttackDMG_Sword
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].prefab
@@ -1711,6 +1718,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3339963394610592647, guid: 964eb0e410b553b448400ed247a1c492, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[24].prefab
+      value: 
+      objectReference: {fileID: 4152042884537762471, guid: fb71bb35cedf9c540b061ec436f8c0de, type: 3}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].initPoolSize
       value: 5
       objectReference: {fileID: 0}
@@ -1796,14 +1807,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[21].initPoolSize
-      value: 5
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[22].initPoolSize
-      value: 5
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[23].initPoolSize
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[24].initPoolSize
       value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
