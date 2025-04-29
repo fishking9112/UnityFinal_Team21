@@ -16,6 +16,8 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private HeroStatusInfo statusInfo;
 
+    public bool isHealthUI = false;
+
     float rand;
     float rand2;
     float rand3;
@@ -28,7 +30,7 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private async UniTaskVoid SetWave()
     {
-        while(true) // 게임 끝나기 전까지
+        while (true) // 게임 끝나기 전까지
         {
             await UniTask.Delay(TimeSpan.FromSeconds(10)); //매 10초마다
 
@@ -43,7 +45,7 @@ public class HeroManager : MonoSingleton<HeroManager>
 
         int rand = UnityEngine.Random.Range(0, cnt);
 
-        
+
         statusInfo = DataManager.Instance.heroStatusDic.ElementAt(rand).Value;
 
 
@@ -53,12 +55,12 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private void SummonHero()
     {
-        HeroController hero = HeroPoolManager.Instance.GetObject(RandomSummonPos(98,98));
-        hero?.StatInit(statusInfo);
+        HeroController hero = HeroPoolManager.Instance.GetObject(RandomSummonPos(98, 98));
+        hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
     }
 
 
-    private Vector2 RandomSummonPos(float width, float height, float edge=5f)
+    private Vector2 RandomSummonPos(float width, float height, float edge = 5f)
     {
         int edgeType = UnityEngine.Random.Range(0, 4);
         float halfW = width * 0.5f;
@@ -83,5 +85,13 @@ public class HeroManager : MonoSingleton<HeroManager>
 
         return new Vector2(x, z);
 
+    }
+    public void OnClickHealthUITest()
+    {
+        isHealthUI = !isHealthUI;
+        foreach (var _hero in hero)
+        {
+            _hero.Value.SetHealthUI(isHealthUI);
+        }
     }
 }
