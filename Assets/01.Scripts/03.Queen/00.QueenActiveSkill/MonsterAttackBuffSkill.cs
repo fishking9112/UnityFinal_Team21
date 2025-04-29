@@ -26,6 +26,7 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
             {
                 UniTask task = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level);
                 tasks.Add(task);
+                ParticleObject particle = ParticleManager.Instance.SpawnParticle("AttackDMG", monster.transform.position, Quaternion.identity, 0.5f, monster.transform);
             }
         }
         await UniTask.WhenAll(tasks);

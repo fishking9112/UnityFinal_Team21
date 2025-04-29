@@ -28,7 +28,10 @@ public class ParticleObject : MonoBehaviour, IPoolable
 
     public void OnDespawn()
     {
-        transform.SetParent(poolParent);
+        if (poolParent != null)
+        {
+            transform.SetParent(poolParent);
+        }
 
         particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         returnToPool?.Invoke(this);
@@ -38,6 +41,6 @@ public class ParticleObject : MonoBehaviour, IPoolable
     private async UniTask FinishedReturnToPool()
     {
         await UniTask.WaitUntil(() => !particle.IsAlive(true));
-        returnToPool?.Invoke(this);
+        OnDespawn();
     }
 }

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class AllRangeMonsterHealSkill : QueenActiveSkillBase
 {
     public override void Init()
@@ -12,6 +14,7 @@ public class AllRangeMonsterHealSkill : QueenActiveSkillBase
         foreach(var monster in MonsterManager.Instance.monsters)
         {
             monster.Value.Heal(info.value);
+            ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", monster.Value.transform.position, Quaternion.identity, 0.5f, monster.Value.transform);
         }
     }
 }
