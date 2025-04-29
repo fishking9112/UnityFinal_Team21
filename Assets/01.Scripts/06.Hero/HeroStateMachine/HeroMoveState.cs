@@ -25,7 +25,7 @@ public class HeroMoveState : HeroBaseState
         detectedRange = state.controller.statusInfo.detectedRange;
     }
 
-    private async UniTaskVoid MoveAndSearch(CancellationToken tk)
+    private async UniTask MoveAndSearch(CancellationToken tk)
     {
             MoveHero();
         while (isMove)
