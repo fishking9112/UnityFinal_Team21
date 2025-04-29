@@ -73,7 +73,11 @@ public class GameHUD : HUDUI
 
         // 레벨업 테스트 버튼
         LevelUPTestButton.onClick.AddListener(() => GameManager.Instance.queen.condition.AdjustCurExpGauge(100));
-        HealthUITestButton.onClick.AddListener(() => { MonsterManager.Instance.OnClickHealthUITest(); });
+        HealthUITestButton.onClick.AddListener(() =>
+        {
+            MonsterManager.Instance.OnClickHealthUITest();
+            HeroManager.Instance.OnClickHealthUITest();
+        });
     }
 
 
