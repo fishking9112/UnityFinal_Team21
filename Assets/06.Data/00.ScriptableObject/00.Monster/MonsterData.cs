@@ -49,6 +49,7 @@ public class MonsterInfo : BaseStatData, IInfo
     }
     public void Copy(MonsterInfo other)
     {
+        base.Copy(other);
         id = other.id;
         name = other.name;
         description = other.description;

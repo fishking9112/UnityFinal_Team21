@@ -27,8 +27,8 @@ public class MonsterManager : MonoSingleton<MonsterManager>
     //     if (Input.GetMouseButtonDown(0))
     //     {
     //         Vector2 randomPos = GetRandomWorldPositionInCamera();
-    //         var monster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfoList[testSpawnNumber].outfit, randomPos);
-    //         monster.StatInit(monsterInfoList[testSpawnNumber]);
+    //         var monster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfoList[1101].outfit, randomPos);
+    //         monster.StatInit(monsterInfoList[1101]);
     //     }
     // }
     // Vector2 GetRandomWorldPositionInCamera()

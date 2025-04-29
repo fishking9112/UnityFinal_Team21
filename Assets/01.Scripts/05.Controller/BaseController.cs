@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 
@@ -14,8 +13,13 @@ public abstract class BaseController : MonoBehaviour
     [Header("핸들러")]
     [SerializeField] protected HealthHandler healthHandler;
 
-    public Dictionary<int, int> buffDic = new Dictionary<int, int>();
-    public Dictionary<int, CancellationTokenSource> buffTokenDic = new Dictionary<int, CancellationTokenSource>();
+    [Header("버프")]
+    public float buffMoveSpeed = 1f;
+    public float buffAttackDamage = 1f;
+    public float buffAttackSpeed = 1f;
+
+    public Dictionary<int, List<Buff>> buffDic = new Dictionary<int, List<Buff>>();
+
 
     protected virtual void Start()
     {
@@ -55,6 +59,14 @@ public abstract class BaseController : MonoBehaviour
             Die();
         }
     }
+    
+    /// <summary>
+    /// 현재 체력 회복
+    /// </summary>
+    public void Heal(float amount)
+    {
+        healthHandler.Heal(amount);
+    }
 
     /// <summary>
     /// 넉백을 입음
@@ -74,33 +86,6 @@ public abstract class BaseController : MonoBehaviour
     {
         // Destroy(this.gameObject);
         ClearAllBuff();
-    }
-
-    public void AddBuffToken(int id, CancellationTokenSource token)
-    {
-        if (buffTokenDic.TryGetValue(id, out var exist))
-        {
-            exist?.Cancel();
-            exist?.Dispose();
-            exist = null;
-        }
-        buffTokenDic[id] = token;
-    }
-
-    public void RemoveBuffToken(int id, bool cancel = false)
-    {
-        if (buffTokenDic.TryGetValue(id, out var exist))
-        {
-            exist?.Cancel();
-
-            if (!cancel)
-            {
-                exist?.Dispose();
-                exist = null;
-                buffTokenDic.Remove(id);
-                buffDic.Remove(id);
-            }
-        }
     }
 
     /// <summary>
@@ -124,24 +109,84 @@ public abstract class BaseController : MonoBehaviour
 
     }
 
+
+    // =================================================================================
+    //                               버프 관련 코드
+    // =================================================================================
+
+
+    /// <summary>
+    /// 버프로 인한 수치 조정
+    /// </summary>
+    public void AttackDamageBuff(float amount)
+    {
+        buffAttackDamage *= (1 + amount);
+    }
+    public void AttackSpeedBuff(float amount)
+    {
+        buffAttackSpeed *= (1 + amount);
+    }
+    public void MoveSpeedBuff(float amount)
+    {
+        buffMoveSpeed *= (1 + amount);
+    }
+
+    /// <summary>
+    /// 버프가 끝날 때 수치 되돌리기
+    /// </summary>
+    public void EndAttackDamageBuff()
+    {
+        buffAttackDamage = 1f;
+    }
+    public void EndAttackSpeedBuff()
+    {
+        buffAttackSpeed = 1f;
+    }
+    public void EndMoveSpeedBuff()
+    {
+        buffMoveSpeed = 1f;
+    }
+
+    // 버프 추가
+    public void AddBuff(int id, int level, CancellationTokenSource token)
+    {
+        if (!buffDic.TryGetValue(id, out var exist))
+        {
+            buffDic[id] = new List<Buff>();
+        }
+        buffDic[id].Add(new Buff(id, level, token));
+    }
+
+    // 버프 제거
+    public void RemoveBuff(int id, bool cancel = false)
+    {
+        if (buffDic.TryGetValue(id, out var buffList))
+        {
+            foreach (var buff in buffList)
+            {
+                if (cancel)
+                {
+                    buff.token?.Cancel();
+                    buff.token?.Dispose();
+                }
+            }
+            buffDic[id].Clear();
+        }
+
+        if (!cancel)
+        {
+            buffDic.Remove(id);
+        }
+    }
+
     // 모든 버프 제거
     public void ClearAllBuff()
     {
-        foreach (var pair in buffDic)
+        foreach (var key in new List<int>(buffDic.Keys))
         {
-            if (DataManager.Instance.buffDic.TryGetValue(pair.Key, out var buffInfo))
-            {
-                BuffManager.Instance.RemoveBuff(this, buffInfo);
-            }
-        }
-
-        foreach (var token in buffTokenDic)
-        {
-            token.Value?.Cancel();
-            token.Value?.Dispose();
+            RemoveBuff(key, false);
         }
 
         buffDic.Clear();
-        buffTokenDic.Clear();
     }
 }

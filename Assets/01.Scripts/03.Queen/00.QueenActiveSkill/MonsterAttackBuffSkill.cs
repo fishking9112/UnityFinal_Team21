@@ -9,7 +9,7 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[12];
+        info = DataManager.Instance.queenActiveSkillDic[203];
     }
 
     public override async void UseSkill()
@@ -22,9 +22,9 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
         List<UniTask> tasks = new List<UniTask>();
         foreach (var hit in hits)
         {
-            if (MonsterManager.Instance.monsters[hit.gameObject])
+            if(MonsterManager.Instance.monsters.TryGetValue(hit.gameObject, out var monster))
             {
-                UniTask task = BuffManager.Instance.ApplyBuff(MonsterManager.Instance.monsters[hit.gameObject], info.buff_ID, info.buff_Level);
+                UniTask task = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level);
                 tasks.Add(task);
             }
         }

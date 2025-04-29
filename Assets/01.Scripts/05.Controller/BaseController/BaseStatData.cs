@@ -17,4 +17,13 @@ public class BaseStatData
         attackRange = other.attackRange;
         attackSpeed = other.attackSpeed;
     }
+
+    public void Copy(BaseStatData other)
+    {
+        health = other.health;
+        moveSpeed = other.moveSpeed;
+        attack = other.attack;
+        attackRange = other.attackRange;
+        attackSpeed = other.attackSpeed;
+    }
 }
