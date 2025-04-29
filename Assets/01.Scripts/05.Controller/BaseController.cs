@@ -157,13 +157,17 @@ public abstract class BaseController : MonoBehaviour
     }
 
     // 버프 추가
-    public void AddBuff(int id, int level, CancellationTokenSource token)
+    public Buff AddBuff(int id, int level, CancellationTokenSource token)
     {
-        if (!buffDic.TryGetValue(id, out var exist))
+        var buff = new Buff(id, level, token);
+
+        if (!buffDic.ContainsKey(id))
         {
             buffDic[id] = new List<Buff>();
         }
-        buffDic[id].Add(new Buff(id, level, token));
+
+        buffDic[id].Add(buff);
+        return buff;
     }
 
     // 버프 제거

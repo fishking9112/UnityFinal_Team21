@@ -94,7 +94,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     /// <param name="position"> 가져올 position </param>
     /// <param name="rotation"> 가져올 rotation </param>
     /// <returns></returns>
-    public T GetObject<T>(string key, Vector2 position) where T:Component
+    public T GetObject<T>(string key, Vector2 position) where T : Component
     {
         if (!pools.ContainsKey(key))
         {
@@ -107,6 +107,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
         {
             comp = CreatePool<T>(key);
         }
+
         comp.transform.position = position;
         comp.gameObject.SetActive(true);
         comp.GetComponent<IPoolable>()?.OnSpawn();

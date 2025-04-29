@@ -51,15 +51,9 @@ public class BuffManager : MonoSingleton<BuffManager>
                     ParticleObject curParticle = buffList[0].particle;
 
                     target.RemoveBuff(id, true);
-                    var updateToken = new CancellationTokenSource();
-                    target.AddBuff(id, level, updateToken);
+                    var updateBuff = AddBuff(target, buffInfo, level);
 
-                    if (target.buffDic.TryGetValue(id, out var newBuffList) && newBuffList.Count > 0)
-                    {
-                        newBuffList[0].particle = curParticle;
-                    }
-
-                    await ApplyBuffDurationTime(target, buffInfo, updateToken);
+                    await ApplyBuffDurationTime(target, buffInfo, updateBuff.token);
                     return;
                 }
                 else
@@ -70,14 +64,14 @@ public class BuffManager : MonoSingleton<BuffManager>
             }
 
             // 버프 적용(최초 적용 or 더높은 레벨의 동일 버프가 들어올 때 적용)
-            CancellationTokenSource token = AddBuff(target, buffInfo, level);
-            await ApplyBuffDurationTime(target, buffInfo, token);
+            Buff buff = AddBuff(target, buffInfo, level);
+            await ApplyBuffDurationTime(target, buffInfo, buff.token);
         }
         else
         {
             // 버프 적용 (이미 버프가 걸려있는 지는 중요하지 않음)
-            CancellationTokenSource token = AddBuff(target, buffInfo, level);
-            await ApplyBuffDurationTime(target, buffInfo, token);
+            Buff buff = AddBuff(target, buffInfo, level);
+            await ApplyBuffDurationTime(target, buffInfo, buff.token);
         }
     }
 
@@ -105,17 +99,17 @@ public class BuffManager : MonoSingleton<BuffManager>
     }
 
     // 버프 추가
-    private CancellationTokenSource AddBuff(BaseController target, BuffInfo info, int level)
+    private Buff AddBuff(BaseController target, BuffInfo info, int level)
     {
         CancellationTokenSource token = new CancellationTokenSource();
-        target.AddBuff(info.id, level, token);
+        Buff buff = target.AddBuff(info.id, level, token);
 
         float amount = GetAmountByLevel(info, level);
 
         switch (info.type)
         {
             case BuffType.ATTACK_DMG:
-                ApplyParticle(target, info.id, "AttackDMG_Sword", target.transform.position + Vector3.up, Quaternion.identity, 0.5f, target.transform);
+                buff.particle = ParticleManager.Instance.SpawnParticle("AttackDMG_Sword", target.transform.position + Vector3.up, Quaternion.identity, 0.5f, target.transform);
                 target.AttackDamageBuff(amount);
                 break;
             case BuffType.ATTACK_SPEED:
@@ -127,12 +121,12 @@ public class BuffManager : MonoSingleton<BuffManager>
             case BuffType.POISON:
                 break;
             case BuffType.BURN:
-                ApplyParticle(target, info.id, "Burn", target.transform.position, Quaternion.identity, 0.5f, target.transform);
+                buff.particle = ParticleManager.Instance.SpawnParticle("Burn", target.transform.position, Quaternion.identity, 0.5f, target.transform);
                 _ = TakeTickDamaged(target, info, token, level);
                 break;
         }
 
-        return token;
+        return buff;
     }
 
     // 버프 제거
@@ -216,21 +210,6 @@ public class BuffManager : MonoSingleton<BuffManager>
                 return info.lv_3;
             default:
                 return 0f;
-        }
-    }
-
-    private void ApplyParticle(BaseController target, int buffId, string key, Vector2 position, Quaternion rotation, float scale, Transform parent)
-    {
-        if (!target.buffDic.TryGetValue(buffId, out var buffList))
-        {
-            return;
-        }
-
-        ParticleObject particle = ParticleManager.Instance.SpawnParticle(key, position, rotation, scale, parent);
-
-        if (buffList.Count > 0)
-        {
-            buffList[buffList.Count - 1].particle = particle;
         }
     }
 

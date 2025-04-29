@@ -23,7 +23,11 @@ public class ParticleObject : MonoBehaviour, IPoolable
     {
         particle.Clear();
         particle.Play();
-        FinishedReturnToPool().Forget();
+
+        if (!particle.main.loop)
+        {
+            FinishedReturnToPool().Forget();
+        }
     }
 
     public void OnDespawn()
