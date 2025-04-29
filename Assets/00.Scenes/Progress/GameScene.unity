@@ -497,6 +497,8 @@ MonoBehaviour:
   initEvolutionPoint: 0
   initLevel: 1
   initGold: 0
+  initEnhnacePoint: 0
+  EnhancePoint: 0
 --- !u!114 &166616951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1102,6 +1104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDontDestroy: 0
+  isHealthUI: 0
 --- !u!4 &637948746
 Transform:
   m_ObjectHideFlags: 0
@@ -2282,6 +2285,10 @@ PrefabInstance:
       propertyPath: heroObj.obj
       value: 
       objectReference: {fileID: 3862953293406409376, guid: 38603b144e4c19f41986e7256e11e558, type: 3}
+    - target: {fileID: 7962203731551977947, guid: 39d4a34702ee1454aa0018ad6622881b, type: 3}
+      propertyPath: heroObj.poolSize
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
