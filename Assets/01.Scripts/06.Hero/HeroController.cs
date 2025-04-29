@@ -43,7 +43,6 @@ public class HeroController : BaseController
         hero.Init(stat.detectedRange);
         navMeshAgent.speed = stat.moveSpeed;
         DeadCheck().Forget();
-        stateMachine.ChangeState(stateMachine.moveState);
 
         base.StatInit(stat);
         this.statusInfo.Copy(stat);
@@ -55,6 +54,7 @@ public class HeroController : BaseController
             hero.SetAbilityLevel(stat.weapon[i], stat.weaponLevel[i]);
         }
 
+        stateMachine.ChangeState(stateMachine.moveState);
         token = new CancellationTokenSource();
     }
 
