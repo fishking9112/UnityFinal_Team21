@@ -1,0 +1,43 @@
+using Cysharp.Threading.Tasks;
+using System;
+using UnityEngine;
+
+public class ParticleObject : MonoBehaviour, IPoolable
+{
+    private Action<Component> returnToPool;
+    private ParticleSystem particle;
+
+    private Transform poolParent;
+
+    private void Awake()
+    {
+        particle = GetComponent<ParticleSystem>();
+    }
+
+    public void Init(Action<Component> returnAction)
+    {
+        returnToPool = returnAction;
+        poolParent = transform.parent;
+    }
+
+    public void OnSpawn()
+    {
+        particle.Play();
+        FinishedReturnToPool().Forget();
+    }
+
+    public void OnDespawn()
+    {
+        transform.SetParent(poolParent);
+
+        particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        returnToPool?.Invoke(this);
+    }
+
+    // 파티클이 끝나면 자동으로 풀에 반환
+    private async UniTask FinishedReturnToPool()
+    {
+        await UniTask.WaitUntil(() => !particle.IsAlive(true));
+        returnToPool?.Invoke(this);
+    }
+}

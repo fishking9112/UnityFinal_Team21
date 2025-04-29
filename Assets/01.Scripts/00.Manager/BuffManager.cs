@@ -2,12 +2,15 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.Android.Types;
+using UnityEngine;
 
 public class Buff
 {
     public int id;
     public int level;
     public CancellationTokenSource token;
+    public ParticleObject particle;
 
     public Buff(int id, int level, CancellationTokenSource token)
     {
@@ -127,11 +130,11 @@ public class BuffManager : MonoSingleton<BuffManager>
                 break;
             case BuffType.MOVE_SPEED:
                 target.MoveSpeedBuff(amount);
-                Utils.Log($"적용된 이동속도 버프 수치 : {target.buffMoveSpeed}");
                 break;
             case BuffType.POISON:
                 break;
             case BuffType.BURN:
+                ApplyParticle(target, info.id, "Burn", target.transform.position, Quaternion.identity, 0.5f, target.transform);
                 _ = TakeTickDamaged(target, info, token, level);
                 break;
         }
@@ -171,6 +174,11 @@ public class BuffManager : MonoSingleton<BuffManager>
                     case BuffType.POISON:
                         break;
                     case BuffType.BURN:
+                        if (buff.particle != null)
+                        {
+                            buff.particle.OnDespawn();
+                            buff.particle = null;
+                        }
                         break;
                 }
 
@@ -228,6 +236,29 @@ public class BuffManager : MonoSingleton<BuffManager>
                 return info.lv_3;
             default:
                 return 0f;
+        }
+    }
+
+    private void ApplyParticle(BaseController target, int buffId, string key, Vector2 position, Quaternion rotation, float scale, Transform parent)
+    {
+        if (!target.buffDic.TryGetValue(buffId, out var buffList))
+        {
+            return;
+        }
+
+        foreach (var exisitBuff in buffList)
+        {
+            if (exisitBuff.particle != null && exisitBuff.particle.gameObject.activeSelf)
+            {
+                return;
+            }
+        }
+
+        ParticleObject burnParticle = ParticleManager.Instance.SpawnParticle(key, position, rotation, scale, parent);
+
+        if (buffList.Count > 0)
+        {
+            buffList[buffList.Count - 1].particle = burnParticle;
         }
     }
 }

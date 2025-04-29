@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class AllRangeMonsterHealSkill : QueenActiveSkillBase
 {
     public override void Init()

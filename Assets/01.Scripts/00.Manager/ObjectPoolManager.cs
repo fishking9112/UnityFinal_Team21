@@ -13,16 +13,16 @@ public interface IPoolable
 
         -------------------------------------------------------------------------------------
 
-        private Action<GameObject> returnToPool;
+        private Action<Component> returnToPool;
 
-        public void Init(Action<GameObject> returnAction)
+        public void Init(Action<Component> returnAction)
         {
             returnToPool = returnAction;
         }
 
         public void OnDespawn()
         {
-            returnToPool?.Invoke(gameObject);
+            returnToPool?.Invoke(this);
         }
     */
 
