@@ -12,6 +12,7 @@ public class QueenCondition : MonoBehaviour
     public float initEvolutionPoint = 0f;
     public float initLevel = 1f;
     public float initGold = 0f;
+    public int initEnhnacePoint = 0;
 
     private float expGainMultiplierPercent = 0f;
     private float goldGainMultiplierPercent = 0f;
@@ -27,6 +28,7 @@ public class QueenCondition : MonoBehaviour
     public ReactiveProperty<float> EvolutionPoint { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> Level { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> Gold { get; private set; } = new ReactiveProperty<float>();
+    public int EnhancePoint;
 
     private float ExpGainMultiplier => 1f + (expGainMultiplierPercent * 0.01f);
     private float GoldGainMultiplier => 1f + (goldGainMultiplierPercent * 0.01f);
@@ -45,6 +47,7 @@ public class QueenCondition : MonoBehaviour
         MaxExpGauge.Value = initMaxExpGauge;
         EvolutionPoint.Value = initEvolutionPoint;
         Gold.Value = initGold;
+        EnhancePoint = initEnhnacePoint;
     }
 
     /// <summary>
@@ -127,6 +130,7 @@ public class QueenCondition : MonoBehaviour
     private void LevelUp()
     {
         Level.Value++;
+        EnhancePoint++;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<QueenEnhanceUI>();
     }
 
