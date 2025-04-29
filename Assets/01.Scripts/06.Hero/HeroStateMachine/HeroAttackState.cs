@@ -23,7 +23,7 @@ public class HeroAttackState : HeroBaseState
         Move(token.Token).Forget();
     }
 
-    private async UniTaskVoid Move(CancellationToken tk)
+    private async UniTask Move(CancellationToken tk)
     {
         while (!token.IsCancellationRequested)
         {
@@ -61,7 +61,7 @@ public class HeroAttackState : HeroBaseState
         Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, detectedRange, 1 << 7 | 1 << 13);
         if (col == null)
         {
-            // state.ChangeState(state.moveState);
+            state.ChangeState(state.moveState);
             return state.GetDir();
         }
         else

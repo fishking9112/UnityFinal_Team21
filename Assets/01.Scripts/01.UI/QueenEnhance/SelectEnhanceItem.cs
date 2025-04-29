@@ -9,17 +9,16 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] private float hoverScale = 1.1f;
     [SerializeField] private float scaleDuration = 0.1f;
 
-    private Transform targetTransform;
-    private QueenEnhanceInfo currentInfo;
-    private Vector3 originalScale;
-    private bool isSelected = false;
-
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI enhanceNameText;
     [SerializeField] private TextMeshProUGUI enhanceNextLevelText;
     [SerializeField] private TextMeshProUGUI enhanceTypeText;
     [SerializeField] private TextMeshProUGUI enhanceDecText;
 
+    private Transform targetTransform;
+    private QueenEnhanceInfo currentInfo;
+    private Vector3 originalScale;
+    private bool isSelected = false;
 
     /// <summary>
     /// UI 요소와 기본 크기를 설정.
@@ -45,27 +44,18 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         iconImage.sprite = null;
         enhanceNameText.text = info.name;
-
-        if (nextLevel >= info.maxLevel)
-        {
-            enhanceNextLevelText.text = $"Lv. {nextLevel}(Max)";
-        }
-        else
-        {
-            enhanceNextLevelText.text = $"Lv. {nextLevel}";
-        }
-
+        enhanceNextLevelText.text = nextLevel >= info.maxLevel ? $"Lv. {nextLevel}(Max)" : $"Lv. {nextLevel}";
         enhanceTypeText.text = info.type.ToString();
 
         float previewValue = currentLevel == 0
             ? info.state_Base
             : info.state_Base + (info.state_LevelUp * currentLevel);
 
+        string formattedValue = QueenEnhanceStatusUI.PercentValueTypes.Contains(info.valueType)
+            ? $"{previewValue * 100:F0}%"
+            : $"{previewValue}";
 
-        string formattedValue = QueenEnhanceStatusUI.PercentValueTypes.Contains(info.valueType) ? $"{previewValue * 100:F0}%" : $"{previewValue}";
-
-        enhanceDecText.text = info.description.Replace("n", formattedValue.ToString());
-
+        enhanceDecText.text = info.description.Replace("n", formattedValue);
     }
 
     /// <summary>
@@ -78,13 +68,22 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     }
 
     /// <summary>
+    /// 강화 포인트가 있는지 확인합니다.
+    /// </summary>
+    private bool HasEnhancePoint()
+    {
+        return GameManager.Instance.queen.condition.EnhancePoint > 0;
+    }
+
+    /// <summary>
     /// 마우스가 버튼에 들어왔을 때 호출되는 함수. 크기를 키웁니다.
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (isSelected) return;
+        if (isSelected || !HasEnhancePoint()) return;
 
         targetTransform.DOScale(originalScale * hoverScale, scaleDuration).SetEase(Ease.OutBack).SetUpdate(true);
+       
     }
 
     /// <summary>
@@ -92,7 +91,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (isSelected) return;
+        if (isSelected || !HasEnhancePoint()) return;
 
         targetTransform.DOScale(originalScale, scaleDuration).SetEase(Ease.InOutSine).SetUpdate(true);
     }
@@ -102,9 +101,10 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (isSelected) return;
+        if (isSelected || !HasEnhancePoint()) return;
 
         isSelected = true;
+
         targetTransform.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutBounce).SetUpdate(true)
             .OnComplete(() =>
             {
@@ -120,8 +120,9 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 {
                     StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.ApplyInhance(currentInfo);
                     StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.CloseUI();
-
                 });
             });
+
+        GameManager.Instance.queen.condition.EnhancePoint--;
     }
 }

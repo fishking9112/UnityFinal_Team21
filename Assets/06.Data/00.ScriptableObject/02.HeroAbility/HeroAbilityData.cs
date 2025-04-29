@@ -11,6 +11,7 @@ public enum HeroAbilityType
     REVOLUTION,
     AREA,
     AXE,
+    CHAIN,
 }
 
 [Serializable]

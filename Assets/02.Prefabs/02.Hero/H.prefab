@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -8899919222466052609}
   - component: {fileID: -6065295390783855606}
   - component: {fileID: -1041513511482003167}
+  - component: {fileID: 4796377309810063318}
   - component: {fileID: 7958608897836801452}
   - component: {fileID: -6293166092204535445}
   m_Layer: 6
@@ -54,7 +55,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  reward: 0
   abilityList: []
   allAbility: []
 --- !u!114 &3862953293406409376
@@ -78,6 +78,22 @@ MonoBehaviour:
   healthHandler: {fileID: 7958608897836801452}
   navMeshAgent: {fileID: 2788587879810130101}
   hero: {fileID: 1140399341762152338}
+  pivot: {fileID: 0}
+  statusInfo:
+    health: 0
+    moveSpeed: 0
+    attack: 0
+    attackRange: 0
+    attackSpeed: 0
+    id: 0
+    name: 
+    description: 
+    startLevel: 0
+    weapon: 
+    weaponLevel: 
+    detectedRange: 0
+    reward: 0
+    custom: 0
 --- !u!195 &2788587879810130101
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -407,6 +423,68 @@ MonoBehaviour:
   count: 1
   count_LevelUp: 1
   countDelay: 0
+  countDelay_LevelUp: 0
+  knockback: 1
+  curLevel: 1
+--- !u!114 &4796377309810063318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3469463355210438680}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 197a83a42726d394e9d0eb87641ab560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroAbilityInfo:
+    id: 106
+    name: "\uCCB4\uC778"
+    description: "\uC5F0\uC1C4 \uACF5\uACA9 \uC608\uC2DC"
+    icon: 0
+    maxLevel: 8
+    pivot: {x: 0, y: 0, z: 0}
+    damage_Base: 5
+    damage_LevelUp: 1
+    delay_Base: 2
+    delay_LevelUp: 0
+    piercing_Base: 3
+    piercing_LevelUp: 1
+    size_Base: {x: 1, y: 1, z: 1}
+    size_LevelUp: {x: 0, y: 0, z: 0}
+    type: 6
+    speed_Base: 0
+    speed_LevelUp: 0
+    rotateSpeed_Base: 0
+    rotateSpeed_LevelUp: 0
+    duration_Base: 0.1
+    duration_LevelUp: 0
+    count_Base: 1
+    count_LevelUp: 0
+    countDelay_Base: 0.1
+    countDelay_LevelUp: 0
+  id: 106
+  maxLevel: 8
+  pivot: {x: 0, y: 0, z: 0}
+  damage: 5
+  damage_LevelUp: 1
+  delay: 2
+  delay_LevelUp: 0
+  pierce: 3
+  pierce_LevelUp: 1
+  size: {x: 1, y: 1, z: 1}
+  size_LevelUp: {x: 0, y: 0, z: 0}
+  type: 6
+  speed: 0
+  speed_LevelUp: 0
+  rotateSpeed: 0
+  rotateSpeed_LevelUp: 0
+  duration: 5
+  duration_LevelUp: 0
+  count: 1
+  count_LevelUp: 0
+  countDelay: 0.1
   countDelay_LevelUp: 0
   knockback: 1
   curLevel: 1
