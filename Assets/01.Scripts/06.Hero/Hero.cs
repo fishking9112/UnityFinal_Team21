@@ -82,6 +82,7 @@ public class Hero : MonoBehaviour
             abilityList.Add(a);
 
             a.SetAbilityLevel(level);
+            break;
         }
     }
 
