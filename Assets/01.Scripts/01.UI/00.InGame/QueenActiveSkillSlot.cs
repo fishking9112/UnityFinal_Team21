@@ -4,13 +4,13 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
     {
         base.AddSlot(index, skill);
 
-        if (index < 0 || index >= slotIcon.Count)
+        if (index < 0 || index >= slotIconList.Count)
         {
             return;
         }
 
-        slotIcon[index].sprite = DataManager.Instance.iconAtlas.GetSprite(skill.info.icon);
-        slotIcon[index].enabled = true;
-        slotIcon[index].preserveAspect = true;
+        slotIconList[index].sprite = DataManager.Instance.iconAtlas.GetSprite(skill.info.icon);
+        slotIconList[index].enabled = true;
+        slotIconList[index].preserveAspect = true;
     }
 }

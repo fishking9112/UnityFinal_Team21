@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +9,7 @@ public class GameHUD : HUDUI
     [Header("UI")]
     public MonsterSlot monsterSlot;
     public QueenActiveSkillSlot queenActiveSkillSlot;
+
     private QueenCondition condition => GameManager.Instance.queen.condition;
 
     [Header("레벨")]
@@ -53,6 +53,8 @@ public class GameHUD : HUDUI
 
     public override void Initialize()
     {
+        BindSlotButton();
+
         condition.Level.AddAction(UpdateLevelText);
         UpdateLevelText(condition.Level.Value);
 
@@ -164,6 +166,27 @@ public class GameHUD : HUDUI
     public void UpdateTimerText(float time)
     {
         timerText.text = Utils.GetMMSSTime((int)time);
+    }
+
+    public void BindSlotButton()
+    {
+        for (int i = 0; i < monsterSlot.slotButtonList.Count; i++)
+        {
+            int index = i;
+            monsterSlot.slotButtonList[i].onClick.AddListener(() =>
+            {
+                GameManager.Instance.queen.controller.OnClickSlotButton(index);
+            });
+        }
+
+        for (int i = 0; i < queenActiveSkillSlot.slotButtonList.Count; i++)
+        {
+            int index = i;
+            queenActiveSkillSlot.slotButtonList[i].onClick.AddListener(() =>
+            {
+                GameManager.Instance.queen.controller.OnClickSlotButton(index);
+            });
+        }
     }
 
     private void OnDestroy()

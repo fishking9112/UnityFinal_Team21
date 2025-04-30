@@ -31,6 +31,7 @@ public class BuffInfo : IInfo
     public int ID => id;
     public string Name => name;
     public string Description => description;
+    public string Icon => icon;
 }
 
 [CreateAssetMenu(fileName = "BuffData", menuName = "Scriptable Object/New BuffData")]
