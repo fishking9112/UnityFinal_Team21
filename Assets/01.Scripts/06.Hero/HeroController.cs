@@ -29,7 +29,7 @@ public class HeroController : BaseController
         stateMachine = new HeroState(hero, this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         stateMachine.navMeshAgent = navMeshAgent;
-        pivot = transform.GetChild(0);
+        pivot = transform.GetChild(1);
 
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
