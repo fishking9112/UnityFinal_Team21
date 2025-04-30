@@ -80,7 +80,7 @@ public class MonsterController : BaseController, IPoolable
         {
             this.monsterInfo.Copy(monsterInfo);
         }
-        Debug.Log(isHealthUI);
+
         base.StatInit(this.monsterInfo, isHealthUI);
 
         if (navMeshAgent == null)

@@ -38,7 +38,6 @@ public abstract class BaseController : MonoBehaviour
 
     public void SetHealthUI(bool isHealthUI)
     {
-        Debug.Log(isHealthUI);
         healthHandler.ActiveHealthUI(isHealthUI);
     }
 
