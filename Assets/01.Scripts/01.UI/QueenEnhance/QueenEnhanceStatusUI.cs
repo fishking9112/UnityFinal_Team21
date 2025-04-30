@@ -45,7 +45,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         AppendCastleHpStatus(builder);
 
         builder.AppendLine();
-        builder.AppendLine("──────────────────");
+        builder.AppendLine("─────────────────");
         builder.AppendLine();
 
         // 종족별 강화 효과 표시 (MonsterPassive만)
@@ -146,7 +146,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
             }
 
             builder.AppendLine();
-            builder.AppendLine("──────────────────");
+            builder.AppendLine("─────────────────");
             builder.AppendLine();
         }
     }
