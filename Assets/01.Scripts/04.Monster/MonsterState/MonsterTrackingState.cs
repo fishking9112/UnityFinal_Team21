@@ -46,6 +46,11 @@ public class MonsterTrackingState : MonsterBaseState
     {
         while (true)
         {
+            if(stateMachine.Controller.navMeshAgent == null)
+            {
+                return;
+            }
+
             token.ThrowIfCancellationRequested(); // 취소되면 예외 발생
 
             TargetAllSearch();
@@ -76,6 +81,11 @@ public class MonsterTrackingState : MonsterBaseState
     /// </summary>
     public void MoveTarget()
     {
+        if(navMeshAgent == null || !navMeshAgent.enabled)
+        {
+            return;
+        }
+
         // 타겟 찾기
         TargetAreaSearch();
 
@@ -162,6 +172,11 @@ public class MonsterTrackingState : MonsterBaseState
     /// </summary>
     public void TargetAreaSearch()
     {
+        if (navMeshAgent == null)
+        {
+            return;
+        }
+
         float minDist = float.MaxValue;
         Vector2 origin = navMeshAgent.transform.position;
         Collider2D[] hits = Physics2D.OverlapCircleAll(origin, searchArea, stateMachine.Controller.attackLayer);
@@ -189,6 +204,11 @@ public class MonsterTrackingState : MonsterBaseState
     /// </summary>
     public void TargetAllSearch()
     {
+        if(navMeshAgent == null)
+        {
+            return;
+        }
+
         float minDist = float.MaxValue;
         Vector2 origin = navMeshAgent.transform.position;
         GameObject nearHero = null;

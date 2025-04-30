@@ -119,6 +119,11 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     /// </summary>
     private void ReturnObject(string key, Component comp)
     {
+        if(comp == null)
+        {
+            return;
+        }
+
         if (!pools.ContainsKey(key))
         {
             Destroy(comp);

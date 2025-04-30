@@ -69,9 +69,13 @@ public class HeroBullet : MonoBehaviour, IPoolable
     /// <returns></returns>
     private async UniTaskVoid Move(CancellationToken token)
     {
-
         while (time < limitTime)
         {
+            if(bulletTransform == null)
+            {
+                return;
+            }
+
             bulletTransform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
             transform.position = (Vector2)transform.position + speed * Time.deltaTime * (Vector2)transform.up;
             time += Time.deltaTime;
