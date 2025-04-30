@@ -35,7 +35,7 @@ public class MenuHUD : HUDUI
             mainUISet.button.onClick.AddListener(() =>
             {
                 mainUISet.panel.SetActive(true);
-                buttonMenu.SetActive(false);
+               // buttonMenu.SetActive(false);
                 uiMenu.SetActive(true);
                 activePanel = mainUISet.panel;
             });
@@ -43,7 +43,7 @@ public class MenuHUD : HUDUI
 
         backBtn.onClick.AddListener(() =>
         {
-            buttonMenu.SetActive(true);
+           // buttonMenu.SetActive(true);
             uiMenu.SetActive(false);
             activePanel.SetActive(false);
         });
