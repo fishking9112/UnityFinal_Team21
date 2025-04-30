@@ -20,7 +20,7 @@ public class HeroAbilityInfo : IInfo
     public int id;
     public string name;
     public string description;
-    public int icon;
+    public string icon;
     public int maxLevel;
     public Vector3 pivot;
     public float damage_Base;
@@ -48,6 +48,7 @@ public class HeroAbilityInfo : IInfo
     public int ID => id;
     public string Name => name;
     public string Description => description;
+    public string Icon => icon;
 }
 
 [CreateAssetMenu(fileName = "HeroAbilityData", menuName = "Scriptable Object/New HeroAbilityData")]
@@ -75,7 +76,7 @@ public class HeroAbilityData : SheetDataReaderBase
                     heroAbilityInfo.description = cell.value;
                     break;
                 case "icon":
-                    heroAbilityInfo.icon = Utils.StringToInt(cell.value);
+                    heroAbilityInfo.icon = cell.value;
                     break;
                 case "maxLevel":
                     heroAbilityInfo.maxLevel = Utils.StringToInt(cell.value);

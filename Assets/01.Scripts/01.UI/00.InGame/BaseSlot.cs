@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 public abstract class BaseSlot<T> : MonoBehaviour
 {
-    [SerializeField] protected List<Image> slotIcon;
+    [SerializeField] protected List<Image> slotIconList;
+    public List<Button> slotButtonList;
 
     protected Dictionary<int, T> slotDic = new Dictionary<int, T>();
 
@@ -21,10 +22,10 @@ public abstract class BaseSlot<T> : MonoBehaviour
         {
             slotDic.Remove(index);
 
-            if (index >= 0 && index < slotIcon.Count)
+            if (index >= 0 && index < slotIconList.Count)
             {
-                slotIcon[index].sprite = null;
-                slotIcon[index].enabled = false;
+                slotIconList[index].sprite = null;
+                slotIconList[index].enabled = false;
             }
         }
     }

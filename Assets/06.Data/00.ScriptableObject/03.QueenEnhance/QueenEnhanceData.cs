@@ -25,7 +25,7 @@ public class QueenEnhanceInfo : IInfo
     public int id;
     public string name;
     public string description;
-    public int icon;
+    public string icon;
     public int maxLevel;
     public float state_Base;
     public int state_LevelUp;
@@ -36,6 +36,7 @@ public class QueenEnhanceInfo : IInfo
     public int ID => id;
     public string Name => name;
     public string Description => description;
+    public string Icon => icon;
 }
 
 [CreateAssetMenu(fileName = "QueenEnhanceData", menuName = "Scriptable Object/New QueenEnhanceData")]
@@ -63,7 +64,7 @@ public class QueenEnhanceData : SheetDataReaderBase
                     queenEnhanceInfo.description = cell.value;
                     break;
                 case "icon":
-                    queenEnhanceInfo.icon = Utils.StringToInt(cell.value);
+                    queenEnhanceInfo.icon = cell.value;
                     break;
                 case "maxLevel":
                     queenEnhanceInfo.maxLevel = Utils.StringToInt(cell.value);

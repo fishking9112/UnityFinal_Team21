@@ -102,11 +102,6 @@ public class CameraController : MonoBehaviour
         cameraTransform.position += curSpeed * Time.deltaTime;
     }
 
-    public void OnMoveCamera(InputAction.CallbackContext context)
-    {
-
-    }
-
     // 키보드로 카메라 움직임
     public void OnKeyboradCameraMove(InputAction.CallbackContext context)
     {
@@ -122,8 +117,7 @@ public class CameraController : MonoBehaviour
         {
             return;
         }
-
-        targetZoom -= scrollValue.y * zoomSpeed;
+        targetZoom -= scrollValue.y * zoomSpeed * 0.1f;
         targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
     }
 

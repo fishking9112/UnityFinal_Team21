@@ -131,7 +131,7 @@ public class QueenController : MonoBehaviour
             }
 
             //스킬 아이콘 처리
-            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconAtlas.GetSprite(selectedQueenActiveSkill.info.icon);
+            //cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconAtlas.GetSprite(selectedQueenActiveSkill.info.icon);
         }
     }
 

@@ -7,14 +7,13 @@ public class MonsterSlot : BaseSlot<MonsterInfo>
     {
         base.AddSlot(index,monster);
 
-        if (index < 0 || index >= slotIcon.Count)
+        if (index < 0 || index >= slotIconList.Count)
         {
             return;
         }
 
-        slotIcon[index].sprite = DataManager.Instance.iconAtlas.GetSprite(monster.outfit);
-        slotIcon[index].enabled = true;
-        slotIcon[index].preserveAspect = true;
-
+        slotIconList[index].sprite = DataManager.Instance.iconAtlas.GetSprite(monster.outfit);
+        slotIconList[index].enabled = true;
+        slotIconList[index].preserveAspect = true;
     }
 }

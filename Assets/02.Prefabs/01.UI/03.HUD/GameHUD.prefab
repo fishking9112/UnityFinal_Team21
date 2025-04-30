@@ -3751,13 +3751,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a04fd810f93abcb45896765c8fc6a2ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotIcon:
+  slotIconList:
   - {fileID: 5269100469232949585}
   - {fileID: 4741823039706577975}
   - {fileID: 1578495111231815320}
   - {fileID: 2488808860912385963}
   - {fileID: 2945857956294612903}
   - {fileID: 1423364832929404096}
+  slotButtonList:
+  - {fileID: 7070928064751360678}
+  - {fileID: 549488699663963543}
+  - {fileID: 3653978746476032463}
+  - {fileID: 3288901176563068366}
+  - {fileID: 9194957471842238666}
+  - {fileID: 1607994526863482400}
 --- !u!1 &5407947658768908675
 GameObject:
   m_ObjectHideFlags: 0
@@ -4011,13 +4018,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0067522c7b89242b437fb6528d598a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotIcon:
+  slotIconList:
   - {fileID: 8354906957018084219}
   - {fileID: 7389380061643918798}
   - {fileID: 1653013160644426250}
   - {fileID: 1638924391603720095}
   - {fileID: 6962835359580480956}
   - {fileID: 8779194416666273727}
+  slotButtonList:
+  - {fileID: 8212837272827010905}
+  - {fileID: 918231024843663652}
+  - {fileID: 1563296011331952680}
+  - {fileID: 7666594681094864285}
+  - {fileID: 5689620019643685409}
+  - {fileID: 421866057806827253}
 --- !u!1 &5549067498074339470
 GameObject:
   m_ObjectHideFlags: 0
@@ -6028,7 +6042,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: QueenController, Assembly-CSharp
-        m_MethodName: SelectSlot
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
