@@ -8,7 +8,7 @@ public class HeroSlowSKill : QueenActiveSkillBase
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[205];
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.RANGE_SLOW];
     }
 
     public override async void UseSkill()

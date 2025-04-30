@@ -8,7 +8,7 @@ public class MeteorSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[206];
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.METEOR];
     }
 
 

@@ -6,7 +6,7 @@ public class AllRangeMonsterHealSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[207];
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.ALL_HEAL];
     }
 
     public override void UseSkill()
