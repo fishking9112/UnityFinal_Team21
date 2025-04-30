@@ -31,6 +31,11 @@ public class HeroAbilityAxe : HeroAbilitySystem
 
     protected override void ActionAbility()
     {
+        if (hero == null)
+        {
+            return;
+        }
+
         target = hero.FindNearestTarget();
         ShootAxe().Forget();
     }
