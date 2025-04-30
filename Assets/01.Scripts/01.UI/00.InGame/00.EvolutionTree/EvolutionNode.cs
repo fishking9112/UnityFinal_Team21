@@ -23,7 +23,7 @@ public class EvolutionNode : MonoBehaviour
         if(DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoId,out var info))
         {
             monsterInfo = info;
-            image.sprite = DataManager.Instance.iconData.GetSprite(monsterInfo.outfit);
+            image.sprite = DataManager.Instance.iconAtlas.GetSprite(monsterInfo.outfit);
         }
         else
         {

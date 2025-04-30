@@ -12,7 +12,7 @@ public class MonsterSlot : BaseSlot<MonsterInfo>
             return;
         }
 
-        slotIcon[index].sprite = DataManager.Instance.iconData.GetSprite(monster.outfit);
+        slotIcon[index].sprite = DataManager.Instance.iconAtlas.GetSprite(monster.outfit);
         slotIcon[index].enabled = true;
         slotIcon[index].preserveAspect = true;
 

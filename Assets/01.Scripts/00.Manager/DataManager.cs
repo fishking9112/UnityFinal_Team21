@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 // Info들의 ID가 무조건 존재해야 하기 때문에 인터페이스를 사용하여 무조건 구현 하도록 함
 public interface IInfo
@@ -20,7 +21,7 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private TrophyData trophyData;
 
     // iconData는 id값으로 초기화 하지 않으므로, iconData 안에 Dictionary 존재
-    public IconData iconData;
+    public SpriteAtlas iconAtlas;
 
     // 모든 데이터 딕셔너리
     public Dictionary<int, MonsterInfo> monsterDic = new Dictionary<int, MonsterInfo>();

@@ -110,7 +110,7 @@ public class QueenController : MonoBehaviour
 
             selectedMonsterId = monster.id;
             var tempMonster = MonsterManager.Instance.monsterInfoList[selectedMonsterId];
-            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(tempMonster.outfit);
+            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconAtlas.GetSprite(tempMonster.outfit);
         }
         else if (curSlot == QueenSlot.QueenActiveSkill)
         {
@@ -131,7 +131,7 @@ public class QueenController : MonoBehaviour
             }
 
             //스킬 아이콘 처리
-            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(selectedQueenActiveSkill.info.icon);
+            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconAtlas.GetSprite(selectedQueenActiveSkill.info.icon);
         }
     }
 
