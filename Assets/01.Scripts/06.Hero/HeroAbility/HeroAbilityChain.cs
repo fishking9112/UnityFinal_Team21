@@ -27,7 +27,7 @@ public class HeroAbilityChain : HeroAbilitySystem
 
     private void OnEnable()
     {
-        Initialize(106);
+        Initialize((int)IDHeroAbility.CHAIN);
     }
 
     protected override void ActionAbility()

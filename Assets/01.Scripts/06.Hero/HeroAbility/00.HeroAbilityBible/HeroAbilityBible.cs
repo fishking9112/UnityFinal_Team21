@@ -21,7 +21,7 @@ public class HeroAbilityBible : HeroAbilitySystem
     }
     private void OnEnable()
     {
-        Initialize(103);
+        Initialize((int)IDHeroAbility.BIBLE);
 
     }
 
