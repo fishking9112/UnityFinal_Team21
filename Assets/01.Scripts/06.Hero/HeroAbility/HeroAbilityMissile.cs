@@ -22,7 +22,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
     {
         hero = this.GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
-        
+
     }
     private void OnEnable()
     {
@@ -36,12 +36,22 @@ public class HeroAbilityMissile : HeroAbilitySystem
     /// </summary>
     protected override void ActionAbility()
     {
+        if (hero == null)
+        {
+            return;
+        }
+
         target = hero.FindNearestTarget();
-            ShootBullet().Forget();
+        ShootBullet().Forget();
     }
 
     private async UniTaskVoid ShootBullet()
     {
+        if(hero == null || token == null)
+        {
+            return;
+        }
+
         float angle;
 
         if (target == null)
@@ -56,10 +66,15 @@ public class HeroAbilityMissile : HeroAbilitySystem
 
         for (int i = 0; i < count; i++)
         {
+            if(hero == null || token.IsCancellationRequested)
+            {
+                return;
+            }
+
             var bullet = objectPoolManager.GetObject<HeroBullet>("Bullet", hero.transform.position);
-            bullet.SetBullet(duration, pierce, damage, speed,0);
+            bullet.SetBullet(duration, pierce, damage, speed, 0);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-            
+
             await UniTask.Delay(TimeSpan.FromSeconds(delay));
         }
     }

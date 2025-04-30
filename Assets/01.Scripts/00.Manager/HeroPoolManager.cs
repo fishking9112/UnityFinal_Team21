@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -27,6 +26,11 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
     // Start is called before the first frame update
     void Start()
     {
+        if(heroObj == null)
+        {
+            return;
+        }
+
         list = Resources.LoadAll<GameObject>("HeroPrefabs").ToList();
         System.Random rand = new System.Random();
         list = list.OrderBy(x => rand.Next()).ToList();
@@ -56,7 +60,6 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
             }
         }
 
-
         // 남은게없을경우(최대치 다 나갔을 경우)
         return null;
     }
@@ -66,5 +69,4 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         HeroManager.Instance.hero.Remove(obj.gameObject);
         obj.gameObject.SetActive(false);
     }
-
 }

@@ -45,7 +45,21 @@ public class ParticleObject : MonoBehaviour, IPoolable
     // 파티클이 끝나면 자동으로 풀에 반환
     private async UniTask FinishedReturnToPool()
     {
-        await UniTask.WaitUntil(() => !particle.IsAlive(true));
-        OnDespawn();
+        try
+        {
+            await UniTask.WaitUntil(() =>
+            {
+                return this != null && particle != null && !particle.IsAlive(true);
+            });
+
+            if (this != null && particle != null)
+            {
+                OnDespawn();
+            }
+        }
+        catch (MissingReferenceException)
+        {
+            // 무시해도 되는 예외
+        }
     }
 }

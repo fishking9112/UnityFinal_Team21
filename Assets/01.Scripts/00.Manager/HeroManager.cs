@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -45,16 +44,18 @@ public class HeroManager : MonoSingleton<HeroManager>
 
         int rand = UnityEngine.Random.Range(0, cnt);
 
-
         statusInfo = DataManager.Instance.heroStatusDic.ElementAt(rand).Value;
-
-
 
     }
 
 
     private void SummonHero()
     {
+        if (HeroPoolManager.Instance == null)
+        {
+            return;
+        }
+
         HeroController hero = HeroPoolManager.Instance.GetObject(RandomSummonPos(98, 98));
         hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
     }

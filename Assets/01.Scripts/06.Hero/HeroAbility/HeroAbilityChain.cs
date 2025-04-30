@@ -32,6 +32,11 @@ public class HeroAbilityChain : HeroAbilitySystem
 
     protected override void ActionAbility()
     {
+        if (hero == null)
+        {
+            return;
+        }
+
         target = hero.FindNearestTarget();
         Chaining().Forget();
     }
