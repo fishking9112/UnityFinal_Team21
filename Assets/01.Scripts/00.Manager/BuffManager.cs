@@ -55,6 +55,7 @@ public class BuffManager : MonoSingleton<BuffManager>
                 }
                 else if (curBuffLevel == level)
                 {
+                    // 현재 적용되어 있는 버프와 지금 적용하려는 버프의 레벨이 같은 경우 시간만 갱신(토큰 업데이트)
                     buffList[0].UpdateToken(new CancellationTokenSource());
 
                     await ApplyBuffDurationTime(target, buffInfo, buffList[0].token);

@@ -53,7 +53,6 @@ public class MonsterController : BaseController, IPoolable
         // {
         //     Die();
         // }
-        Utils.Log("몬스터 공계수" + buffAttackDamage);
     }
     private void FixedUpdate()
     {

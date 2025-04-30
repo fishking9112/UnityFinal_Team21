@@ -24,20 +24,22 @@ public class ParticleObject : MonoBehaviour, IPoolable
         particle.Clear();
         particle.Play();
 
+        // 루프가 아니면 파티클이 끝날 때 자동 반환
         if (!particle.main.loop)
         {
             FinishedReturnToPool().Forget();
         }
     }
 
+    /// <summary>
+    /// 파티클이 루프일 경우 수동으로 Despawn 해야 됨
+    /// </summary>
     public void OnDespawn()
     {
-        print("호출은 됨?");
         if (poolParent != null)
         {
             transform.SetParent(poolParent);
         }
-        print("조건은 만족?");
         particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         returnToPool?.Invoke(this);
     }

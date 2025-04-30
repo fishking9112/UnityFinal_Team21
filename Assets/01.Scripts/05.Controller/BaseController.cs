@@ -127,9 +127,7 @@ public abstract class BaseController : MonoBehaviour
     /// </summary>
     public void AttackDamageBuff(float amount)
     {
-        Utils.Log("버프 전 공계수" + buffAttackDamage);
         buffAttackDamage *= (1 + amount);
-        Utils.Log("버프 후 공계수" + buffAttackDamage);
     }
     public void AttackSpeedBuff(float amount)
     {
@@ -180,30 +178,17 @@ public abstract class BaseController : MonoBehaviour
 
         foreach (var buff in buffList)
         {
-            if (cancel)
-            {
-                if (!buff.token.Token.IsCancellationRequested)
-                {
-                    buff.token.Cancel();
-                }
-                buff.token.Dispose();
-                buff.token = null;
-            }
-            else
-            {
-                if (!buff.token.Token.IsCancellationRequested)
-                {
-                    buff.token.Cancel();
-                }
-                buff.token.Dispose();
-            }
+            buff.token?.Cancel();
+            buff.token?.Dispose();
         }
 
-        if (!cancel)
+        if (cancel)
         {
-            buffList.Clear();
-            buffDic.Remove(id);
+            return;
         }
+
+        buffList.Clear();
+        buffDic.Remove(id);
     }
 
     // 모든 버프 제거
