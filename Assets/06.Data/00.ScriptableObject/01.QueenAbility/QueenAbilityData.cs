@@ -22,6 +22,7 @@ public class QueenAbilityInfo : IInfo
     public int ID => id;
     public string Name => name;
     public string Description => description;
+    public string Icon => string.Empty;
 }
 
 [CreateAssetMenu(fileName = "QueenAbilityData", menuName = "Scriptable Object/New QueenAbilityData")]

@@ -19,10 +19,12 @@ public class TrophyInfo: IInfo
     public int maxCount;
     public int unLockID;
     public TrophyType type;
+    public string icon;
 
     public int ID => id;
     public string Name => name;
     public string Description => description;
+    public string Icon => icon;
 }
 
 [CreateAssetMenu(fileName = "TrophyData", menuName = "Scriptable Object/New TrophyData")]
@@ -57,6 +59,9 @@ public class TrophyData : SheetDataReaderBase
                     break;
                 case "type":
                     trophyInfo.type = Utils.StringToEnum<TrophyType>(cell.value, TrophyType.NULL);
+                    break;
+                case "icon":
+                    trophyInfo.icon = cell.value;
                     break;
             }
         }

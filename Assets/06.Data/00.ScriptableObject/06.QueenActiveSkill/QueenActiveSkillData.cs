@@ -31,6 +31,7 @@ public class QueenActiveSkillInfo : IInfo
     public int ID => id;
     public string Name => name;
     public string Description => description;
+    public string Icon => icon;
 }
 
 [CreateAssetMenu(fileName = "QueenActiveSkillData", menuName = "Scriptable Object/New QueenActiveSKillData")]

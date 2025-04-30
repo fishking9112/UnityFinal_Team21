@@ -8,6 +8,7 @@ public interface IInfo
     int ID { get; }
     string Name { get; }
     string Description { get; }
+    string Icon { get; }
 }
 
 public class DataManager : MonoSingleton<DataManager>

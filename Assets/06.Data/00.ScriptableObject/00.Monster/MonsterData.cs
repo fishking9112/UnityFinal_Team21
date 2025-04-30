@@ -28,6 +28,7 @@ public class MonsterInfo : BaseStatData, IInfo
     public float cost;
     public float reward;
     public string outfit;
+    public string icon;
 
     public MonsterAttackType monsterAttackType;
     public MonsterBrood monsterBrood;
@@ -63,6 +64,7 @@ public class MonsterInfo : BaseStatData, IInfo
     public int ID => id;
     public string Name => name;
     public string Description => description;
+    public string Icon => icon;
 }
 
 [CreateAssetMenu(fileName = "MonsterData", menuName = "Scriptable Object/New MonsterData")]
@@ -119,6 +121,9 @@ public class MonsterData : SheetDataReaderBase
                     break;
                 case "outfit":
                     monsterInfo.outfit = cell.value;
+                    break;
+                case "icon":
+                    monsterInfo.icon = cell.value;
                     break;
                 case "type":
                     monsterInfo.monsterAttackType = Utils.StringToEnum<MonsterAttackType>(cell.value, MonsterAttackType.NULL);
