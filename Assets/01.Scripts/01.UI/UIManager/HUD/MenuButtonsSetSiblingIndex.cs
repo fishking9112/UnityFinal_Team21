@@ -1,39 +1,60 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MenuButtonsSetSiblingIndex : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public MenuHUD menuHUD;
-    public Transform Panel;
-   // private Transform parentObj;
+    [SerializeField] private MenuHUD menuHUD;
+    [SerializeField] private Transform panel;
+    [SerializeField] private Material outline;
+    [SerializeField] private Material outlineAlpha;
+    [SerializeField] private Image imageBtn;
+
+    private Button btn;
+    private RectTransform rectPanel;
+    private Vector2 panelOriginalSize;
 
     private void Awake()
     {
-       // parentObj = transform.parent; 
-        transform.GetChild(1)   .GetComponent<Image>().alphaHitTestMinimumThreshold = 0.2f;
+        imageBtn.material = outlineAlpha;
+        imageBtn.alphaHitTestMinimumThreshold = 0.2f;
+        rectPanel = panel.GetComponent<RectTransform>();
+        panelOriginalSize = rectPanel.sizeDelta;
+        rectPanel.sizeDelta = new Vector2(0f, panelOriginalSize.y);
+        panel.gameObject.SetActive(false);
+        btn = imageBtn.GetComponent<Button>();
+
+        btn.onClick.AddListener(HandleButtonClick);
+    }
+    private void HandleButtonClick()
+    {
+        OnPointerExit(null); 
     }
 
-    // 마우스가 오버됐을 때 호출
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("마우스가 위에 올라왔습니다.");
+        imageBtn.material = outline;
         menuHUD.BlackBackground.SetAsLastSibling();
         menuHUD.BlackBackground.gameObject.SetActive(true);
         transform.SetAsLastSibling();
-       // parentObj.SetAsLastSibling();
-        Panel.gameObject.SetActive(true);
+        panel.gameObject.SetActive(true);
 
-        // 여기에 오버됐을 때 동작할 코드를 작성
+        rectPanel.DOKill();
+        rectPanel.sizeDelta = new Vector2(0f, panelOriginalSize.y);
+
+        rectPanel.DOSizeDelta(new Vector2(400f, panelOriginalSize.y), 1.5f).SetEase(Ease.OutExpo);
     }
 
-    // 마우스가 나갔을 때 호출
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("마우스가 빠져나갔습니다.");
+        imageBtn.material = outlineAlpha;
+
+        rectPanel.DOKill();
+        rectPanel.sizeDelta = new Vector2(0f, panelOriginalSize.y);
+
         menuHUD.BlackBackground.SetAsFirstSibling();
         menuHUD.BlackBackground.gameObject.SetActive(false);
-        Panel.gameObject.SetActive(false);
-        // 여기에 나갔을 때 동작할 코드를 작성 
+        panel.gameObject.SetActive(false);
     }
 }
