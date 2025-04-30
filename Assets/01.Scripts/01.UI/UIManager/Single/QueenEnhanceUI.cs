@@ -85,11 +85,11 @@ public class QueenEnhanceUI : SingleUI
 
         switch (id)
         {
-            case 1002: // 마나 회복 속도 증가
+            case (int)IDQueenEnhance.QUEEN_MANA_GAUGE_RECOVERY_SPEED_UP: // 마나 회복 속도 증가
                 condition.AdjustQueenActiveSkillGaugeRecoverySpeed(value);
                 break;
 
-            case 1003: // 소환 게이지 회복 속도 증가
+            case (int)IDQueenEnhance.QUEEN_SUMMON_GAUGE_RECOVERY_SPEED_UP: // 소환 게이지 회복 속도 증가
                 condition.AdjustSummonGaugeRecoverySpeed(value);
                 break;
         }
