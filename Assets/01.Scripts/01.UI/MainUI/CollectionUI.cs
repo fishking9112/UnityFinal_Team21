@@ -13,6 +13,7 @@ public class CollectionUI : MonoBehaviour
     public int toggleIndex = -1;
 
     [Header("도감 설명")]
+    public Image lockImg;
     public Image descIcon;
     public TextMeshProUGUI title;
     public TextMeshProUGUI desc;
@@ -20,8 +21,8 @@ public class CollectionUI : MonoBehaviour
     [Header("도감 관리")]
     public Transform contentTransform; // 생성 할 위치
     public CollectionIcon iconPrefab; // 생성될 프리팹
-    // public Dictionary<int, CollectionIcon> allIcons = new(); // 프리팹으로 생성 된 Icon 목록들
-    public Dictionary<int, CollectionIcon> allIcons = new(); // 프리팹으로 생성 된 Icon 목록들 TODO : 나중에 Dictonary로 바꿀 것
+
+    public Dictionary<int, CollectionIcon> allIcons = new(); // 프리팹으로 생성 된 Icon 목록들
     public Dictionary<int, CollectionIcon> monsterIcons = new();
     public Dictionary<int, CollectionIcon> queenIcons = new();
     public Dictionary<int, CollectionIcon> enhanceIcons = new();
@@ -68,9 +69,6 @@ public class CollectionUI : MonoBehaviour
         iconList.Add(activeSkillIcons);
         iconList.Add(heroIcons);
         iconList.Add(heroAbilityIcons);
-
-        // 게임시작 버튼 누를 시 스타트 실행
-        // startButton.onClick.AddListener(OnClickGameStart);
     }
 
     /// <summary>
@@ -84,6 +82,13 @@ public class CollectionUI : MonoBehaviour
         ShowDetail(toggleIndex);
     }
 
+    /// <summary>
+    /// 아이콘 Dictionary 형태로 생성
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="dataDic"></param>
+    /// <param name="targetDic"></param>
+    /// <param name="parent"></param>
     private void CreateIcons<T>(Dictionary<int, T> dataDic, Dictionary<int, CollectionIcon> targetDic, Transform parent) where T : IInfo
     {
         foreach (var pair in dataDic)
@@ -99,24 +104,40 @@ public class CollectionUI : MonoBehaviour
     /// <summary>
     /// 아이콘 클릭 시 디테일 보여주기 allIcons들에게 Action으로 callback함수로 넘김
     /// </summary>
-    public void OnClickDetail(Sprite sprite, string _name, string _description)
+    public void OnClickDetail(Sprite sprite, string _name, string _description, bool _isActive)
     {
         descIcon.sprite = sprite;
         title.text = _name;
         desc.text = _description;
+        if (_isActive)
+        {
+            lockImg.gameObject.SetActive(false);
+        }
+        else
+        {
+            lockImg.gameObject.SetActive(true);
+        }
     }
 
+    /// <summary>
+    /// 다른 곳 클릭 시 설명창 초기화 시키기
+    /// </summary>
     public void ClearDetail()
     {
         descIcon.sprite = null;
         title.text = "";
         desc.text = "";
+        lockImg.gameObject.SetActive(false);
         foreach (var icon in allIcons)
         {
             icon.Value.gameObject.SetActive(false);
         }
     }
 
+    /// <summary>
+    /// 버튼 클릭 시 설명창에 설명 적어주기
+    /// </summary>
+    /// <param name="index"></param>
     public void ShowDetail(int index)
     {
         foreach (var icon in iconList[index])
