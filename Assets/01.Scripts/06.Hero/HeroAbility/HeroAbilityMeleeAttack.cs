@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class HeroAbilityMeleeAttack : HeroAbilitySystem
@@ -30,7 +29,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     }
     private void OnEnable()
     {
-        Initialize(101);
+        Initialize((int)IDHeroAbility.SWORD);
 
     }
     protected override void ActionAbility()

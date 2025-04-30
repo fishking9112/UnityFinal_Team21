@@ -10,10 +10,10 @@ using UnityEngine.AI;
 
 public class HeroController : BaseController
 {
-    [SerializeField]private HeroState stateMachine;
+    [SerializeField] private HeroState stateMachine;
 
     public NavMeshAgent navMeshAgent;
-    [SerializeField]private Hero hero;
+    [SerializeField] private Hero hero;
 
     public Transform pivot;
 
@@ -26,10 +26,10 @@ public class HeroController : BaseController
 
     public void InitHero()
     {
-        stateMachine = new HeroState(hero,this);
+        stateMachine = new HeroState(hero, this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         stateMachine.navMeshAgent = navMeshAgent;
-        pivot = transform.GetChild(0);
+        pivot = transform.GetChild(1);
 
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
@@ -38,18 +38,18 @@ public class HeroController : BaseController
 
 
 
-    public void StatInit(HeroStatusInfo stat)
+    public void StatInit(HeroStatusInfo stat, bool isHealthUI)
     {
         hero.Init(stat.detectedRange);
         navMeshAgent.speed = stat.moveSpeed;
         DeadCheck().Forget();
 
-        base.StatInit(stat);
+        base.StatInit(stat, isHealthUI);
         this.statusInfo.Copy(stat);
 
         hero.ResetAbility();
 
-        for(int i=0;i<stat.weapon.Length;i++)
+        for (int i = 0; i < stat.weapon.Length; i++)
         {
             hero.SetAbilityLevel(stat.weapon[i], stat.weaponLevel[i]);
         }
@@ -87,7 +87,7 @@ public class HeroController : BaseController
     }
     private async UniTaskVoid DeadCheck()
     {
-        await UniTask.WaitUntil(() => healthHandler.IsDie(),cancellationToken:this.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => healthHandler.IsDie(), cancellationToken: this.GetCancellationTokenOnDestroy());
         stateMachine.ChangeState(stateMachine.deadState);
         ResetObj();
     }

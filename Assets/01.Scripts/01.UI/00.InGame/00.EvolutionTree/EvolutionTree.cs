@@ -39,9 +39,9 @@ public class EvolutionTree : MonoBehaviour
         {
             node.Init(this);
 
-            if (!evolutionNodeDic.ContainsKey(node.monsterInfoId))
+            if (!evolutionNodeDic.ContainsKey((int)node.monsterInfoId))
             {
-                evolutionNodeDic[node.monsterInfoId] = node;
+                evolutionNodeDic[(int)node.monsterInfoId] = node;
             }
 
             evolutionButton.onClick.AddListener(OnClickEvolutionButton);

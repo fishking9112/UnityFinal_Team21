@@ -6,7 +6,7 @@ public class MonsterHealSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[204];
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.RANGE_HEAL];
     }
 
     public override void UseSkill()
@@ -17,9 +17,10 @@ public class MonsterHealSkill : QueenActiveSkillBase
 
         foreach (var hit in hits)
         {
-            if(MonsterManager.Instance.monsters.TryGetValue(hit.gameObject,out var monster))
+            if (MonsterManager.Instance.monsters.TryGetValue(hit.gameObject, out var monster))
             {
                 monster.Heal(info.value);
+                ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", monster.transform.position, Quaternion.identity, 0.5f, monster.transform);
             }
         }
     }

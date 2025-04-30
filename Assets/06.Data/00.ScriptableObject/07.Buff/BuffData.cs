@@ -29,6 +29,8 @@ public class BuffInfo : IInfo
     public float lv_3;
 
     public int ID => id;
+    public string Name => name;
+    public string Description => description;
 }
 
 [CreateAssetMenu(fileName = "BuffData", menuName = "Scriptable Object/New BuffData")]

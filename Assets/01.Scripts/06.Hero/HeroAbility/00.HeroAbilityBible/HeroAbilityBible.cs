@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class HeroAbilityBible : HeroAbilitySystem
@@ -22,7 +21,7 @@ public class HeroAbilityBible : HeroAbilitySystem
     }
     private void OnEnable()
     {
-        Initialize(103);
+        Initialize((int)IDHeroAbility.BIBLE);
 
     }
 

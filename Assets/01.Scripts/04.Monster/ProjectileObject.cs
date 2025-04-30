@@ -37,6 +37,7 @@ public class ProjectileObject : MonoBehaviour, IPoolable
 
     private float bulletSpeed = 5f;
     private float bulletSize = 1f;
+    float finalAttackDamage => baseController.statData.attack * baseController.buffAttackDamage;
 
     private void Awake()
     {
@@ -94,9 +95,9 @@ public class ProjectileObject : MonoBehaviour, IPoolable
             //? LATE : 나중에 한곳에 몰아야 할 듯(Hero나 Monster나)
             if (HeroManager.Instance.hero.ContainsKey(collision.gameObject))
             {
-                HeroManager.Instance.hero[collision.gameObject].TakeDamaged(baseController.statData.attack);
+                HeroManager.Instance.hero[collision.gameObject].TakeDamaged(finalAttackDamage);
                 var id = MonsterManager.Instance.monsters[baseController.gameObject].monsterInfo.id;
-                StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[id].allDamage += baseController.statData.attack;
+                StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[id].allDamage += finalAttackDamage;
             }
             // BaseController target = MonsterManager.Instance.testTarget.GetComponent<BaseController>();
             // if (target != null)

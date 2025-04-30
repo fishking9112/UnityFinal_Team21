@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 // Info들의 ID가 무조건 존재해야 하기 때문에 인터페이스를 사용하여 무조건 구현 하도록 함
 public interface IInfo
 {
     int ID { get; }
+    string Name { get; }
+    string Description { get; }
 }
 
 public class DataManager : MonoSingleton<DataManager>
@@ -17,9 +20,10 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private HeroStatusData heroStatusData;
     [SerializeField] private QueenActiveSkillData queenActiveSkillData;
     [SerializeField] private BuffData buffData;
+    [SerializeField] private TrophyData trophyData;
 
     // iconData는 id값으로 초기화 하지 않으므로, iconData 안에 Dictionary 존재
-    public IconData iconData;
+    public SpriteAtlas iconAtlas;
 
     // 모든 데이터 딕셔너리
     public Dictionary<int, MonsterInfo> monsterDic = new Dictionary<int, MonsterInfo>();
@@ -29,6 +33,7 @@ public class DataManager : MonoSingleton<DataManager>
     public Dictionary<int, HeroStatusInfo> heroStatusDic = new Dictionary<int, HeroStatusInfo>();
     public Dictionary<int, QueenActiveSkillInfo> queenActiveSkillDic = new Dictionary<int, QueenActiveSkillInfo>();
     public Dictionary<int, BuffInfo> buffDic = new Dictionary<int, BuffInfo>();
+    public Dictionary<int, TrophyInfo> trophyDic = new Dictionary<int, TrophyInfo>();
 
     protected override void Awake()
     {
@@ -41,6 +46,7 @@ public class DataManager : MonoSingleton<DataManager>
         Init<HeroStatusInfo>(heroStatusData.infoList, heroStatusDic);
         Init<QueenActiveSkillInfo>(queenActiveSkillData.infoList, queenActiveSkillDic);
         Init<BuffInfo>(buffData.infoList, buffDic);
+        Init<TrophyInfo>(trophyData.infoList, trophyDic);
     }
 
     // 딕셔너리 초기화

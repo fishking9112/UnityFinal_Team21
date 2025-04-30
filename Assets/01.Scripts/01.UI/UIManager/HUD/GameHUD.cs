@@ -48,6 +48,9 @@ public class GameHUD : HUDUI
     [Header("레벨업 테스트 버튼")]
     public Button LevelUPTestButton;
 
+    [Header("체력 UI 테스트 버튼")]
+    public Button HealthUITestButton;
+
     public override void Initialize()
     {
         condition.Level.AddAction(UpdateLevelText);
@@ -70,6 +73,11 @@ public class GameHUD : HUDUI
 
         // 레벨업 테스트 버튼
         LevelUPTestButton.onClick.AddListener(() => GameManager.Instance.queen.condition.AdjustCurExpGauge(100));
+        HealthUITestButton.onClick.AddListener(() =>
+        {
+            MonsterManager.Instance.OnClickHealthUITest();
+            HeroManager.Instance.OnClickHealthUITest();
+        });
     }
 
 

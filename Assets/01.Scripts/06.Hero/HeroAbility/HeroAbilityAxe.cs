@@ -24,7 +24,7 @@ public class HeroAbilityAxe : HeroAbilitySystem
 
     private void OnEnable()
     {
-        Initialize(105);
+        Initialize((int)IDHeroAbility.AXE);
         
     }
 

@@ -7,9 +7,17 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     private Hero hero;
 
     private LayerMask layer;
+
+    [SerializeField] GameObject magicCircle;
+
+    GameObject circle;
     public override void Initialize(int id)
     {
         base.Initialize(id);
+
+        circle= Instantiate(magicCircle, this.transform);
+
+        circle.transform.localScale = size;
     }
 
     private void Start()
@@ -19,7 +27,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     }
     private void OnEnable()
     {
-        Initialize(104);
+        Initialize((int)IDHeroAbility.GARLIC);
 
     }
     protected override void ActionAbility()
@@ -40,6 +48,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
         }
     }
 
+
     public override void AbilityLevelUp()
     {
         base.AbilityLevelUp();
@@ -47,7 +56,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
 
     public override void DespawnAbility()
     {
-
+        Destroy(circle);
     }
     public override void SetAbilityLevel(int level)
     {

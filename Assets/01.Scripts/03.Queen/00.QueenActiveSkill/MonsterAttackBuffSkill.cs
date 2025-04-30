@@ -9,7 +9,7 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[203];
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.ATTACK_DAMAGE_UP];
     }
 
     public override async void UseSkill()
@@ -26,6 +26,7 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
             {
                 UniTask task = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level);
                 tasks.Add(task);
+                ParticleObject particle = ParticleManager.Instance.SpawnParticle("AttackDMG_Light", monster.transform.position, Quaternion.identity, 0.5f, monster.transform);
             }
         }
         await UniTask.WhenAll(tasks);

@@ -1,0 +1,119 @@
+public enum IDQueenStatus
+{
+    NORMAL = 11,
+    SLIME,
+    ORC,
+    SKELETON,
+}
+
+public enum IDHeroAbility
+{
+    // 히어로 어빌리티 이름은 게임에 맞게 추후 수정 필요
+    SWORD = 101,
+    WAND,
+    BIBLE,
+    GARLIC,
+    AXE,
+    CHAIN,
+}
+
+public enum IDHeroStatus
+{
+    HERO1 = 201,
+    HERO2,
+    HERO3,
+}
+
+public enum IDMonster
+{
+    // 슬라임은 아직 가명
+    SLIME_NORMAL = 1001,
+    SLIME_NORMAL2,
+    SLIME_BIG,
+    SLIME_FAST,
+    SLIME_POISON,
+    SLIME_POISON2,
+
+    ORC_NORMAL = 1101,
+    ORC_WARRIOR,
+    ORC_SHAMAN,
+    ORC_WARRIOR2,
+    ORC_BERSERKER,
+    ORC_SHAMAN2,
+
+    SKELETON_NORMAL = 1201,
+    SKELETON_WARRIOR,
+    SKELETON_ARCHER,
+    SKELETON_MAGE,
+    SKELETON_KNIGHT,
+    SKELETON_RANGER,
+    SKELETON_WIZARD,
+}
+
+public enum IDQueenEnhance
+{
+    EVOLUTIONPOINT_GAIN = 10001,
+    QUEEN_MANA_GAUGE_RECOVERY_SPEED_UP,
+    QUEEN_SUMMON_GAUGE_RECOVERY_SPEED_UP,
+
+    SLIME_MAXHEALTH_UP = 11001,
+    SLIME_ATTACKDAMAGE_UP,
+    SLIME_MOVESPEED_UP,
+
+    ORC_MAXHEALTH_UP = 12001,
+    ORC_ATTACKDAMAGE_UP,
+    ORC_MOVESPEED_UP,
+
+    SKELETON_MAXHEALTH_UP = 13001,
+    SKELETON_ATTACKDAMAGE_UP,
+    SKELETON_MOVESPEED_UP,
+}
+
+public enum IDQueenActiveSkill
+{
+    NORMAL_QUEEN = 20001,
+    SLIME_QUEEN,
+    ORC_QUEEN,
+    SKELETON_QUEEN,
+
+    RANGE_ATTACK = 21001,
+    SUMMON,
+    ATTACK_DAMAGE_UP,
+    RANGE_HEAL,
+    RANGE_SLOW,
+    METEOR,
+    ALL_HEAL,
+}
+
+public enum IDQueenAbility
+{
+    MONSTER_ATTACK_DAMAGE_UP = 30001,
+    MONSTER_MOVE_SPEED_UP,
+    GOLD_GAIN_AMOUNT_UP,
+    EXP_GAIN_AMOUNT_UP,
+    CASTLE_HEALTH_UP,
+    CASTLE_HEALTH_RECOVERY_SPEED_UP,
+    SUMMON_GAUGE_RECOVERY_SPEED_UP,
+    SUMMON_GAUGE_MAXGAUGE_UP,
+    QUEEN_MANA_GAUGE_RECOVERY_SPEED_UP,
+    QUEEN_SUMMON_GAUGE_RECOVERY_SPEED_UP,
+    EVOLUTION_POINT_START_AMOUNT_UP,
+}
+
+public enum IDBuff
+{
+    ATTACK_DAMAGE_UP = 100001,
+    SLOW,
+    BURN,
+    POISON,
+    MOVE_SPEED_UP,
+}
+
+public enum IDTrophy
+{
+    // 업적 이름 추후 수정 필요
+    Trophy1 = 1000001,
+    Trophy2,
+    Trophy3,
+    Trophy4,
+}

@@ -497,6 +497,8 @@ MonoBehaviour:
   initEvolutionPoint: 0
   initLevel: 1
   initGold: 0
+  initEnhnacePoint: 0
+  EnhancePoint: 0
 --- !u!114 &166616951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1102,6 +1104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDontDestroy: 0
+  isHealthUI: 0
 --- !u!4 &637948746
 Transform:
   m_ObjectHideFlags: 0
@@ -1516,7 +1519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.size
-      value: 21
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].key
@@ -1604,7 +1607,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[21].key
-      value: GoldReward
+      value: Burn
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[22].key
+      value: Heal
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[23].key
+      value: AttackDMG_Light
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[24].key
+      value: AttackDMG_Sword
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].prefab
@@ -1693,7 +1708,19 @@ PrefabInstance:
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[21].prefab
       value: 
-      objectReference: {fileID: 6448925068064152846, guid: fc0cfbf9b905e2947b2891933d7d4541, type: 3}
+      objectReference: {fileID: 3760309390836735534, guid: c278ee488f804ae4088efd6513ea96f4, type: 3}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[22].prefab
+      value: 
+      objectReference: {fileID: 4730712359625482318, guid: 734e55d292219f04684d19b5be67465c, type: 3}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[23].prefab
+      value: 
+      objectReference: {fileID: 3339963394610592647, guid: 964eb0e410b553b448400ed247a1c492, type: 3}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[24].prefab
+      value: 
+      objectReference: {fileID: 4152042884537762471, guid: fb71bb35cedf9c540b061ec436f8c0de, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].initPoolSize
       value: 5
@@ -1780,6 +1807,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[21].initPoolSize
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[22].initPoolSize
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[23].initPoolSize
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[24].initPoolSize
       value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2006,15 +2045,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2847952845026656841, guid: 5cdd8a06e23ab174da0d9cd22e17796b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.357786
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2847952845026656841, guid: 5cdd8a06e23ab174da0d9cd22e17796b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.4516667
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2847952845026656841, guid: 5cdd8a06e23ab174da0d9cd22e17796b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.03605985
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2847952845026656841, guid: 5cdd8a06e23ab174da0d9cd22e17796b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2282,6 +2321,10 @@ PrefabInstance:
       propertyPath: heroObj.obj
       value: 
       objectReference: {fileID: 3862953293406409376, guid: 38603b144e4c19f41986e7256e11e558, type: 3}
+    - target: {fileID: 7962203731551977947, guid: 39d4a34702ee1454aa0018ad6622881b, type: 3}
+      propertyPath: heroObj.poolSize
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3273,6 +3316,63 @@ MonoBehaviour:
   minZoom: 3
   maxZoom: 10
   zoomSmoothValue: 0.3
+--- !u!1001 &5188664038417358109
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2332044125591464421, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332044125591464421, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332044125591464421, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332044125591464421, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332044125591464421, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332044125591464421, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332044125591464421, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332044125591464421, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332044125591464421, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332044125591464421, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614863618004874542, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
+      propertyPath: m_Name
+      value: ParticleManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f4bd408be9ce5844b8e0200595f2f05f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -3300,3 +3400,4 @@ SceneRoots:
   - {fileID: 1671790278}
   - {fileID: 1913489643}
   - {fileID: 1081327732}
+  - {fileID: 5188664038417358109}

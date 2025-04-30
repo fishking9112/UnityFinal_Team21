@@ -20,7 +20,6 @@ public abstract class BaseController : MonoBehaviour
 
     public Dictionary<int, List<Buff>> buffDic = new Dictionary<int, List<Buff>>();
 
-
     protected virtual void Start()
     {
 
@@ -30,10 +29,17 @@ public abstract class BaseController : MonoBehaviour
     /// 최초 생성 시 한번만 실행(참조해서 수치 자동 수정)
     /// </summary>
     /// <param name="statInfo">참조 할 수치 데이터</param>
-    public void StatInit(BaseStatData statData)
+    public void StatInit(BaseStatData statData, bool isHealthUI = false)
     {
         this.statData = statData;
         healthHandler.Init(statData.health);
+        SetHealthUI(isHealthUI);
+    }
+
+    public void SetHealthUI(bool isHealthUI)
+    {
+        Debug.Log(isHealthUI);
+        healthHandler.ActiveHealthUI(isHealthUI);
     }
 
     /// <summary>
@@ -59,7 +65,7 @@ public abstract class BaseController : MonoBehaviour
             Die();
         }
     }
-    
+
     /// <summary>
     /// 현재 체력 회복
     /// </summary>
@@ -87,6 +93,7 @@ public abstract class BaseController : MonoBehaviour
         // Destroy(this.gameObject);
         ClearAllBuff();
     }
+
 
     /// <summary>
     /// 업그레이드
@@ -148,35 +155,40 @@ public abstract class BaseController : MonoBehaviour
     }
 
     // 버프 추가
-    public void AddBuff(int id, int level, CancellationTokenSource token)
+    public Buff AddBuff(int id, int level, CancellationTokenSource token)
     {
-        if (!buffDic.TryGetValue(id, out var exist))
+        var buff = new Buff(id, level, token);
+
+        if (!buffDic.ContainsKey(id))
         {
             buffDic[id] = new List<Buff>();
         }
-        buffDic[id].Add(new Buff(id, level, token));
+
+        buffDic[id].Add(buff);
+        return buff;
     }
 
     // 버프 제거
     public void RemoveBuff(int id, bool cancel = false)
     {
-        if (buffDic.TryGetValue(id, out var buffList))
+        if (!buffDic.TryGetValue(id, out var buffList))
         {
-            foreach (var buff in buffList)
-            {
-                if (cancel)
-                {
-                    buff.token?.Cancel();
-                    buff.token?.Dispose();
-                }
-            }
-            buffDic[id].Clear();
+            return;
         }
 
-        if (!cancel)
+        foreach (var buff in buffList)
         {
-            buffDic.Remove(id);
+            buff.token?.Cancel();
+            buff.token?.Dispose();
         }
+
+        if (cancel)
+        {
+            return;
+        }
+
+        buffList.Clear();
+        buffDic.Remove(id);
     }
 
     // 모든 버프 제거
@@ -184,9 +196,19 @@ public abstract class BaseController : MonoBehaviour
     {
         foreach (var key in new List<int>(buffDic.Keys))
         {
-            RemoveBuff(key, false);
+            if (buffDic.TryGetValue(key, out var buffList))
+            {
+                foreach (var buff in buffList)
+                {
+                    if (buff != null && buff.particle != null)
+                    {
+                        buff.particle.OnDespawn();
+                        buff.particle = null;
+                    }
+                }
+            }
+            RemoveBuff(key);
         }
-
         buffDic.Clear();
     }
 }

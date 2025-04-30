@@ -110,7 +110,7 @@ public class QueenController : MonoBehaviour
 
             selectedMonsterId = monster.id;
             var tempMonster = MonsterManager.Instance.monsterInfoList[selectedMonsterId];
-            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(tempMonster.outfit);
+            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconAtlas.GetSprite(tempMonster.outfit);
         }
         else if (curSlot == QueenSlot.QueenActiveSkill)
         {
@@ -131,7 +131,7 @@ public class QueenController : MonoBehaviour
             }
 
             //스킬 아이콘 처리
-            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconData.GetSprite(selectedQueenActiveSkill.info.icon);
+            cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconAtlas.GetSprite(selectedQueenActiveSkill.info.icon);
         }
     }
 
@@ -221,7 +221,7 @@ public class QueenController : MonoBehaviour
 
         condition.AdjustCurSummonGauge(-tempMonster.cost);
         var monster = objectPoolManager.GetObject<MonsterController>(tempMonster.outfit, worldMousePos);
-        monster.StatInit(tempMonster);
+        monster.StatInit(tempMonster, MonsterManager.Instance.isHealthUI);
 
         // 마지막 생성위치 갱신
         lastSummonPosition = worldMousePos;
