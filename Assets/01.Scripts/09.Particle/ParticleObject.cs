@@ -31,9 +31,7 @@ public class ParticleObject : MonoBehaviour, IPoolable
         }
     }
 
-    /// <summary>
-    /// 파티클이 루프일 경우 수동으로 Despawn 해야 됨
-    /// </summary>
+    // 파티클이 루프일 경우 수동으로 Despawn 해야 됨
     public void OnDespawn()
     {
         if (poolParent != null)
