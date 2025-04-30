@@ -32,11 +32,12 @@ public class ParticleObject : MonoBehaviour, IPoolable
 
     public void OnDespawn()
     {
+        print("호출은 됨?");
         if (poolParent != null)
         {
             transform.SetParent(poolParent);
         }
-
+        print("조건은 만족?");
         particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         returnToPool?.Invoke(this);
     }

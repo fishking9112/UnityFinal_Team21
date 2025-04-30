@@ -17,6 +17,13 @@ public class Buff
         this.level = level;
         this.token = token;
     }
+
+    public void UpdateToken(CancellationTokenSource newToken)
+    {
+        token?.Cancel();
+        token?.Dispose();
+        token = newToken;
+    }
 }
 
 public class BuffManager : MonoSingleton<BuffManager>
@@ -48,12 +55,9 @@ public class BuffManager : MonoSingleton<BuffManager>
                 }
                 else if (curBuffLevel == level)
                 {
-                    ParticleObject curParticle = buffList[0].particle;
+                    buffList[0].UpdateToken(new CancellationTokenSource());
 
-                    target.RemoveBuff(id, true);
-                    var updateBuff = AddBuff(target, buffInfo, level);
-
-                    await ApplyBuffDurationTime(target, buffInfo, updateBuff.token);
+                    await ApplyBuffDurationTime(target, buffInfo, buffList[0].token);
                     return;
                 }
                 else

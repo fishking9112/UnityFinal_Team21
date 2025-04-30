@@ -173,27 +173,35 @@ public abstract class BaseController : MonoBehaviour
     // 버프 제거
     public void RemoveBuff(int id, bool cancel = false)
     {
-        if (buffDic.TryGetValue(id, out var buffList))
+        if (!buffDic.TryGetValue(id, out var buffList))
         {
-            foreach (var buff in buffList)
+            return;
+        }
+
+        foreach (var buff in buffList)
+        {
+            if (cancel)
             {
-                if (cancel)
+                if (!buff.token.Token.IsCancellationRequested)
                 {
-                    buff.token?.Cancel();
-                    buff.token?.Dispose();
+                    buff.token.Cancel();
                 }
+                buff.token.Dispose();
+                buff.token = null;
             }
-
-            buffDic[id].Clear();
-
-            if (buffDic[id].Count == 0)
+            else
             {
-                buffDic.Remove(id);
+                if (!buff.token.Token.IsCancellationRequested)
+                {
+                    buff.token.Cancel();
+                }
+                buff.token.Dispose();
             }
         }
 
         if (!cancel)
         {
+            buffList.Clear();
             buffDic.Remove(id);
         }
     }
@@ -203,11 +211,11 @@ public abstract class BaseController : MonoBehaviour
     {
         foreach (var key in new List<int>(buffDic.Keys))
         {
-            if(buffDic.TryGetValue(key, out var buffList))
+            if (buffDic.TryGetValue(key, out var buffList))
             {
-                foreach(var buff in buffList)
+                foreach (var buff in buffList)
                 {
-                    if(buff != null && buff.particle != null)
+                    if (buff != null && buff.particle != null)
                     {
                         buff.particle.OnDespawn();
                         buff.particle = null;
