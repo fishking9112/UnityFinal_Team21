@@ -46,6 +46,8 @@ public class HeroStatusInfo: BaseStatData, IInfo
     }
 
     public int ID => id;
+    public string Name => name;
+    public string Description => description;
 }
 
 

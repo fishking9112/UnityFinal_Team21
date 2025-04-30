@@ -11,7 +11,7 @@ public class EvolutionNode : MonoBehaviour
 
     public bool isUnlock;
     public bool nodeLock;
-    public int monsterInfoId;
+    public IDMonster monsterInfoId;
     public MonsterInfo monsterInfo;
 
     private EvolutionTree evolutionTree;
@@ -20,10 +20,10 @@ public class EvolutionNode : MonoBehaviour
     {
         evolutionTree = tree;
 
-        if(DataManager.Instance.monsterDic.TryGetValue(monsterInfoId,out var info))
+        if(DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoId,out var info))
         {
             monsterInfo = info;
-            image.sprite = DataManager.Instance.iconData.GetSprite(monsterInfo.outfit);
+            image.sprite = DataManager.Instance.iconAtlas.GetSprite(monsterInfo.outfit);
         }
         else
         {

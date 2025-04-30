@@ -34,6 +34,8 @@ public class QueenEnhanceInfo : IInfo
     public ValueType valueType;
 
     public int ID => id;
+    public string Name => name;
+    public string Description => description;
 }
 
 [CreateAssetMenu(fileName = "QueenEnhanceData", menuName = "Scriptable Object/New QueenEnhanceData")]

@@ -21,6 +21,8 @@ public class TrophyInfo: IInfo
     public TrophyType type;
 
     public int ID => id;
+    public string Name => name;
+    public string Description => description;
 }
 
 [CreateAssetMenu(fileName = "TrophyData", menuName = "Scriptable Object/New TrophyData")]

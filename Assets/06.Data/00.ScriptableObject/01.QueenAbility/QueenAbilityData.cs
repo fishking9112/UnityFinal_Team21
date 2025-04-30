@@ -20,6 +20,8 @@ public class QueenAbilityInfo : IInfo
     public LevelInfo[] levelInfo;
 
     public int ID => id;
+    public string Name => name;
+    public string Description => description;
 }
 
 [CreateAssetMenu(fileName = "QueenAbilityData", menuName = "Scriptable Object/New QueenAbilityData")]

@@ -6,7 +6,7 @@ public class SummonSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[202];
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.SUMMON];
     }
 
     public override void UseSkill()
@@ -21,8 +21,7 @@ public class SummonSkill : QueenActiveSkillBase
             Vector3 pos = new Vector3(Mathf.Cos(rad) * info.size, Mathf.Sin(rad) * info.size, 0f) + mousePos;
 
             var skeleton = ObjectPoolManager.Instance.GetObject<MonsterController>("Skeleton_Normal", pos);
-            skeleton.StatInit(DataManager.Instance.monsterDic[1201], MonsterManager.Instance.isHealthUI);
+            skeleton.StatInit(DataManager.Instance.monsterDic[(int)IDMonster.SKELETON_NORMAL], MonsterManager.Instance.isHealthUI);
         }
     }
-
 }

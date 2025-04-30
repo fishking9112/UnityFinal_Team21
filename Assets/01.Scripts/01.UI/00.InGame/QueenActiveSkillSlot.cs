@@ -9,7 +9,7 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
             return;
         }
 
-        slotIcon[index].sprite = DataManager.Instance.iconData.GetSprite(skill.info.icon);
+        slotIcon[index].sprite = DataManager.Instance.iconAtlas.GetSprite(skill.info.icon);
         slotIcon[index].enabled = true;
         slotIcon[index].preserveAspect = true;
     }
