@@ -6,6 +6,8 @@ using UnityEngine.U2D;
 public interface IInfo
 {
     int ID { get; }
+    string Name { get; }
+    string Description { get; }
 }
 
 public class DataManager : MonoSingleton<DataManager>

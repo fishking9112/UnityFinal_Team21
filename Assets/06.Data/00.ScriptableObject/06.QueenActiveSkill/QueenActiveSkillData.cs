@@ -29,6 +29,8 @@ public class QueenActiveSkillInfo : IInfo
     public int buff_Level;
 
     public int ID => id;
+    public string Name => name;
+    public string Description => description;
 }
 
 [CreateAssetMenu(fileName = "QueenActiveSkillData", menuName = "Scriptable Object/New QueenActiveSKillData")]

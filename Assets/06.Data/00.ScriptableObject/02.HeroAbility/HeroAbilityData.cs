@@ -46,6 +46,8 @@ public class HeroAbilityInfo : IInfo
     public float countDelay_LevelUp;
 
     public int ID => id;
+    public string Name => name;
+    public string Description => description;
 }
 
 [CreateAssetMenu(fileName = "HeroAbilityData", menuName = "Scriptable Object/New HeroAbilityData")]

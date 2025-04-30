@@ -61,6 +61,8 @@ public class MonsterInfo : BaseStatData, IInfo
         projectile = other.projectile;
     }
     public int ID => id;
+    public string Name => name;
+    public string Description => description;
 }
 
 [CreateAssetMenu(fileName = "MonsterData", menuName = "Scriptable Object/New MonsterData")]
