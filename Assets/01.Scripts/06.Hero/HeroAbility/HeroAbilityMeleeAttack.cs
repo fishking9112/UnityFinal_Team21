@@ -30,7 +30,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     }
     private void OnEnable()
     {
-        Initialize(101);
+        Initialize((int)IDHeroAbility.SWORD);
 
     }
     protected override void ActionAbility()

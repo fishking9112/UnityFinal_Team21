@@ -27,7 +27,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     }
     private void OnEnable()
     {
-        Initialize(104);
+        Initialize((int)IDHeroAbility.GARLIC);
 
     }
     protected override void ActionAbility()

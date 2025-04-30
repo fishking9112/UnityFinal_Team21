@@ -26,7 +26,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
     }
     private void OnEnable()
     {
-        Initialize(102);
+        Initialize((int)IDHeroAbility.WAND);
 
     }
 
