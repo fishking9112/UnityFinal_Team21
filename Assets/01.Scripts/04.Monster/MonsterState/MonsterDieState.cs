@@ -51,6 +51,11 @@ public class MonsterDieState : MonsterBaseState
             float alpha = time / 2f;
             foreach (var renderer in renderers)
             {
+                if(renderer == null)
+                {
+                    continue;
+                }
+
                 Color color = renderer.color;
                 color.a = alpha;
                 renderer.color = color;
@@ -62,6 +67,11 @@ public class MonsterDieState : MonsterBaseState
         // 마지막에 확실히 0으로
         foreach (var renderer in renderers)
         {
+            if (renderer == null)
+            {
+                continue;
+            }
+
             Color color = renderer.color;
             color.a = 0f;
             renderer.color = color;

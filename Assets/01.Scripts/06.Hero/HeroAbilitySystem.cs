@@ -52,7 +52,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         delay = heroAbilityInfo.delay_Base;
         delay_LevelUp = heroAbilityInfo.delay_LevelUp;
         damage = heroAbilityInfo.damage_Base;
-        damage_LevelUp= heroAbilityInfo.damage_LevelUp;
+        damage_LevelUp = heroAbilityInfo.damage_LevelUp;
         pierce = heroAbilityInfo.piercing_Base;
         pierce_LevelUp = heroAbilityInfo.piercing_LevelUp;
         size = heroAbilityInfo.size_Base;
@@ -90,11 +90,23 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     /// <returns></returns>
     protected async UniTaskVoid AutoAction(CancellationToken tk)
     {
-
-        while (this.gameObject.activeSelf)
+        try
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(delay),false,PlayerLoopTiming.Update,tk);
-            ActionAbility();
+            while (!tk.IsCancellationRequested && this != null)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, tk);
+
+                if (tk.IsCancellationRequested || this == null)
+                {
+                    break;
+                }
+
+                ActionAbility();
+            }
+        }
+        catch (MissingReferenceException)
+        {
+            // 무시해도 되는 예외
         }
 
     }
@@ -106,7 +118,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
 
     public virtual void AbilityLevelUp()
     {
-        if(maxLevel == curLevel)
+        if (maxLevel == curLevel)
         {
             return;
         }
@@ -129,7 +141,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     {
         Init();
 
-        for(int i=1;i<level;i++)
+        for (int i = 1; i < level; i++)
         {
             AbilityLevelUp();
         }

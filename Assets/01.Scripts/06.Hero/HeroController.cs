@@ -1,9 +1,5 @@
 using Cysharp.Threading.Tasks;
-using Google.GData.Extensions;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
@@ -68,6 +64,11 @@ public class HeroController : BaseController
         lastDir = 0;
         while (!tk.IsCancellationRequested)
         {
+            if (navMeshAgent == null)
+            {
+                return;
+            }
+
             float x = navMeshAgent.desiredVelocity.x;
 
             currentDir = MathF.Sign(x);

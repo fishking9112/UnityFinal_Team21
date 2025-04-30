@@ -25,14 +25,20 @@ public class HeroAttackState : HeroBaseState
 
     private async UniTask Move(CancellationToken tk)
     {
-        while (!token.IsCancellationRequested)
+        while (!token.IsCancellationRequested && state.hero != null)
         {
-            while (enemy != null && enemy.activeSelf)
+            while (enemy != null && enemy.activeSelf && state.hero != null)
             {
                 if (state.navMeshAgent.remainingDistance < state.navMeshAgent.stoppingDistance)
                 {
                     state.navMeshAgent.ResetPath();
-                    await UniTask.WaitUntil(() => enemy.activeSelf == false, PlayerLoopTiming.Update, tk);
+                    await UniTask.WaitUntil(() => { return enemy == null || !enemy.activeInHierarchy; }, PlayerLoopTiming.Update, tk);
+
+                    if (state.hero == null)
+                    {
+                        return;
+                    }
+
                     GetEnemyDir();
                     break;
                 }
