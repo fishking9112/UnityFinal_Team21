@@ -18,12 +18,14 @@ public class EvolutionTreeUI : SingleUI
     [SerializeField] private TextMeshProUGUI monsterNameText;
     [SerializeField] private Button leftButton;
     [SerializeField] private Button rightButton;
+    [SerializeField] private Button evolutionButton;
     [SerializeField] private List<GameObject> selectedMonster;
 
     [Header("Pages")]
     [SerializeField] private List<Page> pageList;
 
     private int curIndex;
+    private EvolutionTree currentTreePage;
 
     public int PageCount => pageList.Count;
 
@@ -42,9 +44,11 @@ public class EvolutionTreeUI : SingleUI
     {
         leftButton.onClick.RemoveAllListeners();
         rightButton.onClick.RemoveAllListeners();
+        evolutionButton.onClick.RemoveAllListeners();
 
         leftButton.onClick.AddListener(OnClickLeftButton);
         rightButton.onClick.AddListener(OnClickRightButton);
+        evolutionButton.onClick.AddListener(OnClickEvolutionButton);
     }
 
     private void OnClickLeftButton()
@@ -81,6 +85,7 @@ public class EvolutionTreeUI : SingleUI
         if (index >= 0 && index < pageList.Count)
         {
             monsterNameText.text = pageList[index].name;
+            currentTreePage = pageList[index].evolutionTree.GetComponent<EvolutionTree>();
         }
 
         // 선택된 몬스터 아이콘 크기 조정
@@ -91,5 +96,16 @@ public class EvolutionTreeUI : SingleUI
                 selectedMonster[i].transform.localScale = (i == index) ? new Vector3(3f, 3f, 3f) : Vector3.one;
             }
         }
+    }
+
+    public void OnClickEvolutionButton()
+    {
+        currentTreePage?.OnClickEvolutionButton();
+        SetEvolutionButtonState(false); // 진화 후 비활성화
+    }
+
+    public void SetEvolutionButtonState(bool state)
+    {
+        evolutionButton.gameObject.SetActive(state);
     }
 }

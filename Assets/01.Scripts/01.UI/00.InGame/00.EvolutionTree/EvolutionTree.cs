@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class EvolutionTree : MonoBehaviour
 {
+    private EvolutionTreeUI evolutionTreeUI;
+
     private QueenCondition condition;
 
     [SerializeField] private List<EvolutionNode> evolutionNodeList;
@@ -28,6 +30,7 @@ public class EvolutionTree : MonoBehaviour
 
     private void Awake()
     {
+        evolutionTreeUI = GetComponentInParent<EvolutionTreeUI>();
         condition = GameManager.Instance.queen.condition;
         queenController = GameManager.Instance.queen.controller;
         evolutionNodeDic = new Dictionary<int, EvolutionNode>();
@@ -44,7 +47,6 @@ public class EvolutionTree : MonoBehaviour
                 evolutionNodeDic[(int)node.monsterInfoId] = node;
             }
 
-            evolutionButton.onClick.RemoveAllListeners();
             evolutionButton.onClick.AddListener(OnClickEvolutionButton);
             evolutionButton.gameObject.SetActive(false);
         }
@@ -100,7 +102,7 @@ public class EvolutionTree : MonoBehaviour
 
         UpdateAllNode();
         UpdateDescriptionWindow(selectedNode);
-        evolutionButton.gameObject.SetActive(false);
+        evolutionTreeUI?.SetEvolutionButtonState(false);
     }
 
     // 모든 노드 업데이트
@@ -118,7 +120,7 @@ public class EvolutionTree : MonoBehaviour
         selectedNode = node;
         UpdateDescriptionWindow(node);
 
-        evolutionButton.gameObject.SetActive(!selectedNode.isUnlock);
+        evolutionTreeUI?.SetEvolutionButtonState(!selectedNode.isUnlock);
     }
 
     // 설명창 초기화
