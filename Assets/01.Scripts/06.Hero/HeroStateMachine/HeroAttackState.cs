@@ -25,31 +25,31 @@ public class HeroAttackState : HeroBaseState
 
     private async UniTask Move(CancellationToken tk)
     {
-        while (!token.IsCancellationRequested && enemy != null && enemy.activeSelf && state.hero != null)
+        while (!token.IsCancellationRequested && state.hero != null)
         {
-            if (state.navMeshAgent.remainingDistance < state.navMeshAgent.stoppingDistance)
+            while (enemy != null && enemy.activeSelf && state.hero != null)
             {
-                state.navMeshAgent.ResetPath();
-                await UniTask.WaitUntil(() => { return enemy == null || !enemy.activeInHierarchy; }, PlayerLoopTiming.Update, tk);
-
-                if (state.hero == null)
+                if (state.navMeshAgent.remainingDistance < state.navMeshAgent.stoppingDistance)
                 {
-                    return;
+                    state.navMeshAgent.ResetPath();
+                    await UniTask.WaitUntil(() => { return enemy == null || !enemy.activeInHierarchy; }, PlayerLoopTiming.Update, tk);
+
+                    if (state.hero == null)
+                    {
+                        return;
+                    }
+
+                    GetEnemyDir();
+                    break;
                 }
-
-                GetEnemyDir();
-                break;
+                else
+                {
+                    state.navMeshAgent.SetDestination(state.dir);
+                }
+                await UniTask.Yield(tk, true);
             }
-            else
-            {
-                state.navMeshAgent.SetDestination(state.dir);
-            }
-            await UniTask.Yield(tk, true);
-        }
-
-        if (state.hero != null)
-        {
             GetEnemyDir();
+            await UniTask.Yield(tk, true);
         }
     }
 
