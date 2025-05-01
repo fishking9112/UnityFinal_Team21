@@ -28,8 +28,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     protected override void Awake()
     {
         base.Awake();
-        InitializeEffectActions();
         Initialize();
+        InitializeEffectActions();
     }
 
     #region 초기화
@@ -39,20 +39,35 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// </summary>
     private void InitializeEffectActions()
     {
-        applyEffectActions = new Dictionary<int, Action<float>>
+        applyEffectActions = new Dictionary<int, Action<float>>();
+
+        Action<float>[] actions =
         {
-            { 0, value => ApplyAttackPowerBuff(value) }, 
-            { 1, value => ApplyMoveSpeedBuff(value) }, 
-            { 2, value => GameManager.Instance.queen.condition.SetGoldGainMultiplierPercent(value) }, 
-            { 3, value => GameManager.Instance.queen.condition.SetExpGainMultiplierPercent(value) }, 
-            { 4, value => GameManager.Instance.castle.condition.AdjustMaxHealth(value) },
-            { 5, value => GameManager.Instance.castle.condition.AdjustCastleHealthRecoverySpeed(value) }, 
-            { 6, value => GameManager.Instance.queen.condition.AdjustSummonGaugeRecoverySpeed(value) },
-            { 7, value => GameManager.Instance.queen.condition.AdjustMaxSummonGauge(value) },
-            { 8, value => GameManager.Instance.queen.condition.AdjustQueenActiveSkillGaugeRecoverySpeed(value) },
-            { 9, value => GameManager.Instance.queen.condition.AdjustMaxQueenActiveSkillGauge(value) },
-            { 10, value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value) }
+            value => ApplyAttackPowerBuff(value),
+            value => ApplyMoveSpeedBuff(value),
+            value => GameManager.Instance.queen.condition.SetGoldGainMultiplierPercent(value),
+            value => GameManager.Instance.queen.condition.SetExpGainMultiplierPercent(value),
+            value => GameManager.Instance.castle.condition.AdjustMaxHealth(value),
+            value => GameManager.Instance.castle.condition.AdjustCastleHealthRecoverySpeed(value),
+            value => GameManager.Instance.queen.condition.AdjustSummonGaugeRecoverySpeed(value),
+            value => GameManager.Instance.queen.condition.AdjustMaxSummonGauge(value),
+            value => GameManager.Instance.queen.condition.AdjustQueenActiveSkillGaugeRecoverySpeed(value),
+            value => GameManager.Instance.queen.condition.AdjustMaxQueenActiveSkillGauge(value),
+            value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value)
         };
+
+        int index = 0;
+        foreach (var kvp in DataManager.Instance.queenAbilityDic)
+        {
+            if (index >= actions.Length)
+            {
+                Utils.LogWarning("Action보다 queenAbilityDic의 항목 수가 더 많음");
+                break;
+            }
+
+            applyEffectActions[kvp.Key] = actions[index];
+            index++;
+        }
     }
 
     /// <summary>

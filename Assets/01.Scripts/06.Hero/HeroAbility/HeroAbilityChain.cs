@@ -15,6 +15,7 @@ public class HeroAbilityChain : HeroAbilitySystem
     private float range;
 
     private GameObject preObj;
+    private CancellationTokenSource tk;
 
     private void Start()
     {
@@ -31,7 +32,6 @@ public class HeroAbilityChain : HeroAbilitySystem
     private void OnEnable()
     {
         Initialize((int)IDHeroAbility.CHAIN);
-        token = new CancellationTokenSource();
     }
 
     protected override void ActionAbility()
@@ -42,7 +42,7 @@ public class HeroAbilityChain : HeroAbilitySystem
         }
 
         target = hero.FindNearestTarget();
-        Chaining(token.Token).Forget();
+        Chaining(tk.Token).Forget();
     }
 
     private async UniTask Chaining(CancellationToken tk)
@@ -100,11 +100,13 @@ public class HeroAbilityChain : HeroAbilitySystem
         this.enabled = false;
         token?.Cancel();
         token?.Dispose();
+        tk?.Cancel();
+        tk?.Dispose();
     }
 
     public override void SetAbilityLevel(int level)
     {
         base.SetAbilityLevel(level);
-        token = new CancellationTokenSource();
+        tk = new CancellationTokenSource();
     }
 }

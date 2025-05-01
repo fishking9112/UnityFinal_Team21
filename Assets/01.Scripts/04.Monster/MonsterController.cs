@@ -86,6 +86,11 @@ public class MonsterController : BaseController, IPoolable
         if (navMeshAgent == null)
             navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.enabled = true;
+        if (!navMeshAgent.isOnNavMesh)
+        {
+            OnDespawn();
+            return;
+        }
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
 
