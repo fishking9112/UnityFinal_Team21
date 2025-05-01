@@ -93,8 +93,12 @@ public class QueenController : MonoBehaviour
     }
 
     // 슬롯 버튼을 클릭했을 때 해당 슬롯 선택
-    public void OnClickSlotButton(int index)
+    public void OnClickSlotButton(int index, QueenSlot slotType)
     {
+        if(curSlot != slotType)
+        {
+            return;
+        }
         SelectSlot(index);
     }
 
