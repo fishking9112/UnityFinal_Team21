@@ -21,6 +21,7 @@ public class SlotChange : MonoBehaviour
     private void Start()
     {
         controller = GameManager.Instance.queen.controller;
+
         InitOrder();
     }
 
