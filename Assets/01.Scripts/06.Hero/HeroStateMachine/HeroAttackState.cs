@@ -48,6 +48,7 @@ public class HeroAttackState : HeroBaseState
                 }
                 await UniTask.Yield(tk, true);
             }
+            GetEnemyDir();
             await UniTask.Yield(tk, true);
         }
     }
