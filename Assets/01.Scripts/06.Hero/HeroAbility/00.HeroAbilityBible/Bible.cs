@@ -13,13 +13,18 @@ public class Bible : MonoBehaviour, IPoolable
     public float damage;
     private LayerMask targetLayer;
 
+    private void Start()
+    {
+        targetLayer = LayerMask.GetMask("Monster", "Castle");
+
+    }
+
     private void Update()
     {
         if(target == null)
         {
             return;
         }
-        targetLayer = LayerMask.GetMask("Monster", "Castle");
 
         // target을 중심으로 radius만큼 떨어져서 공전
         angle += speed * Time.deltaTime;
@@ -42,7 +47,7 @@ public class Bible : MonoBehaviour, IPoolable
         returnToPool?.Invoke(this);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (((1 << collision.gameObject.layer) & targetLayer) != 0)
         {
