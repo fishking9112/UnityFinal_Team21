@@ -19,11 +19,12 @@ public class SlotChange : MonoBehaviour
 
     private QueenController controller;
 
-    private InputAction inputAction = GameManager.Instance.queen.input.actions["SlotChange"];
+    private InputAction inputAction;
 
     private void Start()
     {
         controller = GameManager.Instance.queen.controller;
+        inputAction = GameManager.Instance.queen.input.actions["SlotChange"];
         inputAction.started += OnChangeSlots;
         InitOrder();
     }

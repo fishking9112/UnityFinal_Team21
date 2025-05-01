@@ -31,7 +31,7 @@ public class GameHUD : HUDUI
 
     //[Header("버튼")]
     //[SerializeField] private Button pauseButton;
-    private InputAction inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
+    private InputAction inputAction;
 
     [Header("미니맵")]
     [SerializeField] private MiniMapClick miniMap;
@@ -85,6 +85,7 @@ public class GameHUD : HUDUI
             HeroManager.Instance.OnClickHealthUITest();
         });
 
+        inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
         inputAction.started += OnPauseUI;
     }
 
