@@ -370,10 +370,6 @@ MonoBehaviour:
     m_ActionId: 9c2d3ada-8a9b-4938-a828-f1d85799f0b6
     m_ActionName: InGame/EvolutionWindow[/Keyboard/tab]
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 14bb0621-d7da-4213-8b56-9a532701bec5
-    m_ActionName: UI/EvolutionWindow[/Keyboard/tab]
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 166616946}
         m_TargetAssemblyTypeName: QueenController, Assembly-CSharp
@@ -405,6 +401,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 8a3979c0-1b61-4efb-9c61-197eb64688a6
     m_ActionName: InGame/Drag[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 53203828-9d1f-4ce6-b15b-7b3bec352c47
+    m_ActionName: InGame/PauseUI[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: InGame
@@ -422,6 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73028f2f860e01e42b32de8cf58cb8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedSlotIndex: -1
   rangeObject: {fileID: 648000347}
   worldMousePos: {x: 0, y: 0, z: 0}
   cursorIcon: {fileID: 90943526}

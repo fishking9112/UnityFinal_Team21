@@ -1,8 +1,8 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class GameHUD : HUDUI
@@ -29,8 +29,9 @@ public class GameHUD : HUDUI
     [SerializeField] private TextMeshProUGUI timerText;
     private ReactiveProperty<float> curTime => GameManager.Instance.curTime;// new ReactiveProperty<float>();
 
-    [Header("버튼")]
-    [SerializeField] private Button pauseButton;
+    //[Header("버튼")]
+    //[SerializeField] private Button pauseButton;
+    private InputAction inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
 
     [Header("미니맵")]
     [SerializeField] private MiniMapClick miniMap;
@@ -72,10 +73,9 @@ public class GameHUD : HUDUI
         queenActiveSkillGaugeUI.Bind(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
 
-        pauseButton.onClick.AddListener(() => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<PauseUI>());
+        //pauseButton.onClick.AddListener(() => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<PauseUI>());
 
         GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
-
 
         // 레벨업 테스트 버튼
         LevelUPTestButton.onClick.AddListener(() => GameManager.Instance.queen.condition.AdjustCurExpGauge(100));
@@ -84,6 +84,8 @@ public class GameHUD : HUDUI
             MonsterManager.Instance.OnClickHealthUITest();
             HeroManager.Instance.OnClickHealthUITest();
         });
+
+        inputAction.started += OnPauseUI;
     }
 
 
@@ -193,6 +195,17 @@ public class GameHUD : HUDUI
         }
     }
 
+    public void OnPauseUI(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            if (!ReferenceEquals(openWindow, pauseUI.gameObject))
+                ShowWindow<PauseUI>();
+            else
+                HideWindow();
+        }
+    }
+
     private void OnDestroy()
     {
         if (curTime != null)
@@ -209,5 +222,7 @@ public class GameHUD : HUDUI
         {
             condition.Gold.RemoveAction(UpdateGoldText);
         }
+
+        inputAction.started -= OnPauseUI;
     }
 }
