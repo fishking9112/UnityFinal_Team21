@@ -50,7 +50,7 @@ public class LoadingUI : MonoBehaviour
         {
             t += Time.unscaledDeltaTime;
             fadeCanvasGroup.alpha = Mathf.Lerp(0f, 1f, t / duration); // 0 -> 1로 페이드 인
-            await UniTask.Yield();
+            await UniTask.Yield(PlayerLoopTiming.Update);
         }
         fadeCanvasGroup.alpha = 1f; // 최종 알파 값 보장
     }
@@ -62,7 +62,7 @@ public class LoadingUI : MonoBehaviour
         {
             t += Time.unscaledDeltaTime;
             fadeCanvasGroup.alpha = Mathf.Lerp(1f, 0f, t / duration); // 1 -> 0으로 페이드 아웃
-            await UniTask.Yield();
+            await UniTask.Yield(PlayerLoopTiming.Update);
         }
         fadeCanvasGroup.alpha = 0f; // 최종 알파 값 보장
         fadeCanvasGroup.interactable = false;
