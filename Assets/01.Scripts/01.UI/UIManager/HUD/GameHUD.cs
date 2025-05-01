@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Reflection;
 using TMPro;
@@ -51,9 +52,12 @@ public class GameHUD : HUDUI
     [Header("체력 UI 테스트 버튼")]
     public Button HealthUITestButton;
 
-    public override void Initialize()
+    public override async UniTask Initialize()
     {
         BindSlotButton();
+
+        // null이 아닐 때 까지 기다림
+        await UniTask.WaitUntil(() => condition != null);
 
         condition.Level.AddAction(UpdateLevelText);
         UpdateLevelText(condition.Level.Value);
