@@ -10,6 +10,7 @@ public class QueenAbilityUpgradeItem : MonoBehaviour, IPointerEnterHandler, IPoi
     [SerializeField] private Transform upgradeIndicator;
     [SerializeField] private Button upgradeButton;
     [SerializeField] private Button downgradeButton;
+    [SerializeField] private Image abilityIcon;
 
     private QueenAbilityInfo queenAbilityInfo;
     private QueenAbilityUpgradeManager manager;
@@ -57,6 +58,8 @@ public class QueenAbilityUpgradeItem : MonoBehaviour, IPointerEnterHandler, IPoi
                 }
             }
         }
+
+        abilityIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
     }
 
     /// <summary>
