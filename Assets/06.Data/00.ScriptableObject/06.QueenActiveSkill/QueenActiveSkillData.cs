@@ -20,6 +20,7 @@ public class QueenActiveSkillInfo : IInfo
     public string icon;
     public QueenActiveSkillType type;
     public float cost;
+    public float coolTime;
     public float value;
     public float range;
     public float size;
@@ -66,6 +67,9 @@ public class QueenActiveSkillData : SheetDataReaderBase
                     break;
                 case "cost":
                     queenActiveSkillInfo.cost = Utils.StringToFloat(cell.value);
+                    break;
+                case "coolTime":
+                    queenActiveSkillInfo.coolTime = Utils.StringToFloat(cell.value);
                     break;
                 case "value":
                     queenActiveSkillInfo.value = Utils.StringToFloat(cell.value);

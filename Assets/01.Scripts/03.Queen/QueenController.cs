@@ -13,6 +13,8 @@ public class QueenController : MonoBehaviour
 {
     public MonsterSlot monsterSlot => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().monsterSlot;
     public QueenActiveSkillSlot queenActiveSkillSlot => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenActiveSkillSlot;
+    public int selectedSlotIndex = -1;
+
 
     [Header("스킬 범위")]
     public GameObject rangeObject;
@@ -99,6 +101,7 @@ public class QueenController : MonoBehaviour
     // 슬롯에 따라 다른 처리
     public void SelectSlot(int index)
     {
+        selectedSlotIndex = index;
         if (curSlot == QueenSlot.MONSTER)
         {
             MonsterInfo monster = monsterSlot.GetValue(index);
@@ -228,7 +231,7 @@ public class QueenController : MonoBehaviour
     }
 
     // 퀸의 액티브 스킬 사용
-    private void UseQueenActiveSkill()
+    private async void UseQueenActiveSkill()
     {
         if (selectedQueenActiveSkill == null)
         {
@@ -246,15 +249,12 @@ public class QueenController : MonoBehaviour
         {
             if (Vector3.Distance(worldMousePos, GameManager.Instance.castle.transform.position) > selectedQueenActiveSkill.info.range)
             {
-                Utils.Log($"{selectedQueenActiveSkill.info.range}");
-                Utils.Log($"{Vector3.Distance(worldMousePos, GameManager.Instance.castle.transform.position)}");
-                Utils.Log("범위 밖");
+                // 범위 밖이면 스킬 사용 불가
                 return;
             }
         }
 
-        condition.AdjustCurQueenActiveSkillGauge(-selectedQueenActiveSkill.info.cost);
-        selectedQueenActiveSkill.UseSkill();
+        await selectedQueenActiveSkill.TryUseSkill();
     }
 
     // 자동 게이지 회복
