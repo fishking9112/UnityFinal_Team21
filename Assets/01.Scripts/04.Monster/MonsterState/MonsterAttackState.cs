@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Threading;
 using UnityEngine;
 
@@ -101,34 +102,41 @@ public class MonsterAttackState : MonsterBaseState
         cts?.Dispose(); // 메모리 누수 방지
         cts = new CancellationTokenSource();
 
-        // 1초 프레임에서 0.55때 공격됨
-        UniTask.Delay((int)(550 * (1f / finalAttackSpeed)), cancellationToken: cts.Token).ContinueWith(() =>
+        try
         {
-            float minDist = float.MaxValue;
-            Vector2 origin = navMeshAgent.transform.position;
-            Collider2D[] hits = Physics2D.OverlapCircleAll(origin, stateMachine.Controller.statData.attackRange, stateMachine.Controller.attackLayer);
-            Utils.DrawOverlapCircle(origin, stateMachine.Controller.statData.attackRange, Color.red, 0.1f);
-            Collider2D nearHit = null;
-
-            foreach (var hit in hits)
+            // 1초 프레임에서 0.55때 공격됨
+            UniTask.Delay((int)(550 * (1f / finalAttackSpeed)), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
             {
-                float dist = Vector2.Distance(origin, hit.transform.position);
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    nearHit = hit;
-                }
-            }
+                float minDist = float.MaxValue;
+                Vector2 origin = navMeshAgent.transform.position;
+                Collider2D[] hits = Physics2D.OverlapCircleAll(origin, stateMachine.Controller.statData.attackRange, stateMachine.Controller.attackLayer);
+                Utils.DrawOverlapCircle(origin, stateMachine.Controller.statData.attackRange, Color.red, 0.1f);
+                Collider2D nearHit = null;
 
-            if (nearHit != null)
-            {
-                if (HeroManager.Instance.hero.ContainsKey(nearHit.gameObject))
+                foreach (var hit in hits)
                 {
-                    HeroManager.Instance.hero[nearHit.gameObject].TakeDamaged(finalAttackDamage);
-                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += finalAttackDamage;
+                    float dist = Vector2.Distance(origin, hit.transform.position);
+                    if (dist < minDist)
+                    {
+                        minDist = dist;
+                        nearHit = hit;
+                    }
                 }
-            }
-        });
+
+                if (nearHit != null)
+                {
+                    if (HeroManager.Instance.hero.ContainsKey(nearHit.gameObject))
+                    {
+                        HeroManager.Instance.hero[nearHit.gameObject].TakeDamaged(finalAttackDamage);
+                        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += finalAttackDamage;
+                    }
+                }
+            });
+        }
+        catch (OperationCanceledException)
+        {
+
+        }
     }
 
     /// <summary>
@@ -141,7 +149,7 @@ public class MonsterAttackState : MonsterBaseState
         cts = new CancellationTokenSource();
 
         // 1초 프레임에서 0.65때 발사
-        UniTask.Delay((int)(650 * (1f / finalAttackSpeed)), cancellationToken: cts.Token).ContinueWith(() =>
+        UniTask.Delay((int)(650 * (1f / finalAttackSpeed)), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
         {
             var projectileObject = ObjectPoolManager.Instance.GetObject<ProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
             projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);

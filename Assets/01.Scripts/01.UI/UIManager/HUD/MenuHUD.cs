@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,14 +29,16 @@ public class MenuHUD : HUDUI
 
 
 
-    public override void Initialize()
+    public override async UniTask Initialize()
     {
+        await UniTask.Yield(PlayerLoopTiming.Update);
+
         foreach (var mainUISet in mainUISets)
         {
             mainUISet.button.onClick.AddListener(() =>
             {
                 mainUISet.panel.SetActive(true);
-               // buttonMenu.SetActive(false);
+                // buttonMenu.SetActive(false);
                 uiMenu.SetActive(true);
                 activePanel = mainUISet.panel;
             });
@@ -43,7 +46,7 @@ public class MenuHUD : HUDUI
 
         backBtn.onClick.AddListener(() =>
         {
-           // buttonMenu.SetActive(true);
+            // buttonMenu.SetActive(true);
             uiMenu.SetActive(false);
             activePanel.SetActive(false);
         });

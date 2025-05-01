@@ -38,7 +38,7 @@ public class MonsterDieState : MonsterBaseState
         cts?.Dispose(); // 메모리 누수 방지
         cts = null;
     }
-    private async UniTaskVoid DieProccess()
+    private async UniTask DieProccess()
     {
         List<SpriteRenderer> renderers = stateMachine.Controller.renderers;
         float time = 2f;
@@ -51,7 +51,7 @@ public class MonsterDieState : MonsterBaseState
             float alpha = time / 2f;
             foreach (var renderer in renderers)
             {
-                if(renderer == null)
+                if (renderer == null)
                 {
                     continue;
                 }

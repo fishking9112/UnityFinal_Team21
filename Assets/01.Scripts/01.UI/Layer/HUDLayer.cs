@@ -35,7 +35,7 @@ public class HUDLayer : MonoBehaviour
         if (hudPrefab != null)
         {
             currentHUD = Instantiate(hudPrefab, this.transform);
-            currentHUD.Initialize();
+            await currentHUD.Initialize();
         }
         else
         {
