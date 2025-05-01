@@ -46,7 +46,7 @@ public class HeroAbilityAxe : HeroAbilitySystem
 
         if (target == null)
         {
-            angle = 0;
+            return;
         }
         else
         {
