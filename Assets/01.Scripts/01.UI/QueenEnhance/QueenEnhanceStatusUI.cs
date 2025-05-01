@@ -64,8 +64,8 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         builder.AppendLine($"마나 : ({(int)curMana} / {(int)maxMana})");
 
         // 마나 회복량 = 기본 회복량 + 강화 효과
-        float manaRegenBase = queenCondition.QueenActiveSkillGaugeRecoverySpeed;
-        float manaRegenEnhance = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceValueByID(1002);
+        float manaRegenBase = queenCondition.initQueenActiveSkillGaugeRecoverySpeed;
+        float manaRegenEnhance = queenCondition.QueenActiveSkillGaugeRecoverySpeed - manaRegenBase;
         builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / sec");
     }
 
@@ -74,10 +74,10 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendSummonGaugeStatus(StringBuilder builder)
     {
-        float maxSummonBase = queenCondition.MaxSummonGauge.Value;
-        float maxSummonEnhance = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceValueByID(1003);
+        float maxSummonBase = queenCondition.initMaxSummonGauge;
+        float maxSummonEnhance = queenCondition.MaxSummonGauge.Value - maxSummonBase;
         float maxSummonGauge = maxSummonBase + maxSummonEnhance;
-        builder.AppendLine($"소환 게이지 : {FormatNumber(maxSummonBase)} + {FormatNumber(maxSummonEnhance)} / {FormatNumber(maxSummonGauge)}");
+        builder.AppendLine($"소환 게이지 : {FormatNumber(maxSummonBase)} + {FormatNumber(maxSummonEnhance)}");
     }
 
     /// <summary>
@@ -85,8 +85,8 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendSummonRegenStatus(StringBuilder builder)
     {
-        float summonRegenBase = queenCondition.SummonGaugeRecoverySpeed;
-        float summonRegenEnhance = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceValueByID(-1);
+        float summonRegenBase = queenCondition.initSummonGaugeRecoverySpeed;
+        float summonRegenEnhance = queenCondition.SummonGaugeRecoverySpeed - summonRegenBase;
         builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / sec");
     }
 
