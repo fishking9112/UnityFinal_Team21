@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using DigitalRuby.LightningBolt;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ public class HeroAbilityChain : HeroAbilitySystem
     private List<GameObject> hitList=new List<GameObject>();
 
     private float range;
+
+    private GameObject preObj;
 
     private void Start()
     {
@@ -28,6 +31,7 @@ public class HeroAbilityChain : HeroAbilitySystem
     private void OnEnable()
     {
         Initialize((int)IDHeroAbility.CHAIN);
+        token = new CancellationTokenSource();
     }
 
     protected override void ActionAbility()
@@ -38,24 +42,29 @@ public class HeroAbilityChain : HeroAbilitySystem
         }
 
         target = hero.FindNearestTarget();
-        Chaining().Forget();
+        Chaining(token.Token).Forget();
     }
 
-    private async UniTaskVoid Chaining()
+    private async UniTask Chaining(CancellationToken tk)
     {
         hitList.Clear();
+        preObj = this.gameObject;
 
-        for(int i=0;i<pierce;i++)
+        for (int i=0;i<pierce;i++)
         {
             target= FindNextTarget();
             if (target == null)
             {
                 break;
             }
+            var chain = ObjectPoolManager.Instance.GetObject<LightningBoltScript>("Chain", transform.position);
+            chain.StartObject = preObj;
+            chain.EndObject = target;
+            preObj = target;
             TakeDamaged();
             hitList.Add(target);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(countDelay));
+            await UniTask.Delay(TimeSpan.FromSeconds(countDelay), false, PlayerLoopTiming.Update, cancellationToken: tk);
         }
     }
 
