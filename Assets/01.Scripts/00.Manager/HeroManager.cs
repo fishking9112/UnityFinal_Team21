@@ -2,6 +2,8 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class HeroManager : MonoSingleton<HeroManager>
@@ -16,22 +18,19 @@ public class HeroManager : MonoSingleton<HeroManager>
     private HeroStatusInfo statusInfo;
 
     public bool isHealthUI = false;
-
-    float rand;
-    float rand2;
-    float rand3;
-    float rand4;
+    private CancellationTokenSource token;
 
     private void Start()
     {
-        SetWave().Forget();
+        token = new CancellationTokenSource();
+        SetWave(token.Token).Forget();
     }
 
-    private async UniTaskVoid SetWave()
+    private async UniTaskVoid SetWave(CancellationToken tk)
     {
-        while (true) // 게임 끝나기 전까지
+        while (!token.IsCancellationRequested) // 게임 끝나기 전까지
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(10)); //매 10초마다
+            await UniTask.Delay(TimeSpan.FromSeconds(10),cancellationToken:this.GetCancellationTokenOnDestroy()); //매 10초마다
 
             SetNextHero();
             SummonHero();
