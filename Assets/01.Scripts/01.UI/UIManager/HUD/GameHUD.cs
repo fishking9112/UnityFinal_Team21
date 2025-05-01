@@ -155,12 +155,12 @@ public class GameHUD : HUDUI
 
     public void UpdateLevelText(float level)
     {
-        levelText.text = $"LV. {level}";
+        levelText.text = level.ToString();
     }
 
     public void UpdateGoldText(float gold)
     {
-        goldText.text = $"Gold. {Utils.GetThousandCommaText((int)gold)}";
+        goldText.text = Utils.GetThousandCommaText((int)gold);
     }
 
     public void UpdateTimerText(float time)

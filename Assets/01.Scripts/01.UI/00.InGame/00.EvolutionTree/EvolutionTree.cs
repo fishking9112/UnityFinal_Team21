@@ -63,7 +63,7 @@ public class EvolutionTree : MonoBehaviour
 
     private void UpdateEvolutionPointText(float evolutionPoint)
     {
-        evolutionPointText.text = $"Ep. {evolutionPoint}";
+        evolutionPointText.text = evolutionPoint.ToString();
     }
 
     // 진화 버튼을 누르면 진화 확정
