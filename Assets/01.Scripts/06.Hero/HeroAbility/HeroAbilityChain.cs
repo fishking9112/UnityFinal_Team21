@@ -93,6 +93,10 @@ public class HeroAbilityChain : HeroAbilitySystem
         {
             monster.TakeDamaged(damage);
         }
+        else if (GameManager.Instance.castle.gameObject == target)
+        {
+            GameManager.Instance.castle.TakeDamaged(damage);
+        }
     }
 
     public override void DespawnAbility()
