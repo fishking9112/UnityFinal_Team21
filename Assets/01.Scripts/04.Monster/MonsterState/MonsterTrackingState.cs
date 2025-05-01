@@ -69,7 +69,6 @@ public class MonsterTrackingState : MonsterBaseState
     {
         while (stateMachine.Controller != null)
         {
-            Debug.Log(token);
             token.ThrowIfCancellationRequested(); // 취소되면 예외 발생
             await UniTask.Delay(100, cancellationToken: token); // 100ms 대기
             MoveTarget();
