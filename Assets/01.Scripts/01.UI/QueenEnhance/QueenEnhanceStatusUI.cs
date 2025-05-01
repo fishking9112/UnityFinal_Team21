@@ -44,6 +44,9 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         // 캐슬 체력 표시
         AppendCastleHpStatus(builder);
 
+        // 캐슬 회복량 표시
+        AppendCastleHpRegenStatus(builder);
+
         builder.AppendLine();
         builder.AppendLine("─────────────────");
         builder.AppendLine();
@@ -98,6 +101,16 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         float curCastleHp = GameManager.Instance.castle.condition.CurCastleHealth.Value;
         float maxCastleHp = GameManager.Instance.castle.condition.MaxCastleHealth.Value;
         builder.AppendLine($"캐슬 체력 : {FormatNumber(curCastleHp)} / {FormatNumber(maxCastleHp)}");
+    }
+
+    /// <summary>
+    /// 캐슬 체력 회복량 상태를 문자열로 추가합니다.
+    /// </summary>
+    private void AppendCastleHpRegenStatus(StringBuilder builder)
+    {
+        float castleHpRegenBase = GameManager.Instance.castle.condition.initCastleHealthRecoverySpeed;
+        float castleHpRegenEnhance = GameManager.Instance.castle.condition.CastleHealthRecoverySpeed - castleHpRegenBase;
+        builder.AppendLine($"캐슬 회복량 : {FormatNumber(castleHpRegenBase)} + {FormatNumber(castleHpRegenEnhance)} / sec");
     }
 
     /// <summary>
