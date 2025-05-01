@@ -44,6 +44,7 @@ public class EvolutionTree : MonoBehaviour
                 evolutionNodeDic[(int)node.monsterInfoId] = node;
             }
 
+            evolutionButton.onClick.RemoveAllListeners();
             evolutionButton.onClick.AddListener(OnClickEvolutionButton);
             evolutionButton.gameObject.SetActive(false);
         }
@@ -58,6 +59,7 @@ public class EvolutionTree : MonoBehaviour
         }
 
         selectedNode = evolutionNodeList[0];
+        evolutionButton.gameObject.SetActive(false);
         UpdateDescriptionWindow(evolutionNodeList[0]);
     }
 

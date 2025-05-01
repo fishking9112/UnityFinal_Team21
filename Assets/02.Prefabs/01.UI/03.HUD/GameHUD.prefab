@@ -8880,7 +8880,6 @@ GameObject:
   m_Component:
   - component: {fileID: 842855827705191366}
   - component: {fileID: 3321227881329158059}
-  - component: {fileID: 760861481041424599}
   m_Layer: 5
   m_Name: QueenActiveSkillGroup
   m_TagString: Untagged
@@ -8921,26 +8920,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &760861481041424599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8084011142657836863}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 738274fe98af4574897e451943581984, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  queenActiveSkillGroup: {fileID: 0}
-  monsterGroup: {fileID: 0}
-  queenActiveSkillGroupTransform: {fileID: 0}
-  monsterGroupTransform: {fileID: 0}
-  queenActiveSkillGauge: {fileID: 0}
-  summonGauge: {fileID: 0}
-  duration: 0
-  arcHeight: 0
 --- !u!1 &8151691145416052972
 GameObject:
   m_ObjectHideFlags: 0
@@ -10796,6 +10775,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -62
       objectReference: {fileID: 0}
+    - target: {fileID: 3246764361908230607, guid: af0b80c102496b74caac2b5ca06c05ef, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3849464585100369617, guid: af0b80c102496b74caac2b5ca06c05ef, type: 3}
       propertyPath: monsterInfoId
       value: 1201
@@ -10807,6 +10790,14 @@ PrefabInstance:
     - target: {fileID: 3980573821412788996, guid: af0b80c102496b74caac2b5ca06c05ef, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949225584505387309, guid: af0b80c102496b74caac2b5ca06c05ef, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5074831992096806816, guid: af0b80c102496b74caac2b5ca06c05ef, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5367206746792284249, guid: af0b80c102496b74caac2b5ca06c05ef, type: 3}
       propertyPath: m_AnchorMax.y
@@ -11027,6 +11018,10 @@ PrefabInstance:
     - target: {fileID: 8233449301206954471, guid: af0b80c102496b74caac2b5ca06c05ef, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -62
+      objectReference: {fileID: 0}
+    - target: {fileID: 8415611420894131172, guid: af0b80c102496b74caac2b5ca06c05ef, type: 3}
+      propertyPath: nodeLock
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8415611420894131172, guid: af0b80c102496b74caac2b5ca06c05ef, type: 3}
       propertyPath: monsterInfoId
