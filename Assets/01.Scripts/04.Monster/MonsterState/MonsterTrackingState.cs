@@ -42,15 +42,14 @@ public class MonsterTrackingState : MonsterBaseState
         ctsAllSearch = null;
     }
 
-    private async UniTaskVoid TargetAllSearchAsync(CancellationToken token)
+    private async UniTask TargetAllSearchAsync(CancellationToken token)
     {
-        while (true)
+        while (stateMachine.Controller != null)
         {
-            if(stateMachine.Controller.navMeshAgent == null)
+            if (stateMachine.Controller.navMeshAgent == null)
             {
                 return;
             }
-
             token.ThrowIfCancellationRequested(); // 취소되면 예외 발생
 
             TargetAllSearch();
@@ -66,13 +65,13 @@ public class MonsterTrackingState : MonsterBaseState
         }
     }
 
-    private async UniTaskVoid MoveTargetAsync(CancellationToken token)
+    private async UniTask MoveTargetAsync(CancellationToken token)
     {
-        while (true)
+        while (stateMachine.Controller != null)
         {
             token.ThrowIfCancellationRequested(); // 취소되면 예외 발생
-            MoveTarget();
             await UniTask.Delay(100, cancellationToken: token); // 100ms 대기
+            MoveTarget();
         }
     }
 
@@ -81,7 +80,7 @@ public class MonsterTrackingState : MonsterBaseState
     /// </summary>
     public void MoveTarget()
     {
-        if(navMeshAgent == null || !navMeshAgent.enabled)
+        if (navMeshAgent == null || !navMeshAgent.enabled)
         {
             return;
         }
@@ -204,7 +203,7 @@ public class MonsterTrackingState : MonsterBaseState
     /// </summary>
     public void TargetAllSearch()
     {
-        if(navMeshAgent == null)
+        if (navMeshAgent == null)
         {
             return;
         }

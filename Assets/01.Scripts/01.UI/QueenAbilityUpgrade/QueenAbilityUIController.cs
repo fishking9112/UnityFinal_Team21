@@ -72,9 +72,8 @@ public class QueenAbilityUIController : MonoBehaviour
         popupUIAbilityName.text = info.name;
         popupUIAbilityDec.text = info.description;
         popupUIAbilityCost.text = currentLevel >= info.maxLevel? "―" : info.levelInfo[currentLevel].cost.ToString();
-        
-        // TODO: 권능 이미지 스프라이트 설정 하기
-        popupUIAbilityImage.sprite = null;
+
+        popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
 
         descriptionPopupUI.gameObject.SetActive(true);
         descriptionPopupUI.position = Input.mousePosition;

@@ -42,7 +42,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         int currentLevel = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
         int nextLevel = currentLevel + 1;
 
-        iconImage.sprite = null;
+        iconImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
         enhanceNameText.text = info.name;
         enhanceNextLevelText.text = nextLevel >= info.maxLevel ? $"Lv. {nextLevel}(Max)" : $"Lv. {nextLevel}";
         enhanceTypeText.text = info.type.ToString();

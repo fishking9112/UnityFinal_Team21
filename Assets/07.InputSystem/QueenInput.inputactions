@@ -67,6 +67,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PauseUI",
+                    "type": "Button",
+                    "id": "53203828-9d1f-4ce6-b15b-7b3bec352c47",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SlotChange",
+                    "type": "Button",
+                    "id": "17d85296-8826-45fd-aacf-1886a24ccfbb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -216,7 +234,7 @@
                 {
                     "name": "",
                     "id": "348f50e8-9173-4e57-8b5a-52fa0ecd9efb",
-                    "path": "<Keyboard>/tab",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -245,32 +263,26 @@
                     "action": "Drag",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "UI",
-            "id": "820c1332-dfe6-4fbd-b890-b01fd2d38d31",
-            "actions": [
-                {
-                    "name": "EvolutionWindow",
-                    "type": "Button",
-                    "id": "14bb0621-d7da-4213-8b56-9a532701bec5",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "af895c9c-5841-4504-b24c-753466cd0f53",
+                    "id": "8a57341a-4e38-49b8-bdad-095e167622ea",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3f573a2b-b46e-492f-9337-372886c16b82",
                     "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "EvolutionWindow",
+                    "action": "SlotChange",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
