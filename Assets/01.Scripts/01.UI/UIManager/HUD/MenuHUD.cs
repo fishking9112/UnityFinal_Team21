@@ -48,6 +48,8 @@ public class MenuHUD : HUDUI
             activePanel.SetActive(false);
         });
 
+        // 씬에 들어 갈때 골드 업데이트
+        goldText.text = Utils.GetThousandCommaText(GameManager.Instance.Gold.Value);
         GameManager.Instance.Gold.AddAction(value => RefreshGoldText(value));
 
         BlackBackground.SetAsFirstSibling();

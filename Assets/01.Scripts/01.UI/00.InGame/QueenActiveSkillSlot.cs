@@ -38,6 +38,8 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
 
     private async UniTaskVoid ApplyCoolTimeUI(int index, float coolTime)
     {
+        var token = this.GetCancellationTokenOnDestroy();
+
         float time = 0f;
 
         while (time < coolTime)
@@ -48,7 +50,7 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
             {
                 coolTimeMask[index].fillAmount = 1f - (time / coolTime);
             }
-            await UniTask.Yield();
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
         if(index < coolTimeMask.Count)
         {
