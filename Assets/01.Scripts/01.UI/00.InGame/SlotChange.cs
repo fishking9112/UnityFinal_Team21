@@ -66,10 +66,6 @@ public class SlotChange : MonoBehaviour
     // 슬롯의 순서를 바꿈. 현재 선택된 슬롯이 아니면 반 투명해지면서 현재슬롯에 가려지도록 렌더링 순서 변경
     private void SetOrder()
     {
-        controller.selectedMonsterId = -1;
-        controller.selectedQueenActiveSkill = null;
-        controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = null;
-
         if (controller.curSlot == QueenSlot.MONSTER)
         {
             monsterGroupTransform.SetAsFirstSibling();
@@ -92,6 +88,9 @@ public class SlotChange : MonoBehaviour
     private void CheangeEnd()
     {
         controller.curSlot = controller.curSlot == QueenSlot.MONSTER ? QueenSlot.QueenActiveSkill : QueenSlot.MONSTER;
+        controller.selectedMonsterId = -1;
+        controller.selectedQueenActiveSkill = null;
+        controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = null;
         isChange = false;
     }
 

@@ -21,7 +21,7 @@ public class SummonSkill : QueenActiveSkillBase
             Vector3 pos = new Vector3(Mathf.Cos(rad) * info.size, Mathf.Sin(rad) * info.size, 0f) + mousePos;
 
             var skeleton = ObjectPoolManager.Instance.GetObject<MonsterController>("Skeleton_Normal", pos);
-            skeleton.StatInit(DataManager.Instance.monsterDic[(int)IDMonster.SKELETON_NORMAL], MonsterManager.Instance.isHealthUI);
+            skeleton.StatInit(MonsterManager.Instance.monsterInfoList[(int)IDMonster.SKELETON_NORMAL], MonsterManager.Instance.isHealthUI);
         }
     }
 }

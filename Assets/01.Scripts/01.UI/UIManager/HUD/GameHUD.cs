@@ -175,7 +175,7 @@ public class GameHUD : HUDUI
             int index = i;
             monsterSlot.slotButtonList[i].onClick.AddListener(() =>
             {
-                GameManager.Instance.queen.controller.OnClickSlotButton(index);
+                GameManager.Instance.queen.controller.OnClickSlotButton(index, QueenSlot.MONSTER);
             });
         }
 
@@ -184,7 +184,7 @@ public class GameHUD : HUDUI
             int index = i;
             queenActiveSkillSlot.slotButtonList[i].onClick.AddListener(() =>
             {
-                GameManager.Instance.queen.controller.OnClickSlotButton(index);
+                GameManager.Instance.queen.controller.OnClickSlotButton(index, QueenSlot.QueenActiveSkill);
             });
         }
     }
