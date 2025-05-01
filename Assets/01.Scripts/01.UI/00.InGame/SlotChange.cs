@@ -7,8 +7,6 @@ public class SlotChange : MonoBehaviour
     public CanvasGroup monsterGroup;
     public RectTransform queenActiveSkillGroupTransform;
     public RectTransform monsterGroupTransform;
-    public RectTransform queenActiveSkillSlotTransform;
-    public RectTransform monsterSlotTransform;
 
     public GameObject queenActiveSkillGauge;
     public GameObject summonGauge;
@@ -45,8 +43,8 @@ public class SlotChange : MonoBehaviour
 
         isChange = true;
 
-        Vector3 queenActiveSkillPos = queenActiveSkillSlotTransform.localPosition;
-        Vector3 monsterPos = monsterSlotTransform.localPosition;
+        Vector3 queenActiveSkillPos = queenActiveSkillGroupTransform.anchoredPosition;
+        Vector3 monsterPos = monsterGroupTransform.anchoredPosition;
 
         Vector3[] queenActiveSkillPath = CreateArc(queenActiveSkillPos, monsterPos, controller.curSlot == QueenSlot.MONSTER ? arcHeight : -arcHeight);
         Vector3[] monsterPath = CreateArc(monsterPos, queenActiveSkillPos, controller.curSlot == QueenSlot.MONSTER ? -arcHeight : arcHeight);
@@ -54,8 +52,8 @@ public class SlotChange : MonoBehaviour
         Sequence seq = DOTween.Sequence();
 
         // 시작할 때
-        seq.Append(queenActiveSkillSlotTransform.DOLocalPath(queenActiveSkillPath, duration, PathType.CatmullRom).SetEase(Ease.InOutQuad))
-           .Join(monsterSlotTransform.DOLocalPath(monsterPath, duration, PathType.CatmullRom).SetEase(Ease.InOutQuad));
+        seq.Append(queenActiveSkillGroupTransform.DOLocalPath(queenActiveSkillPath, duration, PathType.CatmullRom).SetEase(Ease.InOutQuad))
+           .Join(monsterGroupTransform.DOLocalPath(monsterPath, duration, PathType.CatmullRom).SetEase(Ease.InOutQuad));
 
         // 포물선 최고점에 이르렀을 때
         seq.InsertCallback(duration / 2f, SetOrder);
