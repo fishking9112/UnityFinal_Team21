@@ -83,7 +83,7 @@ public class HeroAbilityBible : HeroAbilitySystem
         }
     }
 
-    private async UniTaskVoid DespawnBible(IPoolable bible, float delay,CancellationToken tk)
+    private async UniTask DespawnBible(IPoolable bible, float delay,CancellationToken tk)
     {
         await UniTask.Delay(TimeSpan.FromSeconds(delay),false,PlayerLoopTiming.Update,tk);
         bible?.OnDespawn();
