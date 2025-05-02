@@ -46,9 +46,6 @@ public class EvolutionTree : MonoBehaviour
             {
                 evolutionNodeDic[(int)node.monsterInfoId] = node;
             }
-
-            evolutionButton.onClick.AddListener(OnClickEvolutionButton);
-            evolutionButton.gameObject.SetActive(false);
         }
     }
 

@@ -3,8 +3,8 @@ using UnityEngine;
 public class QueenCondition : MonoBehaviour
 {
     [Header("초기 설정")]
-    public float initSummonGaugeRecoverySpeed = 10f;
-    public float initQueenActiveSkillGaugeRecoverySpeed = 5f;
+    public float initSummonGaugeRecoverySpeed = 5f;
+    public float initQueenActiveSkillGaugeRecoverySpeed = 2.5f;
     public float initMaxQueenActiveSkillGauge = 100f;
     public float initMaxSummonGauge = 100f;
     public float initCurExpGauge = 0f;

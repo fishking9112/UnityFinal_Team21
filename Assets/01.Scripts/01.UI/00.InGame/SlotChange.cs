@@ -47,6 +47,10 @@ public class SlotChange : MonoBehaviour
             {
                 return;
             }
+            if(StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused == true)
+            {
+                return;
+            }
 
             isChange = true;
 

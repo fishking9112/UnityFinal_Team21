@@ -151,7 +151,7 @@ public class MonsterAttackState : MonsterBaseState
         // 1초 프레임에서 0.65때 발사
         UniTask.Delay((int)(650 * (1f / finalAttackSpeed)), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
         {
-            var projectileObject = ObjectPoolManager.Instance.GetObject<ProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
+            var projectileObject = ObjectPoolManager.Instance.GetObject<MonsterProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
             projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);
         });
     }

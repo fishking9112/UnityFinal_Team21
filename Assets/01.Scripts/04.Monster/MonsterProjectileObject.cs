@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileObject : MonoBehaviour, IPoolable
+public class MonsterProjectileObject : MonoBehaviour, IPoolable
 {
 
     #region IPoolable
@@ -21,13 +21,13 @@ public class ProjectileObject : MonoBehaviour, IPoolable
 
     public void OnDespawn() // 실행하면 자동으로 반환
     {
-        returnToPool?.Invoke(gameObject.GetComponent<ProjectileObject>());
+        returnToPool?.Invoke(gameObject.GetComponent<MonsterProjectileObject>());
     }
     #endregion
 
     public bool fxOnDestory = true;
 
-    [HideInInspector] public BaseController baseController;
+    [HideInInspector] public MonsterController baseController;
     private float currentDuration;
     private Vector2 direction;
     private bool isReady;
@@ -67,7 +67,7 @@ public class ProjectileObject : MonoBehaviour, IPoolable
     /// </summary>
     /// <param name="direction"></param>
     /// <param name="baseController"></param>
-    public void Set(Vector2 direction, BaseController baseController)
+    public void Set(Vector2 direction, MonsterController baseController)
     {
         this.baseController = baseController;
         this.direction = direction;
@@ -86,6 +86,8 @@ public class ProjectileObject : MonoBehaviour, IPoolable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (baseController == null) return; // 방어코드
+
         if (baseController.obstacleLayer.value == (baseController.obstacleLayer.value | (1 << collision.gameObject.layer)))
         {
             DestroyProjectile(collision.ClosestPoint(transform.position) - direction * .2f, fxOnDestory);
@@ -96,7 +98,7 @@ public class ProjectileObject : MonoBehaviour, IPoolable
             if (HeroManager.Instance.hero.ContainsKey(collision.gameObject))
             {
                 HeroManager.Instance.hero[collision.gameObject].TakeDamaged(finalAttackDamage);
-                var id = MonsterManager.Instance.monsters[baseController.gameObject].monsterInfo.id;
+                var id = baseController.monsterInfo.id;
                 StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[id].allDamage += finalAttackDamage;
             }
             // BaseController target = MonsterManager.Instance.testTarget.GetComponent<BaseController>();
