@@ -15,7 +15,7 @@ public class BaseBuffStrategy : MonoBehaviour
         {
             for (int i = 0; i < tickCount; i++)
             {
-                if (target == null || !target.buffDic.ContainsKey(info.id))
+                if (target == null || !target.buffController.buffDic.ContainsKey(info.id))
                 {
                     break;
                 }

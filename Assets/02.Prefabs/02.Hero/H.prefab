@@ -202,6 +202,7 @@ GameObject:
   - component: {fileID: 7242429983008879116}
   - component: {fileID: 1140399341762152338}
   - component: {fileID: 3862953293406409376}
+  - component: {fileID: -1669867321582281066}
   - component: {fileID: 2788587879810130101}
   - component: {fileID: 1921074925856681525}
   - component: {fileID: 388765593493363859}
@@ -268,6 +269,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   healthHandler: {fileID: 7958608897836801452}
+  buffController: {fileID: -1669867321582281066}
   buffMoveSpeed: 1
   buffAttackDamage: 1
   buffAttackSpeed: 1
@@ -289,6 +291,18 @@ MonoBehaviour:
     detectedRange: 0
     reward: 0
     custom: 0
+--- !u!114 &-1669867321582281066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3469463355210438680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64c80c1b910f8fc4e9280ff445d19595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!195 &2788587879810130101
 NavMeshAgent:
   m_ObjectHideFlags: 0

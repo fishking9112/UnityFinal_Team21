@@ -13,12 +13,12 @@ public abstract class BaseController : MonoBehaviour
     [Header("핸들러")]
     [SerializeField] protected HealthHandler healthHandler;
 
-    [Header("버프")]
+    public BuffController buffController;
+
+    // 스텟핸들러가 있었으면 좋겠습니다
     public float buffMoveSpeed = 1f;
     public float buffAttackDamage = 1f;
     public float buffAttackSpeed = 1f;
-
-    public Dictionary<int, List<Buff>> buffDic = new Dictionary<int, List<Buff>>();
 
     protected virtual void Start()
     {
@@ -90,9 +90,13 @@ public abstract class BaseController : MonoBehaviour
     protected virtual void Die()
     {
         // Destroy(this.gameObject);
-        ClearAllBuff();
+        buffController.ClearAllBuff();
     }
 
+    //-----------------------------------------------
+    // 아래 코드들은 스텟핸들러에서 관리하면 좋겠습니다
+    //-----------------------------------------------
+    
 
     /// <summary>
     /// 업그레이드
@@ -114,12 +118,6 @@ public abstract class BaseController : MonoBehaviour
     {
 
     }
-
-
-    // =================================================================================
-    //                               버프 관련 코드
-    // =================================================================================
-
 
     /// <summary>
     /// 버프로 인한 수치 조정
@@ -151,63 +149,5 @@ public abstract class BaseController : MonoBehaviour
     public void EndMoveSpeedBuff()
     {
         buffMoveSpeed = 1f;
-    }
-
-    // 버프 추가
-    public Buff AddBuff(int id, int level, CancellationTokenSource token)
-    {
-        var buff = new Buff(id, level, token);
-
-        if (!buffDic.ContainsKey(id))
-        {
-            buffDic[id] = new List<Buff>();
-        }
-
-        buffDic[id].Add(buff);
-        return buff;
-    }
-
-    // 버프 제거
-    public void RemoveBuff(int id, bool cancel = false)
-    {
-        if (!buffDic.TryGetValue(id, out var buffList))
-        {
-            return;
-        }
-
-        foreach (var buff in buffList)
-        {
-            buff.token?.Cancel();
-            buff.token?.Dispose();
-        }
-
-        if (cancel)
-        {
-            return;
-        }
-
-        buffList.Clear();
-        buffDic.Remove(id);
-    }
-
-    // 모든 버프 제거
-    public void ClearAllBuff()
-    {
-        foreach (var key in new List<int>(buffDic.Keys))
-        {
-            if (buffDic.TryGetValue(key, out var buffList))
-            {
-                foreach (var buff in buffList)
-                {
-                    if (buff != null && buff.particle != null)
-                    {
-                        buff.particle.OnDespawn();
-                        buff.particle = null;
-                    }
-                }
-            }
-            RemoveBuff(key);
-        }
-        buffDic.Clear();
     }
 }

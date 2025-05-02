@@ -61,7 +61,7 @@ public class BuffManager : MonoSingleton<BuffManager>
 
         if (!buffInfo.isStack)
         {
-            if (target.buffDic.TryGetValue(id, out var buffList) && buffList.Count > 0)
+            if (target.buffController.buffDic.TryGetValue(id, out var buffList) && buffList.Count > 0)
             {
                 var curBuffLevel = buffList[0].level;
 
@@ -124,7 +124,7 @@ public class BuffManager : MonoSingleton<BuffManager>
     private Buff AddBuff(BaseController target, BuffInfo info, int level)
     {
         CancellationTokenSource token = new CancellationTokenSource();
-        Buff buff = target.AddBuff(info.id, level, token);
+        Buff buff = target.buffController.AddBuff(info.id, level, token);
         float amount = GetAmountByLevel(info, level);
 
         var buffStrategy = GetBuffStrategy(info.id);
@@ -136,7 +136,7 @@ public class BuffManager : MonoSingleton<BuffManager>
     // 버프 제거
     private void RemoveBuff(BaseController target, BuffInfo info)
     {
-        if (!target.buffDic.TryGetValue(info.id, out var buffList) || buffList.Count == 0)
+        if (!target.buffController.buffDic.TryGetValue(info.id, out var buffList) || buffList.Count == 0)
         {
             return;
         }
@@ -151,7 +151,7 @@ public class BuffManager : MonoSingleton<BuffManager>
             }
             buffStrategy?.Remove(target, buff, info);
         }
-        target.RemoveBuff(info.id);
+        target.buffController.RemoveBuff(info.id);
     }
 
     // 레벨에 따른 버프 수치를 가져오는 함수
