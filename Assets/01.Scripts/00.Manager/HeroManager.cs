@@ -38,7 +38,7 @@ public class HeroManager : MonoSingleton<HeroManager>
     {
         while(!tk.IsCancellationRequested)
         {
-            await UniTask.Delay(TimeSpan.FromMinutes(1), cancellationToken: tk);
+            await UniTask.Delay(TimeSpan.FromMinutes(1), cancellationToken: this.GetCancellationTokenOnDestroy());
             heroCnt++;
         }
     }
