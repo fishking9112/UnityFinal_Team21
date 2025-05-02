@@ -19,21 +19,42 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     public bool isHealthUI = false;
     private CancellationTokenSource token;
+    private CancellationTokenSource token2;
+
+    private float time;
+    private int heroCnt;
 
     private void Start()
     {
+        time = 10;
+        heroCnt = 1;
         token = new CancellationTokenSource();
+        token2 = new CancellationTokenSource();
         SetWave(token.Token).Forget();
+        IncreaseCnt(token2.Token).Forget();
     }
 
-    private async UniTaskVoid SetWave(CancellationToken tk)
+    private async UniTask IncreaseCnt(CancellationToken tk)
     {
-        while (!token.IsCancellationRequested) // 게임 끝나기 전까지
+        while(!tk.IsCancellationRequested)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(10),cancellationToken:this.GetCancellationTokenOnDestroy()); //매 10초마다
+            await UniTask.Delay(TimeSpan.FromMinutes(1), cancellationToken: tk);
+            heroCnt++;
+        }
+    }
 
-            SetNextHero();
-            SummonHero();
+    private async UniTask SetWave(CancellationToken tk)
+    {
+        while (!tk.IsCancellationRequested) // 게임 끝나기 전까지
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(time), cancellationToken: this.GetCancellationTokenOnDestroy()); //매 10초마다
+
+
+            for (int i = 0; i < heroCnt; i++)
+            {
+                SetNextHero();
+                SummonHero();
+            }
         }
     }
 

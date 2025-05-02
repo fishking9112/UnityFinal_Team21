@@ -101,7 +101,6 @@ public class EvolutionTreeUI : SingleUI
     public void OnClickEvolutionButton()
     {
         currentTreePage?.OnClickEvolutionButton();
-        SetEvolutionButtonState(false); // 진화 후 비활성화
     }
 
     public void SetEvolutionButtonState(bool state)
