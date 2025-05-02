@@ -116,7 +116,7 @@ public class MonsterController : BaseController, IPoolable
         // projectileObject의 XY값 가져오기
         if (monsterInfo.projectile != "" && projectileSize == Vector2.zero)
         {
-            var projectileObject = ObjectPoolManager.Instance.GetObject<ProjectileObject>(monsterInfo.projectile, transform.position);
+            var projectileObject = ObjectPoolManager.Instance.GetObject<MonsterProjectileObject>(monsterInfo.projectile, transform.position);
             projectileSize = projectileObject._boxCollider.size;
             projectileObject.OnDespawn();
         }

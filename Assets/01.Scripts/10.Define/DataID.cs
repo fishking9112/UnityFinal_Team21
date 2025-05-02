@@ -52,9 +52,13 @@ public enum IDMonster
 
 public enum IDQueenEnhance
 {
-    EVOLUTIONPOINT_GAIN = 10001,
-    QUEEN_MANA_GAUGE_RECOVERY_SPEED_UP,
-    QUEEN_SUMMON_GAUGE_RECOVERY_SPEED_UP,
+    EVOLUTIONPOINT_GAIN = 10001, // 진화 포인트
+    QUEEN_MANA_GAUGE_RECOVERY_SPEED_UP, // 마나 회복 속도
+    QUEEN_SUMMON_GAUGE_RECOVERY_SPEED_UP, // 소환 게이지 회복 속도
+    QUEEN_MAX_MANA_GAUGE_UP,                 // 여왕 최대 마나 게이지 증가
+    QUEEN_MAX_SUMMON_GAUGE_UP,              // 여왕 최대 소환 게이지 증가
+    CASTLE_HEALTH_RECOVERY_SPEED_UP,         // 성벽 체력 회복 속도
+    CASTLE_MAX_HEALTH_UP,                    // 성벽 최대 체력
 
     SLIME_MAXHEALTH_UP = 11001,
     SLIME_ATTACKDAMAGE_UP,
