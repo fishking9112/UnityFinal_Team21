@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using UnityEngine;
 
 public class Buff
 {
@@ -29,10 +28,28 @@ public class Buff
 public class BuffManager : MonoSingleton<BuffManager>
 {
     private Dictionary<int, BuffInfo> buffDic;
+    private Dictionary<int, IBuffStrategy> buffStrategyDic;
 
     private void Start()
     {
         buffDic = DataManager.Instance.buffDic;
+        buffStrategyDic = new Dictionary<int, IBuffStrategy>();
+
+        InitBuffStrategyDic();
+    }
+
+    private void InitBuffStrategyDic()
+    {
+        buffStrategyDic[(int)IDBuff.ATTACK_DAMAGE_UP] = new AttackDamageBuff();
+        buffStrategyDic[(int)IDBuff.BURN] = new BurnBuff();
+        buffStrategyDic[(int)IDBuff.POISON] = new PoisonBuff();
+        buffStrategyDic[(int)IDBuff.SLOW] = new SlowBuff();
+    }
+
+    // 버프 아이디로 버프 가져오기
+    private IBuffStrategy GetBuffStrategy(int id)
+    {
+        return buffStrategyDic.TryGetValue(id, out var strategy) ? strategy : null;
     }
 
     public async UniTask ApplyBuff(BaseController target, int id, int level)
@@ -108,39 +125,23 @@ public class BuffManager : MonoSingleton<BuffManager>
     {
         CancellationTokenSource token = new CancellationTokenSource();
         Buff buff = target.AddBuff(info.id, level, token);
-
         float amount = GetAmountByLevel(info, level);
 
-        switch (info.type)
-        {
-            case BuffType.ATTACK_DMG:
-                buff.particle = ParticleManager.Instance.SpawnParticle("AttackDMG_Sword", target.transform.position + Vector3.up, Quaternion.identity, 0.5f, target.transform);
-                target.AttackDamageBuff(amount);
-                break;
-            case BuffType.ATTACK_SPEED:
-                target.AttackSpeedBuff(amount);
-                break;
-            case BuffType.MOVE_SPEED:
-                target.MoveSpeedBuff(amount);
-                break;
-            case BuffType.POISON:
-                break;
-            case BuffType.BURN:
-                buff.particle = ParticleManager.Instance.SpawnParticle("Burn", target.transform.position, Quaternion.identity, 0.5f, target.transform);
-                _ = TakeTickDamaged(target, info, token, level);
-                break;
-        }
+        var buffStrategy = GetBuffStrategy(info.id);
+        buffStrategy?.Apply(target, buff, info, amount);
 
         return buff;
     }
 
     // 버프 제거
-    public void RemoveBuff(BaseController target, BuffInfo info)
+    private void RemoveBuff(BaseController target, BuffInfo info)
     {
         if (!target.buffDic.TryGetValue(info.id, out var buffList) || buffList.Count == 0)
         {
             return;
         }
+
+        var buffStrategy = GetBuffStrategy(info.id);
 
         foreach (var buff in buffList)
         {
@@ -148,58 +149,9 @@ public class BuffManager : MonoSingleton<BuffManager>
             {
                 continue;
             }
-
-            float amount = GetAmountByLevel(info, buff.level);
-
-            switch (info.type)
-            {
-                case BuffType.ATTACK_DMG:
-                    RemoveParticle(buff);
-                    target.EndAttackDamageBuff();
-                    break;
-                case BuffType.ATTACK_SPEED:
-                    target.EndAttackSpeedBuff();
-                    break;
-                case BuffType.MOVE_SPEED:
-                    target.EndMoveSpeedBuff();
-                    break;
-                case BuffType.POISON:
-                    break;
-                case BuffType.BURN:
-                    RemoveParticle(buff);
-                    break;
-            }
+            buffStrategy?.Remove(target, buff, info);
         }
         target.RemoveBuff(info.id);
-    }
-
-    // 틱 데미지
-    private async UniTask TakeTickDamaged(BaseController target, BuffInfo info, CancellationTokenSource token, int level)
-    {
-        int tickCount = (int)(info.durationTime / info.tick);
-        float tickDamage = GetAmountByLevel(info, level);
-
-        try
-        {
-            for (int i = 0; i < tickCount; i++)
-            {
-                if (target == null || !target.buffDic.ContainsKey(info.id))
-                {
-                    break;
-                }
-                target.TakeDamaged(tickDamage);
-
-                await UniTask.Delay(TimeSpan.FromSeconds(info.tick), false, PlayerLoopTiming.Update, token.Token);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            // 버프가 중간에 끊겼을 때 예외. 무시해도 됨
-        }
-        catch (ObjectDisposedException)
-        {
-            // 버프가 중간에 끊겼을 때 예외. 무시해도 됨
-        }
     }
 
     // 레벨에 따른 버프 수치를 가져오는 함수
@@ -215,15 +167,6 @@ public class BuffManager : MonoSingleton<BuffManager>
                 return info.lv_3;
             default:
                 return 0f;
-        }
-    }
-
-    private void RemoveParticle(Buff buff)
-    {
-        if (buff.particle != null)
-        {
-            buff.particle.OnDespawn();
-            buff.particle = null;
         }
     }
 }
