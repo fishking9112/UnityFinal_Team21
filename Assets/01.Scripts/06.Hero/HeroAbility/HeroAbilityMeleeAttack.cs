@@ -49,7 +49,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
         if (target == null)
         {
-            angle = 0;
+            return;
         }
         else
         {
