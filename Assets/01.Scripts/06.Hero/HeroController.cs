@@ -26,6 +26,8 @@ public class HeroController : BaseController
         navMeshAgent = GetComponent<NavMeshAgent>();
         stateMachine.navMeshAgent = navMeshAgent;
         pivot = transform.GetChild(1);
+        stateMachine.animator=GetComponentInChildren<Animator>();
+
 
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
@@ -62,6 +64,7 @@ public class HeroController : BaseController
     private async UniTaskVoid CheckFlip(CancellationToken tk)
     {
         lastDir = 0;
+        float x;
         while (!tk.IsCancellationRequested)
         {
             if (navMeshAgent == null)
@@ -69,7 +72,7 @@ public class HeroController : BaseController
                 return;
             }
 
-            float x = navMeshAgent.desiredVelocity.x;
+            x = navMeshAgent.desiredVelocity.x;
 
             currentDir = MathF.Sign(x);
 
@@ -83,7 +86,7 @@ public class HeroController : BaseController
                 lastDir = currentDir;
             }
 
-            await UniTask.Yield(tk);
+            await UniTask.WaitForSeconds(0.5f);
         }
     }
     private async UniTaskVoid DeadCheck()
@@ -93,6 +96,19 @@ public class HeroController : BaseController
         ResetObj();
     }
 
+    public void SetMove(bool isMove)
+    {
+        stateMachine.animator.SetBool("1_Move", isMove);
+    }
+
+    public void SetAttack(bool isAttack)
+    {
+        stateMachine.animator.SetBool("2_Attack", isAttack);
+    }
+    public void SetDead(bool isDead)
+    {
+        stateMachine.animator.SetBool("isDeath", isDead);
+    }
 
     private void ResetObj()
     {

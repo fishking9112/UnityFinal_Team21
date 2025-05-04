@@ -49,14 +49,17 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
         if (target == null)
         {
+            animator.SetBool("1_Move", true);
+            animator.SetBool("2_Attack", false);
             return;
         }
         else
         {
             angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
                 target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
+            animator.SetBool("1_Move", false);
+            animator.SetBool("2_Attack", true);
         }
-        animator.SetBool("2_Attack", true);
         await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f);
 
         // 충돌처리

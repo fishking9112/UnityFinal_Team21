@@ -19,6 +19,7 @@ public class HeroMoveState : HeroBaseState
         state.dir = state.GetDir();
         isMove = true;
         MoveAndSearch(token.Token).Forget();
+        state.controller.SetMove(true);
         detectedRange = state.controller.statusInfo.detectedRange;
     }
 

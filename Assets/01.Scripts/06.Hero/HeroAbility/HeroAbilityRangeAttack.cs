@@ -56,6 +56,8 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
 
     public override void DespawnAbility()
     {
+        token?.Cancel();
+        token?.Dispose();
         Destroy(circle);
     }
     public override void SetAbilityLevel(int level)

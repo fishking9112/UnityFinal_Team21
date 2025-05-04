@@ -8,7 +8,7 @@ public class HeroDeadStete : HeroBaseState
     {
         base.Enter();
         // 사망 애니메이션, 사운드
-
+        state.controller.SetDead(true);
         // 전투(자동전투 포함) 중지
         state.hero.ResetAbility();
         // 보상 떨구기/획득하기
