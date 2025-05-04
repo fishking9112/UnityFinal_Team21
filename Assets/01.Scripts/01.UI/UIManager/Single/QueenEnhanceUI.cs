@@ -81,16 +81,35 @@ public class QueenEnhanceUI : SingleUI
     /// </summary>
     private void ApplyQueenPassive(int id, float value)
     {
-        var condition = GameManager.Instance.queen.condition;
+        var queenCondition = GameManager.Instance.queen.condition;
+        var castleCondition = GameManager.Instance.castle.condition;
 
         switch (id)
         {
             case (int)IDQueenEnhance.QUEEN_MANA_GAUGE_RECOVERY_SPEED_UP: // 마나 회복 속도 증가
-                condition.AdjustQueenActiveSkillGaugeRecoverySpeed(value);
+                queenCondition.AdjustQueenActiveSkillGaugeRecoverySpeed(value);
                 break;
 
             case (int)IDQueenEnhance.QUEEN_SUMMON_GAUGE_RECOVERY_SPEED_UP: // 소환 게이지 회복 속도 증가
-                condition.AdjustSummonGaugeRecoverySpeed(value);
+                queenCondition.AdjustSummonGaugeRecoverySpeed(value);
+                break;
+
+            case (int)IDQueenEnhance.CASTLE_HEALTH_RECOVERY_SPEED_UP: // 성벽 체력 회복량 증가
+                castleCondition.AdjustCastleHealthRecoverySpeed(value);
+                break;
+
+            case (int)IDQueenEnhance.CASTLE_MAX_HEALTH_UP: // 성벽 최대 체력 증가
+                castleCondition.AdjustMaxHealth(value);
+                break;
+
+            case (int)IDQueenEnhance.QUEEN_MAX_MANA_GAUGE_UP: // 여왕 마나 최대량 증가 
+
+                queenCondition.AdjustMaxQueenActiveSkillGauge(value);
+                break;
+
+            case (int)IDQueenEnhance.QUEEN_MAX_SUMMON_GAUGE_UP: // 여왕 소환 게이지 최대량 증가
+
+                queenCondition.AdjustMaxSummonGauge(value);
                 break;
         }
     }

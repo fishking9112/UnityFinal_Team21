@@ -64,7 +64,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     {
         float curMana = queenCondition.CurQueenActiveSkillGauge.Value;
         float maxMana = queenCondition.MaxQueenActiveSkillGauge.Value;
-        builder.AppendLine($"마나 : ({(int)curMana} / {(int)maxMana})");
+        builder.AppendLine($"마나 : {(int)curMana} / {(int)maxMana}");
 
         // 마나 회복량 = 기본 회복량 + 강화 효과
         float manaRegenBase = queenCondition.initQueenActiveSkillGaugeRecoverySpeed;
@@ -77,10 +77,9 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendSummonGaugeStatus(StringBuilder builder)
     {
-        float maxSummonBase = queenCondition.initMaxSummonGauge;
-        float maxSummonEnhance = queenCondition.MaxSummonGauge.Value - maxSummonBase;
-        float maxSummonGauge = maxSummonBase + maxSummonEnhance;
-        builder.AppendLine($"소환 게이지 : {FormatNumber(maxSummonBase)} + {FormatNumber(maxSummonEnhance)}");
+        float curSummongauge = queenCondition.CurSummonGauge.Value;
+        float maxSummonGauge = queenCondition.MaxSummonGauge.Value;
+        builder.AppendLine($"소환 게이지 : {FormatNumber(curSummongauge)} / {FormatNumber(maxSummonGauge)}");
     }
 
     /// <summary>
