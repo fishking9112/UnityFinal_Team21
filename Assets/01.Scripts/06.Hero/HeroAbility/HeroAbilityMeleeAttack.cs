@@ -10,6 +10,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     private LayerMask targetLayer;
 
+    private CancellationTokenSource tk;
 
     public override void Initialize(int id)
     {
@@ -30,7 +31,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     private void OnEnable()
     {
         Initialize((int)IDHeroAbility.SWORD);
-
+        tk = new CancellationTokenSource();
     }
     protected override void ActionAbility()
     {
@@ -40,10 +41,10 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         }
 
         target = hero.FindNearestTarget();
-        SwingSword().Forget();
+        SwingSword(tk.Token).Forget();
     }
 
-    private async UniTaskVoid SwingSword()
+    private async UniTaskVoid SwingSword(CancellationToken tk)
     {
         float angle;
 
@@ -60,12 +61,13 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
             animator.SetBool("1_Move", false);
             animator.SetBool("2_Attack", true);
         }
-        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f);
+
+        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f,cancellationToken:tk);
 
         // 충돌처리
         OverlapCheck(angle);
 
-        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
+        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f, cancellationToken: tk);
 
     }
 
@@ -96,9 +98,14 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     public override void DespawnAbility()
     {
+        animator.SetBool("1_Move", false);
+        animator.SetBool("2_Attack", false);
+
         animator.SetBool("4_Death", true);
         token?.Cancel();
         token?.Dispose();
+        tk?.Cancel();
+        tk?.Dispose();
     }
     public override void SetAbilityLevel(int level)
     {

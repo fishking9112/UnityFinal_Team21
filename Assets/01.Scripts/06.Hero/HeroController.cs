@@ -107,13 +107,20 @@ public class HeroController : BaseController
     }
     public void SetDead(bool isDead)
     {
-        stateMachine.animator.SetBool("isDeath", isDead);
+        stateMachine.animator.SetBool("4_Death", isDead);
     }
 
-    private void ResetObj()
+    public async UniTask GetAnimFinish()
+    {
+        await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
+        HeroPoolManager.Instance.ReturnObject(this);
+    }
+
+    public void ResetObj()
     {
         token?.Cancel();
         token?.Dispose();
-        HeroPoolManager.Instance.ReturnObject(this);
+        SetMove(false);
+        SetAttack(false);
     }
 }

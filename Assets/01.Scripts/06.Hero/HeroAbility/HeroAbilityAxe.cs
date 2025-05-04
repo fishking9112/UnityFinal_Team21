@@ -46,6 +46,9 @@ public class HeroAbilityAxe : HeroAbilitySystem
     {
         float angle;
 
+        if (!tk.IsCancellationRequested)
+            return;
+
         if (target == null)
         {
             return;
