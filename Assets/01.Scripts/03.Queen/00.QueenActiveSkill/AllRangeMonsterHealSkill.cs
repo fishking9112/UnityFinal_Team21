@@ -11,10 +11,10 @@ public class AllRangeMonsterHealSkill : QueenActiveSkillBase
 
     public override void UseSkill()
     {
-        foreach(var monster in MonsterManager.Instance.monsters)
+        foreach (var monster in MonsterManager.Instance.monsters)
         {
             monster.Value.Heal(info.value);
-            ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", monster.Value.transform.position, Quaternion.identity, 0.5f, monster.Value.transform);
+            ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", monster.Value.transform.position + new Vector3(0, 0.1f, 0), Quaternion.identity, 0.1f, monster.Value.transform);
         }
     }
 }
