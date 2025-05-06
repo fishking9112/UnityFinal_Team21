@@ -43,7 +43,7 @@ public class MenuButtonsSetSiblingIndex : MonoBehaviour, IPointerEnterHandler, I
         rectPanel.DOKill();
         rectPanel.sizeDelta = new Vector2(0f, panelOriginalSize.y);
 
-        rectPanel.DOSizeDelta(new Vector2(400f, panelOriginalSize.y), 1.5f).SetEase(Ease.OutExpo);
+        rectPanel.DOSizeDelta(new Vector2(200f, panelOriginalSize.y), 1.5f).SetEase(Ease.OutExpo);
     }
 
     public void OnPointerExit(PointerEventData eventData)
