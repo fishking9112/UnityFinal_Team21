@@ -20,7 +20,7 @@ public class MonsterHealSkill : QueenActiveSkillBase
             if (MonsterManager.Instance.monsters.TryGetValue(hit.gameObject, out var monster))
             {
                 monster.Heal(info.value);
-                ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", monster.transform.position + new Vector3(0, 0.1f, 0), Quaternion.identity, 0.1f, monster.transform);
+                ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", monster.transform.position + new Vector3(0, 0.1f, 0), new Vector3(0.1f, 0.1f, 1f), Quaternion.identity, monster.transform);
             }
         }
     }

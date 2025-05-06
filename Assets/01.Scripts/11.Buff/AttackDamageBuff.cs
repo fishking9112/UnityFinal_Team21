@@ -4,7 +4,7 @@ public class AttackDamageBuff : BaseBuffStrategy, IBuffStrategy
 {
     public void Apply(BaseController target, Buff buff, BuffInfo info, float amount)
     {
-        buff.particle = ParticleManager.Instance.SpawnParticle("AttackDMG_Sword", target.transform.position + Vector3.up, Quaternion.identity, 0.5f, target.transform);
+        buff.particle = ParticleManager.Instance.SpawnParticle("AttackDMG_Sword", target.transform.position + Vector3.up, new Vector3(0.5f, 0.5f, 1f), Quaternion.identity, target.transform);
         target.AttackDamageBuff(amount);
     }
 

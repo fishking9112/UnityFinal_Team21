@@ -863,6 +863,26 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 53203828-9d1f-4ce6-b15b-7b3bec352c47
     m_ActionName: InGame/PauseUI[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 17d85296-8826-45fd-aacf-1886a24ccfbb
+    m_ActionName: InGame/SlotChange[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 166616946}
+        m_TargetAssemblyTypeName: QueenController, Assembly-CSharp
+        m_MethodName: CloseWindow
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d553e196-3bb1-460e-96d1-c9c71aa4cad4
+    m_ActionName: InGame/CloseWindow[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: InGame
@@ -2900,7 +2920,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.size
-      value: 26
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].key
@@ -3007,6 +3027,10 @@ PrefabInstance:
       value: Chain
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[26].key
+      value: Explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].prefab
       value: 
       objectReference: {fileID: 4227891616735513516, guid: 93dee373ed3430d4dbde3d7d85765d71, type: 3}
@@ -3111,6 +3135,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11413728, guid: 2736bbc2f2c78a949957b0719c2992bd, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[26].prefab
+      value: 
+      objectReference: {fileID: -1220559715688472851, guid: 5f53d2ddeb0b25247a3b4d2d2bfda09d, type: 3}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].initPoolSize
       value: 5
       objectReference: {fileID: 0}
@@ -3212,6 +3240,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[25].initPoolSize
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[26].initPoolSize
       value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6704,8 +6736,8 @@ MonoBehaviour:
   minRange: {x: -50, y: -50}
   maxRange: {x: 50, y: 50}
   zoomSpeed: 0.02
-  minZoom: 3
-  maxZoom: 10
+  minZoom: 7
+  maxZoom: 12
   zoomSmoothValue: 0.3
 --- !u!1001 &5188664038417358109
 PrefabInstance:

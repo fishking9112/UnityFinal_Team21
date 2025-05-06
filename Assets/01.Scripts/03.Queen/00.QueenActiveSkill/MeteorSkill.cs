@@ -17,6 +17,9 @@ public class MeteorSkill : QueenActiveSkillBase
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
+        Vector3 scale = new Vector3(info.size/4, info.size/4, 1f);
+        ParticleObject particle = ParticleManager.Instance.SpawnParticle("Explosion", mousePos, scale, Quaternion.identity);
+
         List<UniTask> tasks = new List<UniTask>();
         foreach (var hit in hits)
         {
