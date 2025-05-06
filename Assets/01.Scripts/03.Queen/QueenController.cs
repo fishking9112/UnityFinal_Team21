@@ -274,9 +274,24 @@ public class QueenController : MonoBehaviour
         {
             // 참조값을 비교해서 성능상 빠름
             if (!ReferenceEquals(gameHUD.openWindow, gameHUD.evolutionTreeUI.gameObject))
+            {
                 gameHUD.ShowWindow<EvolutionTreeUI>();
+            }
             else
+            {
                 gameHUD.HideWindow();
+            }
+        }
+    }
+
+    public void CloseWindow(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            if (ReferenceEquals(gameHUD.openWindow, gameHUD.evolutionTreeUI.gameObject))
+            {
+                gameHUD.HideWindow();
+            }
         }
     }
 }
