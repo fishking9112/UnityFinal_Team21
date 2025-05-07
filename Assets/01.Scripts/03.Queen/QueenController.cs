@@ -18,6 +18,8 @@ public class QueenController : MonoBehaviour
 
     [Header("스킬 범위")]
     public GameObject rangeObject;
+    public SpriteRenderer rangeSprite;
+    private float spriteRadius;
 
     [Header("내부 값")]
     public Vector3 worldMousePos;
@@ -43,6 +45,8 @@ public class QueenController : MonoBehaviour
 
         summonDistance = 0.5f;
         lastSummonPosition = Vector3.positiveInfinity;
+
+        spriteRadius = rangeSprite.bounds.size.x;
     }
 
     private void Update()
@@ -60,7 +64,9 @@ public class QueenController : MonoBehaviour
             rangeObject.transform.position = worldMousePos;
 
             float radius = selectedQueenActiveSkill.info.size;
-            rangeObject.transform.localScale = new Vector3(radius * 2f, radius * 2f, 1f);
+            float scale = radius / (spriteRadius / 2f);
+
+            rangeObject.transform.localScale = new Vector3(scale, scale, 1f);
         }
         else
         {
