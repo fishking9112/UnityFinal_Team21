@@ -39,6 +39,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
         {
             if (MonsterManager.Instance.monsters.TryGetValue(c.gameObject, out var monster))
             {
+                monster.TakeKnockback(hero.transform, knockback);
                 monster.TakeDamaged(damage);
             }
             else if (GameManager.Instance.castle.gameObject == c.gameObject)

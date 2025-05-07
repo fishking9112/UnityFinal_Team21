@@ -68,7 +68,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         count_LevelUp = heroAbilityInfo.count_LevelUp;
         countDelay = heroAbilityInfo.countDelay_Base;
         countDelay_LevelUp = heroAbilityInfo.countDelay_LevelUp;
-        knockback = 1; // 임시 값
+        knockback = heroAbilityInfo.knockback;
         maxLevel = heroAbilityInfo.maxLevel;
         pivot = heroAbilityInfo.pivot;
         curLevel = 1;

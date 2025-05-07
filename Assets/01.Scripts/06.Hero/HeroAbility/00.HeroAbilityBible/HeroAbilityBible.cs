@@ -68,6 +68,7 @@ public class HeroAbilityBible : HeroAbilitySystem
             bible.speed = speed;
             bible.angle = summonAngle;
             bible.damage = damage; 
+            bible.knockback= knockback;
 
             bibleList.Add(bible);
 
