@@ -19,13 +19,17 @@ public class ParticleManager : MonoSingleton<ParticleManager>
     /// <param name="scale"> 파티클 크기. 입력안하면 1 </param>
     /// <param name="parent"> 부모 객체. 입력안하면 없음 </param>
     /// <returns> 생성한 파티클 반환 </returns>
-    public ParticleObject SpawnParticle(string key, Vector2 position, Quaternion rotation = default, float scale = 1f, Transform parent = default)
+    public ParticleObject SpawnParticle(string key, Vector3 position, Vector3 scale, Quaternion rotation = default, Transform parent = default)
     {
-        if(rotation == default)
+        if (scale == default)
+        {
+            scale = new Vector3(1f, 1f, 1f);
+        }
+        if (rotation == default)
         {
             rotation = Quaternion.identity;
         }
-        if(parent == default)
+        if (parent == default)
         {
             parent = transform;
         }
@@ -33,7 +37,7 @@ public class ParticleManager : MonoSingleton<ParticleManager>
         ParticleObject particle = objectPoolManager.GetObject<ParticleObject>(key, position);
 
         particle.transform.rotation = rotation;
-        particle.transform.localScale = new Vector2(scale, scale);
+        particle.transform.localScale = scale;
         particle.transform.SetParent(parent);
 
         return particle;
