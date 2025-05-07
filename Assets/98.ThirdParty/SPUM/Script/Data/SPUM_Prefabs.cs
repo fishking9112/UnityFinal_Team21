@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using System;
-using UnityEngine;
-using UnityEngine.Events;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 public enum PlayerState
 {
     IDLE,
@@ -37,12 +35,13 @@ public class SPUM_Prefabs : MonoBehaviour
 
     private int moveSpeedHash = Animator.StringToHash("MoveSpeed");
     private int attackSpeedHash = Animator.StringToHash("AttackSpeed");
+    private int knockbackSpeedHash = Animator.StringToHash("KnockbackSpeed");
 
     public void OverrideControllerInit()
     {
         Animator animator = _anim;
         OverrideController = new AnimatorOverrideController();
-        OverrideController.runtimeAnimatorController = animator.runtimeAnimatorController;
+        OverrideController.runtimeAnimatorController= animator.runtimeAnimatorController;
 
         // 모든 애니메이션 클립을 가져옵니다
         AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
@@ -53,7 +52,7 @@ public class SPUM_Prefabs : MonoBehaviour
             OverrideController[clip.name] = clip;
         }
 
-        animator.runtimeAnimatorController = OverrideController;
+        animator.runtimeAnimatorController= OverrideController;
         foreach (PlayerState state in Enum.GetValues(typeof(PlayerState)))
         {
             var stateText = state.ToString();
@@ -84,8 +83,7 @@ public class SPUM_Prefabs : MonoBehaviour
             }
         }
     }
-    public bool allListsHaveItemsExist()
-    {
+    public bool allListsHaveItemsExist(){
         List<List<AnimationClip>> allLists = new List<List<AnimationClip>>()
         {
             IDLE_List, MOVE_List, ATTACK_List, DAMAGED_List, DEBUFF_List, DEATH_List, OTHER_List
@@ -103,24 +101,24 @@ public class SPUM_Prefabs : MonoBehaviour
         DEBUFF_List = new();
         DEATH_List = new();
         OTHER_List = new();
-
+        
         var groupedClips = spumPackages
         .SelectMany(package => package.SpumAnimationData)
-        .Where(spumClip => spumClip.HasData &&
-                        spumClip.UnitType.Equals(UnitType) &&
-                        spumClip.index > -1)
+        .Where(spumClip => spumClip.HasData && 
+                        spumClip.UnitType.Equals(UnitType) && 
+                        spumClip.index > -1 )
         .GroupBy(spumClip => spumClip.StateType)
         .ToDictionary(
-            group => group.Key,
+            group => group.Key, 
             group => group.OrderBy(clip => clip.index).ToList()
         );
-        // foreach (var item in groupedClips)
-        // {
-        //     foreach (var clip in item.Value)
-        //     {
-        //         Debug.Log(clip.ClipPath);
-        //     }
-        // }
+    // foreach (var item in groupedClips)
+    // {
+    //     foreach (var clip in item.Value)
+    //     {
+    //         Debug.Log(clip.ClipPath);
+    //     }
+    // }
         foreach (var kvp in groupedClips)
         {
             var stateType = kvp.Key;
@@ -157,25 +155,24 @@ public class SPUM_Prefabs : MonoBehaviour
                     break;
             }
         }
-
+    
     }
-    public void PlayAnimation(PlayerState PlayState, int index)
-    {
+    public void PlayAnimation(PlayerState PlayState, int index){
         Animator animator = _anim;
         //Debug.Log(PlayState.ToString());
-        var animations = StateAnimationPairs[PlayState.ToString()];
+        var animations =  StateAnimationPairs[PlayState.ToString()];
         //Debug.Log(OverrideController[PlayState.ToString()].name);
         OverrideController[PlayState.ToString()] = animations[index];
         //Debug.Log( OverrideController[PlayState.ToString()].name);
         var StateStr = PlayState.ToString();
-
+   
         bool isMove = StateStr.Contains("MOVE");
         bool isDebuff = StateStr.Contains("DEBUFF");
         bool isDeath = StateStr.Contains("DEATH");
         animator.SetBool("1_Move", isMove);
         animator.SetBool("5_Debuff", isDebuff);
         animator.SetBool("isDeath", isDeath);
-        if (!isMove && !isDebuff)
+        if(!isMove && !isDebuff)
         {
             AnimatorControllerParameter[] parameters = animator.parameters;
             foreach (AnimatorControllerParameter parameter in parameters)
@@ -184,12 +181,11 @@ public class SPUM_Prefabs : MonoBehaviour
                 //     bool isBool = StateStr.ToUpper().Contains(parameter.name.ToUpper());
                 //     animator.SetBool(parameter.name, isBool);
                 // }
-                if (parameter.type == AnimatorControllerParameterType.Trigger)
+                if(parameter.type == AnimatorControllerParameterType.Trigger)
                 {
                     bool isTrigger = parameter.name.ToUpper().Contains(StateStr.ToUpper());
-                    if (isTrigger)
-                    {
-                        // Debug.Log($"Parameter: {parameter.name}, Type: {parameter.type}");
+                    if(isTrigger){
+                         Debug.Log($"Parameter: {parameter.name}, Type: {parameter.type}");
                         animator.SetTrigger(parameter.name);
                     }
                 }
@@ -207,16 +203,21 @@ public class SPUM_Prefabs : MonoBehaviour
         _anim.SetFloat(attackSpeedHash, _value);
     }
 
+    public void SetKnockbackSpeed(float _value)
+    {
+        _anim.SetFloat(knockbackSpeedHash, _value);
+    }
+
     AnimationClip LoadAnimationClip(string clipPath)
     {
         // "Animations" 폴더에서 애니메이션 클립 로드
         AnimationClip clip = Resources.Load<AnimationClip>(clipPath.Replace(".anim", ""));
-
+        
         if (clip == null)
         {
-            Utils.LogWarning($"Failed to load animation clip '{clipPath}'.");
+            Debug.LogWarning($"Failed to load animation clip '{clipPath}'.");
         }
-
+        
         return clip;
     }
 }
