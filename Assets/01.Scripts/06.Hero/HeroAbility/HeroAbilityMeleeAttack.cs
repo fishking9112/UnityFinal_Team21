@@ -104,14 +104,19 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
         animator.SetBool("4_Death", true);
         token?.Cancel();
-        token?.Dispose();
         tk?.Cancel();
-        tk?.Dispose();
     }
     public override void SetAbilityLevel(int level)
     {
         base.SetAbilityLevel(level);
         token = new CancellationTokenSource();
 
+    }
+
+    private void OnDisable()
+    {
+        token?.Dispose();
+        tk?.Dispose();
+        
     }
 }
