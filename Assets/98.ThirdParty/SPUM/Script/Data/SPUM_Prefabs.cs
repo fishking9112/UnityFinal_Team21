@@ -37,6 +37,7 @@ public class SPUM_Prefabs : MonoBehaviour
 
     private int moveSpeedHash = Animator.StringToHash("MoveSpeed");
     private int attackSpeedHash = Animator.StringToHash("AttackSpeed");
+    private int knockbackSpeedHash = Animator.StringToHash("KnockbackSpeed");
 
     public void OverrideControllerInit()
     {
@@ -205,6 +206,11 @@ public class SPUM_Prefabs : MonoBehaviour
     public void SetAttackSpeed(float _value)
     {
         _anim.SetFloat(attackSpeedHash, _value);
+    }
+
+    public void SetKnockbackSpeed(float _value)
+    {
+        _anim.SetFloat(knockbackSpeedHash, _value);
     }
 
     AnimationClip LoadAnimationClip(string clipPath)
