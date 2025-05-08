@@ -14,13 +14,11 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
 
     public void OnSpawn()
     {
-        isActive = true;
         isMagnet = false;
     }
 
     public void OnDespawn()
     {
-        isActive = false;
         isMagnet = false;
         returnToPool?.Invoke(this);
     }
@@ -33,7 +31,6 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
     protected QueenCondition condition;
     public float rewardAmount;
 
-    private bool isActive;
     private bool isMagnet;
 
     private void Start()
@@ -48,11 +45,6 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
 
     private void CursorMagnet()
     {
-        if (!isActive)
-        {
-            return;
-        }
-
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float distance = Vector2.Distance(transform.position, mousePos);
        

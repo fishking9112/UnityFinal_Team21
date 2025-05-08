@@ -2,21 +2,20 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class MonsterAttackBuffSkill : QueenActiveSkillBase
+public class WarcrySkill : QueenActiveSkillBase
 {
     public override void Init()
     {
-        base.Init();
+        //base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.ATTACK_DAMAGE_UP];
+        //info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.ATTACK_DAMAGE_UP];
     }
 
     public override async void UseSkill()
     {
         // 마우스 위치를 기준으로 size만큼 충돌 검사
         Vector3 mousePos = controller.worldMousePos;
-        Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, 10f, LayerMask.GetMask("Monster"));
 
         // 충돌한 모든 몬스터에게 버프 적용
         List<UniTask> tasks = new List<UniTask>();
@@ -26,9 +25,9 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
             {
                 ParticleObject skillParticle = ParticleManager.Instance.SpawnParticle("AttackDMG_Light", monster.transform.position + new Vector3(0, 0.1f, 0), new Vector3(0.1f, 0.1f, 1f), Quaternion.identity, monster.transform);
 
-                ParticleObject buffParticle = ParticleManager.Instance.SpawnParticle("AttackDMG_Sword", monster.transform.position + new Vector3(0, 0.7f, 0), new Vector3(0.3f, 0.3f, 0.3f), Quaternion.identity, monster.transform);
+                ParticleObject buffParticle = ParticleManager.Instance.SpawnParticle("AttackDMG_Sword", monster.transform.position + new Vector3(0, 0.5f, 0), new Vector3(1f, 1f, 1f), Quaternion.identity, monster.transform);
                 BuffCounter counter = new BuffCounter(1, () => { buffParticle.OnDespawn(); });
-                UniTask attackDamageTask = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level, counter.BuffEnd);
+                UniTask attackDamageTask = BuffManager.Instance.ApplyBuff(monster, (int)IDBuff.ATTACK_DAMAGE_UP, 1, counter.BuffEnd);
                 tasks.Add(attackDamageTask);
             }
         }
