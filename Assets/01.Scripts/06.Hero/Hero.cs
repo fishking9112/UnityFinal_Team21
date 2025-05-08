@@ -40,6 +40,11 @@ public class Hero : MonoBehaviour
         float distance;
         foreach (Collider2D c in col)
         {
+            if(c.CompareTag("Aggro"))
+            {
+                return c.gameObject;
+            }
+
             distance = Vector2.Distance(c.transform.position, transform.position);
             if (minVal > distance)
             {
