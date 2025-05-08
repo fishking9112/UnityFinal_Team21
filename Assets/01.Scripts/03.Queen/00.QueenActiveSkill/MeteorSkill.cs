@@ -17,7 +17,7 @@ public class MeteorSkill : QueenActiveSkillBase
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
-        Vector3 scale = new Vector3(info.size/4, info.size/4, 1f);
+        Vector3 scale = new Vector3(info.size / 4, info.size / 4, 1f);
         ParticleObject particle = ParticleManager.Instance.SpawnParticle("Explosion", mousePos, scale, Quaternion.identity);
 
         List<UniTask> tasks = new List<UniTask>();
@@ -26,8 +26,10 @@ public class MeteorSkill : QueenActiveSkillBase
             if (HeroManager.Instance.hero.TryGetValue(hit.gameObject, out var hero))
             {
                 hero.TakeDamaged(info.value);
-                UniTask task = BuffManager.Instance.ApplyBuff(hero, info.buff_ID, info.buff_Level);
-                tasks.Add(task);
+                ParticleObject buffParticle = ParticleManager.Instance.SpawnParticle("Burn", hero.transform.position + new Vector3(0, 0.3f, 0), new Vector3(0.1f, 0.1f, 1f), Quaternion.identity, hero.transform);
+                BuffCounter counter = new BuffCounter(1, () => { buffParticle.OnDespawn(); });
+                UniTask burnTask = BuffManager.Instance.ApplyBuff(hero, info.buff_ID, info.buff_Level, counter.BuffEnd);
+                tasks.Add(burnTask);
             }
         }
         await UniTask.WhenAll(tasks);

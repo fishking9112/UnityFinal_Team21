@@ -111,6 +111,7 @@ public enum IDBuff
     BURN,
     POISON,
     MOVE_SPEED_UP,
+    ATTACK_SPEED_UP,
 }
 
 public enum IDTrophy

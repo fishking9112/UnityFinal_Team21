@@ -8,7 +8,6 @@ public class Buff
     public int id;
     public int level;
     public CancellationTokenSource token;
-    public ParticleObject particle;
 
     public Buff(int id, int level, CancellationTokenSource token)
     {
@@ -17,11 +16,11 @@ public class Buff
         this.token = token;
     }
 
-    public void UpdateToken(CancellationTokenSource newToken)
+    public void UpdateToken()
     {
         token?.Cancel();
         token?.Dispose();
-        token = newToken;
+        token = new CancellationTokenSource();
     }
 }
 
@@ -52,53 +51,20 @@ public class BuffManager : MonoSingleton<BuffManager>
         return buffStrategyDic.TryGetValue(id, out var strategy) ? strategy : null;
     }
 
-    public async UniTask ApplyBuff(BaseController target, int id, int level)
+    public async UniTask ApplyBuff(BaseController target, int id, int level, Action buffEnd = null)
     {
         if (target == null || !buffDic.TryGetValue(id, out var buffInfo))
         {
             return;
         }
 
-        if (!buffInfo.isStack)
-        {
-            if (target.buffController.buffDic.TryGetValue(id, out var buffList) && buffList.Count > 0)
-            {
-                var curBuffLevel = buffList[0].level;
-
-                if (curBuffLevel > level)
-                {
-                    // 현재 적용되어 있는 버프가 지금 적용하려는 버프보다 레벨이 높은 경우 무시
-                    return;
-                }
-                else if (curBuffLevel == level)
-                {
-                    // 현재 적용되어 있는 버프와 지금 적용하려는 버프의 레벨이 같은 경우 시간만 갱신(토큰 업데이트)
-                    buffList[0].UpdateToken(new CancellationTokenSource());
-
-                    await ApplyBuffDurationTime(target, buffInfo, buffList[0].token);
-                    return;
-                }
-                else
-                {
-                    // 이전에 적용되어 있는 동일 버프 제거
-                    RemoveBuff(target, buffInfo);
-                }
-            }
-
-            // 버프 적용(최초 적용 or 더높은 레벨의 동일 버프가 들어올 때 적용)
-            Buff buff = AddBuff(target, buffInfo, level);
-            await ApplyBuffDurationTime(target, buffInfo, buff.token);
-        }
-        else
-        {
-            // 버프 적용 (이미 버프가 걸려있는 지는 중요하지 않음)
-            Buff buff = AddBuff(target, buffInfo, level);
-            await ApplyBuffDurationTime(target, buffInfo, buff.token);
-        }
+        // 버프 적용 (이미 버프가 걸려있는 지는 중요하지 않음)
+        Buff buff = AddBuff(target, buffInfo, level);
+        await ApplyBuffDurationTime(target, buffInfo, buff.token, buffEnd);
     }
 
     // 버프 지속 시간 적용
-    private async UniTask ApplyBuffDurationTime(BaseController target, BuffInfo info, CancellationTokenSource token)
+    private async UniTask ApplyBuffDurationTime(BaseController target, BuffInfo info, CancellationTokenSource token, Action buffEnd = null)
     {
         try
         {
@@ -108,6 +74,7 @@ public class BuffManager : MonoSingleton<BuffManager>
             if (target != null)
             {
                 RemoveBuff(target, info);
+                buffEnd?.Invoke();
             }
         }
         catch (OperationCanceledException)
