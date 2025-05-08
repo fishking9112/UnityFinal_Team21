@@ -48,17 +48,6 @@ public class BuffController : MonoBehaviour
     {
         foreach (var key in new List<int>(buffDic.Keys))
         {
-            if (buffDic.TryGetValue(key, out var buffList))
-            {
-                foreach (var buff in buffList)
-                {
-                    if (buff != null && buff.particle != null)
-                    {
-                        buff.particle.OnDespawn();
-                        buff.particle = null;
-                    }
-                }
-            }
             RemoveBuff(key);
         }
         buffDic.Clear();
