@@ -6,19 +6,19 @@ using UnityEngine;
 public abstract class BaseController : MonoBehaviour
 {
     [Header("현재 데이터")]
-    public BaseStatData statData;
     public LayerMask attackLayer; // 공격할 레이어 (적)
     public LayerMask obstacleLayer; // 감지할 레이어 (장애물)
 
     [Header("핸들러")]
     [SerializeField] protected HealthHandler healthHandler;
+    [SerializeField] public StatHandler statHandler;
 
     public BuffController buffController;
 
     // 스텟핸들러가 있었으면 좋겠습니다
-    public float buffMoveSpeed = 1f;
-    public float buffAttackDamage = 1f;
-    public float buffAttackSpeed = 1f;
+    // public float buffMoveSpeed = 1f;
+    // public float buffAttackDamage = 1f;
+    // public float buffAttackSpeed = 1f;
 
     protected virtual void Start()
     {
@@ -31,8 +31,17 @@ public abstract class BaseController : MonoBehaviour
     /// <param name="statInfo">참조 할 수치 데이터</param>
     public void StatInit(BaseStatData statData, bool isHealthUI = false)
     {
-        this.statData = statData;
         healthHandler.Init(statData.health);
+
+        if (statData is MonsterInfo monsterStat)
+        {
+            statHandler.Init(monsterStat.health, monsterStat.moveSpeed, monsterStat.attack, monsterStat.attackRange, monsterStat.attackSpeed);
+        }
+        else
+        {
+            statHandler.Init(statData.health, statData.moveSpeed);
+        }
+
         SetHealthUI(isHealthUI);
     }
 
@@ -47,7 +56,7 @@ public abstract class BaseController : MonoBehaviour
     /// <param name="statInfo">참조 할 수치 데이터</param>
     protected void HealthStatUpdate()
     {
-        healthHandler.SetMaxPoint(statData.health);
+        healthHandler.SetMaxPoint(statHandler.health.Value);
     }
 
     /// <summary>
@@ -86,42 +95,23 @@ public abstract class BaseController : MonoBehaviour
     // 아래 코드들은 스텟핸들러에서 관리하면 좋겠습니다
     //-----------------------------------------------
 
-
-    /// <summary>
-    /// 업그레이드
-    /// </summary>
-    /// <param name="amount"></param>
-    public virtual void UpgradeHealth(float amount)
-    {
-
-    }
-    public virtual void UpgradeAttack(float amount)
-    {
-
-    }
-    public virtual void UpgradeAttackSpeed(float amount)
-    {
-
-    }
-    public virtual void UpgradeMoveSpeed(float amount)
-    {
-
-    }
-
     /// <summary>
     /// 버프로 인한 수치 조정
     /// </summary>
     public void AttackDamageBuff(float amount)
     {
-        buffAttackDamage *= (1 + amount);
+        statHandler.attack.AddModifier(ModifierType.Multiply, 10, 1 + amount);
+        // buffAttackDamage *= (1 + amount);
     }
     public void AttackSpeedBuff(float amount)
     {
-        buffAttackSpeed *= (1 + amount);
+        statHandler.attackSpeed.AddModifier(ModifierType.Multiply, 10, 1 + amount);
+        // buffAttackSpeed *= (1 + amount);
     }
     public void MoveSpeedBuff(float amount)
     {
-        buffMoveSpeed *= (1 + amount);
+        statHandler.moveSpeed.AddModifier(ModifierType.Multiply, 10, 1 + amount);
+        // buffMoveSpeed *= (1 + amount);
     }
 
     /// <summary>
@@ -129,14 +119,17 @@ public abstract class BaseController : MonoBehaviour
     /// </summary>
     public void EndAttackDamageBuff()
     {
-        buffAttackDamage = 1f;
+        statHandler.attack.RemoveModifier(ModifierType.Multiply, 10);
+        // buffAttackDamage = 1f;
     }
     public void EndAttackSpeedBuff()
     {
-        buffAttackSpeed = 1f;
+        statHandler.attackSpeed.RemoveModifier(ModifierType.Multiply, 10);
+        // buffAttackSpeed = 1f;
     }
     public void EndMoveSpeedBuff()
     {
-        buffMoveSpeed = 1f;
+        statHandler.moveSpeed.RemoveModifier(ModifierType.Multiply, 10);
+        // buffMoveSpeed = 1f;
     }
 }
