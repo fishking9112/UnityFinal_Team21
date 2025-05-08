@@ -11,6 +11,7 @@ public class Bible : MonoBehaviour, IPoolable
     public float speed;
     public float angle;
     public float damage;
+    public float knockback;
     private LayerMask targetLayer;
 
     private void Start()
@@ -53,6 +54,7 @@ public class Bible : MonoBehaviour, IPoolable
         {
             if (MonsterManager.Instance.monsters.TryGetValue(collision.gameObject, out var monster))
             {
+                monster.TakeKnockback(target.transform, knockback);
                 monster.TakeDamaged(damage);
             }
             else if (GameManager.Instance.castle.gameObject == collision.gameObject)

@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 public class StaticUIManager : MonoSingleton<StaticUIManager>
 {
     public HUDLayer hudLayer;
+    public DamageLayer damageLayer;
 
 
     public LoadingUI loadingUI;

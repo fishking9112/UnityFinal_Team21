@@ -200,6 +200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7242429983008879116}
+  - component: {fileID: -8904989799357261544}
   - component: {fileID: 1140399341762152338}
   - component: {fileID: 3862953293406409376}
   - component: {fileID: -1669867321582281066}
@@ -235,6 +236,18 @@ Transform:
   - {fileID: 1265385971993939956}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8904989799357261544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3469463355210438680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 953e820a5bf2a9c4ea977cc66af5e380, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1140399341762152338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,27 +282,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   healthHandler: {fileID: 7958608897836801452}
+  statHandler: {fileID: -8904989799357261544}
   buffController: {fileID: -1669867321582281066}
-  buffMoveSpeed: 1
-  buffAttackDamage: 1
-  buffAttackSpeed: 1
   navMeshAgent: {fileID: 2788587879810130101}
   hero: {fileID: 1140399341762152338}
   pivot: {fileID: 0}
   statusInfo:
-    health: 0
-    moveSpeed: 0
-    attack: 0
-    attackRange: 0
-    attackSpeed: 0
     id: 0
     name: 
     description: 
+    health: 0
+    moveSpeed: 0
+    reward: 0
     startLevel: 0
     weapon: 
     weaponLevel: 
     detectedRange: 0
-    reward: 0
     custom: 0
 --- !u!114 &-1669867321582281066
 MonoBehaviour:
@@ -350,6 +358,7 @@ MonoBehaviour:
     delay_LevelUp: 0
     piercing_Base: -1
     piercing_LevelUp: 0
+    knockback: 0
     size_Base: {x: 1, y: 1, z: 1}
     size_LevelUp: {x: 0, y: 0, z: 0}
     type: 1
@@ -412,6 +421,7 @@ MonoBehaviour:
     delay_LevelUp: 0
     piercing_Base: 0
     piercing_LevelUp: 0
+    knockback: 0
     size_Base: {x: 1, y: 1, z: 1}
     size_LevelUp: {x: 0, y: 0, z: 0}
     type: 2
@@ -474,6 +484,7 @@ MonoBehaviour:
     delay_LevelUp: 0
     piercing_Base: -1
     piercing_LevelUp: 0
+    knockback: 0
     size_Base: {x: 1, y: 1, z: 1}
     size_LevelUp: {x: 0, y: 0, z: 0}
     type: 3
@@ -536,6 +547,7 @@ MonoBehaviour:
     delay_LevelUp: 0
     piercing_Base: -1
     piercing_LevelUp: 0
+    knockback: 0
     size_Base: {x: 1, y: 1, z: 1}
     size_LevelUp: {x: 0.2, y: 0.2, z: 0.2}
     type: 4
@@ -599,6 +611,7 @@ MonoBehaviour:
     delay_LevelUp: 0
     piercing_Base: 5
     piercing_LevelUp: 1
+    knockback: 0
     size_Base: {x: 1, y: 1, z: 1}
     size_LevelUp: {x: 0, y: 0, z: 0}
     type: 5
@@ -661,6 +674,7 @@ MonoBehaviour:
     delay_LevelUp: 0
     piercing_Base: 3
     piercing_LevelUp: 1
+    knockback: 0
     size_Base: {x: 1, y: 1, z: 1}
     size_LevelUp: {x: 0, y: 0, z: 0}
     type: 6

@@ -29,6 +29,7 @@ public class HeroAbilityInfo : IInfo
     public float delay_LevelUp;
     public int piercing_Base;
     public float piercing_LevelUp;
+    public float knockback;
     public Vector3 size_Base;
     public Vector3 size_LevelUp;
 
@@ -101,6 +102,9 @@ public class HeroAbilityData : SheetDataReaderBase
                     break;
                 case "piercing_LevelUp":
                     heroAbilityInfo.piercing_LevelUp = Utils.StringToFloat(cell.value);
+                    break;
+                case "knockback":
+                    heroAbilityInfo.knockback = Utils.StringToFloat(cell.value);
                     break;
                 case "size_Base":
                     heroAbilityInfo.size_Base = Utils.StringToVector3(cell.value);

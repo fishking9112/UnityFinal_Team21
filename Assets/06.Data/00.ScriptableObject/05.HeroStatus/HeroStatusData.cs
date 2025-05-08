@@ -4,30 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class HeroStatusInfo: BaseStatData, IInfo
+public class HeroStatusInfo : BaseStatData, IInfo
 {
-    public int id;
-    public string name;
-    public string description;
     public int startLevel;
     public int[] weapon;
     public int[] weaponLevel;
     public float detectedRange;
-    public float reward;
     public int custom;
     public HeroStatusInfo() { }
     public HeroStatusInfo(HeroStatusInfo other) : base(other)
     {
-        id = other.id;
-        name = other.name;
-        description = other.description;
         startLevel = other.startLevel;
         weapon = other.weapon;
         weaponLevel = other.weaponLevel;
-        health = other.health;
         detectedRange = other.detectedRange;
-        moveSpeed = other.moveSpeed;
-        reward = other.reward;
         custom = other.custom;
     }
     public void Copy(HeroStatusInfo other)
@@ -35,13 +25,14 @@ public class HeroStatusInfo: BaseStatData, IInfo
         id = other.id;
         name = other.name;
         description = other.description;
+        health = other.health;
+        moveSpeed = other.moveSpeed;
+        reward = other.reward;
+
         startLevel = other.startLevel;
         weapon = other.weapon;
         weaponLevel = other.weaponLevel;
-        health = other.health;
         detectedRange = other.detectedRange;
-        moveSpeed = other.moveSpeed;
-        reward = other.reward;
         custom = other.custom;
     }
 

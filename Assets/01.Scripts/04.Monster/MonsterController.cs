@@ -1,6 +1,8 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
@@ -25,6 +27,9 @@ public class MonsterController : BaseController, IPoolable
 
     public void OnDespawn() // 실행하면 자동으로 반환
     {
+        _takeDamagedRendererCts?.Cancel();
+        _takeDamagedRendererCts?.Dispose();
+        _takeDamagedRendererCts = null;
         returnToPool?.Invoke(this);
     }
     #endregion
@@ -40,6 +45,15 @@ public class MonsterController : BaseController, IPoolable
     [NonSerialized] public Vector2 projectileSize = Vector2.zero;
     [NonSerialized] public List<SpriteRenderer> renderers;
     [NonSerialized] public Collider2D _collider;
+
+    [Header("넉백 관련 데이터")]
+    [NonSerialized] public Vector2 knockback = Vector2.zero;
+    [NonSerialized] public float knockbackPower = 0f;
+    [NonSerialized] public float knockbackDuration = 0f;
+
+    [Header("넉백 관련 데이터")]
+    private CancellationTokenSource _takeDamagedRendererCts;
+    [SerializeField] private float takeDamagedRendererTimer = 0.5f;
 
     private SortingGroup group;
     private int sortingOffset = 0;
@@ -132,15 +146,13 @@ public class MonsterController : BaseController, IPoolable
         if (renderers == null)
         {
             renderers = new();
-            renderers = gameObject.GetComponentsInChildren<SpriteRenderer>(true).ToList();
+            renderers = gameObject.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow").ToList();
         }
 
         // alpha 1로 초기화
         foreach (var renderer in renderers)
         {
-            Color color = renderer.color;
-            color.a = 1f;
-            renderer.color = color;
+            renderer.color = Color.white;
         }
 
         stateMachine.ChangeState(stateMachine.Tracking); // 할 일 찾기
@@ -156,7 +168,55 @@ public class MonsterController : BaseController, IPoolable
     public override void TakeDamaged(float damage)
     {
         base.TakeDamaged(damage);
+        StaticUIManager.Instance.damageLayer.ShowDamage(damage, transform.position + Vector3.up * 0.5f);
+        TakeDamagedRenderer();
     }
+
+    /// <summary>
+    /// 넉백을 입음
+    /// </summary>
+    /// <param name="other">넉백이 들어온 방향</param>
+    /// <param name="power">넉백 계수</param>
+    /// <param name="duration">지속 시간</param>
+    public void TakeKnockback(Transform other, float power, float duration = 0.5f)
+    {
+        knockbackDuration = duration;
+        knockbackPower = power;
+        knockback = -(other.position - transform.position).normalized * power;
+        stateMachine.ChangeState(stateMachine.Konckback); // 넉백
+    }
+
+
+    // UniTask 실행 함수
+    public void TakeDamagedRenderer()
+    {
+        _takeDamagedRendererCts?.Cancel();
+        _takeDamagedRendererCts?.Dispose();
+        // 새로운 CancellationTokenSource 만들기 (OnDisable용 토큰도 연동)
+        _takeDamagedRendererCts = new CancellationTokenSource();
+
+        // Task 시작
+        TakeDamagedRendererTask(_takeDamagedRendererCts.Token).Forget();
+    }
+
+    // UniTask 본문
+    private async UniTaskVoid TakeDamagedRendererTask(CancellationToken token)
+    {
+        foreach (var renderer in stateMachine.Controller.renderers)
+        {
+            renderer.color = Color.red;
+        }
+
+        await UniTask.Delay(TimeSpan.FromSeconds(takeDamagedRendererTimer), cancellationToken: token);
+
+        if (stateMachine.Controller == null) return;
+
+        foreach (var renderer in stateMachine.Controller.renderers)
+        {
+            renderer.color = Color.white;
+        }
+    }
+
 
     /// <summary>
     /// 사망했을 경우
@@ -177,24 +237,24 @@ public class MonsterController : BaseController, IPoolable
     /// 업그레이드
     /// </summary>
     /// <param name="amount"></param>
-    public override void UpgradeHealth(float amount)
+    public void UpgradeHealth(float amount)
     {
-        monsterInfo.health += amount;
+        statHandler.health.AddOrigin(amount);
         HealthStatUpdate();
     }
 
-    public override void UpgradeAttack(float amount)
+    public void UpgradeAttack(float amount)
     {
-        monsterInfo.attack += amount;
+        statHandler.attack.AddOrigin(amount);
     }
 
-    public override void UpgradeAttackSpeed(float amount)
+    public void UpgradeAttackSpeed(float amount)
     {
-        monsterInfo.attackSpeed += amount;
+        statHandler.attackSpeed.AddOrigin(amount);
     }
 
-    public override void UpgradeMoveSpeed(float amount)
+    public void UpgradeMoveSpeed(float amount)
     {
-        monsterInfo.moveSpeed *= (1 + amount);
+        statHandler.moveSpeed.AddOrigin(amount);
     }
 }

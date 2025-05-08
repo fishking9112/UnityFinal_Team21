@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public abstract class RewardBase : MonoBehaviour, IPoolable
 {
@@ -13,21 +14,50 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
 
     public void OnSpawn()
     {
-
+        isMagnet = false;
     }
 
     public void OnDespawn()
     {
+        isMagnet = false;
         returnToPool?.Invoke(this);
     }
     #endregion 
 
+    [Header("자석 효과")]
+    [SerializeField] private float magnetRadius = 3f;
+    [SerializeField] private float magnetPower = 5f;
+
     protected QueenCondition condition;
     public float rewardAmount;
+
+    private bool isMagnet;
 
     private void Start()
     {
         condition = GameManager.Instance.queen.condition;
+    }
+
+    private void Update()
+    {
+        CursorMagnet();
+    }
+
+    private void CursorMagnet()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        float distance = Vector2.Distance(transform.position, mousePos);
+       
+        if(!isMagnet && distance < magnetRadius)
+        {
+            isMagnet = true;
+        }
+
+        if (isMagnet)
+        {
+            Vector3 dir = (mousePos - transform.position).normalized;
+            transform.position += dir * magnetPower * Time.deltaTime;
+        }
     }
 
     protected abstract void GainReward();

@@ -20,19 +20,21 @@ public class HeroBullet : MonoBehaviour, IPoolable
     float limitTime;
     float pierce;
     float rotateSpeed;
+    float knockback;
     private Action<Component> returnToPool;
     CancellationTokenSource cancel = new CancellationTokenSource();
     private bool isDispose;
 
     private Transform bulletTransform;
 
-    public void SetBullet(float time, float pierceCnt, float dmg, float spd, float rSpeed)
+    public void SetBullet(float time, float pierceCnt, float dmg, float spd, float rSpeed,float knockback=1)
     {
         limitTime = time;
         pierce = pierceCnt;
         damage = dmg;
         speed = spd;
         rotateSpeed = rSpeed;
+        this.knockback= knockback;
         cancel = new CancellationTokenSource();
         isDispose = false;
         Move(cancel.Token).Forget();
@@ -98,6 +100,7 @@ public class HeroBullet : MonoBehaviour, IPoolable
         {
             if (MonsterManager.Instance.monsters.TryGetValue(collision.gameObject, out var monster))
             {
+                monster.TakeKnockback(bulletTransform, knockback);
                 monster.TakeDamaged(damage);
             }
             else if (GameManager.Instance.castle.gameObject == collision.gameObject)
