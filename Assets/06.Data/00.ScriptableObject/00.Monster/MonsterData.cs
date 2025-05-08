@@ -22,13 +22,12 @@ public enum MonsterBrood
 [Serializable]
 public class MonsterInfo : BaseStatData, IInfo
 {
-    public int id;
-    public string name;
-    public string description;
     public float cost;
-    public float reward;
     public string outfit;
     public string icon;
+    public float attack;
+    public float attackRange;
+    public float attackSpeed;
 
     public MonsterAttackType monsterAttackType;
     public MonsterBrood monsterBrood;
@@ -38,28 +37,39 @@ public class MonsterInfo : BaseStatData, IInfo
     public MonsterInfo() { }
     public MonsterInfo(MonsterInfo other) : base(other)
     {
-        id = other.id;
-        name = other.name;
-        description = other.description;
         cost = other.cost;
-        reward = other.reward;
         outfit = other.outfit;
+        icon = other.icon;
+        attack = other.attack;
+        attackRange = other.attackRange;
+        attackSpeed = other.attackSpeed;
         monsterAttackType = other.monsterAttackType;
         monsterBrood = other.monsterBrood;
         projectile = other.projectile;
+        tire = other.tire;
+        preNode = other.preNode;
     }
     public void Copy(MonsterInfo other)
     {
-        base.Copy(other);
+
         id = other.id;
         name = other.name;
         description = other.description;
-        cost = other.cost;
+        health = other.health;
+        moveSpeed = other.moveSpeed;
         reward = other.reward;
+
+        cost = other.cost;
         outfit = other.outfit;
+        icon = other.icon;
+        attack = other.attack;
+        attackRange = other.attackRange;
+        attackSpeed = other.attackSpeed;
         monsterAttackType = other.monsterAttackType;
         monsterBrood = other.monsterBrood;
         projectile = other.projectile;
+        tire = other.tire;
+        preNode = other.preNode;
     }
     public int ID => id;
     public string Name => name;

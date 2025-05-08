@@ -209,6 +209,8 @@ public class MonsterController : BaseController, IPoolable
 
         await UniTask.Delay(TimeSpan.FromSeconds(takeDamagedRendererTimer), cancellationToken: token);
 
+        if (stateMachine.Controller == null) return;
+
         foreach (var renderer in stateMachine.Controller.renderers)
         {
             renderer.color = Color.white;
@@ -235,24 +237,24 @@ public class MonsterController : BaseController, IPoolable
     /// 업그레이드
     /// </summary>
     /// <param name="amount"></param>
-    public override void UpgradeHealth(float amount)
+    public void UpgradeHealth(float amount)
     {
-        monsterInfo.health += amount;
+        statHandler.health.AddOrigin(amount);
         HealthStatUpdate();
     }
 
-    public override void UpgradeAttack(float amount)
+    public void UpgradeAttack(float amount)
     {
-        monsterInfo.attack += amount;
+        statHandler.attack.AddOrigin(amount);
     }
 
-    public override void UpgradeAttackSpeed(float amount)
+    public void UpgradeAttackSpeed(float amount)
     {
-        monsterInfo.attackSpeed += amount;
+        statHandler.attackSpeed.AddOrigin(amount);
     }
 
-    public override void UpgradeMoveSpeed(float amount)
+    public void UpgradeMoveSpeed(float amount)
     {
-        monsterInfo.moveSpeed *= (1 + amount);
+        statHandler.moveSpeed.AddOrigin(amount);
     }
 }

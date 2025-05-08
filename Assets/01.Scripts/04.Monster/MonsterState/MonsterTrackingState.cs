@@ -11,8 +11,6 @@ public class MonsterTrackingState : MonsterBaseState
     private CancellationTokenSource ctsAllSearch;
     private float searchArea = 20f;
     private float searchTimer = 0f;
-    float finalMoveSpeed => stateMachine.Controller.statData.moveSpeed * stateMachine.Controller.buffMoveSpeed;
-
 
     public override void Enter()
     {
@@ -110,15 +108,15 @@ public class MonsterTrackingState : MonsterBaseState
         // 움직임-----
         spum.PlayAnimation(PlayerState.MOVE, 0);
         // 속도 0.1f 곱해서 너프시킴
-        float animationSpeed = Mathf.Clamp(finalMoveSpeed, 0.1f, float.MaxValue);
+        float animationSpeed = Mathf.Clamp(stat.moveSpeed.Value, 0.1f, float.MaxValue);
         spum.SetMoveSpeed(animationSpeed);
-        navMeshAgent.speed = finalMoveSpeed;
+        navMeshAgent.speed = stat.moveSpeed.Value;
 
         // 타겟과의 거리
         targetDistance = (target.position - navMeshAgent.transform.position).magnitude;
 
         // 타겟과의 거리가 적절해졌다면
-        if (stateMachine.Controller.statData.attackRange >= targetDistance)
+        if (stat.attackRange.Value >= targetDistance)
         {
             // 타겟과 나 사이에 장애물이 있다면 계속 움직이기
             if (IsObstacleBetween(navMeshAgent.transform.position, target.position))
@@ -126,7 +124,7 @@ public class MonsterTrackingState : MonsterBaseState
                 navMeshAgent.SetDestination(target.position); // 이동 업데이트
 
                 // 방향 바꾸기 0.04f 이상의 속도가 나올 때 움직여야 버버벅임 없음
-                if (navMeshAgent.velocity.magnitude >= finalMoveSpeed * 0.04f && navMeshAgent.speed != 0)
+                if (navMeshAgent.velocity.magnitude >= stat.moveSpeed.Value * 0.04f && navMeshAgent.speed != 0)
                     pivot.localScale = new Vector3(0 <= navMeshAgent.velocity.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
             }
             else
@@ -139,7 +137,7 @@ public class MonsterTrackingState : MonsterBaseState
             navMeshAgent.SetDestination(target.position); // 이동 업데이트
 
             // 방향 바꾸기 0.04f 이상의 속도가 나올 때 움직여야 버버벅임 없음
-            if (navMeshAgent.velocity.magnitude >= finalMoveSpeed * 0.04f && navMeshAgent.speed != 0)
+            if (navMeshAgent.velocity.magnitude >= stat.moveSpeed.Value * 0.04f && navMeshAgent.speed != 0)
                 pivot.localScale = new Vector3(0 <= navMeshAgent.velocity.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
         }
     }
