@@ -8,6 +8,8 @@ public class ParticleObject : MonoBehaviour, IPoolable
     private ParticleSystem particle;
     private Transform poolParent;
 
+    private bool isDespawn = false;
+
     private void Awake()
     {
         particle = GetComponent<ParticleSystem>();
@@ -34,6 +36,13 @@ public class ParticleObject : MonoBehaviour, IPoolable
     // 파티클이 루프일 경우 수동으로 Despawn 해야 됨
     public void OnDespawn()
     {
+        if (isDespawn)
+        {
+            return;
+        }
+
+        isDespawn = true;
+
         if (poolParent != null)
         {
             transform.SetParent(poolParent);

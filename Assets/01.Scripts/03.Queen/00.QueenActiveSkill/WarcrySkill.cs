@@ -26,8 +26,8 @@ public class WarcrySkill : QueenActiveSkillBase
                 ParticleObject skillParticle = ParticleManager.Instance.SpawnParticle("AttackDMG_Light", monster.transform.position + new Vector3(0, 0.1f, 0), new Vector3(0.1f, 0.1f, 1f), Quaternion.identity, monster.transform);
 
                 ParticleObject buffParticle = ParticleManager.Instance.SpawnParticle("AttackDMG_Sword", monster.transform.position + new Vector3(0, 0.5f, 0), new Vector3(1f, 1f, 1f), Quaternion.identity, monster.transform);
-                BuffCounter counter = new BuffCounter(1, () => { buffParticle.OnDespawn(); });
-                UniTask attackDamageTask = BuffManager.Instance.ApplyBuff(monster, (int)IDBuff.ATTACK_DAMAGE_UP, 1, counter.BuffEnd);
+                BuffParticleController particleController = new BuffParticleController(1, () => { buffParticle.OnDespawn(); });
+                UniTask attackDamageTask = BuffManager.Instance.ApplyBuff(monster, (int)IDBuff.ATTACK_DAMAGE_UP, 1, particleController);
                 tasks.Add(attackDamageTask);
             }
         }

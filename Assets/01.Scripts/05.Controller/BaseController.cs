@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 
@@ -14,11 +12,6 @@ public abstract class BaseController : MonoBehaviour
     [SerializeField] public StatHandler statHandler;
 
     public BuffController buffController;
-
-    // 스텟핸들러가 있었으면 좋겠습니다
-    // public float buffMoveSpeed = 1f;
-    // public float buffAttackDamage = 1f;
-    // public float buffAttackSpeed = 1f;
 
     protected virtual void Start()
     {
@@ -89,47 +82,5 @@ public abstract class BaseController : MonoBehaviour
     {
         // Destroy(this.gameObject);
         buffController.ClearAllBuff();
-    }
-
-    //-----------------------------------------------
-    // 아래 코드들은 스텟핸들러에서 관리하면 좋겠습니다
-    //-----------------------------------------------
-
-    /// <summary>
-    /// 버프로 인한 수치 조정
-    /// </summary>
-    public void AttackDamageBuff(float amount)
-    {
-        statHandler.attack.AddModifier(ModifierType.Multiply, 10, 1 + amount);
-        // buffAttackDamage *= (1 + amount);
-    }
-    public void AttackSpeedBuff(float amount)
-    {
-        statHandler.attackSpeed.AddModifier(ModifierType.Multiply, 10, 1 + amount);
-        // buffAttackSpeed *= (1 + amount);
-    }
-    public void MoveSpeedBuff(float amount)
-    {
-        statHandler.moveSpeed.AddModifier(ModifierType.Multiply, 10, 1 + amount);
-        // buffMoveSpeed *= (1 + amount);
-    }
-
-    /// <summary>
-    /// 버프가 끝날 때 수치 되돌리기
-    /// </summary>
-    public void EndAttackDamageBuff()
-    {
-        statHandler.attack.RemoveModifier(ModifierType.Multiply, 10);
-        // buffAttackDamage = 1f;
-    }
-    public void EndAttackSpeedBuff()
-    {
-        statHandler.attackSpeed.RemoveModifier(ModifierType.Multiply, 10);
-        // buffAttackSpeed = 1f;
-    }
-    public void EndMoveSpeedBuff()
-    {
-        statHandler.moveSpeed.RemoveModifier(ModifierType.Multiply, 10);
-        // buffMoveSpeed = 1f;
     }
 }

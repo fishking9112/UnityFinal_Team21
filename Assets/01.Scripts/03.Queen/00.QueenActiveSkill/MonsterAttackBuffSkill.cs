@@ -27,8 +27,8 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
                 ParticleObject skillParticle = ParticleManager.Instance.SpawnParticle("AttackDMG_Light", monster.transform.position + new Vector3(0, 0.1f, 0), new Vector3(0.1f, 0.1f, 1f), Quaternion.identity, monster.transform);
 
                 ParticleObject buffParticle = ParticleManager.Instance.SpawnParticle("AttackDMG_Sword", monster.transform.position + new Vector3(0, 0.7f, 0), new Vector3(0.3f, 0.3f, 0.3f), Quaternion.identity, monster.transform);
-                BuffCounter counter = new BuffCounter(1, () => { buffParticle.OnDespawn(); });
-                UniTask attackDamageTask = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level, counter.BuffEnd);
+                BuffParticleController particleController = new BuffParticleController(1, () => { buffParticle.OnDespawn(); });
+                UniTask attackDamageTask = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level, particleController);
                 tasks.Add(attackDamageTask);
             }
         }

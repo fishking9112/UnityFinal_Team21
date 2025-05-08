@@ -27,8 +27,8 @@ public class MeteorSkill : QueenActiveSkillBase
             {
                 hero.TakeDamaged(info.value);
                 ParticleObject buffParticle = ParticleManager.Instance.SpawnParticle("Burn", hero.transform.position + new Vector3(0, 0.3f, 0), new Vector3(0.1f, 0.1f, 1f), Quaternion.identity, hero.transform);
-                BuffCounter counter = new BuffCounter(1, () => { buffParticle.OnDespawn(); });
-                UniTask burnTask = BuffManager.Instance.ApplyBuff(hero, info.buff_ID, info.buff_Level, counter.BuffEnd);
+                BuffParticleController particleController = new BuffParticleController(1, () => { buffParticle.OnDespawn(); });
+                UniTask burnTask = BuffManager.Instance.ApplyBuff(hero, info.buff_ID, info.buff_Level, particleController);
                 tasks.Add(burnTask);
             }
         }

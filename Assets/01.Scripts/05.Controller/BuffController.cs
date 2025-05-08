@@ -32,6 +32,7 @@ public class BuffController : MonoBehaviour
         {
             buff.token?.Cancel();
             buff.token?.Dispose();
+            buff.particleController?.ForceRemoveParticle();
         }
 
         if (cancel)
