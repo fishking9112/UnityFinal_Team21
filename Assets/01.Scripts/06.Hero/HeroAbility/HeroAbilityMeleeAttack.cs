@@ -35,7 +35,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     }
     protected override void ActionAbility()
     {
-        if (hero == null)
+        if (hero == null || token.IsCancellationRequested)
         {
             return;
         }
@@ -104,7 +104,9 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
         animator.SetBool("4_Death", true);
         token?.Cancel();
+        token?.Dispose();
         tk?.Cancel();
+        tk?.Dispose();
     }
     public override void SetAbilityLevel(int level)
     {
@@ -113,10 +115,4 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     }
 
-    private void OnDisable()
-    {
-        token?.Dispose();
-        tk?.Dispose();
-        
-    }
 }

@@ -33,7 +33,7 @@ public class HeroAbilityAxe : HeroAbilitySystem
 
     protected override void ActionAbility()
     {
-        if (hero == null)
+        if (hero == null || token.IsCancellationRequested)
         {
             return;
         }
