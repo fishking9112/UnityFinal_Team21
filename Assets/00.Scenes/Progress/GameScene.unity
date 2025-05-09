@@ -643,7 +643,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 3
+  m_Radius: 0.1
 --- !u!1 &143270909
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,6 +863,26 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 53203828-9d1f-4ce6-b15b-7b3bec352c47
     m_ActionName: InGame/PauseUI[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 17d85296-8826-45fd-aacf-1886a24ccfbb
+    m_ActionName: InGame/SlotChange[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 166616946}
+        m_TargetAssemblyTypeName: QueenController, Assembly-CSharp
+        m_MethodName: CloseWindow
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d553e196-3bb1-460e-96d1-c9c71aa4cad4
+    m_ActionName: InGame/CloseWindow[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: InGame
@@ -882,6 +902,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedSlotIndex: -1
   rangeObject: {fileID: 648000347}
+  rangeSprite: {fileID: 648000349}
   worldMousePos: {x: 0, y: 0, z: 0}
   cursorIcon: {fileID: 90943526}
   curSlot: 0
@@ -2557,8 +2578,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.5882353}
+  m_Sprite: {fileID: 21300000, guid: a914e342795b8a840b9e966ef1fa72f8, type: 3}
+  m_Color: {r: 0, g: 0.7604737, b: 1, a: 0.3137255}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2900,7 +2921,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.size
-      value: 26
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].key
@@ -3007,6 +3028,10 @@ PrefabInstance:
       value: Chain
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[26].key
+      value: Explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].prefab
       value: 
       objectReference: {fileID: 4227891616735513516, guid: 93dee373ed3430d4dbde3d7d85765d71, type: 3}
@@ -3093,15 +3118,15 @@ PrefabInstance:
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[21].prefab
       value: 
-      objectReference: {fileID: 3760309390836735534, guid: c278ee488f804ae4088efd6513ea96f4, type: 3}
+      objectReference: {fileID: 6984392543379170250, guid: 478cd47bf08986c49a6bd5e72215a490, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[22].prefab
       value: 
-      objectReference: {fileID: 4730712359625482318, guid: 734e55d292219f04684d19b5be67465c, type: 3}
+      objectReference: {fileID: 3746241493603479697, guid: 300889fe5d538a743b3bc7e999afe516, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[23].prefab
       value: 
-      objectReference: {fileID: 3339963394610592647, guid: 964eb0e410b553b448400ed247a1c492, type: 3}
+      objectReference: {fileID: -8938338968591250434, guid: f96ebef09f4e3fe459c65c904c2d3138, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[24].prefab
       value: 
@@ -3110,6 +3135,10 @@ PrefabInstance:
       propertyPath: poolPrefabs.Array.data[25].prefab
       value: 
       objectReference: {fileID: 11413728, guid: 2736bbc2f2c78a949957b0719c2992bd, type: 3}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[26].prefab
+      value: 
+      objectReference: {fileID: -1220559715688472851, guid: 5f53d2ddeb0b25247a3b4d2d2bfda09d, type: 3}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[0].initPoolSize
       value: 5
@@ -3208,10 +3237,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[24].initPoolSize
-      value: 5
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: poolPrefabs.Array.data[25].initPoolSize
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
+      propertyPath: poolPrefabs.Array.data[26].initPoolSize
       value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6704,8 +6737,8 @@ MonoBehaviour:
   minRange: {x: -50, y: -50}
   maxRange: {x: 50, y: 50}
   zoomSpeed: 0.02
-  minZoom: 3
-  maxZoom: 10
+  minZoom: 7
+  maxZoom: 12
   zoomSmoothValue: 0.3
 --- !u!1001 &5188664038417358109
 PrefabInstance:
@@ -6784,9 +6817,9 @@ SceneRoots:
   - {fileID: 878322906}
   - {fileID: 952452708}
   - {fileID: 1441495887}
+  - {fileID: 1081327732}
+  - {fileID: 5188664038417358109}
   - {fileID: 607669759}
   - {fileID: 1623829574}
   - {fileID: 1671790278}
   - {fileID: 1913489643}
-  - {fileID: 1081327732}
-  - {fileID: 5188664038417358109}

@@ -517,6 +517,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8093199388650962264}
+  - component: {fileID: 997975794891666623}
   - component: {fileID: 7380879640195716517}
   - component: {fileID: -5964496736716964657}
   - component: {fileID: 3309829388262035602}
@@ -547,6 +548,18 @@ Transform:
   - {fileID: 7301539506294143112}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &997975794891666623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 968675749530671982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 953e820a5bf2a9c4ea977cc66af5e380, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7380879640195716517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -566,10 +579,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   healthHandler: {fileID: 3309829388262035602}
+  statHandler: {fileID: 997975794891666623}
   buffController: {fileID: -5964496736716964657}
-  buffMoveSpeed: 1
-  buffAttackDamage: 1
-  buffAttackSpeed: 1
+  takeDamagedRendererTimer: 0.5
 --- !u!114 &-5964496736716964657
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -22,11 +22,14 @@ public class MonsterAttackBuffSkill : QueenActiveSkillBase
         List<UniTask> tasks = new List<UniTask>();
         foreach (var hit in hits)
         {
-            if(MonsterManager.Instance.monsters.TryGetValue(hit.gameObject, out var monster))
+            if (MonsterManager.Instance.monsters.TryGetValue(hit.gameObject, out var monster))
             {
-                UniTask task = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level);
-                tasks.Add(task);
-                ParticleObject particle = ParticleManager.Instance.SpawnParticle("AttackDMG_Light", monster.transform.position, Quaternion.identity, 0.5f, monster.transform);
+                ParticleObject skillParticle = ParticleManager.Instance.SpawnParticle("AttackDMG_Light", monster.transform.position + new Vector3(0, 0.1f, 0), new Vector3(0.1f, 0.1f, 1f), Quaternion.identity, monster.transform);
+
+                ParticleObject buffParticle = ParticleManager.Instance.SpawnParticle("AttackDMG_Sword", monster.transform.position + new Vector3(0, 0.7f, 0), new Vector3(0.3f, 0.3f, 0.3f), Quaternion.identity, monster.transform);
+                BuffParticleController particleController = new BuffParticleController(1, () => { buffParticle.OnDespawn(); });
+                UniTask attackDamageTask = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level, particleController);
+                tasks.Add(attackDamageTask);
             }
         }
         await UniTask.WhenAll(tasks);

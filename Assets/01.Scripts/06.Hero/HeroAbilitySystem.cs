@@ -68,7 +68,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         count_LevelUp = heroAbilityInfo.count_LevelUp;
         countDelay = heroAbilityInfo.countDelay_Base;
         countDelay_LevelUp = heroAbilityInfo.countDelay_LevelUp;
-        knockback = 1; // 임시 값
+        knockback = heroAbilityInfo.knockback;
         maxLevel = heroAbilityInfo.maxLevel;
         pivot = heroAbilityInfo.pivot;
         curLevel = 1;
@@ -94,7 +94,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         {
             while (!tk.IsCancellationRequested && this != null)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, tk);
+                await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, cancellationToken: tk);
 
                 if (tk.IsCancellationRequested || this == null)
                 {

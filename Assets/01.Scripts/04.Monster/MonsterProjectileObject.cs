@@ -37,7 +37,7 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
 
     private float bulletSpeed = 5f;
     private float bulletSize = 1f;
-    float finalAttackDamage => baseController.statData.attack * baseController.buffAttackDamage;
+    float finalAttackDamage => baseController.statHandler.attack.Value;
 
     private void Awake()
     {

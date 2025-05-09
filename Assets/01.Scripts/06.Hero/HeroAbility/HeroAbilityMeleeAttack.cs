@@ -35,7 +35,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     }
     protected override void ActionAbility()
     {
-        if (hero == null)
+        if (hero == null || token.IsCancellationRequested)
         {
             return;
         }
@@ -62,7 +62,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
             animator.SetBool("2_Attack", true);
         }
 
-        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f,cancellationToken:tk);
+        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f, cancellationToken: tk);
 
         // 충돌처리
         OverlapCheck(angle);
@@ -87,6 +87,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         {
             if (MonsterManager.Instance.monsters.TryGetValue(c.gameObject, out var monster))
             {
+                monster.TakeKnockback(this.transform, knockback);
                 monster.TakeDamaged(damage);
             }
             else if (GameManager.Instance.castle.gameObject == c.gameObject)
@@ -113,4 +114,5 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         token = new CancellationTokenSource();
 
     }
+
 }
