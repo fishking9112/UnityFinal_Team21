@@ -12,6 +12,7 @@ public enum HeroAbilityType
     AREA,
     AXE,
     CHAIN,
+    TARGETTING,
 }
 
 [Serializable]

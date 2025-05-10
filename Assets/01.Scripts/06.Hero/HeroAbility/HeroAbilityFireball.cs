@@ -26,7 +26,7 @@ public class HeroAbilityFireball : HeroAbilitySystem
 
     private void OnEnable()
     {
-        Initialize((int)IDHeroAbility.WAND);
+        Initialize((int)IDHeroAbility.TARGETTING);
 
     }
 
@@ -61,7 +61,7 @@ public class HeroAbilityFireball : HeroAbilitySystem
         }
 
         var bullet = objectPoolManager.GetObject<HeroTargetBullet>("Fireball", hero.transform.position);
-        bullet.SetBullet(damage, speed, knockback);
+        bullet.SetBullet(damage, speed, knockback, target);
         bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
     }
