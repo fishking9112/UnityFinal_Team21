@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 513637796650143215}
   - component: {fileID: 3041658210985062675}
   - component: {fileID: 6547887280538027396}
+  - component: {fileID: 6224269826002790012}
   m_Layer: 0
   m_Name: AllSkill
   m_TagString: Untagged
@@ -51,13 +52,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info:
-    id: 13
-    name: "\uAE30\uBCF8\uC2A4\uD0AC_4"
-    description: "\uAE30\uBCF8\uC2A4\uD0AC \uC785\uB2C8\uB2E4."
-    icon: 
+    id: 21004
+    name: "\uD68C\uBCF5\uC2A4\uD0AC"
+    description: "\uBC94\uC704\uD68C\uBCF5 \uC2A4\uD0AC \uC608\uC2DC \uC2A4\uD0AC"
+    icon: gameicon_tilemap-Sheet_1099
     type: 3
     cost: 10
-    coolTime: 0
+    coolTime: 5
     value: 50
     range: -1
     size: 10
@@ -81,13 +82,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info:
-    id: 12
-    name: "\uAE30\uBCF8\uC2A4\uD0AC_3"
-    description: "\uACF5\uACA9\uB825 \uC99D\uAC00 \uC608\uC2DC \uC2A4\uD0AC"
-    icon: 
+    id: 21003
+    name: "\uACF5\uACA9\uB825\uC99D\uAC00"
+    description: "\uACF5\uACA9\uB825 \uC99D\uAC00 \uBC84\uD504 \uC608\uC2DC \uC2A4\uD0AC"
+    icon: gameicon_tilemap-Sheet_857
     type: 3
     cost: 10
-    coolTime: 0
+    coolTime: 15
     value: 10
     range: -1
     size: 10
@@ -95,7 +96,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 128
     required_Level: 1
-    buff_ID: 1001
+    buff_ID: 100001
     buff_Level: 2
   onCoolTime: 0
 --- !u!114 &8096152510419001192
@@ -111,22 +112,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info:
-    id: 0
-    name: 
-    description: 
-    icon: 
-    type: 0
-    cost: 0
-    coolTime: 0
+    id: 21005
+    name: "\uBC94\uC704 \uC2AC\uB85C\uC6B0"
+    description: "\uD574\uB2F9 \uBC94\uC704\uC5D0 lv 1 \uC2AC\uB85C\uC6B0 \uC801\uC6A9"
+    icon: gameicon_tilemap-Sheet_1437
+    type: 3
+    cost: 10
+    coolTime: 7
     value: 0
-    range: 0
-    size: 0
+    range: -1
+    size: 10
     target:
       serializedVersion: 2
-      m_Bits: 0
-    required_Level: 0
-    buff_ID: 0
-    buff_Level: 0
+      m_Bits: 64
+    required_Level: 5
+    buff_ID: 100002
+    buff_Level: 1
   onCoolTime: 0
 --- !u!114 &2938480269554106327
 MonoBehaviour:
@@ -141,22 +142,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info:
-    id: 0
-    name: 
-    description: 
-    icon: 
-    type: 0
-    cost: 0
-    coolTime: 0
-    value: 0
-    range: 0
-    size: 0
+    id: 21006
+    name: "\uBA54\uD14C\uC624"
+    description: "\uD574\uB2F9 \uBC94\uC704\uC5D0 50\uC758 \uB370\uBBF8\uC9C0\uB97C
+      \uC8FC\uACE0 \uD654\uC0C1 2\uB808\uBCA8 \uC801\uC6A9"
+    icon: gameicon_tilemap-Sheet_79
+    type: 1
+    cost: 50
+    coolTime: 10
+    value: 50
+    range: -1
+    size: 5
     target:
       serializedVersion: 2
-      m_Bits: 0
-    required_Level: 0
-    buff_ID: 0
-    buff_Level: 0
+      m_Bits: 64
+    required_Level: 5
+    buff_ID: 100003
+    buff_Level: 2
   onCoolTime: 0
 --- !u!114 &513637796650143215
 MonoBehaviour:
@@ -171,20 +173,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info:
-    id: 0
-    name: 
-    description: 
-    icon: 
-    type: 0
-    cost: 0
-    coolTime: 0
-    value: 0
-    range: 0
-    size: 0
+    id: 21002
+    name: "\uC18C\uD658 \uC2A4\uD0AC"
+    description: "\uC18C\uD658 \uC2A4\uD0AC \uC608\uC2DC \uC2A4\uD0AC"
+    icon: gameicon_tilemap-Sheet_1977
+    type: 2
+    cost: 30
+    coolTime: 3
+    value: 5
+    range: -1
+    size: 1
     target:
       serializedVersion: 2
-      m_Bits: 0
-    required_Level: 0
+      m_Bits: 1
+    required_Level: 1
     buff_ID: 0
     buff_Level: 0
   onCoolTime: 0
@@ -201,20 +203,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info:
-    id: 0
-    name: 
-    description: 
-    icon: 
-    type: 0
-    cost: 0
-    coolTime: 0
-    value: 0
-    range: 0
-    size: 0
+    id: 21007
+    name: "\uC804\uCCB4 \uD68C\uBCF5"
+    description: "\uB9F5 \uC804\uCCB4 \uBAAC\uC2A4\uD130 \uD68C\uBCF5"
+    icon: gameicon_tilemap-Sheet_1148
+    type: 3
+    cost: 50
+    coolTime: 20
+    value: 50
+    range: -1
+    size: -1
     target:
       serializedVersion: 2
-      m_Bits: 0
-    required_Level: 0
+      m_Bits: 128
+    required_Level: 5
     buff_ID: 0
     buff_Level: 0
   onCoolTime: 0
@@ -244,6 +246,36 @@ MonoBehaviour:
     target:
       serializedVersion: 2
       m_Bits: 128
+    required_Level: 0
+    buff_ID: 0
+    buff_Level: 0
+  onCoolTime: 1
+--- !u!114 &6224269826002790012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3449543277398582152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58e5b02dd8806b84dad5ab882754be85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  info:
+    id: 22002
+    name: 
+    description: 
+    icon: 
+    type: 0
+    cost: 30
+    coolTime: 10
+    value: 50
+    range: -1
+    size: -1
+    target:
+      serializedVersion: 2
+      m_Bits: 0
     required_Level: 0
     buff_ID: 0
     buff_Level: 0

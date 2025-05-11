@@ -90,6 +90,7 @@ public enum IDQueenActiveSkill
     ALL_HEAL,
 
     SACRIFICE = 22001,
+    MANARECYCLE,
 }
 
 public enum IDQueenAbility
