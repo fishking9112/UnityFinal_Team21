@@ -12,6 +12,7 @@ public class BuffParticleController
     {
         this.end = end;
         this.count = 0;
+        this.isRemove = false;
         this.removeBuffParticle = removeBuffParticle;
     }
 

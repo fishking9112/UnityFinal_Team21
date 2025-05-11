@@ -8,7 +8,7 @@ public class ParticleObject : MonoBehaviour, IPoolable
     private ParticleSystem particle;
     private Transform poolParent;
 
-    private bool isDespawn = false;
+    private bool isDespawn;
 
     private void Awake()
     {
@@ -23,6 +23,7 @@ public class ParticleObject : MonoBehaviour, IPoolable
 
     public void OnSpawn()
     {
+        isDespawn = false;
         particle.Clear();
         particle.Play();
 

@@ -21,7 +21,7 @@ public class BuffController : MonoBehaviour
     }
 
     // 버프 제거
-    public void RemoveBuff(int id, bool cancel = false)
+    public void RemoveBuff(int id)
     {
         if (!buffDic.TryGetValue(id, out var buffList))
         {
@@ -33,11 +33,6 @@ public class BuffController : MonoBehaviour
             buff.token?.Cancel();
             buff.token?.Dispose();
             buff.particleController?.ForceRemoveParticle();
-        }
-
-        if (cancel)
-        {
-            return;
         }
 
         buffList.Clear();

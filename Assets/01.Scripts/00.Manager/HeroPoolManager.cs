@@ -31,7 +31,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
             return;
         }
 
-        list = Resources.LoadAll<GameObject>("HeroPrefabs").ToList();
+        list = AddressableManager.Instance.LoadDataAssets<GameObject>("Hero");
         System.Random rand = new System.Random();
         list = list.OrderBy(x => rand.Next()).ToList();
         int min = Mathf.Min(list.Count, heroObj.poolSize);

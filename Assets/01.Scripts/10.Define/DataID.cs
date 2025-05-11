@@ -15,6 +15,7 @@ public enum IDHeroAbility
     GARLIC,
     AXE,
     CHAIN,
+    TARGETTING,
 }
 
 public enum IDHeroStatus
