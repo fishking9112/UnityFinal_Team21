@@ -91,6 +91,7 @@ public enum IDQueenActiveSkill
 
     SACRIFICE = 22001,
     MANARECYCLE,
+    OVERWORK,
 }
 
 public enum IDQueenAbility

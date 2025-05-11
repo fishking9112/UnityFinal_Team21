@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3041658210985062675}
   - component: {fileID: 6547887280538027396}
   - component: {fileID: 6224269826002790012}
+  - component: {fileID: -9075285023376248533}
   m_Layer: 0
   m_Name: AllSkill
   m_TagString: Untagged
@@ -98,7 +99,7 @@ MonoBehaviour:
     required_Level: 1
     buff_ID: 100001
     buff_Level: 2
-  onCoolTime: 0
+  onCoolTime: 1
 --- !u!114 &8096152510419001192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,7 +160,7 @@ MonoBehaviour:
     required_Level: 5
     buff_ID: 100003
     buff_Level: 2
-  onCoolTime: 0
+  onCoolTime: 1
 --- !u!114 &513637796650143215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,7 +220,7 @@ MonoBehaviour:
     required_Level: 5
     buff_ID: 0
     buff_Level: 0
-  onCoolTime: 0
+  onCoolTime: 1
 --- !u!114 &6547887280538027396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +250,7 @@ MonoBehaviour:
     required_Level: 0
     buff_ID: 0
     buff_Level: 0
-  onCoolTime: 1
+  onCoolTime: 0
 --- !u!114 &6224269826002790012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,6 +272,36 @@ MonoBehaviour:
     cost: 30
     coolTime: 10
     value: 50
+    range: -1
+    size: -1
+    target:
+      serializedVersion: 2
+      m_Bits: 0
+    required_Level: 0
+    buff_ID: 0
+    buff_Level: 0
+  onCoolTime: 0
+--- !u!114 &-9075285023376248533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3449543277398582152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dea6d436608e84419bbe35c302f48dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  info:
+    id: 22003
+    name: 
+    description: 
+    icon: 
+    type: 0
+    cost: 0
+    coolTime: 30
+    value: 100
     range: -1
     size: -1
     target:
