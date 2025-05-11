@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2938480269554106327}
   - component: {fileID: 513637796650143215}
   - component: {fileID: 3041658210985062675}
+  - component: {fileID: 6547887280538027396}
   m_Layer: 0
   m_Name: AllSkill
   m_TagString: Untagged
@@ -56,6 +57,7 @@ MonoBehaviour:
     icon: 
     type: 3
     cost: 10
+    coolTime: 0
     value: 50
     range: -1
     size: 10
@@ -65,6 +67,7 @@ MonoBehaviour:
     required_Level: 1
     buff_ID: 0
     buff_Level: 0
+  onCoolTime: 0
 --- !u!114 &5861958974445726821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +87,7 @@ MonoBehaviour:
     icon: 
     type: 3
     cost: 10
+    coolTime: 0
     value: 10
     range: -1
     size: 10
@@ -93,6 +97,7 @@ MonoBehaviour:
     required_Level: 1
     buff_ID: 1001
     buff_Level: 2
+  onCoolTime: 0
 --- !u!114 &8096152510419001192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,6 +117,7 @@ MonoBehaviour:
     icon: 
     type: 0
     cost: 0
+    coolTime: 0
     value: 0
     range: 0
     size: 0
@@ -121,6 +127,7 @@ MonoBehaviour:
     required_Level: 0
     buff_ID: 0
     buff_Level: 0
+  onCoolTime: 0
 --- !u!114 &2938480269554106327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +147,7 @@ MonoBehaviour:
     icon: 
     type: 0
     cost: 0
+    coolTime: 0
     value: 0
     range: 0
     size: 0
@@ -149,6 +157,7 @@ MonoBehaviour:
     required_Level: 0
     buff_ID: 0
     buff_Level: 0
+  onCoolTime: 0
 --- !u!114 &513637796650143215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,6 +177,7 @@ MonoBehaviour:
     icon: 
     type: 0
     cost: 0
+    coolTime: 0
     value: 0
     range: 0
     size: 0
@@ -177,6 +187,7 @@ MonoBehaviour:
     required_Level: 0
     buff_ID: 0
     buff_Level: 0
+  onCoolTime: 0
 --- !u!114 &3041658210985062675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +207,7 @@ MonoBehaviour:
     icon: 
     type: 0
     cost: 0
+    coolTime: 0
     value: 0
     range: 0
     size: 0
@@ -205,3 +217,34 @@ MonoBehaviour:
     required_Level: 0
     buff_ID: 0
     buff_Level: 0
+  onCoolTime: 0
+--- !u!114 &6547887280538027396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3449543277398582152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d30eaaf42e4632c478ed2957742d896e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  info:
+    id: 22001
+    name: 
+    description: 
+    icon: 
+    type: 0
+    cost: 0
+    coolTime: 5
+    value: 50
+    range: -1
+    size: 1
+    target:
+      serializedVersion: 2
+      m_Bits: 128
+    required_Level: 0
+    buff_ID: 0
+    buff_Level: 0
+  onCoolTime: 0

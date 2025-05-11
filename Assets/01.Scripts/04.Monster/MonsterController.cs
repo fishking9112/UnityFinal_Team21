@@ -221,7 +221,7 @@ public class MonsterController : BaseController, IPoolable
     /// <summary>
     /// 사망했을 경우
     /// </summary>
-    protected override void Die()
+    public override void Die()
     {
         base.Die();
 

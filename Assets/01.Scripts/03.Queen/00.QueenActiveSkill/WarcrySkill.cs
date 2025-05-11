@@ -6,7 +6,7 @@ public class WarcrySkill : QueenActiveSkillBase
 {
     public override void Init()
     {
-        //base.Init();
+        base.Init();
 
         //info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.ATTACK_DAMAGE_UP];
     }

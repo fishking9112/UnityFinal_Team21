@@ -88,6 +88,8 @@ public enum IDQueenActiveSkill
     RANGE_SLOW,
     METEOR,
     ALL_HEAL,
+
+    SACRIFICE = 22001,
 }
 
 public enum IDQueenAbility
