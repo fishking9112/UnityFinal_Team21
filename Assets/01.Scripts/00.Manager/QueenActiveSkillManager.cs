@@ -23,6 +23,7 @@ public class QueenActiveSkillManager : MonoBehaviour
             GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(1, queenActiveSkillDic[(int)IDQueenActiveSkill.MANARECYCLE]);
             GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(2, queenActiveSkillDic[(int)IDQueenActiveSkill.OVERWORK]);
             GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(3, queenActiveSkillDic[(int)IDQueenActiveSkill.RECALL]);
+            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(4, queenActiveSkillDic[(int)IDQueenActiveSkill.SKELETONLEGION]);
         }, 3);
     }
 

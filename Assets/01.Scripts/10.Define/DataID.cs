@@ -93,6 +93,7 @@ public enum IDQueenActiveSkill
     MANARECYCLE,
     OVERWORK,
     RECALL,
+    SKELETONLEGION,
 }
 
 public enum IDQueenAbility

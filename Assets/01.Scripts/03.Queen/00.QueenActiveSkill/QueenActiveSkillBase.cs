@@ -6,11 +6,12 @@ public abstract class QueenActiveSkillBase : MonoBehaviour
     public QueenActiveSkillInfo info;
     protected QueenController controller;
 
-    public bool onCoolTime = false;
+    public bool onCoolTime;
 
     public virtual void Init()
     {
         controller = GameManager.Instance.queen.controller;
+        onCoolTime = false;
     }
 
     public async UniTask ApplyCooltimeSkill()
