@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class OverworkSkill : QueenActiveSkillBase
 {
     QueenCondition condition;

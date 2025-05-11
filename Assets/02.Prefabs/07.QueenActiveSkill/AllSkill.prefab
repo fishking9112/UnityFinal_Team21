@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 6547887280538027396}
   - component: {fileID: 6224269826002790012}
   - component: {fileID: -9075285023376248533}
+  - component: {fileID: 8402710178065201993}
   m_Layer: 0
   m_Name: AllSkill
   m_TagString: Untagged
@@ -307,6 +308,36 @@ MonoBehaviour:
     target:
       serializedVersion: 2
       m_Bits: 0
+    required_Level: 0
+    buff_ID: 0
+    buff_Level: 0
+  onCoolTime: 0
+--- !u!114 &8402710178065201993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3449543277398582152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b50104624e355a2449613332b9139600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  info:
+    id: 22004
+    name: 
+    description: 
+    icon: 
+    type: 0
+    cost: 50
+    coolTime: 30
+    value: 0
+    range: -1
+    size: 10
+    target:
+      serializedVersion: 2
+      m_Bits: 128
     required_Level: 0
     buff_ID: 0
     buff_Level: 0
