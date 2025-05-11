@@ -45,6 +45,7 @@ public class BuffManager : MonoSingleton<BuffManager>
         buffStrategyDic[(int)IDBuff.BURN] = new BurnBuff();
         buffStrategyDic[(int)IDBuff.POISON] = new PoisonBuff();
         buffStrategyDic[(int)IDBuff.SLOW] = new SlowBuff();
+        buffStrategyDic[(int)IDBuff.DEATHSYBOL] = new DeathSybolBuff();
     }
 
     // 버프 아이디로 버프 가져오기
@@ -114,7 +115,6 @@ public class BuffManager : MonoSingleton<BuffManager>
         {
             return;
         }
-
         var buffStrategy = GetBuffStrategy(info.id);
 
         foreach (var buff in buffList)
@@ -123,6 +123,7 @@ public class BuffManager : MonoSingleton<BuffManager>
             {
                 continue;
             }
+
             buffStrategy?.Remove(target, buff, info);
             buff.particleController?.RemoveParticle();
         }
