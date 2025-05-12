@@ -33,4 +33,14 @@ public class BaseBuffStrategy : MonoBehaviour
             // 버프가 중간에 끊겼을 때 예외. 무시해도 됨
         }
     }
+
+    // 파티클 제거
+    protected void RemoveParticle(Buff buff)
+    {
+        if (buff.particle != null)
+        {
+            buff.particle.OnDespawn();
+            buff.particle = null;
+        }
+    }
 }
