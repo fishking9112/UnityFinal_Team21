@@ -17,6 +17,9 @@ public class HeroSlowSKill : QueenActiveSkillBase
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
+        Vector3 scale = new Vector3(info.size / 4, info.size / 4, 1f);
+        ParticleObject skillParticle = ParticleManager.Instance.SpawnParticle("Slow_Hit", mousePos, scale, Quaternion.identity);
+
         // 충돌한 모든 용사에게 디버프 적용
         List<UniTask> tasks = new List<UniTask>();
         foreach (var hit in hits)
