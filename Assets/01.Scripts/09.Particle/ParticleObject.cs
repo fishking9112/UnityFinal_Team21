@@ -60,7 +60,7 @@ public class ParticleObject : MonoBehaviour, IPoolable
             await UniTask.WaitUntil(() =>
             {
                 return this != null && particle != null && !particle.IsAlive(true);
-            });
+            }, cancellationToken: this.GetCancellationTokenOnDestroy());
 
             if (this != null && particle != null)
             {

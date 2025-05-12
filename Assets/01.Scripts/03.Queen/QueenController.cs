@@ -264,7 +264,7 @@ public class QueenController : MonoBehaviour
             }
         }
 
-        await selectedQueenActiveSkill.TryUseSkill();
+        await selectedQueenActiveSkill.TryUseSkill(selectedQueenActiveSkill.info.cost);
     }
 
     // 자동 게이지 회복

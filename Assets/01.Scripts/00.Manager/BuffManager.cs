@@ -77,11 +77,7 @@ public class BuffManager : MonoSingleton<BuffManager>
             if (target != null)
             {
                 RemoveBuff(target, info);
-
-                if (particleController != null)
-                {
-                    particleController.RemoveParticle();
-                }
+                particleController?.RemoveParticle();
             }
         }
         catch (OperationCanceledException)

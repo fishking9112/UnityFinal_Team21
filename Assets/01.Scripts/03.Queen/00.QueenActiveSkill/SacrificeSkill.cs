@@ -35,6 +35,6 @@ public class SacrificeSkill : QueenActiveSkillBase
             monster.Die();
         }
 
-        GameManager.Instance.queen.condition.AdjustCurSummonGauge(info.value);
+        condition.AdjustCurSummonGauge(info.value);
     }
 }

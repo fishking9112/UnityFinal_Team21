@@ -1,6 +1,5 @@
 public class OverworkSkill : QueenActiveSkillBase
 {
-    QueenCondition condition;
     float returnToValue;
 
     public override void Init()
@@ -8,8 +7,6 @@ public class OverworkSkill : QueenActiveSkillBase
         base.Init();
 
         //info 초기화
-
-        condition = GameManager.Instance.queen.condition;
     }
     public override void UseSkill()
     {
