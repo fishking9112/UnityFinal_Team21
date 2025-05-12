@@ -93,6 +93,7 @@ public class HeroController : BaseController
     {
         await UniTask.WaitUntil(() => healthHandler.IsDie(), cancellationToken: this.GetCancellationTokenOnDestroy());
         stateMachine.ChangeState(stateMachine.deadState);
+        Die();
         ResetObj();
     }
 
@@ -114,6 +115,11 @@ public class HeroController : BaseController
     {
         await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
         HeroPoolManager.Instance.ReturnObject(this);
+    }
+
+    protected override void Die()
+    {
+        base.Die();
     }
 
     public void ResetObj()
