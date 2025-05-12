@@ -15,14 +15,12 @@ public class DeathSymbolBuff : BaseBuffStrategy, IBuffStrategy
 
     protected async UniTask DeathSymbol(BaseController target, float delay)
     {
-        print("버프 걸리나?");
         try
         {
             await UniTask.Delay(TimeSpan.FromSeconds(delay));
 
             if (target != null)
             {
-                print("죽기는 해?");
                 target.Die();
             }
         }
