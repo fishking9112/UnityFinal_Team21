@@ -67,7 +67,7 @@ public class TrophyUI : MonoBehaviour
             unlockCollection = $"{tempName} 해금 ";
         }
         string gainGold = trophyInfo.reward != 0 ? $"{trophyInfo.reward} 골드 획득" : "";
-        reward.text = unlockCollection + gainGold;
+        reward.text = $"{unlockCollection}{gainGold}";
     }
 
     /// <summary>

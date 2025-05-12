@@ -14,21 +14,8 @@ public class StaticUIManager : MonoSingleton<StaticUIManager>
     public DownloadUI downloadUI;
 
 
-    public async UniTask LoadUI(string sceneName)
+    public async UniTask LoadUI(LoadSceneEnum sceneEnum)
     {
-        switch (sceneName)
-        {
-            case "LoginScene": // 로그인 씬 일 경우
-                break;
-            case "MenuScene": // 메뉴 씬 일 경우
-                await hudLayer.LoadHUD(sceneName);
-                break;
-            case "GameScene": // 게임 씬 일 경우
-                await hudLayer.LoadHUD(sceneName);
-                break;
-            default:
-                // await LoadSceneAsync("Error"); // 에러씬으로 이동(?)
-                break;
-        }
+        await hudLayer.LoadHUD(sceneEnum);
     }
 }
