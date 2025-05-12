@@ -1,5 +1,9 @@
+using UnityEngine;
+
 public class CastleInvincibleSkill : QueenActiveSkillBase
 {
+    ParticleObject skillParticle;
+
     public override void Init()
     {
         base.Init();
@@ -9,6 +13,7 @@ public class CastleInvincibleSkill : QueenActiveSkillBase
 
     public override void UseSkill()
     {
+        skillParticle = ParticleManager.Instance.SpawnParticle("Barrior", GameManager.Instance.castle.transform.position, new Vector3(0.7f, 0.7f, 0.7f));
         GameManager.Instance.castle.condition.SetInvincible(true);
         Invoke("EndSkill", info.value);
     }
@@ -16,5 +21,6 @@ public class CastleInvincibleSkill : QueenActiveSkillBase
     private void EndSkill()
     {
         GameManager.Instance.castle.condition.SetInvincible(false);
+        skillParticle.OnDespawn();
     }
 }
