@@ -60,6 +60,6 @@ public class GameResultUI : SingleUI
 
     private void ReturnToTitle()
     {
-        SceneLoadManager.Instance.LoadScene("MenuScene").Forget();
+        SceneLoadManager.Instance.LoadScene(LoadSceneEnum.MenuScene).Forget();
     }
 }
