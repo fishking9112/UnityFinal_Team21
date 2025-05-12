@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 
-public class DeathSybolBuff : BaseBuffStrategy, IBuffStrategy
+public class DeathSymbolBuff : BaseBuffStrategy, IBuffStrategy
 {
     public void Apply(BaseController target, Buff buff, BuffInfo info, float amount)
     {

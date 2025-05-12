@@ -94,7 +94,8 @@ public enum IDQueenActiveSkill
     OVERWORK,
     RECALL,
     SKELETONLEGION,
-    DEATHSYBOL,
+    DEATHSYMBOL,
+    CASTLEINVINCIBLE,
 }
 
 public enum IDQueenAbility
@@ -119,7 +120,7 @@ public enum IDBuff
     BURN,
     POISON,
     MOVE_SPEED_UP,
-    DEATHSYBOL,
+    DEATHSYMBOL,
 }
 
 public enum IDTrophy
