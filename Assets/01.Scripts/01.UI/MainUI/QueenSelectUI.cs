@@ -41,7 +41,7 @@ public class QueenSelectUI : MonoBehaviour
     public void OnClickGameStart()
     {
         // TODO : 바뀐 스텟으로 시작(?)
-        SceneLoadManager.Instance.LoadScene("GameScene").Forget();
+        SceneLoadManager.Instance.LoadScene(LoadSceneEnum.GameScene).Forget();
     }
 
 }

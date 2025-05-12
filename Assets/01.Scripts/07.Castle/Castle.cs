@@ -44,6 +44,11 @@ public class Castle : MonoBehaviour
     /// <param name="amount"> 입힐 데미지 양 </param>
     public virtual void TakeDamaged(float amount)
     {
+        if (condition.IsInvincible)
+        {
+            return;
+        }
+
         condition.AdjustCurHealth(-amount);
 
         if (condition.CurCastleHealth.Value <= 0f)

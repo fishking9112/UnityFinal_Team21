@@ -88,6 +88,14 @@ public enum IDQueenActiveSkill
     RANGE_SLOW,
     METEOR,
     ALL_HEAL,
+
+    SACRIFICE = 22001,
+    MANARECYCLE,
+    OVERWORK,
+    RECALL,
+    SKELETONLEGION,
+    DEATHSYMBOL,
+    CASTLEINVINCIBLE,
 }
 
 public enum IDQueenAbility
@@ -112,7 +120,7 @@ public enum IDBuff
     BURN,
     POISON,
     MOVE_SPEED_UP,
-    ATTACK_SPEED_UP,
+    DEATHSYMBOL,
 }
 
 public enum IDTrophy

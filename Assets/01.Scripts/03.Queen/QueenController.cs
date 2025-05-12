@@ -259,12 +259,12 @@ public class QueenController : MonoBehaviour
         {
             if (Vector3.Distance(worldMousePos, GameManager.Instance.castle.transform.position) > selectedQueenActiveSkill.info.range)
             {
-                // 범위 밖이면 스킬 사용 불가
+                Utils.Log("범위 밖 스킬 사용 불가");
                 return;
             }
         }
 
-        await selectedQueenActiveSkill.TryUseSkill();
+        await selectedQueenActiveSkill.TryUseSkill(selectedQueenActiveSkill.info.cost);
     }
 
     // 자동 게이지 회복

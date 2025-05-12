@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class EvolutionNode : MonoBehaviour
@@ -14,12 +15,10 @@ public class EvolutionNode : MonoBehaviour
     public IDMonster monsterInfoId;
     public MonsterInfo monsterInfo;
 
-    private EvolutionTree evolutionTree;
+    public UnityAction<EvolutionNode> onClickNode;
 
-    public void Init(EvolutionTree tree)
+    public void Init()
     {
-        evolutionTree = tree;
-
         if(DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoId,out var info))
         {
             monsterInfo = info;
@@ -30,17 +29,11 @@ public class EvolutionNode : MonoBehaviour
             Utils.Log($"{monsterInfoId}의 info는 존재하지 않습니다.");
         }
 
-        button.onClick.AddListener(OnClickNode);
-        UpdateButtonState();
-    }
-
-    public void OnClickNode()
-    {
-        evolutionTree.OnClickNodeButton(this);
+        button.onClick.AddListener(() => onClickNode?.Invoke(this));
     }
 
     // 현재 버튼(노드)들의 상태 업데이트
-    public void UpdateButtonState()
+    public void UpdateButtonState(bool isActive)
     {
         if (nodeLock)
         {
@@ -49,8 +42,6 @@ public class EvolutionNode : MonoBehaviour
             nameText.text = "잠김";
             return;
         }
-
-        bool isActive = evolutionTree.ActiveCheck(this);
 
         // 해금 된 노드
         if (isUnlock)

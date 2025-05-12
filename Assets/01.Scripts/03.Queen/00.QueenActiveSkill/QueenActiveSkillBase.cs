@@ -5,12 +5,15 @@ public abstract class QueenActiveSkillBase : MonoBehaviour
 {
     public QueenActiveSkillInfo info;
     protected QueenController controller;
+    protected QueenCondition condition;
 
-    public bool onCoolTime = false;
+    public bool onCoolTime;
 
     public virtual void Init()
     {
         controller = GameManager.Instance.queen.controller;
+        condition = GameManager.Instance.queen.condition;
+        onCoolTime = false;
     }
 
     public async UniTask ApplyCooltimeSkill()
@@ -21,14 +24,14 @@ public abstract class QueenActiveSkillBase : MonoBehaviour
         onCoolTime = false;
     }
 
-    public async UniTask TryUseSkill()
+    public async UniTask TryUseSkill(float value)
     {
         if (onCoolTime)
         {
             return;
         }
 
-        GameManager.Instance.queen.condition.AdjustCurQueenActiveSkillGauge(-controller.selectedQueenActiveSkill.info.cost);
+        condition.AdjustCurQueenActiveSkillGauge(-value);
         UseSkill();
         await ApplyCooltimeSkill();
         return;

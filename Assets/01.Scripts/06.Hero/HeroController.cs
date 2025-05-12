@@ -92,9 +92,7 @@ public class HeroController : BaseController
     private async UniTaskVoid DeadCheck()
     {
         await UniTask.WaitUntil(() => healthHandler.IsDie(), cancellationToken: this.GetCancellationTokenOnDestroy());
-        stateMachine.ChangeState(stateMachine.deadState);
         Die();
-        ResetObj();
     }
 
     public void SetMove(bool isMove)
@@ -117,9 +115,12 @@ public class HeroController : BaseController
         HeroPoolManager.Instance.ReturnObject(this);
     }
 
-    protected override void Die()
+    public override void Die()
     {
         base.Die();
+
+        stateMachine.ChangeState(stateMachine.deadState);
+        ResetObj();
     }
 
     public void ResetObj()

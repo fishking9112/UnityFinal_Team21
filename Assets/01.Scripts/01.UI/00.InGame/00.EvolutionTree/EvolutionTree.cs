@@ -8,7 +8,8 @@ public class EvolutionTree : MonoBehaviour
 {
     private EvolutionTreeUI evolutionTreeUI;
 
-    private QueenCondition condition;
+    private QueenCondition queenCondition;
+    private QueenController queenController;
 
     [SerializeField] private List<EvolutionNode> evolutionNodeList;
     private Dictionary<int, EvolutionNode> evolutionNodeDic;
@@ -26,21 +27,21 @@ public class EvolutionTree : MonoBehaviour
     [SerializeField] private List<EvolutionSlot> slotList;
 
     public EvolutionNode selectedNode;
-    private QueenController queenController;
 
     private void Awake()
     {
         evolutionTreeUI = GetComponentInParent<EvolutionTreeUI>();
-        condition = GameManager.Instance.queen.condition;
+        queenCondition = GameManager.Instance.queen.condition;
         queenController = GameManager.Instance.queen.controller;
         evolutionNodeDic = new Dictionary<int, EvolutionNode>();
 
-        condition.EvolutionPoint.AddAction(UpdateEvolutionPointText);
-        UpdateEvolutionPointText(condition.EvolutionPoint.Value);
+        queenCondition.EvolutionPoint.AddAction(UpdateEvolutionPointText);
+        UpdateEvolutionPointText(queenCondition.EvolutionPoint.Value);
 
         foreach (EvolutionNode node in evolutionNodeList)
         {
-            node.Init(this);
+            node.Init();
+            node.onClickNode = OnClickNodeButton;
 
             if (!evolutionNodeDic.ContainsKey((int)node.monsterInfoId))
             {
@@ -60,6 +61,7 @@ public class EvolutionTree : MonoBehaviour
         selectedNode = evolutionNodeList[0];
         evolutionButton.gameObject.SetActive(false);
         UpdateDescriptionWindow(evolutionNodeList[0]);
+        UpdateAllNode();
     }
 
     private void UpdateEvolutionPointText(float evolutionPoint)
@@ -77,14 +79,14 @@ public class EvolutionTree : MonoBehaviour
             return;
         }
 
-        if (condition.EvolutionPoint.Value <= 0)
+        if (queenCondition.EvolutionPoint.Value <= 0)
         {
             // 진화 포인트가 부족하다는 팝업창 있으면 좋을 것 같음
             return;
         }
 
         selectedNode.isUnlock = true;
-        condition.AdjustEvolutionPoint(-1f);
+        queenCondition.AdjustEvolutionPoint(-1f);
 
         // 한쪽 노드를 진화시키면 다른 쪽 노드 잠금
         int parentNodeId = selectedNode.monsterInfo.preNode;
@@ -107,7 +109,8 @@ public class EvolutionTree : MonoBehaviour
     {
         foreach (EvolutionNode node in evolutionNodeList)
         {
-            node.UpdateButtonState();
+            bool isActive = ActiveCheck(node);
+            node.UpdateButtonState(isActive);
         }
     }
 
@@ -116,7 +119,6 @@ public class EvolutionTree : MonoBehaviour
     {
         selectedNode = node;
         UpdateDescriptionWindow(node);
-
         evolutionTreeUI?.SetEvolutionButtonState(!selectedNode.isUnlock);
     }
 

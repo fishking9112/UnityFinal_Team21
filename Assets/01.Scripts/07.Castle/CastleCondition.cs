@@ -6,8 +6,9 @@ public class CastleCondition : MonoBehaviour
     public float initCastleHealthRecoverySpeed = 10f;
     public float initCurCastleHealth = 100f;
     public float initMaxCastleHealth = 100f;
-    public float CastleHealthRecoverySpeed { get; private set; }
 
+    public float CastleHealthRecoverySpeed { get; private set; }
+    public bool IsInvincible { get; private set; } = false;
     public ReactiveProperty<float> CurCastleHealth { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxCastleHealth { get; private set; } = new ReactiveProperty<float>();
 
@@ -16,6 +17,11 @@ public class CastleCondition : MonoBehaviour
         CurCastleHealth.Value = initCurCastleHealth;
         MaxCastleHealth.Value = initMaxCastleHealth;
         CastleHealthRecoverySpeed = initCastleHealthRecoverySpeed;
+    }
+
+    public void SetInvincible(bool value)
+    {
+        IsInvincible = value;
     }
 
     /// <summary>

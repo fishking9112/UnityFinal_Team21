@@ -78,7 +78,7 @@ public abstract class BaseController : MonoBehaviour
     /// <summary>
     /// 사망함
     /// </summary>
-    protected virtual void Die()
+    public virtual void Die()
     {
         // Destroy(this.gameObject);
         buffController.ClearAllBuff();

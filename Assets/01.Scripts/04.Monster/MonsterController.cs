@@ -180,6 +180,7 @@ public class MonsterController : BaseController, IPoolable
     /// <param name="duration">지속 시간</param>
     public void TakeKnockback(Transform other, float power, float duration = 0.5f)
     {
+        if (power == 0f) return;
         knockbackDuration = duration;
         knockbackPower = power;
         knockback = -(other.position - transform.position).normalized * power;
@@ -221,7 +222,7 @@ public class MonsterController : BaseController, IPoolable
     /// <summary>
     /// 사망했을 경우
     /// </summary>
-    protected override void Die()
+    public override void Die()
     {
         base.Die();
 
