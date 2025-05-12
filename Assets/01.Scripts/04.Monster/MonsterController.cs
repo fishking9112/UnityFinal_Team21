@@ -15,17 +15,17 @@ public class MonsterController : BaseController, IPoolable
     #region IPoolable
     private Action<Component> returnToPool;
 
-    public void Init(Action<Component> returnAction)
+    public virtual void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
     }
 
-    public void OnSpawn() // GetObject 이후
+    public virtual void OnSpawn() // GetObject 이후
     {
 
     }
 
-    public void OnDespawn() // 실행하면 자동으로 반환
+    public virtual void OnDespawn() // 실행하면 자동으로 반환
     {
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();

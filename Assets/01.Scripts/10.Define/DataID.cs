@@ -96,6 +96,7 @@ public enum IDQueenActiveSkill
     SKELETONLEGION,
     DEATHSYMBOL,
     CASTLEINVINCIBLE,
+    ZOMBIESUMMON,
 }
 
 public enum IDQueenAbility
