@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 7913117997887721308}
   - component: {fileID: 6679041691584490331}
   - component: {fileID: -2328670409925698637}
+  - component: {fileID: -603843674797800434}
   m_Layer: 0
   m_Name: AllSkill
   m_TagString: Untagged
@@ -524,9 +525,9 @@ MonoBehaviour:
       m_Bits: 128
     required_Level: 0
     buff_ID: 100005
-    buff_Level: 1
+    buff_Level: 2
     monster_ID: 0
-  onCoolTime: 1
+  onCoolTime: 0
 --- !u!114 &6679041691584490331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -540,22 +541,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info:
-    id: 0
-    name: 
-    description: 
+    id: 21018
+    name: "\uD53C\uC758 \uD568\uC131"
+    description: "\uC77C\uC815 \uBC94\uC704 \uACF5\uACA9\uB825 + \uACF5\uC18D + \uC774\uB3D9\uC18D\uB3C4
+      \uB300\uD3ED \uC0C1\uC2B9, hp \uAC10\uC18C"
     icon: 
-    type: 0
-    cost: 0
-    coolTime: 0
-    value: 0
-    range: 0
-    size: 0
+    type: 3
+    cost: 10
+    coolTime: 5
+    value: 0.5
+    range: -1
+    size: 3
     target:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 128
     required_Level: 0
-    buff_ID: 0
-    buff_Level: 0
+    buff_ID: 100007
+    buff_Level: 3
     monster_ID: 0
   onCoolTime: 0
 --- !u!114 &-2328670409925698637
@@ -568,6 +570,38 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aab2bae455b22f241b3a6015c74de9cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  info:
+    id: 21019
+    name: "\uAC70\uB300\uD654"
+    description: "\uC77C\uC815 \uBC94\uC704 hp \uB300\uD3ED \uC99D\uAC00, \uD06C\uAE30\uAC00
+      \uCEE4\uC9D0"
+    icon: 
+    type: 3
+    cost: 10
+    coolTime: 5
+    value: 0
+    range: -1
+    size: 3
+    target:
+      serializedVersion: 2
+      m_Bits: 128
+    required_Level: 0
+    buff_ID: 100014
+    buff_Level: 3
+    monster_ID: 0
+  onCoolTime: 1
+--- !u!114 &-603843674797800434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3449543277398582152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e7d1aab72948840a83ef1b989e4a6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   info:

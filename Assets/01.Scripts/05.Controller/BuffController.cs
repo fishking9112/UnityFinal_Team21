@@ -45,13 +45,11 @@ public class BuffController : MonoBehaviour
         {
             if (buffDic.TryGetValue(key, out var buffList))
             {
+                var strategy = BuffManager.Instance.GetBuffStrategy(key);
+
                 foreach (var buff in buffList)
                 {
-                    if (buff != null && buff.particle != null)
-                    {
-                        buff.particle.OnDespawn();
-                        buff.particle = null;
-                    }
+                    strategy?.Remove(GetComponent<BaseController>(), buff);
                 }
             }
             RemoveBuff(key);

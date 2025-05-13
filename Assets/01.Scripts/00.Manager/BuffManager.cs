@@ -38,6 +38,7 @@ public class BuffManager : MonoSingleton<BuffManager>
         InitBuffStrategyDic();
     }
 
+    #region InitBuffStraegyDic
     private void InitBuffStrategyDic()
     {
         buffStrategyDic[(int)IDBuff.ATTACK_DAMAGE_UP] = new AttackDamageBuff();
@@ -49,10 +50,12 @@ public class BuffManager : MonoSingleton<BuffManager>
         buffStrategyDic[(int)IDBuff.ATTACK_DAMAGE_AND_ATTACK_SPEED_UP] = new AttackDamageAndAttackSpeedBuff();
         buffStrategyDic[(int)IDBuff.ATTACK_DAMAGE_AND_MOVE_SPEED_AND_ATTACK_SPEED_UP] = new AttackDamageAndMoveSpeedAndAttackSpeedBuff();
         buffStrategyDic[(int)IDBuff.GIANT_FORM] = new GiantFormBuff();
+        buffStrategyDic[(int)IDBuff.DECAY] = new DecayBuff();
     }
+    #endregion
 
     // 버프 아이디로 버프 가져오기
-    private IBuffStrategy GetBuffStrategy(int id)
+    public IBuffStrategy GetBuffStrategy(int id)
     {
         return buffStrategyDic.TryGetValue(id, out var strategy) ? strategy : null;
     }

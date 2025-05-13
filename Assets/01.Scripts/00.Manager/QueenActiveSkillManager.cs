@@ -29,7 +29,8 @@ public class QueenActiveSkillManager : MonoBehaviour
             //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.SUMMON_MILITIA]);
             //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.WARCRY]);
             //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.BLOOD_ROAR]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.GIANT_FORM]);
+            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.GIANT_FORM]);
+            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.DECAY]);
         }, 3);
     }
 
