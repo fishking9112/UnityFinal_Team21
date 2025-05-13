@@ -120,7 +120,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3071206673355799227
 RectTransform:
   m_ObjectHideFlags: 0
@@ -262,8 +262,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  abilityList: []
-  allAbility: []
+  abilityList:
+  - {fileID: -5830836639515715495}
+  allAbility:
+  - {fileID: 1921074925856681525}
+  - {fileID: 388765593493363859}
+  - {fileID: -8899919222466052609}
+  - {fileID: -6065295390783855606}
+  - {fileID: -1041513511482003167}
+  - {fileID: 4796377309810063318}
+  - {fileID: -5830836639515715495}
 --- !u!114 &3862953293406409376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,17 +297,17 @@ MonoBehaviour:
   hero: {fileID: 1140399341762152338}
   pivot: {fileID: 0}
   statusInfo:
-    id: 0
-    name: 
-    description: 
-    health: 0
-    moveSpeed: 0
-    reward: 0
-    startLevel: 0
-    weapon: 
-    weaponLevel: 
-    detectedRange: 0
-    custom: 0
+    id: 201
+    name: "\uC6A9\uC0AC1"
+    description: "\uD14C\uC2A4\uD2B8\uC6A9 \uC6A9\uC0AC \uC785\uB2C8\uB2E4."
+    health: 200
+    moveSpeed: 1
+    reward: 100
+    startLevel: 1
+    weapon: 6b000000
+    weaponLevel: 01000000
+    detectedRange: 3
+    custom: 1
 --- !u!114 &-1669867321582281066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,10 +327,10 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3469463355210438680}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -757,9 +765,9 @@ MonoBehaviour:
   pivot: {x: 0, y: 0, z: 0}
   damage: 20
   damage_LevelUp: 5
-  delay: 5
+  delay: 2
   delay_LevelUp: 0
-  pierce: 0
+  pierce: -1
   pierce_LevelUp: 0
   size: {x: 1, y: 1, z: 1}
   size_LevelUp: {x: 0, y: 0, z: 0}
@@ -770,12 +778,12 @@ MonoBehaviour:
   rotateSpeed_LevelUp: 0
   duration: 0
   duration_LevelUp: 0
-  count: 0
+  count: 1
   count_LevelUp: 0
   countDelay: 0
   countDelay_LevelUp: 0
-  knockback: 0
-  curLevel: 0
+  knockback: 1
+  curLevel: 1
 --- !u!114 &7958608897836801452
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -52,11 +52,12 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
     public HeroController GetBossObject(Vector2 pos)
     {
         int rand=UnityEngine.Random.Range(0,bossList.Count);
-        GameObject hPrefab = Instantiate(bossList.ElementAt(rand), Vector3.zero, Quaternion.identity, bossObj.transform);
-        bossObj.InitHero();
-        bossObj.transform.position = pos;
+        HeroController hObj = Instantiate(bossObj, transform);
+        GameObject hPrefab = Instantiate(bossList.ElementAt(rand), Vector3.zero, Quaternion.identity, hObj.transform);
+        hObj.InitHero();
+        hObj.transform.position = pos;
 
-        return bossObj;
+        return hObj;
     }
 
     public HeroController GetObject(Vector2 pos)

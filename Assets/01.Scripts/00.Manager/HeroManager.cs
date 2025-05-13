@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class HeroManager : MonoSingleton<HeroManager>
@@ -92,8 +91,21 @@ public class HeroManager : MonoSingleton<HeroManager>
         return heroList;
     }
 
-    public void SummonBoss()
+    private void Update()
     {
+        if(Input.GetKeyUp(KeyCode.Space))
+        {
+            SummonBoss(1);
+        }
+    }
+    public void SummonBoss(int type)
+    {
+        int cnt = DataManager.Instance.heroStatusDic.Where(x=>x.Value.custom==type).First().Key;
+
+        statusInfo = DataManager.Instance.heroStatusDic[cnt];
+
+        HeroController boss = HeroPoolManager.Instance.GetBossObject(RandomSummonPos(90, 90));
+        boss?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
 
     }
 
