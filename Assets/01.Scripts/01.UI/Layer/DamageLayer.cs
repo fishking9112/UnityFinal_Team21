@@ -15,11 +15,11 @@ public class DamageLayer : MonoBehaviour
         }
     }
 
-    public void ShowDamage(float damage, Vector3 position)
+    public void ShowDamage(float damage, Vector3 position, float fontSize = 0.3f)
     {
         DamageUI ui = GetFromPool();
         ui.transform.position = position;
-        ui.Init(damage, this); // DamageLayer를 넘겨줌
+        ui.Init(damage, this, fontSize); // DamageLayer를 넘겨줌
         ui.gameObject.SetActive(true);
     }
 
