@@ -129,6 +129,7 @@ public enum IDBuff
     POISON,
     DEATHSYMBOL,
     DECAY,
+    MILITIA,
 }
 
 public enum IDTrophy

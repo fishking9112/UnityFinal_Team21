@@ -45,6 +45,7 @@ public class BuffManager : MonoSingleton<BuffManager>
         buffStrategyDic[(int)IDBuff.POISON] = new PoisonBuff();
         buffStrategyDic[(int)IDBuff.SLOW] = new SlowBuff();
         buffStrategyDic[(int)IDBuff.DEATHSYMBOL] = new DeathSymbolBuff();
+        buffStrategyDic[(int)IDBuff.MILITIA] = new MilitiaBuff();
     }
 
     // 버프 아이디로 버프 가져오기

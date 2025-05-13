@@ -25,7 +25,8 @@ public class QueenActiveSkillManager : MonoBehaviour
             //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(3, queenActiveSkillDic[(int)IDQueenActiveSkill.RECALL]);
             //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(4, queenActiveSkillDic[(int)IDQueenActiveSkill.SKELETONLEGION]);
             // GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.DEATHSYMBOL]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.CASTLEINVINCIBLE]);
+            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.CASTLE_INVINCIBLE]);
+            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.SUMMON_MILITIA]);
         }, 3);
     }
 
@@ -37,7 +38,6 @@ public class QueenActiveSkillManager : MonoBehaviour
 
         foreach (QueenActiveSkillBase skill in skills)
         {
-            print(skill.info.name);
             skill.Init();
 
             if (!queenActiveSkillDic.TryGetValue(skill.info.id, out var exist))

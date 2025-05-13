@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 
 
@@ -8,7 +9,7 @@ public abstract class BaseController : MonoBehaviour
     public LayerMask obstacleLayer; // 감지할 레이어 (장애물)
 
     [Header("핸들러")]
-    [SerializeField] protected HealthHandler healthHandler;
+    [SerializeField] public HealthHandler healthHandler;
     [SerializeField] public StatHandler statHandler;
 
     public BuffController buffController;

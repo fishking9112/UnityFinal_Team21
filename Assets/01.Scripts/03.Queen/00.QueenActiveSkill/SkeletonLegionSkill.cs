@@ -18,9 +18,9 @@ public class SkeletonLegionSkill : QueenActiveSkillBase
             Vector2 randomOffset = Random.insideUnitCircle * info.size;
             Vector3 spawnPos = mousePos + (Vector3)randomOffset;
 
-            MonsterInfo summonMonster = MonsterManager.Instance.monsterInfoList[(int)IDMonster.SKELETON_NORMAL];
-            var skeleton = ObjectPoolManager.Instance.GetObject<MonsterController>(summonMonster.outfit, spawnPos);
-            skeleton.StatInit(summonMonster, MonsterManager.Instance.isHealthUI);
+            MonsterInfo monsterInfo = MonsterManager.Instance.monsterInfoList[info.monster_ID];
+            var summonMonster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfo.outfit, spawnPos);
+            summonMonster.StatInit(monsterInfo, MonsterManager.Instance.isHealthUI);
         }
     }
 }

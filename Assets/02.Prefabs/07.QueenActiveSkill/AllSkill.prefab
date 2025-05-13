@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: -5600686777815038718}
   - component: {fileID: 6708796564487409881}
   - component: {fileID: -6757831363072985879}
+  - component: {fileID: -8299147813125677901}
   m_Layer: 0
   m_Name: AllSkill
   m_TagString: Untagged
@@ -289,7 +290,7 @@ MonoBehaviour:
     coolTime: 10
     value: 50
     range: -1
-    size: 0
+    size: -1
     target:
       serializedVersion: 2
       m_Bits: 1
@@ -321,7 +322,7 @@ MonoBehaviour:
     coolTime: 30
     value: 100
     range: -1
-    size: 0
+    size: -1
     target:
       serializedVersion: 2
       m_Bits: 1
@@ -384,8 +385,8 @@ MonoBehaviour:
     cost: 70
     coolTime: 30
     value: 10
-    range: 0
-    size: 0
+    range: -1
+    size: -1
     target:
       serializedVersion: 2
       m_Bits: 128
@@ -417,7 +418,7 @@ MonoBehaviour:
     coolTime: 10
     value: 1
     range: -1
-    size: 0.1
+    size: 0.5
     target:
       serializedVersion: 2
       m_Bits: 1
@@ -449,7 +450,7 @@ MonoBehaviour:
     coolTime: 60
     value: 999
     range: -1
-    size: 0.1
+    size: 0.5
     target:
       serializedVersion: 2
       m_Bits: 64
@@ -458,3 +459,36 @@ MonoBehaviour:
     buff_Level: 0
     monster_ID: 0
   onCoolTime: 0
+--- !u!114 &-8299147813125677901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3449543277398582152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d6ea5c35bd1bbb4b8b9732b565efe43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  info:
+    id: 21012
+    name: "\uBBFC\uBCD1\uB300"
+    description: "\uC131\uBCBD \uC8FC\uBCC0\uC5D0 30\uCD08\uAC04 \uC720\uC9C0\uB418\uB294
+      \uBAAC\uC2A4\uD130\uB97C \uC18C\uD658\uD569\uB2C8\uB2E4"
+    icon: 
+    type: 2
+    cost: 30
+    coolTime: 60
+    value: 10
+    range: -1
+    size: -1
+    target:
+      serializedVersion: 2
+      m_Bits: 1
+    required_Level: 0
+    buff_ID: 0
+    buff_Level: 0
+    monster_ID: 1101
+  onCoolTime: 1
+  summonRadius: 10
