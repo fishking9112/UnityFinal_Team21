@@ -6,7 +6,7 @@ public class DeathSybolSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        //info 초기화
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.DEATH_SYMBOL];
     }
 
     public override async void UseSkill()

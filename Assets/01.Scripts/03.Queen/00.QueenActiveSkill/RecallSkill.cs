@@ -8,7 +8,7 @@ public class RecallSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        //info 초기화
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.RECALL];
     }
 
     public override async void UseSkill()

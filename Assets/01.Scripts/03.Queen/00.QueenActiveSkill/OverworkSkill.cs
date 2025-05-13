@@ -6,7 +6,7 @@ public class OverworkSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        //info 초기화
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.OVERWORK];
     }
     public override void UseSkill()
     {

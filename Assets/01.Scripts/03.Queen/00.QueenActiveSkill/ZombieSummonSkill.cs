@@ -6,7 +6,7 @@ public class ZombieSummonSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        //info 초기화
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.SUMMON_ZOMBIE];
     }
 
     public override void UseSkill()

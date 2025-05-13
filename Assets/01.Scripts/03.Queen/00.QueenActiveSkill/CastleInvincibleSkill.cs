@@ -8,7 +8,7 @@ public class CastleInvincibleSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        //info 초기화
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.CASTLE_INVINCIBLE];
     }
 
     public override void UseSkill()

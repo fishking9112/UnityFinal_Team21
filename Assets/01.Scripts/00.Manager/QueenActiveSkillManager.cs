@@ -37,6 +37,7 @@ public class QueenActiveSkillManager : MonoBehaviour
 
         foreach (QueenActiveSkillBase skill in skills)
         {
+            print(skill.info.name);
             skill.Init();
 
             if (!queenActiveSkillDic.TryGetValue(skill.info.id, out var exist))
