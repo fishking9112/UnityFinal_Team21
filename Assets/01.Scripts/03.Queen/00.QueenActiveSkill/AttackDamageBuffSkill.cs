@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class MonsterAttackBuffSkill : QueenActiveSkillBase
+public class AttackDamageBuffSkill : QueenActiveSkillBase
 {
     public override void Init()
     {

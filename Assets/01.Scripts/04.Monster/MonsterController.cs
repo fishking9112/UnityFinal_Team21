@@ -15,18 +15,19 @@ public class MonsterController : BaseController, IPoolable
     #region IPoolable
     private Action<Component> returnToPool;
 
-    public void Init(Action<Component> returnAction)
+    public virtual void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
     }
 
-    public void OnSpawn() // GetObject 이후
+    public virtual void OnSpawn() // GetObject 이후
     {
-
+        originScale = transform.localScale;
     }
 
-    public void OnDespawn() // 실행하면 자동으로 반환
+    public virtual void OnDespawn() // 실행하면 자동으로 반환
     {
+        transform.localScale = originScale;
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
         _takeDamagedRendererCts = null;
@@ -51,12 +52,14 @@ public class MonsterController : BaseController, IPoolable
     [NonSerialized] public float knockbackPower = 0f;
     [NonSerialized] public float knockbackDuration = 0f;
 
-    [Header("넉백 관련 데이터")]
+    [Header("빨간색 점등 관련 데이터")]
     private CancellationTokenSource _takeDamagedRendererCts;
     [SerializeField] private float takeDamagedRendererTimer = 0.5f;
 
     private SortingGroup group;
     private int sortingOffset = 0;
+
+    public Vector3 originScale;
 
     private void Update()
     {
@@ -168,7 +171,9 @@ public class MonsterController : BaseController, IPoolable
     public override void TakeDamaged(float damage)
     {
         base.TakeDamaged(damage);
-        StaticUIManager.Instance.damageLayer.ShowDamage(damage, transform.position + Vector3.up * 0.5f);
+        Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f));
+        Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
+        StaticUIManager.Instance.damageLayer.ShowDamage(damage, worldPos + Vector3.up * 0.5f);
         TakeDamagedRenderer();
     }
 

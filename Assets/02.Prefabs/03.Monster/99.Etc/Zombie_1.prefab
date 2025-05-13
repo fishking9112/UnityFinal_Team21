@@ -429,8 +429,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8093199388650962264}
   - component: {fileID: 8630020140936709011}
-  - component: {fileID: 7380879640195716517}
   - component: {fileID: -1919209602402898860}
+  - component: {fileID: -2204340076656446049}
   - component: {fileID: 3309829388262035602}
   - component: {fileID: 5606942373168075264}
   - component: {fileID: 6417832614657969999}
@@ -471,28 +471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953e820a5bf2a9c4ea977cc66af5e380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7380879640195716517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 968675749530671982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ceb062c57fd16a4c8e1df775ac8947e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  healthHandler: {fileID: 3309829388262035602}
-  statHandler: {fileID: 8630020140936709011}
-  buffController: {fileID: -1919209602402898860}
-  takeDamagedRendererTimer: 0.5
 --- !u!114 &-1919209602402898860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -505,6 +483,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64c80c1b910f8fc4e9280ff445d19595, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2204340076656446049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 968675749530671982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61db0839a0a4e7c468e5d35327edcb63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  healthHandler: {fileID: 3309829388262035602}
+  statHandler: {fileID: 8630020140936709011}
+  buffController: {fileID: -1919209602402898860}
+  takeDamagedRendererTimer: 0.5
+  lifeTime: 5
+  explosionSize: 3
+  explosionDamage: 50
 --- !u!114 &3309829388262035602
 MonoBehaviour:
   m_ObjectHideFlags: 0

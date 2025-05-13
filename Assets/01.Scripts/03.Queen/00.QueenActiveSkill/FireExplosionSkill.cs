@@ -2,13 +2,13 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeteorSkill : QueenActiveSkillBase
+public class FireExplosionSkill : QueenActiveSkillBase
 {
     public override void Init()
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.METEOR];
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.FIRE_EXPLOSION];
     }
 
 
