@@ -6,7 +6,7 @@ public class SkeletonLegionSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        //info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.SUMMON];
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.SKELETON_LEGION];
     }
 
     public override void UseSkill()
@@ -18,8 +18,9 @@ public class SkeletonLegionSkill : QueenActiveSkillBase
             Vector2 randomOffset = Random.insideUnitCircle * info.size;
             Vector3 spawnPos = mousePos + (Vector3)randomOffset;
 
-            var skeleton = ObjectPoolManager.Instance.GetObject<MonsterController>("Skeleton_Normal", spawnPos);
-            skeleton.StatInit(MonsterManager.Instance.monsterInfoList[(int)IDMonster.SKELETON_NORMAL], MonsterManager.Instance.isHealthUI);
+            MonsterInfo summonMonster = MonsterManager.Instance.monsterInfoList[(int)IDMonster.SKELETON_NORMAL];
+            var skeleton = ObjectPoolManager.Instance.GetObject<MonsterController>(summonMonster.outfit, spawnPos);
+            skeleton.StatInit(summonMonster, MonsterManager.Instance.isHealthUI);
         }
     }
 }
