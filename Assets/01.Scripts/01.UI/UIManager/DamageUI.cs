@@ -12,10 +12,11 @@ public class DamageUI : MonoBehaviour
     private float elapsed = 0f;
     private DamageLayer owner;
 
-    public void Init(float damage, DamageLayer owner)
+    public void Init(float damage, DamageLayer owner, float fontSize)
     {
         this.owner = owner;
         text.text = damage.ToString();
+        text.fontSize = fontSize;
         transform.localScale = Vector3.zero;
         elapsed = 0f;
     }
