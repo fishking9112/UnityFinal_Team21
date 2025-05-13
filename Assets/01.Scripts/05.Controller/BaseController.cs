@@ -13,6 +13,7 @@ public abstract class BaseController : MonoBehaviour
     [SerializeField] public StatHandler statHandler;
 
     public BuffController buffController;
+    public float addDamage = 0f;
 
     protected virtual void Start()
     {
@@ -59,7 +60,7 @@ public abstract class BaseController : MonoBehaviour
     /// <param name="damage">공격 들어온 데미지 수치</param>
     public virtual void TakeDamaged(float damage)
     {
-        float finalDamage = damage;//Mathf.Max(0, damage - statData.defence);
+        float finalDamage = damage + addDamage;//Mathf.Max(0, damage - statData.defence);
         healthHandler.Damage(finalDamage);
 
         if (healthHandler.IsDie())

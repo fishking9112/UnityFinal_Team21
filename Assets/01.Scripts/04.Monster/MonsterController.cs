@@ -22,11 +22,12 @@ public class MonsterController : BaseController, IPoolable
 
     public virtual void OnSpawn() // GetObject 이후
     {
-
+        originScale = transform.localScale;
     }
 
     public virtual void OnDespawn() // 실행하면 자동으로 반환
     {
+        transform.localScale = originScale;
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
         _takeDamagedRendererCts = null;
@@ -57,6 +58,8 @@ public class MonsterController : BaseController, IPoolable
 
     private SortingGroup group;
     private int sortingOffset = 0;
+
+    public Vector3 originScale;
 
     private void Update()
     {

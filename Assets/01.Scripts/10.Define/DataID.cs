@@ -130,6 +130,7 @@ public enum IDBuff
     DEATHSYMBOL,
     DECAY,
     MILITIA,
+    GIANT_FORM,
 }
 
 public enum IDTrophy

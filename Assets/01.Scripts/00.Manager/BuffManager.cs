@@ -46,6 +46,9 @@ public class BuffManager : MonoSingleton<BuffManager>
         buffStrategyDic[(int)IDBuff.SLOW] = new SlowBuff();
         buffStrategyDic[(int)IDBuff.DEATHSYMBOL] = new DeathSymbolBuff();
         buffStrategyDic[(int)IDBuff.MILITIA] = new MilitiaBuff();
+        buffStrategyDic[(int)IDBuff.ATTACK_DAMAGE_AND_ATTACK_SPEED_UP] = new AttackDamageAndAttackSpeedBuff();
+        buffStrategyDic[(int)IDBuff.ATTACK_DAMAGE_AND_MOVE_SPEED_AND_ATTACK_SPEED_UP] = new AttackDamageAndMoveSpeedAndAttackSpeedBuff();
+        buffStrategyDic[(int)IDBuff.GIANT_FORM] = new GiantFormBuff();
     }
 
     // 버프 아이디로 버프 가져오기
@@ -119,7 +122,7 @@ public class BuffManager : MonoSingleton<BuffManager>
                 continue;
             }
 
-            buffStrategy?.Remove(target, buff, info);
+            buffStrategy?.Remove(target, buff);
         }
         target.buffController.RemoveBuff(info.id);
     }
