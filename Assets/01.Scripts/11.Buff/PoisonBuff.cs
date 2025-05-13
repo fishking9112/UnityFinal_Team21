@@ -8,7 +8,7 @@ public class PoisonBuff : BaseBuffStrategy, IBuffStrategy
         _ = TakeTickDamaged(target, info, buff.token, buff.level, amount);
     }
 
-    public void Remove(BaseController target, Buff buff, BuffInfo info)
+    public void Remove(BaseController target, Buff buff)
     {
         RemoveParticle(buff);
     }

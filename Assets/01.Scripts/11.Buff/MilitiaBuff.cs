@@ -8,7 +8,7 @@ public class MilitiaBuff : BaseBuffStrategy, IBuffStrategy
         _ = Militia(target, info.durationTime);
     }
 
-    public void Remove(BaseController target, Buff buff, BuffInfo info)
+    public void Remove(BaseController target, Buff buff)
     {
 
     }

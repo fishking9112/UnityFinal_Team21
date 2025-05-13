@@ -8,7 +8,7 @@ public class DeathSymbolBuff : BaseBuffStrategy, IBuffStrategy
         _ = DeathSymbol(target, info.durationTime);
     }
 
-    public void Remove(BaseController target, Buff buff, BuffInfo info)
+    public void Remove(BaseController target, Buff buff)
     {
 
     }
