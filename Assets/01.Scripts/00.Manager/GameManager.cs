@@ -18,7 +18,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     // 게임 시작 시 시간에 관한 변수들
     public float gameLimitTime = 1800f;
-    private bool isTimeOver = true;
+    public bool isTimeOver = true;
     public ReactiveProperty<float> curTime = new ReactiveProperty<float>();
 
 
@@ -61,8 +61,6 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (curTime.Value <= 0f)
         {
-            curTime.Value = 0f;
-            isTimeOver = true;
             GameClear();
         }
     }
@@ -107,12 +105,16 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void GameClear()
     {
+        curTime.Value = 0f;
+        isTimeOver = true;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
     }
 
     public void GameOver()
     {
+        curTime.Value = 0f;
+        isTimeOver = true;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
     }

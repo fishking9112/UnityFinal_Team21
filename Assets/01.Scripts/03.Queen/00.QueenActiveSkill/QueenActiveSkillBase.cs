@@ -20,7 +20,7 @@ public abstract class QueenActiveSkillBase : MonoBehaviour
     {
         onCoolTime = true;
         controller.queenActiveSkillSlot.StartCoolTimeUI(controller.selectedSlotIndex, info.coolTime);
-        await UniTask.Delay((int)(info.coolTime * 1000));
+        await UniTask.Delay((int)(info.coolTime * 1000), false, PlayerLoopTiming.Update);
         onCoolTime = false;
     }
 

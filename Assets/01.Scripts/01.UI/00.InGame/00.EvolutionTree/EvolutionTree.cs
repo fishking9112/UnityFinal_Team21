@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,17 +15,6 @@ public class EvolutionTree : MonoBehaviour
     [SerializeField] private List<EvolutionNode> evolutionNodeList;
     private Dictionary<int, EvolutionNode> evolutionNodeDic;
 
-    [Header("UI")]
-    [SerializeField] private TextMeshProUGUI evolutionPointText;
-    [SerializeField] private Image descriptionImage;
-    [SerializeField] private Button evolutionButton;
-    [SerializeField] private TextMeshProUGUI description;
-    [SerializeField] private TextMeshProUGUI healthText;
-    [SerializeField] private TextMeshProUGUI attackText;
-    [SerializeField] private TextMeshProUGUI costText;
-
-    [Header("Slot")]
-    [SerializeField] private List<EvolutionSlot> slotList;
 
     public EvolutionNode selectedNode;
 
@@ -35,8 +25,8 @@ public class EvolutionTree : MonoBehaviour
         queenController = GameManager.Instance.queen.controller;
         evolutionNodeDic = new Dictionary<int, EvolutionNode>();
 
-        queenCondition.EvolutionPoint.AddAction(UpdateEvolutionPointText);
-        UpdateEvolutionPointText(queenCondition.EvolutionPoint.Value);
+        queenCondition.EvolutionPoint.AddAction(evolutionTreeUI.UpdateEvolutionPointText);
+        evolutionTreeUI.UpdateEvolutionPointText(queenCondition.EvolutionPoint.Value);
 
         foreach (EvolutionNode node in evolutionNodeList)
         {
@@ -52,21 +42,10 @@ public class EvolutionTree : MonoBehaviour
 
     private void OnEnable()
     {
-        for (int i = 0; i < slotList.Count; i++)
-        {
-            slotList[i].evolutionTree = this;
-            slotList[i].slotIndex = i;
-        }
-
+        evolutionTreeUI.SetSlotList(this);
         selectedNode = evolutionNodeList[0];
-        evolutionButton.gameObject.SetActive(false);
-        UpdateDescriptionWindow(evolutionNodeList[0]);
+        evolutionTreeUI.UpdateDescriptionWindow(evolutionNodeList[0]);
         UpdateAllNode();
-    }
-
-    private void UpdateEvolutionPointText(float evolutionPoint)
-    {
-        evolutionPointText.text = evolutionPoint.ToString();
     }
 
     // 진화 버튼을 누르면 진화 확정
@@ -100,7 +79,7 @@ public class EvolutionTree : MonoBehaviour
         }
 
         UpdateAllNode();
-        UpdateDescriptionWindow(selectedNode);
+        evolutionTreeUI.UpdateDescriptionWindow(selectedNode);
         evolutionTreeUI?.SetEvolutionButtonState(false);
     }
 
@@ -118,22 +97,10 @@ public class EvolutionTree : MonoBehaviour
     public void OnClickNodeButton(EvolutionNode node)
     {
         selectedNode = node;
-        UpdateDescriptionWindow(node);
+        evolutionTreeUI.UpdateDescriptionWindow(node);
         evolutionTreeUI?.SetEvolutionButtonState(!selectedNode.isUnlock);
     }
 
-    // 설명창 초기화
-    private void UpdateDescriptionWindow(EvolutionNode node)
-    {
-        MonsterInfo info = node.monsterInfo;
-
-        descriptionImage.enabled = true;
-        descriptionImage.sprite = node.image.sprite;
-        description.text = info.description;
-        healthText.text = $"기본 체력 : {info.health}";
-        attackText.text = $"기본 공격력 : {info.attack}";
-        costText.text = $"소환 비용 : {info.cost}";
-    }
 
     // 노드가 활성화 되어 있는 지 확인 (해금된 노드 or 해금할 수 있는 노드)
     public bool ActiveCheck(EvolutionNode node)
@@ -154,7 +121,7 @@ public class EvolutionTree : MonoBehaviour
     // 이전에 등록된 슬롯 데이터 제거 (몬스터 A를 1번칸에 등록한 상태로 2번칸에 등록하려할 때 1번칸의 데이터를 없애주는 역할)
     public void RemovePreSlotData(EvolutionNode node)
     {
-        foreach (var slot in slotList)
+        foreach (var slot in evolutionTreeUI.SlotList)
         {
             if (slot.slotMonsterData == node)
             {

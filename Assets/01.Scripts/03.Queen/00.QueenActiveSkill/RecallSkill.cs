@@ -35,7 +35,7 @@ public class RecallSkill : QueenActiveSkillBase
 
     private async UniTask RecallAfterDelay(MonsterController monster, float delaySeconds, Vector3 targetPosition)
     {
-        await UniTask.Delay((int)(delaySeconds * 1000), DelayType.DeltaTime, PlayerLoopTiming.Update);
+        await UniTask.Delay((int)(delaySeconds * 1000), false, PlayerLoopTiming.Update);
         monster.transform.position = targetPosition;
     }
 }

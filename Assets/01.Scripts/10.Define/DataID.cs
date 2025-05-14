@@ -98,8 +98,9 @@ public enum IDQueenActiveSkill
     BLOOD_ROAR,
     GIANT_FORM,
     DECAY,
-    GROURND_SLAM,
+    LASER,
     LIGHTNING_STORM,
+    GRAVITYBALL,
 }
 
 public enum IDQueenAbility
