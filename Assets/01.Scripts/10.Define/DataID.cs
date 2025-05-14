@@ -16,6 +16,8 @@ public enum IDHeroAbility
     AXE,
     CHAIN,
     TARGETTING,
+    BURST,
+    SPEAR,
 }
 
 public enum IDHeroStatus

@@ -100,9 +100,9 @@ public class HeroManager : MonoSingleton<HeroManager>
     }
     public void SummonBoss(int type)
     {
-        int cnt = DataManager.Instance.heroStatusDic.Where(x=>x.Value.custom==type).First().Key;
+        //int cnt = DataManager.Instance.heroStatusDic.Select(x=>x.Value.id==201);
 
-        statusInfo = DataManager.Instance.heroStatusDic[cnt];
+        statusInfo = DataManager.Instance.heroStatusDic[201];
 
         HeroController boss = HeroPoolManager.Instance.GetBossObject(RandomSummonPos(90, 90));
         boss?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);

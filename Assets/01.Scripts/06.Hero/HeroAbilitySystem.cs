@@ -6,7 +6,7 @@ using System.Threading;
 
 public abstract class HeroAbilitySystem : MonoBehaviour
 {
-    public HeroAbilityInfo heroAbilityInfo;
+    private HeroAbilityInfo heroAbilityInfo;
 
     protected GameObject target;
 
