@@ -46,7 +46,7 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
 
     }
 
-    public void SetBullet(float dmg,float spd,float knockback,GameObject t)
+    public void SetBullet(float dmg,float spd,float knockback,Vector2 t)
     {
         damage = dmg;
         speed = spd;
@@ -54,7 +54,7 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
         cancel=new CancellationTokenSource();
         isDispose = false;
 
-        targetPos = t.transform.position;
+        targetPos = t;
         
         Move(cancel.Token).Forget();
     }

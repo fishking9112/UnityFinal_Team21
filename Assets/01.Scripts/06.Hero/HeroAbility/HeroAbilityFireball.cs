@@ -37,11 +37,10 @@ public class HeroAbilityFireball : HeroAbilitySystem
             return;
         }
 
-        target = hero.FindNearestTarget();
-        ShootFireball().Forget();
+        ShootFireball();
     }
 
-    private async UniTask ShootFireball()
+    private void ShootFireball()
     {
         if (hero == null || token == null)
         {
@@ -56,12 +55,15 @@ public class HeroAbilityFireball : HeroAbilitySystem
         }
         else
         {
-            angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
-                target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
+            //angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
+            //    target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
+            angle = UnityEngine.Random.Range(0f, 360f);
         }
 
+        Vector2 nor= new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)).normalized;
+        Vector2 targetPos = (Vector2)hero.transform.position + nor * 3f;
         var bullet = objectPoolManager.GetObject<HeroTargetBullet>("HeroFireball", hero.transform.position);
-        bullet.SetBullet(damage, speed, knockback, target);
+        bullet.SetBullet(damage, speed, knockback, targetPos);
         bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
     }
