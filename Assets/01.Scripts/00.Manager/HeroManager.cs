@@ -20,7 +20,7 @@ public class HeroManager : MonoSingleton<HeroManager>
     private float time;
     private int heroCnt;
 
-    private List<GameObject> heroList;
+    private List<GameObject> heroList = new();
 
     private void Start()
     {
@@ -34,7 +34,7 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private async UniTask IncreaseCnt(CancellationToken tk)
     {
-        while(!tk.IsCancellationRequested)
+        while (!tk.IsCancellationRequested)
         {
             await UniTask.Delay(TimeSpan.FromMinutes(1), cancellationToken: this.GetCancellationTokenOnDestroy());
             heroCnt++;
@@ -78,13 +78,13 @@ public class HeroManager : MonoSingleton<HeroManager>
         hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
     }
 
-    public List<GameObject> SummonHeros(Vector2 v,int count)
+    public List<GameObject> SummonHeros(Vector2 v, int count)
     {
         heroList.Clear();
 
-        for(int i=0; i<count; i++)
+        for (int i = 0; i < count; i++)
         {
-            HeroController hero = HeroPoolManager.Instance.GetObject(GetRandomPos(v,3));
+            HeroController hero = HeroPoolManager.Instance.GetObject(GetRandomPos(v, 3));
             hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
             heroList.Add(hero.gameObject);
         }
@@ -93,19 +93,22 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private void Update()
     {
-        if(Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space))
         {
-            SummonBoss(1);
+            SummonBoss(RandomSummonPos(90, 90), 1);
         }
     }
-    public void SummonBoss(int type)
+    public GameObject SummonBoss(Vector2 v, int type)
     {
-        int cnt = DataManager.Instance.heroStatusDic.Where(x=>x.Value.custom==type).First().Key;
+        int cnt = DataManager.Instance.heroStatusDic.Where(x => x.Value.custom == type).First().Key;
 
         statusInfo = DataManager.Instance.heroStatusDic[cnt];
 
-        HeroController boss = HeroPoolManager.Instance.GetBossObject(RandomSummonPos(90, 90));
+        // HeroController boss = HeroPoolManager.Instance.GetBossObject(RandomSummonPos(90, 90));
+        HeroController boss = HeroPoolManager.Instance.GetBossObject(GetRandomPos(v, 3));
         boss?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
+
+        return boss.gameObject;
 
     }
 

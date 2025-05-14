@@ -59,7 +59,7 @@ public class MonsterAttackState : MonsterBaseState
         attackTimer += Time.deltaTime;
         if (attackTimer < (1f / stat.attackSpeed.Value)) return;
 
-        targetDistance = (target.position - navMeshAgent.transform.position).magnitude;
+        targetDistance = (target.position - navMeshAgent.transform.position).magnitude - (0.45f * target.transform.localScale.z);
 
         // 타겟과의 거리가 적절해졌다면
         if (stat.attackRange.Value >= targetDistance)
