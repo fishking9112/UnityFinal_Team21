@@ -100,25 +100,13 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
                 monster.TakeDamaged(damage);
 
             }
+            else if (GameManager.Instance.castle.gameObject == c.gameObject)
+            {
+                GameManager.Instance.castle.TakeDamaged(damage);
+            }
         }
         OnDespawn();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(isDispose) return;
-
-        if(collision.gameObject==target)
-        {
-            if (MonsterManager.Instance.monsters.TryGetValue(collision.gameObject, out var monster))
-            {
-                monster.TakeKnockback(this.transform, knockback);
-                monster.TakeDamaged(damage);
-
-                OnDespawn();
-            }
-
-        }
-    }
 
 }

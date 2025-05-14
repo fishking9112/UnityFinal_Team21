@@ -3,15 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class HeroManager : MonoSingleton<HeroManager>
 {
     public Dictionary<GameObject, HeroController> hero = new Dictionary<GameObject, HeroController>();
-
-    private List<int> idList = new List<int>();
-    private List<int> levelList = new List<int>();
 
     public Dictionary<int, HeroAbilitySystem> allAbilityDic = new Dictionary<int, HeroAbilitySystem>();
 
@@ -23,6 +19,8 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private float time;
     private int heroCnt;
+
+    private List<GameObject> heroList;
 
     private void Start()
     {
@@ -80,6 +78,46 @@ public class HeroManager : MonoSingleton<HeroManager>
         hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
     }
 
+    public List<GameObject> SummonHeros(Vector2 v,int count)
+    {
+        heroList.Clear();
+
+        for(int i=0; i<count; i++)
+        {
+            HeroController hero = HeroPoolManager.Instance.GetObject(GetRandomPos(v,3));
+            hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
+            heroList.Add(hero.gameObject);
+        }
+        return heroList;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyUp(KeyCode.Space))
+        {
+            SummonBoss(1);
+        }
+    }
+    public void SummonBoss(int type)
+    {
+        int cnt = DataManager.Instance.heroStatusDic.Where(x=>x.Value.custom==type).First().Key;
+
+        statusInfo = DataManager.Instance.heroStatusDic[cnt];
+
+        HeroController boss = HeroPoolManager.Instance.GetBossObject(RandomSummonPos(90, 90));
+        boss?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
+
+    }
+
+    private Vector2 GetRandomPos(Vector2 pos, float radius = 3f)
+    {
+        float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2);
+        float distance = UnityEngine.Random.Range(0f, radius);
+        float x = pos.x + Mathf.Cos(angle) * distance;
+        float y = pos.y + Mathf.Sin(angle) * distance;
+        return new Vector2(x, y);
+
+    }
 
     private Vector2 RandomSummonPos(float width, float height, float edge = 5f)
     {
