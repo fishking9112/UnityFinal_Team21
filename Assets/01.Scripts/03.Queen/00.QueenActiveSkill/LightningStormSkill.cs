@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class LightingStormSkill : QueenActiveSkillBase
 {
+    ParticleObject skillParticle;
+
     public override void Init()
     {
         base.Init();
@@ -17,7 +19,8 @@ public class LightingStormSkill : QueenActiveSkillBase
 
         LightningStormEffect(mousePos, info.size, tickCount).Forget();
 
-        var skillParticle = ParticleManager.Instance.SpawnParticle("LightningStorm_Range", mousePos, Vector3.one, Quaternion.identity);
+        skillParticle = ParticleManager.Instance.SpawnParticle("LightningStorm_Range", mousePos, Vector3.one, Quaternion.identity);
+        Invoke("ParticleDelayDespawn", 3f);
 
         for (int i = 0; i < tickCount; i++)
         {
@@ -33,11 +36,6 @@ public class LightingStormSkill : QueenActiveSkillBase
 
             await UniTask.Delay(300, false, PlayerLoopTiming.Update);
         }
-
-        if(skillParticle != null && skillParticle.gameObject.activeInHierarchy)
-        {
-            skillParticle.OnDespawn();
-        }
     }
 
     private async UniTaskVoid LightningStormEffect(Vector3 pos, float size, float count)
@@ -49,5 +47,10 @@ public class LightingStormSkill : QueenActiveSkillBase
 
             await UniTask.Delay(300, false, PlayerLoopTiming.Update);
         }
+    }
+
+    private void ParticleDelayDespawn()
+    {
+        skillParticle.OnDespawn();
     }
 }
