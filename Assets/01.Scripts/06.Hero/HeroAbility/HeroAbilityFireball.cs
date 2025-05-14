@@ -60,7 +60,7 @@ public class HeroAbilityFireball : HeroAbilitySystem
                 target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
         }
 
-        var bullet = objectPoolManager.GetObject<HeroTargetBullet>("Fireball", hero.transform.position);
+        var bullet = objectPoolManager.GetObject<HeroTargetBullet>("HeroFireball", hero.transform.position);
         bullet.SetBullet(damage, speed, knockback, target);
         bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
