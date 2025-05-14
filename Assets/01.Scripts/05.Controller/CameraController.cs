@@ -203,6 +203,11 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    // 미니맵을 클릭하면 해당 위치로 카메라가 이동
+    public void MiniMapCameraMove(Vector2 worldPosition)
+    {
+        cameraTransform.position = new Vector3(worldPosition.x, worldPosition.y, cameraTransform.position.z);
+    }
 
     // 카메라 제한 범위 기즈모를 그려줌
     private void OnDrawGizmosSelected()

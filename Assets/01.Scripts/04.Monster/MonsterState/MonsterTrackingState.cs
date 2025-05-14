@@ -113,7 +113,7 @@ public class MonsterTrackingState : MonsterBaseState
         navMeshAgent.speed = stat.moveSpeed.Value;
 
         // 타겟과의 거리
-        targetDistance = (target.position - navMeshAgent.transform.position).magnitude;
+        targetDistance = (target.position - navMeshAgent.transform.position).magnitude - (0.45f * target.transform.localScale.z);
 
         // 타겟과의 거리가 적절해졌다면
         if (stat.attackRange.Value >= targetDistance)

@@ -22,6 +22,7 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private QueenActiveSkillData queenActiveSkillData;
     [SerializeField] private BuffData buffData;
     [SerializeField] private TrophyData trophyData;
+    [SerializeField] private EventTableData eventData;
 
     // iconData는 id값으로 초기화 하지 않으므로, iconData 안에 Dictionary 존재
     public SpriteAtlas iconAtlas;
@@ -35,6 +36,7 @@ public class DataManager : MonoSingleton<DataManager>
     public Dictionary<int, QueenActiveSkillInfo> queenActiveSkillDic = new Dictionary<int, QueenActiveSkillInfo>();
     public Dictionary<int, BuffInfo> buffDic = new Dictionary<int, BuffInfo>();
     public Dictionary<int, TrophyInfo> trophyDic = new Dictionary<int, TrophyInfo>();
+    public Dictionary<int, EventTableInfo> eventDic = new Dictionary<int, EventTableInfo>();
 
     protected override void Awake()
     {
@@ -48,6 +50,7 @@ public class DataManager : MonoSingleton<DataManager>
         Init<QueenActiveSkillInfo>(queenActiveSkillData.infoList, queenActiveSkillDic);
         Init<BuffInfo>(buffData.infoList, buffDic);
         Init<TrophyInfo>(trophyData.infoList, trophyDic);
+        Init<EventTableInfo>(eventData.infoList, eventDic);
     }
 
     // 딕셔너리 초기화

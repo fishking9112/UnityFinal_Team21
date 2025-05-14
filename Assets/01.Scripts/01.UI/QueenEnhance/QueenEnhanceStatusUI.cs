@@ -7,6 +7,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
 {
     [SerializeField] private QueenCondition queenCondition;
     [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private TextMeshProUGUI enhanceText;
 
     // 앞으로 추가될 퍼센트 타입들도 여기 넣으면 됨
     public static readonly HashSet<ValueType> PercentValueTypes = new HashSet<ValueType>
@@ -30,32 +31,23 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         if (queenCondition == null)
             SetQueenCondition(GameManager.Instance.queen.condition);
 
-        var builder = new StringBuilder();
+        var statusBuilder = new StringBuilder();
+        var enhanceBuilder = new StringBuilder();
 
-        // 마나 표시
-        AppendManaStatus(builder);
+        // 마나, 게이지, 체력 상태
+        AppendManaStatus(statusBuilder);
+        AppendSummonGaugeStatus(statusBuilder);
+        AppendSummonRegenStatus(statusBuilder);
+        AppendCastleHpStatus(statusBuilder);
+        AppendCastleHpRegenStatus(statusBuilder);
 
-        // 소환 게이지 표시
-        AppendSummonGaugeStatus(builder);
+        // 종족 강화 효과는 별도 builder 사용
+        AppendBroodEnhanceStatus(enhanceBuilder);
 
-        // 소환 회복량 표시
-        AppendSummonRegenStatus(builder);
-
-        // 캐슬 체력 표시
-        AppendCastleHpStatus(builder);
-
-        // 캐슬 회복량 표시
-        AppendCastleHpRegenStatus(builder);
-
-        builder.AppendLine();
-        builder.AppendLine("─────────────────");
-        builder.AppendLine();
-
-        // 종족별 강화 효과 표시 (MonsterPassive만)
-        AppendBroodEnhanceStatus(builder);
-
-        statusText.text = builder.ToString();
-    }
+        // 텍스트 UI에 각각 설정
+        statusText.text = statusBuilder.ToString();
+        enhanceText.text = enhanceBuilder.ToString();
+    } 
 
     /// <summary>
     /// 마나 상태를 문자열로 추가합니다.

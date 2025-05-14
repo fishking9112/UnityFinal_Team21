@@ -57,7 +57,7 @@ public class MonsterController : BaseController, IPoolable
     [SerializeField] private float takeDamagedRendererTimer = 0.5f;
 
     private SortingGroup group;
-    private int sortingOffset = 0;
+    private Vector3 lastPos = new();
 
     public Vector3 originScale;
 
@@ -70,11 +70,17 @@ public class MonsterController : BaseController, IPoolable
         // {
         //     Die();
         // }
+
+        if (transform.position != lastPos)
+        {
+            lastPos = transform.position;
+            group.sortingOrder = Mathf.RoundToInt(transform.position.y * -100);
+        }
     }
     private void FixedUpdate()
     {
         stateMachine.FixedUpdate();
-        group.sortingOrder = Mathf.RoundToInt(transform.position.y * -100) + sortingOffset;
+
     }
 
     /// <summary>
