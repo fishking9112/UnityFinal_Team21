@@ -6,7 +6,7 @@ public class ManaRecycleSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        //info 초기화
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.MANA_RECYCLE];
     }
 
     public override void UseSkill()

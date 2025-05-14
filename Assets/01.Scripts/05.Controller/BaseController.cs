@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 
 
@@ -8,7 +9,7 @@ public abstract class BaseController : MonoBehaviour
     public LayerMask obstacleLayer; // 감지할 레이어 (장애물)
 
     [Header("핸들러")]
-    [SerializeField] protected HealthHandler healthHandler;
+    [SerializeField] public HealthHandler healthHandler;
     [SerializeField] public StatHandler statHandler;
 
     public BuffController buffController;
@@ -58,7 +59,7 @@ public abstract class BaseController : MonoBehaviour
     /// <param name="damage">공격 들어온 데미지 수치</param>
     public virtual void TakeDamaged(float damage)
     {
-        float finalDamage = damage;//Mathf.Max(0, damage - statData.defence);
+        float finalDamage = damage + statHandler.addAttack.Value;//Mathf.Max(0, damage - statData.defence);
         healthHandler.Damage(finalDamage);
 
         if (healthHandler.IsDie())

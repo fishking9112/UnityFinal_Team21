@@ -8,7 +8,7 @@ public class AttackDamageBuff : BaseBuffStrategy, IBuffStrategy
         target.statHandler.attack.AddModifier(ModifierType.Multiply, (int)IDBuff.ATTACK_DAMAGE_UP, 1 + amount);
     }
 
-    public void Remove(BaseController target, Buff buff, BuffInfo info)
+    public void Remove(BaseController target, Buff buff)
     {
         RemoveParticle(buff);
         target.statHandler.attack.RemoveModifier(ModifierType.Multiply, (int)IDBuff.ATTACK_DAMAGE_UP);

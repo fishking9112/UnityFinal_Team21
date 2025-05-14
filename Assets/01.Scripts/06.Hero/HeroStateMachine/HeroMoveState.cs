@@ -17,15 +17,20 @@ public class HeroMoveState : HeroBaseState
         base.Enter();
         token = new CancellationTokenSource();
         state.dir = state.GetDir();
+        if (state.dir == Vector2.zero)
+        {
+            Debug.LogWarning($"dir이 0");
+        }
         isMove = true;
         MoveAndSearch(token.Token).Forget();
         state.controller.SetMove(true);
         detectedRange = state.controller.statusInfo.detectedRange;
+
     }
 
     private async UniTask MoveAndSearch(CancellationToken tk)
     {
-        MoveHero();
+        MoveHero().Forget();
         while (isMove)
         {
             if(state.hero == null)
@@ -47,8 +52,10 @@ public class HeroMoveState : HeroBaseState
         token?.Dispose();
     }
 
-    private void MoveHero()
+    private async UniTask MoveHero()
     {
+        await UniTask.Yield();
+        state.navMeshAgent.enabled = true;
         state.navMeshAgent.SetDestination(state.dir);
         //state.hero.transform.Translate(state.moveSpeed * Time.deltaTime * state.dir);
     }

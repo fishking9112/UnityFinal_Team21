@@ -6,7 +6,7 @@ public class SacrificeSkill : QueenActiveSkillBase
     {
         base.Init();
 
-        // info 초기화
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.SACRIFICE];
     }
     public override void UseSkill()
     {

@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class MonsterHealSkill : QueenActiveSkillBase
+public class HealWaveSkill : QueenActiveSkillBase
 {
     public override void Init()
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.RANGE_HEAL];
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.HEAL_WAVE];
     }
 
     public override void UseSkill()

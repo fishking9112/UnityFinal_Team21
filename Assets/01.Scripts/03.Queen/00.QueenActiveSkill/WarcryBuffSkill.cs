@@ -2,13 +2,13 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroSlowSKill : QueenActiveSkillBase
+public class WarcryBuffSkill : QueenActiveSkillBase
 {
     public override void Init()
     {
         base.Init();
 
-        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.RANGE_SLOW];
+        info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.WARCRY];
     }
 
     public override async void UseSkill()
@@ -17,14 +17,14 @@ public class HeroSlowSKill : QueenActiveSkillBase
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
-        // 충돌한 모든 용사에게 디버프 적용
+        // 충돌한 모든 몬스터에게 버프 적용
         List<UniTask> tasks = new List<UniTask>();
         foreach (var hit in hits)
         {
-            if (HeroManager.Instance.hero.TryGetValue(hit.gameObject, out var hero))
+            if (MonsterManager.Instance.monsters.TryGetValue(hit.gameObject, out var monster))
             {
-                UniTask task = BuffManager.Instance.ApplyBuff(hero, info.buff_ID, info.buff_Level);
-                tasks.Add(task);
+                UniTask warcryTask = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level);
+                tasks.Add(warcryTask);
             }
         }
         await UniTask.WhenAll(tasks);

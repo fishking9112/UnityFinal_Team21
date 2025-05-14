@@ -13,8 +13,10 @@ public class HeroObj
 public class HeroPoolManager : MonoSingleton<HeroPoolManager>
 {
     [SerializeField] private HeroObj heroObj;
+    [SerializeField] private HeroController bossObj;
 
     private List<GameObject> list;
+    private List<GameObject> bossList;
 
     private List<HeroController> poolList = new List<HeroController>();
 
@@ -32,6 +34,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         }
 
         list = AddressableManager.Instance.LoadDataAssets<GameObject>("Hero");
+        bossList = AddressableManager.Instance.LoadDataAssets<GameObject>("BossHero");
         System.Random rand = new System.Random();
         list = list.OrderBy(x => rand.Next()).ToList();
         int min = Mathf.Min(list.Count, heroObj.poolSize);
@@ -44,6 +47,17 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
             hObj.gameObject.SetActive(false);
             poolList.Add(hObj);
         }
+    }
+
+    public HeroController GetBossObject(Vector2 pos)
+    {
+        int rand=UnityEngine.Random.Range(0,bossList.Count);
+        HeroController hObj = Instantiate(bossObj, transform);
+        GameObject hPrefab = Instantiate(bossList.ElementAt(rand), Vector3.zero, Quaternion.identity, hObj.transform);
+        hObj.InitHero();
+        hObj.transform.position = pos;
+
+        return hObj;
     }
 
     public HeroController GetObject(Vector2 pos)
