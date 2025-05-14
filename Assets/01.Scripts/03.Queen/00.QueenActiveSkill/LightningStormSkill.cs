@@ -34,7 +34,10 @@ public class LightingStormSkill : QueenActiveSkillBase
             await UniTask.Delay(300, false, PlayerLoopTiming.Update);
         }
 
-        skillParticle.OnDespawn();
+        if(skillParticle != null && skillParticle.gameObject.activeInHierarchy)
+        {
+            skillParticle.OnDespawn();
+        }
     }
 
     private async UniTaskVoid LightningStormEffect(Vector3 pos, float size, float count)
