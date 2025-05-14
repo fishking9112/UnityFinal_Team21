@@ -8,6 +8,7 @@ public class SlotChange : MonoBehaviour
     public CanvasGroup monsterGroup;
     public RectTransform queenActiveSkillGroupTransform;
     public RectTransform monsterGroupTransform;
+    public RectTransform panelTransform;
 
     public GameObject queenActiveSkillGauge;
     public GameObject summonGauge;
@@ -31,6 +32,7 @@ public class SlotChange : MonoBehaviour
 
     private void InitOrder()
     {
+        panelTransform.SetAsFirstSibling();
         monsterGroupTransform.SetAsLastSibling();
         summonGauge.SetActive(true);
         queenActiveSkillGauge.SetActive(false);
@@ -80,6 +82,7 @@ public class SlotChange : MonoBehaviour
         if (controller.curSlot == QueenSlot.MONSTER)
         {
             monsterGroupTransform.SetAsFirstSibling();
+            panelTransform.SetAsFirstSibling();
             summonGauge.SetActive(false);
             queenActiveSkillGauge.SetActive(true);
             queenActiveSkillGroup.DOFade(1f, 0.2f);
@@ -88,6 +91,7 @@ public class SlotChange : MonoBehaviour
         else if (controller.curSlot == QueenSlot.QueenActiveSkill)
         {
             monsterGroupTransform.SetAsLastSibling();
+            panelTransform.SetAsFirstSibling();
             summonGauge.SetActive(true);
             queenActiveSkillGauge.SetActive(false);
             queenActiveSkillGroup.DOFade(0.5f, 0.2f);

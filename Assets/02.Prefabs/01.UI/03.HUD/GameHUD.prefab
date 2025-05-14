@@ -301,7 +301,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6167955244301444204}
-  - {fileID: 1926682960330058235}
   - {fileID: 8245049319202310995}
   - {fileID: 4516760164401860431}
   - {fileID: 842855827705191366}
@@ -330,6 +329,7 @@ MonoBehaviour:
   monsterGroup: {fileID: 6585797939733481621}
   queenActiveSkillGroupTransform: {fileID: 842855827705191366}
   monsterGroupTransform: {fileID: 3181184150835260907}
+  panelTransform: {fileID: 6167955244301444204}
   queenActiveSkillGauge: {fileID: 9133363786683995220}
   summonGauge: {fileID: 2515954036400915654}
   duration: 0.5
@@ -422,7 +422,6 @@ GameObject:
   - component: {fileID: 8839546348096908141}
   - component: {fileID: 2802565836124448718}
   - component: {fileID: 1758294521194845807}
-  - component: {fileID: 1838675278886544389}
   m_Layer: 5
   m_Name: slot
   m_TagString: Untagged
@@ -535,23 +534,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1838675278886544389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 275756560977186244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5a6d3b524f8714981c72fa0227dbda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  evolutionTree: {fileID: 0}
-  slotIcon: {fileID: 8643581698517230822}
-  slotButton: {fileID: 1758294521194845807}
-  slotIndex: 0
-  slotMonsterData: {fileID: 0}
 --- !u!1 &352984205799053833
 GameObject:
   m_ObjectHideFlags: 0
@@ -828,7 +810,6 @@ GameObject:
   - component: {fileID: 4219201680820088845}
   - component: {fileID: 5892914076629654363}
   - component: {fileID: 2548950940925849182}
-  - component: {fileID: 6364079236597180938}
   m_Layer: 5
   m_Name: slot
   m_TagString: Untagged
@@ -941,23 +922,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6364079236597180938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 412802814627541980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5a6d3b524f8714981c72fa0227dbda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  evolutionTree: {fileID: 0}
-  slotIcon: {fileID: 3462725281414519047}
-  slotButton: {fileID: 2548950940925849182}
-  slotIndex: 0
-  slotMonsterData: {fileID: 0}
 --- !u!1 &449364081287241525
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,7 +934,6 @@ GameObject:
   - component: {fileID: 3256768379283760305}
   - component: {fileID: 4901579258842624137}
   - component: {fileID: 9141607812224986072}
-  - component: {fileID: 1744989782526374273}
   m_Layer: 5
   m_Name: slot
   m_TagString: Untagged
@@ -1083,23 +1046,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1744989782526374273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 449364081287241525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5a6d3b524f8714981c72fa0227dbda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  evolutionTree: {fileID: 0}
-  slotIcon: {fileID: 7968060066372154990}
-  slotButton: {fileID: 9141607812224986072}
-  slotIndex: 0
-  slotMonsterData: {fileID: 0}
 --- !u!1 &487409338234471224
 GameObject:
   m_ObjectHideFlags: 0
@@ -6395,7 +6341,6 @@ GameObject:
   - component: {fileID: 2812490281516371042}
   - component: {fileID: 8447230073735567261}
   - component: {fileID: 3591185668159080594}
-  - component: {fileID: 4049994044211363076}
   m_Layer: 5
   m_Name: slot
   m_TagString: Untagged
@@ -6508,23 +6453,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4049994044211363076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2864096036750839888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5a6d3b524f8714981c72fa0227dbda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  evolutionTree: {fileID: 0}
-  slotIcon: {fileID: 9151293204126986318}
-  slotButton: {fileID: 3591185668159080594}
-  slotIndex: 0
-  slotMonsterData: {fileID: 0}
 --- !u!1 &2951268316269531386
 GameObject:
   m_ObjectHideFlags: 0
@@ -6692,7 +6620,6 @@ GameObject:
   - component: {fileID: 7570397804643520734}
   - component: {fileID: 4967812294354144969}
   - component: {fileID: 1834189895420645485}
-  - component: {fileID: 2459895552409773363}
   m_Layer: 5
   m_Name: slot
   m_TagString: Untagged
@@ -6805,23 +6732,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2459895552409773363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2999595617813252479}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5a6d3b524f8714981c72fa0227dbda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  evolutionTree: {fileID: 0}
-  slotIcon: {fileID: 5545082589903179372}
-  slotButton: {fileID: 1834189895420645485}
-  slotIndex: 0
-  slotMonsterData: {fileID: 0}
 --- !u!1 &3008940585952300157
 GameObject:
   m_ObjectHideFlags: 0
@@ -7116,7 +7026,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1926682960330058235}
   m_Father: {fileID: 5497083797294422510}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -10877,12 +10788,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5497083797294422510}
+  m_Father: {fileID: 6167955244301444204}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -5, y: -5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9105923293098287130
 CanvasRenderer:
@@ -11659,7 +11570,6 @@ GameObject:
   - component: {fileID: 4645766258641041142}
   - component: {fileID: 2796975393116088710}
   - component: {fileID: 1792150347800266260}
-  - component: {fileID: 2348898771011556912}
   m_Layer: 5
   m_Name: slot
   m_TagString: Untagged
@@ -11772,23 +11682,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2348898771011556912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5492040695429629049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5a6d3b524f8714981c72fa0227dbda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  evolutionTree: {fileID: 0}
-  slotIcon: {fileID: 6782452810093270780}
-  slotButton: {fileID: 1792150347800266260}
-  slotIndex: 0
-  slotMonsterData: {fileID: 0}
 --- !u!1 &5494329914386213237
 GameObject:
   m_ObjectHideFlags: 0
@@ -12903,7 +12796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 584bcd472dff930479ed06384c2d8c8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterSlot: {fileID: 6415995866401483944}
+  monsterSlot: {fileID: 499823171199472239}
   queenActiveSkillSlot: {fileID: 2740008872668844685}
   levelText: {fileID: 2017318667137147152}
   goldText: {fileID: 3122090648728263208}
@@ -16749,6 +16642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6991331648297846356}
   - component: {fileID: 8062761971016165634}
+  - component: {fileID: 499823171199472239}
   m_Layer: 5
   m_Name: MonsterSlot (1)
   m_TagString: Untagged
@@ -16805,6 +16699,32 @@ MonoBehaviour:
   m_Spacing: {x: 40, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
+--- !u!114 &499823171199472239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914277040185764945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a04fd810f93abcb45896765c8fc6a2ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotIconList:
+  - {fileID: 7968060066372154990}
+  - {fileID: 5545082589903179372}
+  - {fileID: 3462725281414519047}
+  - {fileID: 8643581698517230822}
+  - {fileID: 9151293204126986318}
+  - {fileID: 6782452810093270780}
+  slotButtonList:
+  - {fileID: 9141607812224986072}
+  - {fileID: 1834189895420645485}
+  - {fileID: 2548950940925849182}
+  - {fileID: 1758294521194845807}
+  - {fileID: 3591185668159080594}
+  - {fileID: 1792150347800266260}
 --- !u!1 &7918195570232806592
 GameObject:
   m_ObjectHideFlags: 0
