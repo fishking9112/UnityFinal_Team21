@@ -34,6 +34,7 @@ public class PauseUI : SingleUI
     private void OnClickGameResult()
     {
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().HideWindow();
-        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
+        GameManager.Instance.GameOver();
+        // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
     }
 }
