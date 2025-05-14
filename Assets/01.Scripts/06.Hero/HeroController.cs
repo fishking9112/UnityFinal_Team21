@@ -16,6 +16,8 @@ public class HeroController : BaseController
     private int currentDir;
     private int lastDir;
 
+    private bool isDead;
+
     private CancellationTokenSource token = new CancellationTokenSource();
 
     [SerializeField] public HeroStatusInfo statusInfo;
@@ -40,8 +42,8 @@ public class HeroController : BaseController
     {
         hero.Init(stat.detectedRange);
         navMeshAgent.speed = stat.moveSpeed;
-        DeadCheck().Forget();
 
+        isDead = false;
         base.StatInit(stat, isHealthUI);
         this.statusInfo.Copy(stat);
 
@@ -95,11 +97,6 @@ public class HeroController : BaseController
             await UniTask.WaitForSeconds(0.5f);
         }
     }
-    private async UniTaskVoid DeadCheck()
-    {
-        await UniTask.WaitUntil(() => healthHandler.IsDie(), cancellationToken: this.GetCancellationTokenOnDestroy());
-        Die();
-    }
 
     public void SetMove(bool isMove)
     {
@@ -119,10 +116,15 @@ public class HeroController : BaseController
     {
         await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
         HeroPoolManager.Instance.ReturnObject(this);
+        isDead = false;
+
     }
 
     public override void Die()
     {
+        if (isDead) return;
+        isDead = true;
+
         base.Die();
 
         stateMachine.ChangeState(stateMachine.deadState);
@@ -131,8 +133,8 @@ public class HeroController : BaseController
 
     public void ResetObj()
     {
-        token?.Cancel();
-        token?.Dispose();
+        //token?.Cancel();
+        //token?.Dispose();
         SetMove(false);
         SetAttack(false);
     }
