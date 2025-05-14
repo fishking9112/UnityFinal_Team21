@@ -63,8 +63,7 @@ public class QueenController : MonoBehaviour
             rangeObject.SetActive(true);
             rangeObject.transform.position = worldMousePos;
 
-            float radius = selectedQueenActiveSkill.info.size;
-            float scale = radius / (spriteRadius / 2f);
+            float scale = selectedQueenActiveSkill.info.size / (spriteRadius / 2f);
 
             rangeObject.transform.localScale = new Vector3(scale, scale, 1f);
         }

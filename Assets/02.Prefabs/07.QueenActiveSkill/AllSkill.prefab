@@ -27,6 +27,7 @@ GameObject:
   - component: {fileID: 6679041691584490331}
   - component: {fileID: -2328670409925698637}
   - component: {fileID: -603843674797800434}
+  - component: {fileID: 3831853351912588029}
   m_Layer: 0
   m_Name: AllSkill
   m_TagString: Untagged
@@ -206,7 +207,7 @@ MonoBehaviour:
     buff_ID: 100009
     buff_Level: 2
     monster_ID: 0
-  onCoolTime: 0
+  onCoolTime: 1
 --- !u!114 &-951353231110317439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,7 +592,7 @@ MonoBehaviour:
     buff_ID: 100014
     buff_Level: 3
     monster_ID: 0
-  onCoolTime: 1
+  onCoolTime: 0
 --- !u!114 &-603843674797800434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,6 +603,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77e7d1aab72948840a83ef1b989e4a6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  info:
+    id: 21020
+    name: "\uBD80\uD328"
+    description: "\uBC94\uC704 \uB370\uBBF8\uC9C0 + \uBD80\uD328"
+    icon: 
+    type: 3
+    cost: 10
+    coolTime: 5
+    value: 50
+    range: -1
+    size: 5
+    target:
+      serializedVersion: 2
+      m_Bits: 64
+    required_Level: 0
+    buff_ID: 100012
+    buff_Level: 2
+    monster_ID: 0
+  onCoolTime: 1
+--- !u!114 &3831853351912588029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3449543277398582152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 462168205a135bd4faa032c2c5ec113b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   info:
@@ -623,3 +655,4 @@ MonoBehaviour:
     buff_Level: 0
     monster_ID: 0
   onCoolTime: 0
+  obstaclePrefab: {fileID: 5788264139910778824, guid: 2786d2cc219b5564b9dff2a004e7c44d, type: 3}
