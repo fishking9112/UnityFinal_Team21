@@ -34,7 +34,7 @@ public class ObstacleSummonSkill : QueenActiveSkillBase
     {
         try
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: obstacle.GetCancellationTokenOnDestroy());
+            await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, cancellationToken: obstacle.GetCancellationTokenOnDestroy());
 
             if (obstacle != null)
             {

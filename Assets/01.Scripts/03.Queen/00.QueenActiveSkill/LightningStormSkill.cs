@@ -31,7 +31,7 @@ public class LightingStormSkill : QueenActiveSkillBase
                 }
             }
 
-            await UniTask.Delay(300);
+            await UniTask.Delay(300, false, PlayerLoopTiming.Update);
         }
 
         skillParticle.OnDespawn();
@@ -44,7 +44,7 @@ public class LightingStormSkill : QueenActiveSkillBase
             Vector3 randomPos = pos + (Vector3)Random.insideUnitCircle * size;
             ParticleManager.Instance.SpawnParticle("LightningStorm", randomPos, Vector3.one, Quaternion.identity);
 
-            await UniTask.Delay(300);
+            await UniTask.Delay(300, false, PlayerLoopTiming.Update);
         }
     }
 }

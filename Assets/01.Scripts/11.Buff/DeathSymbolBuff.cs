@@ -17,7 +17,7 @@ public class DeathSymbolBuff : BaseBuffStrategy, IBuffStrategy
     {
         try
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(delay));
+            await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update);
 
             if (target != null)
             {

@@ -98,6 +98,7 @@ public enum IDQueenActiveSkill
     DECAY,
     LASER,
     LIGHTNING_STORM,
+    GRAVITYBALL,
 }
 
 public enum IDQueenAbility
