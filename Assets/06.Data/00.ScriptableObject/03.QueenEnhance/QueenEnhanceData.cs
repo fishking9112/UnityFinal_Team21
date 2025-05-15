@@ -8,7 +8,8 @@ public enum QueenEnhanceType
     NULL,
     Point,
     QueenPassive,
-    MonsterPassive
+    MonsterPassive,
+    AddSkill
 }
 public enum ValueType
 {
@@ -16,7 +17,8 @@ public enum ValueType
     Queen,
     Hp,
     Attack,
-    MoveSpeed
+    MoveSpeed,
+    Default
 }
 
 [Serializable]
@@ -32,11 +34,13 @@ public class QueenEnhanceInfo : IInfo
     public QueenEnhanceType type;
     public MonsterBrood brood;
     public ValueType valueType;
+    public int skill_ID;
 
     public int ID => id;
     public string Name => name;
     public string Description => description;
     public string Icon => icon;
+    public int Skill_ID => skill_ID;
 }
 
 [CreateAssetMenu(fileName = "QueenEnhanceData", menuName = "Scriptable Object/New QueenEnhanceData")]
@@ -83,6 +87,9 @@ public class QueenEnhanceData : SheetDataReaderBase
                     break;
                 case "valueType":
                     queenEnhanceInfo.valueType = Utils.StringToEnum<ValueType>(cell.value, ValueType.NULL);
+                    break;
+                case "skill_ID":
+                    queenEnhanceInfo.skill_ID = Utils.StringToInt(cell.value);
                     break;
             }
         }
