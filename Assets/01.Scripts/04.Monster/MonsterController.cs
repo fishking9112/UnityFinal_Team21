@@ -45,6 +45,7 @@ public class MonsterController : BaseController, IPoolable
     [NonSerialized] public MonsterStateMachine stateMachine;
     [NonSerialized] public Vector2 projectileSize = Vector2.zero;
     [NonSerialized] public List<SpriteRenderer> renderers;
+    private List<Color> originalColors = new(); // 원본 색상 저장용
     [NonSerialized] public Collider2D _collider;
 
     [Header("넉백 관련 데이터")]
@@ -156,15 +157,25 @@ public class MonsterController : BaseController, IPoolable
         {
             renderers = new();
             renderers = gameObject.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow").ToList();
+
+            // 각 renderer의 현재 색상 저장
+            foreach (var renderer in renderers)
+            {
+                originalColors.Add(renderer.color);
+            }
+        }
+        else
+        {
+            // 저장한 색상으로 복원
+            for (int i = 0; i < renderers.Count; i++)
+            {
+                if (i < originalColors.Count)
+                {
+                    renderers[i].color = originalColors[i];
+                }
+            }
         }
 
-        // alpha 1로 초기화
-        foreach (var renderer in renderers)
-        {
-            var color = renderer.color;
-            color.a = 1;
-            renderer.color = color;
-        }
 
         stateMachine.ChangeState(stateMachine.Tracking); // 할 일 찾기
 
@@ -216,18 +227,22 @@ public class MonsterController : BaseController, IPoolable
     // UniTask 본문
     private async UniTaskVoid TakeDamagedRendererTask(CancellationToken token)
     {
-        foreach (var renderer in stateMachine.Controller.renderers)
+        foreach (var renderer in renderers)
         {
             renderer.color = Color.red;
         }
 
         await UniTask.Delay(TimeSpan.FromSeconds(takeDamagedRendererTimer), cancellationToken: token);
 
-        if (stateMachine.Controller == null) return;
+        if (this == null) return;
 
-        foreach (var renderer in stateMachine.Controller.renderers)
+        // 저장한 색상으로 복원
+        for (int i = 0; i < renderers.Count; i++)
         {
-            renderer.color = Color.white;
+            if (i < originalColors.Count)
+            {
+                renderers[i].color = originalColors[i];
+            }
         }
     }
 
