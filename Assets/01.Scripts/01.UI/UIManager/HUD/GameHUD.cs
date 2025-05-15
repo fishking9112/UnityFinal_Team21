@@ -91,6 +91,9 @@ public class GameHUD : HUDUI
         // 옵션창 버튼 이벤트 연결
         OptionBtn.onClick.AddListener(() => ShowWindow<OptionController>());
 
+        // Exit 버튼 이벤트 연결 
+        ExitBtn.onClick.AddListener(() => HideWindow());
+
         inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
         inputAction.started += OnPauseUI;
     }
