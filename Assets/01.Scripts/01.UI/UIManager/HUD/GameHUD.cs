@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -48,6 +49,7 @@ public class GameHUD : HUDUI
     [NonSerialized] public GameObject openWindow = null;
 
     [Header("기타 UI 그룹오브젝트")]
+    public GameObject HUDGroup;
     public GameObject BackgroundGroup;
     public GameObject TopButtonGroup;
     public GameObject EtcUIGroup;
@@ -111,6 +113,7 @@ public class GameHUD : HUDUI
         }
 
         // 기타 UI그룹 비활성화
+        HUDGroup.SetActive(false);
         BackgroundGroup.SetActive(false);
         TopButtonGroup.SetActive(false);
         EtcUIGroup.SetActive(false);
@@ -153,6 +156,7 @@ public class GameHUD : HUDUI
     {
         if (openWindow == null) return;
 
+        HUDGroup.SetActive(true);
         BackgroundGroup.SetActive(false);
         openWindow.SetActive(false);
         openWindow = null;
