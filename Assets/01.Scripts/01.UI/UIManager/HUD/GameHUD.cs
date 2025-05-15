@@ -33,19 +33,19 @@ public class GameHUD : HUDUI
     [Header("미니맵")]
     [SerializeField] private MiniMapClick miniMap;
 
-
     [Header("InGame에 대한 UI들")]
     public QueenEnhanceUI queenEnhanceUI;
     public EvolutionTreeUI evolutionTreeUI;
     public PauseUI pauseUI;
     public GameResultUI gameResultUI;
 
-
-    [Header("기타 UI 그룹 오브젝트")]
+    [Header("기타 UI 오브젝트")]
     public GameObject HUDGroup;
     public GameObject BackgroundGroup;
     public GameObject TopButtonGroup;
     public GameObject EtcUIGroup;
+    public GameObject OptionUIGroup;
+    public Button OptionBtn;
 
     [Header("현재 상태")]
     public bool isPaused = false;
@@ -87,6 +87,9 @@ public class GameHUD : HUDUI
             HeroManager.Instance.OnClickHealthUITest();
         });
 
+        // 옵션창 버튼 이벤트 연결
+        OptionBtn.onClick.AddListener(() => ShowWindow<OptionController>());
+
         inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
         inputAction.started += OnPauseUI;
     }
@@ -98,18 +101,21 @@ public class GameHUD : HUDUI
     /// <param name="controller"></param>
     public void ShowWindow<T>(T controller = null) where T : MonoBehaviour
     {
-        // 만약 오픈된 창이 있다면 이미 열린 창이 있다고 표시
-        if (openWindow != null)
+        if (typeof(T) != typeof(OptionController))
         {
-            Utils.Log("이미 열려있는 창이 있습니다");
-            return;
-        }
+            // 이미 창이 열려있다면 리턴
+            if (openWindow != null)
+            {
+                Utils.Log("이미 열려있는 창이 있습니다");
+                return;
+            }
 
-        // 기타 UI그룹 비활성화
-        HUDGroup.SetActive(false);
-        BackgroundGroup.SetActive(false);
-        TopButtonGroup.SetActive(false);
-        EtcUIGroup.SetActive(false);
+            // 기타 UI 그룹 숨기기
+            HUDGroup.SetActive(false);
+            BackgroundGroup.SetActive(false);
+            TopButtonGroup.SetActive(false);
+            EtcUIGroup.SetActive(false);
+        }
 
         // 타입별로 분리
         if (typeof(T) == typeof(QueenEnhanceUI))
@@ -137,6 +143,11 @@ public class GameHUD : HUDUI
         {
             openWindow = gameResultUI.gameObject;
         }
+        else if (typeof(T) == typeof(OptionController))
+        {
+            OptionUIGroup.SetActive(true);
+            return;
+        }
         else
         {
             Utils.Log("없는 타입의 Controller입니다.");
@@ -157,6 +168,7 @@ public class GameHUD : HUDUI
         BackgroundGroup.SetActive(false);
         TopButtonGroup.SetActive(false);
         EtcUIGroup.SetActive(false);
+        OptionUIGroup.SetActive(false);
 
         openWindow.SetActive(false);
         openWindow = null;
