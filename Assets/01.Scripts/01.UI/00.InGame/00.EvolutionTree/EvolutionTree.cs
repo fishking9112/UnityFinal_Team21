@@ -61,15 +61,15 @@ public class EvolutionTree : MonoBehaviour
         queenCondition.AdjustEvolutionPoint(-1f);
 
         // 한쪽 노드를 진화시키면 다른 쪽 노드 잠금
-        int parentNodeId = selectedNode.monsterInfo.preNode;
+        //int parentNodeId = selectedNode.monsterInfo.preNode;
 
-        foreach (EvolutionNode node in evolutionNodeList)
-        {
-            if (node.monsterInfo.preNode == parentNodeId && node != selectedNode)
-            {
-                node.nodeLock = true;
-            }
-        }
+        //foreach (EvolutionNode node in evolutionNodeList)
+        //{
+        //    if (node.monsterInfo.preNode == parentNodeId && node != selectedNode)
+        //    {
+        //        node.nodeLock = true;
+        //    }
+        //}
 
         UpdateAllNode();
         evolutionTreeUI.UpdateDescriptionWindow(selectedNode);
