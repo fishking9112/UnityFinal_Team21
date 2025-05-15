@@ -47,6 +47,11 @@ public class GameHUD : HUDUI
     public bool isPaused = false;
     [NonSerialized] public GameObject openWindow = null;
 
+    [Header("기타 UI 그룹오브젝트")]
+    public GameObject BackgroundGroup;
+    public GameObject TopButtonGroup;
+    public GameObject EtcUIGroup;
+
     [Header("레벨업 테스트 버튼")]
     public Button LevelUPTestButton;
 
@@ -105,20 +110,28 @@ public class GameHUD : HUDUI
             return;
         }
 
+        // 기타 UI그룹 비활성화
+        BackgroundGroup.SetActive(false);
+        TopButtonGroup.SetActive(false);
+        EtcUIGroup.SetActive(false);
+
         // 타입별로 분리
         if (typeof(T) == typeof(QueenEnhanceUI))
         {
             openWindow = queenEnhanceUI.gameObject;
+            BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(EvolutionTreeUI))
         {
             // 다른 타입 처리
             openWindow = evolutionTreeUI.gameObject;
+            BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(PauseUI))
         {
             openWindow = pauseUI.gameObject;
             GameManager.Instance.cameraController.miniMapRect = pauseUI.cameraRect;
+            BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(GameResultUI))
         {
@@ -140,6 +153,7 @@ public class GameHUD : HUDUI
     {
         if (openWindow == null) return;
 
+        BackgroundGroup.SetActive(false);
         openWindow.SetActive(false);
         openWindow = null;
         Time.timeScale = 1f; // 시간 흐름
