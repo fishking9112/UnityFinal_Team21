@@ -161,7 +161,9 @@ public class MonsterController : BaseController, IPoolable
         // alpha 1로 초기화
         foreach (var renderer in renderers)
         {
-            renderer.color = Color.white;
+            var color = renderer.color;
+            color.a = 1;
+            renderer.color = color;
         }
 
         stateMachine.ChangeState(stateMachine.Tracking); // 할 일 찾기
