@@ -134,6 +134,7 @@ public class GameHUD : HUDUI
         {
             openWindow = pauseUI.gameObject;
             GameManager.Instance.cameraController.miniMapRect = pauseUI.cameraRect;
+            HUDGroup.SetActive(true);
             BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(GameResultUI))
