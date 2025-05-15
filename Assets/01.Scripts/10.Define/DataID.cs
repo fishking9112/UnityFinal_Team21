@@ -51,6 +51,12 @@ public enum IDMonster
     SKELETON_KNIGHT,
     SKELETON_RANGER,
     SKELETON_WIZARD,
+
+    ELF_SCOUT = 1401,
+    ELF_ARCHER,
+    ELF_HUNTER,
+    ELF_SENTINEL,
+    ELF_GUARDIAN,
 }
 
 public enum IDQueenEnhance

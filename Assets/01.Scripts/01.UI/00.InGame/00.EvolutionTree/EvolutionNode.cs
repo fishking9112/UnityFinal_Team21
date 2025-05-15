@@ -24,10 +24,6 @@ public class EvolutionNode : MonoBehaviour
             monsterInfo = info;
             image.sprite = DataManager.Instance.iconAtlas.GetSprite(monsterInfo.outfit);
         }
-        else
-        {
-            Utils.Log($"{monsterInfoId}의 info는 존재하지 않습니다.");
-        }
 
         button.onClick.AddListener(() => onClickNode?.Invoke(this));
     }
