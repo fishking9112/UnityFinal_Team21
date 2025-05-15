@@ -22,10 +22,10 @@ public class SlotChange : MonoBehaviour
 
     private InputAction inputAction;
 
-    private void Start()
+    public void Init(QueenController queenController, PlayerInput playerInput)
     {
-        controller = GameManager.Instance.queen.controller;
-        inputAction = GameManager.Instance.queen.input.actions["SlotChange"];
+        controller = queenController;
+        inputAction = playerInput.actions["SlotChange"];
         inputAction.started += OnChangeSlots;
         InitOrder();
     }
