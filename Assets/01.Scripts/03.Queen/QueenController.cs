@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.U2D;
 
 public enum QueenSlot
 {
@@ -17,9 +18,12 @@ public class QueenController : MonoBehaviour
 
 
     [Header("스킬 범위")]
-    public GameObject rangeObject;
-    public SpriteRenderer rangeSprite;
-    private float spriteRadius;
+    public GameObject skillRangeObject;
+    public GameObject skillSizeObject;
+    public SpriteRenderer skillRangeSprite;
+    public SpriteRenderer skillSizeSprite;
+    private float skillRangeSpriteRadius;
+    private float skillSizeSpriteRadius;
 
     [Header("내부 값")]
     public Vector3 worldMousePos;
@@ -28,6 +32,8 @@ public class QueenController : MonoBehaviour
 
     private QueenCondition condition;
     private ObjectPoolManager objectPoolManager;
+    private SpriteAtlas atlas;
+    private Vector3 castlePos;
 
     [NonSerialized] public int selectedMonsterId = -1;
     [NonSerialized] public QueenActiveSkillBase selectedQueenActiveSkill;
@@ -42,11 +48,14 @@ public class QueenController : MonoBehaviour
     {
         condition = GameManager.Instance.queen.condition;
         objectPoolManager = ObjectPoolManager.Instance;
+        atlas = DataManager.Instance.iconAtlas;
+        castlePos = GameManager.Instance.castle.transform.position;
 
         summonDistance = 0.5f;
         lastSummonPosition = Vector3.positiveInfinity;
 
-        spriteRadius = rangeSprite.bounds.size.x;
+        skillSizeSpriteRadius = skillSizeSprite.bounds.size.x;
+        skillRangeSpriteRadius = skillRangeSprite.bounds.size.x;
     }
 
     private void Update()
@@ -60,16 +69,46 @@ public class QueenController : MonoBehaviour
     {
         if (curSlot == QueenSlot.QueenActiveSkill && selectedQueenActiveSkill != null)
         {
-            rangeObject.SetActive(true);
-            rangeObject.transform.position = worldMousePos;
+            skillSizeObject.SetActive(true);
+            skillRangeObject.SetActive(true);
 
-            float scale = selectedQueenActiveSkill.info.size / (spriteRadius / 2f);
+            skillSizeObject.transform.position = worldMousePos;
+            skillRangeObject.transform.position = castlePos;
 
-            rangeObject.transform.localScale = new Vector3(scale, scale, 1f);
+            float skillSize = selectedQueenActiveSkill.info.size / (skillSizeSpriteRadius / 2f);
+            float skillRange = selectedQueenActiveSkill.info.range / (skillRangeSpriteRadius / 2f);
+
+            if (selectedQueenActiveSkill.info.range == -1)
+            {
+                skillRangeObject.transform.localScale = new Vector3(150f, 150f, 1f);
+            }
+            else
+            {
+                skillRangeObject.transform.localScale = new Vector3(skillRange, skillRange, 1f);
+            }
+
+            if (selectedQueenActiveSkill.info.id == (int)IDQueenActiveSkill.SUMMON_OBSTACLE)
+            {
+                skillSizeSprite.sprite = atlas.GetSprite("SkillSize_Rect");
+
+                Vector3 mousePos = worldMousePos;
+                Vector3 dir = (mousePos - castlePos).normalized;
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+
+                skillSizeObject.transform.localScale = new Vector3(skillSize, 1.5f, 1f);
+                skillSizeObject.transform.rotation = rotation;
+            }
+            else
+            {
+                skillSizeSprite.sprite = atlas.GetSprite("SkillSize_Circle");
+                skillSizeObject.transform.localScale = new Vector3(skillSize, skillSize, 1f);
+            }
         }
         else
         {
-            rangeObject.SetActive(false);
+            skillSizeObject.SetActive(false);
+            skillRangeObject.SetActive(false);
         }
     }
 
@@ -100,7 +139,7 @@ public class QueenController : MonoBehaviour
     // 슬롯 버튼을 클릭했을 때 해당 슬롯 선택
     public void OnClickSlotButton(int index, QueenSlot slotType)
     {
-        if(curSlot != slotType)
+        if (curSlot != slotType)
         {
             return;
         }
@@ -141,9 +180,6 @@ public class QueenController : MonoBehaviour
                 selectedQueenActiveSkill = null;
                 return;
             }
-
-            //스킬 아이콘 처리
-            //cursorIcon.GetComponent<SpriteRenderer>().sprite = DataManager.Instance.iconAtlas.GetSprite(selectedQueenActiveSkill.info.icon);
         }
     }
 
