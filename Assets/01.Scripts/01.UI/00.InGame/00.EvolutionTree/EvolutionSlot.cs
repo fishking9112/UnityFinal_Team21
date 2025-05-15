@@ -18,7 +18,7 @@ public class EvolutionSlot : MonoBehaviour
 
     private void OnClickSlot()
     {
-        // 아무 몬스터를 선택하지 않고 슬롯을 클릭하면 해당 슬롯 초기화
+        // 아무 몬스터도 선택하지 않고 슬롯을 클릭하면 해당 슬롯 초기화
         if(slotMonsterData != null)
         {
             ClearSlot();

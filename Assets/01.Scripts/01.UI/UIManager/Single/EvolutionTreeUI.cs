@@ -91,6 +91,8 @@ public class EvolutionTreeUI : SingleUI
         if (index >= 0 && index < pageList.Count)
         {
             currentTreePage = pageList[index].evolutionTree.GetComponent<EvolutionTree>();
+            SetSlotList(currentTreePage);
+            currentTreePage.SelectFirstNode();
         }
 
         // 해당 카테고리의 선택 표시 UI 활성화
@@ -105,8 +107,9 @@ public class EvolutionTreeUI : SingleUI
     {
         MonsterInfo info = node.monsterInfo;
 
+        monsterName.text = info.name;
         descriptionImage.enabled = true;
-        descriptionImage.sprite = node.image.sprite;
+        descriptionImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.icon);
         description.text = info.description;
         healthText.text = $"기본 체력 : {info.health}";
         attackText.text = $"기본 공격력 : {info.attack}";

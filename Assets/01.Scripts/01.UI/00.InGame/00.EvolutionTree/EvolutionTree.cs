@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 public class EvolutionTree : MonoBehaviour
@@ -42,9 +39,6 @@ public class EvolutionTree : MonoBehaviour
 
     private void OnEnable()
     {
-        evolutionTreeUI.SetSlotList(this);
-        selectedNode = evolutionNodeList[0];
-        evolutionTreeUI.UpdateDescriptionWindow(evolutionNodeList[0]);
         UpdateAllNode();
     }
 
@@ -131,6 +125,17 @@ public class EvolutionTree : MonoBehaviour
             }
         }
     }
+
+    public void SelectFirstNode()
+    {
+        if (evolutionNodeList == null || evolutionNodeList.Count == 0)
+            return;
+
+        selectedNode = evolutionNodeList[0];
+        evolutionTreeUI.UpdateDescriptionWindow(selectedNode);
+        evolutionTreeUI.SetEvolutionButtonState(!selectedNode.isUnlock);
+    }
+
 
     // 진화 트리 슬롯에 등록한 몬스터를 퀸 슬롯에도 등록
     public void AddQueenSlot(MonsterInfo monster, int index)
