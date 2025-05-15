@@ -13,8 +13,6 @@ public class TrophyUI : MonoBehaviour
     public TrophyPanel panelPrefab;
 
     [Header("업적 설명")]
-    public TextMeshProUGUI desc;
-    public TextMeshProUGUI reward;
     public List<TrophyInfo> infos = new();
     public List<Toggle> toggleList = new();
 
@@ -59,7 +57,7 @@ public class TrophyUI : MonoBehaviour
 
     public void OnClickDetail(TrophyInfo trophyInfo)
     {
-        desc.text = trophyInfo.description;
+
         string unlockCollection = "";
         if (trophyInfo.unLockID != 0 && TrophyManager.Instance.allCollections.ContainsKey(trophyInfo.unLockID))
         {
@@ -67,15 +65,7 @@ public class TrophyUI : MonoBehaviour
             unlockCollection = $"{tempName} 해금 ";
         }
         string gainGold = trophyInfo.reward != 0 ? $"{trophyInfo.reward} 골드 획득" : "";
-        reward.text = $"{unlockCollection}{gainGold}";
+
     }
 
-    /// <summary>
-    /// 다른 곳 클릭 시 설명창 초기화 시키기
-    /// </summary>
-    public void ClearDetail()
-    {
-        desc.text = "";
-        reward.text = "";
-    }
 }
