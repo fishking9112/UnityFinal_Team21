@@ -15,12 +15,5 @@ public class Queen : MonoBehaviour
         controller = GetComponent<QueenController>();
         queenActiveSkillManager = GetComponent<QueenActiveSkillManager>();
         input = GetComponent<PlayerInput>();
-
-        SlotChange slotChange = FindObjectOfType<SlotChange>();
-
-        if (slotChange != null)
-        {
-            slotChange.Init(controller, input);
-        }
     }
 }

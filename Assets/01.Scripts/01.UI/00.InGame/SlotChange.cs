@@ -22,11 +22,10 @@ public class SlotChange : MonoBehaviour
 
     private InputAction inputAction;
 
-    public void Init(QueenController queenController, PlayerInput playerInput)
+    public void Init(QueenController queenController, InputAction slotChangeAction)
     {
         controller = queenController;
-        inputAction = playerInput.actions["SlotChange"];
-        inputAction.started += OnChangeSlots;
+        slotChangeAction.started += OnChangeSlots;
         InitOrder();
     }
 
@@ -119,6 +118,9 @@ public class SlotChange : MonoBehaviour
 
     private void OnDestroy()
     {
-        inputAction.started -= OnChangeSlots;
+        if (inputAction != null)
+        {
+            inputAction.started -= OnChangeSlots;
+        }
     }
 }
