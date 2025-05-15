@@ -128,13 +128,16 @@ public class GameHUD : HUDUI
         {
             // 다른 타입 처리
             openWindow = evolutionTreeUI.gameObject;
+            TopButtonGroup.SetActive(true);
+            EtcUIGroup.SetActive(true);
             BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(PauseUI))
         {
             openWindow = pauseUI.gameObject;
             GameManager.Instance.cameraController.miniMapRect = pauseUI.cameraRect;
-            HUDGroup.SetActive(true);
+            TopButtonGroup.SetActive(true);
+            EtcUIGroup.SetActive(true);
             BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(GameResultUI))
@@ -159,6 +162,8 @@ public class GameHUD : HUDUI
 
         HUDGroup.SetActive(true);
         BackgroundGroup.SetActive(false);
+        TopButtonGroup.SetActive(false);
+        EtcUIGroup.SetActive(false);
         openWindow.SetActive(false);
         openWindow = null;
         Time.timeScale = 1f; // 시간 흐름
