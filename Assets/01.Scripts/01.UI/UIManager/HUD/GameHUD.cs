@@ -53,6 +53,9 @@ public class GameHUD : HUDUI
     [Header("체력 UI 테스트 버튼")]
     public Button HealthUITestButton;
 
+    [Header("Slot")]
+    public SlotChange slot;
+
     public override async UniTask Initialize()
     {
         BindSlotButton();
@@ -87,6 +90,8 @@ public class GameHUD : HUDUI
 
         inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
         inputAction.started += OnPauseUI;
+
+        slot.Init(GameManager.Instance.queen.controller, GameManager.Instance.queen.input.actions["SlotChange"]);
     }
 
 
