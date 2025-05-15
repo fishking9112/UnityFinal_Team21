@@ -14,10 +14,8 @@ public class GameHUD : HUDUI
 
     private QueenCondition condition => GameManager.Instance.queen.condition;
 
-    [Header("레벨")]
+    [Header("레벨 / 골드")]
     [SerializeField] private TextMeshProUGUI levelText;
-
-    [Header("골드")]
     [SerializeField] private TextMeshProUGUI goldText;
 
     [Header("게이지")]
@@ -28,10 +26,8 @@ public class GameHUD : HUDUI
     [Header("타이머")]
     // 곧 지워 질 것(?)
     [SerializeField] private TextMeshProUGUI timerText;
-    private ReactiveProperty<float> curTime => GameManager.Instance.curTime;// new ReactiveProperty<float>();
+    private ReactiveProperty<float> curTime => GameManager.Instance.curTime;
 
-    //[Header("버튼")]
-    //[SerializeField] private Button pauseButton;
     private InputAction inputAction;
 
     [Header("미니맵")]
@@ -44,15 +40,16 @@ public class GameHUD : HUDUI
     public PauseUI pauseUI;
     public GameResultUI gameResultUI;
 
-    [Header("현재 상태")]
-    public bool isPaused = false;
-    [NonSerialized] public GameObject openWindow = null;
 
-    [Header("기타 UI 그룹오브젝트")]
+    [Header("기타 UI 그룹 오브젝트")]
     public GameObject HUDGroup;
     public GameObject BackgroundGroup;
     public GameObject TopButtonGroup;
     public GameObject EtcUIGroup;
+
+    [Header("현재 상태")]
+    public bool isPaused = false;
+    [NonSerialized] public GameObject openWindow = null;
 
     [Header("레벨업 테스트 버튼")]
     public Button LevelUPTestButton;
@@ -80,8 +77,6 @@ public class GameHUD : HUDUI
         queenActiveSkillGaugeUI.Bind(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
 
-        //pauseButton.onClick.AddListener(() => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<PauseUI>());
-
         GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
 
         // 레벨업 테스트 버튼
@@ -95,8 +90,6 @@ public class GameHUD : HUDUI
         inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
         inputAction.started += OnPauseUI;
     }
-
-
 
     /// <summary>
     /// 컨트롤러들 타입을 넣어서 활성화
@@ -164,8 +157,10 @@ public class GameHUD : HUDUI
         BackgroundGroup.SetActive(false);
         TopButtonGroup.SetActive(false);
         EtcUIGroup.SetActive(false);
+
         openWindow.SetActive(false);
         openWindow = null;
+
         Time.timeScale = 1f; // 시간 흐름
         isPaused = false;
         GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
@@ -233,21 +228,11 @@ public class GameHUD : HUDUI
 
     private void OnDestroy()
     {
-        if (curTime != null)
-        {
-            curTime.RemoveAction(UpdateTimerText);
-        }
+        curTime?.RemoveAction(UpdateTimerText);
+        condition.Level?.RemoveAction(UpdateLevelText);
+        condition.Gold?.RemoveAction(UpdateGoldText);
 
-        if (condition.Level != null)
-        {
-            condition.Level.RemoveAction(UpdateLevelText);
-        }
-
-        if (condition.Gold != null)
-        {
-            condition.Gold.RemoveAction(UpdateGoldText);
-        }
-
-        inputAction.started -= OnPauseUI;
+        if (inputAction != null)
+            inputAction.started -= OnPauseUI;
     }
 }
