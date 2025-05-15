@@ -63,7 +63,7 @@ public class HeroAbilityFireball : HeroAbilitySystem
         Vector2 nor= new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)).normalized;
         Vector2 targetPos = (Vector2)hero.transform.position + nor * 3f;
         var bullet = objectPoolManager.GetObject<HeroTargetBullet>("HeroFireball", hero.transform.position);
-        bullet.SetBullet(damage, speed, knockback, targetPos);
+        bullet.SetBullet(damage, speed, knockback, targetPos,damage_Range);
         bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
     }

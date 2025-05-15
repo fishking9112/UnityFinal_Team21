@@ -34,6 +34,9 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     [SerializeField] protected float countDelay;
     [SerializeField] protected float countDelay_LevelUp;
     [SerializeField] protected float knockback;
+    [SerializeField] protected float damage_Delay;
+    [SerializeField] protected float damage_Range;
+
     [SerializeField] protected int curLevel;
 
 
@@ -69,6 +72,8 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         countDelay = heroAbilityInfo.countDelay_Base;
         countDelay_LevelUp = heroAbilityInfo.countDelay_LevelUp;
         knockback = heroAbilityInfo.knockback;
+        damage_Delay = heroAbilityInfo.damage_Delay;
+        damage_Range= heroAbilityInfo.damage_Range;
         maxLevel = heroAbilityInfo.maxLevel;
         pivot = heroAbilityInfo.pivot;
         curLevel = 1;

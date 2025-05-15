@@ -18,6 +18,8 @@ public enum IDHeroAbility
     TARGETTING,
     BURST,
     SPEAR,
+    HOLD,
+    THUNDER,
 }
 
 public enum IDHeroStatus

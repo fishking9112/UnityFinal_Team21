@@ -46,6 +46,8 @@ public class HeroAbilityInfo : IInfo
     public float count_LevelUp;
     public float countDelay_Base;
     public float countDelay_LevelUp;
+    public float damage_Delay;
+    public float damage_Range;
 
     public int ID => id;
     public string Name => name;
@@ -145,6 +147,12 @@ public class HeroAbilityData : SheetDataReaderBase
                     break;
                 case "countDelay_LevelUp":
                     heroAbilityInfo.countDelay_LevelUp = Utils.StringToFloat(cell.value);
+                    break;
+                case "damage_Delay":
+                    heroAbilityInfo.damage_Delay = Utils.StringToFloat(cell.value);
+                    break;
+                case "damage_Range":
+                    heroAbilityInfo.damage_Range = Utils.StringToFloat(cell.value);
                     break;
             }
         }

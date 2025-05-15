@@ -11,7 +11,7 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
 
     private float speed;
     private float damage;
-
+    private float radius;
     float knockback;
     CancellationTokenSource cancel;
     private bool isDispose;
@@ -46,10 +46,11 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
 
     }
 
-    public void SetBullet(float dmg,float spd,float knockback,Vector2 t)
+    public void SetBullet(float dmg,float spd,float knockback,Vector2 t,float rad)
     {
         damage = dmg;
         speed = spd;
+        radius = rad;
         this.knockback = knockback;
         cancel=new CancellationTokenSource();
         isDispose = false;
@@ -90,7 +91,7 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
 
     private void Explode()
     {
-        Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, 3, 1 << 7| 1<<13);
+        Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, radius, 1 << 7| 1<<13);
 
         foreach (var c in col)
         {
