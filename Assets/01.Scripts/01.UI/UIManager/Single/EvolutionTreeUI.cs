@@ -50,8 +50,7 @@ public class EvolutionTreeUI : SingleUI
 
     private void OnEnable()
     {
-        curIndex = 0;
-        ShowPage(curIndex);
+        ShowPage(0);
     }
 
     private void Start()
@@ -91,8 +90,9 @@ public class EvolutionTreeUI : SingleUI
         if (index >= 0 && index < pageList.Count)
         {
             currentTreePage = pageList[index].evolutionTree.GetComponent<EvolutionTree>();
+
+            currentTreePage.Init(this);
             SetSlotList(currentTreePage);
-            currentTreePage.SelectFirstNode();
         }
 
         // 해당 카테고리의 선택 표시 UI 활성화

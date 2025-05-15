@@ -15,9 +15,10 @@ public class EvolutionTree : MonoBehaviour
 
     public EvolutionNode selectedNode;
 
-    private void Awake()
+    public void Init(EvolutionTreeUI treeUI)
     {
-        evolutionTreeUI = GetComponentInParent<EvolutionTreeUI>();
+        evolutionTreeUI = treeUI;
+
         queenCondition = GameManager.Instance.queen.condition;
         queenController = GameManager.Instance.queen.controller;
         evolutionNodeDic = new Dictionary<int, EvolutionNode>();
@@ -35,10 +36,8 @@ public class EvolutionTree : MonoBehaviour
                 evolutionNodeDic[(int)node.monsterInfoId] = node;
             }
         }
-    }
 
-    private void OnEnable()
-    {
+        SelectFirstNode();
         UpdateAllNode();
     }
 
@@ -129,7 +128,9 @@ public class EvolutionTree : MonoBehaviour
     public void SelectFirstNode()
     {
         if (evolutionNodeList == null || evolutionNodeList.Count == 0)
+        {
             return;
+        }
 
         selectedNode = evolutionNodeList[0];
         evolutionTreeUI.UpdateDescriptionWindow(selectedNode);
