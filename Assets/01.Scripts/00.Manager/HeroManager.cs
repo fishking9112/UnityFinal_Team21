@@ -78,14 +78,14 @@ public class HeroManager : MonoSingleton<HeroManager>
         hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
     }
 
-    public List<GameObject> SummonHeros(Vector2 v, int count)
+    public List<GameObject> SummonHeros(Vector2 v, int count, bool isEventMark = true)
     {
         heroList.Clear();
 
         for (int i = 0; i < count; i++)
         {
             HeroController hero = HeroPoolManager.Instance.GetObject(GetRandomPos(v, 3));
-            hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
+            hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI, isEventMark);
             heroList.Add(hero.gameObject);
         }
         return heroList;
@@ -98,7 +98,7 @@ public class HeroManager : MonoSingleton<HeroManager>
             SummonBoss(RandomSummonPos(90, 90), 1);
         }
     }
-    public GameObject SummonBoss(Vector2 v, int type)
+    public GameObject SummonBoss(Vector2 v, int type, bool isEventMark = true)
     {
         //int cnt = DataManager.Instance.heroStatusDic.Select(x=>x.Value.id==201);
 
@@ -106,7 +106,7 @@ public class HeroManager : MonoSingleton<HeroManager>
 
         // HeroController boss = HeroPoolManager.Instance.GetBossObject(RandomSummonPos(90, 90));
         HeroController boss = HeroPoolManager.Instance.GetBossObject(GetRandomPos(v, 3));
-        boss?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
+        boss?.StatInit(statusInfo, HeroManager.Instance.isHealthUI, isEventMark);
 
         return boss.gameObject;
 

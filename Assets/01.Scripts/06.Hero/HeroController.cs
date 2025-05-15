@@ -3,6 +3,7 @@ using System;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 
 public class HeroController : BaseController
 {
@@ -10,6 +11,9 @@ public class HeroController : BaseController
 
     public NavMeshAgent navMeshAgent;
     [SerializeField] private Hero hero;
+    [SerializeField] private GameObject eventMark;
+    [SerializeField] private SortingGroup group;
+    private Vector3 lastPos = new();
 
     public Transform pivot;
 
@@ -22,13 +26,21 @@ public class HeroController : BaseController
 
     [SerializeField] public HeroStatusInfo statusInfo;
 
+    private void Update()
+    {
+        if (transform.position != lastPos)
+        {
+            lastPos = transform.position;
+            group.sortingOrder = Mathf.RoundToInt(transform.position.y * -100);
+        }
+    }
     public void InitHero()
     {
         stateMachine = new HeroState(hero, this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         stateMachine.navMeshAgent = navMeshAgent;
-        pivot = transform.GetChild(1);
-        stateMachine.animator=GetComponentInChildren<Animator>();
+        pivot = transform.GetChild(2);
+        stateMachine.animator = GetComponentInChildren<Animator>();
 
 
         navMeshAgent.updateRotation = false;
@@ -38,7 +50,7 @@ public class HeroController : BaseController
 
 
 
-    public void StatInit(HeroStatusInfo stat, bool isHealthUI)
+    public void StatInit(HeroStatusInfo stat, bool isHealthUI, bool isEventMark = false)
     {
         hero.Init(stat.detectedRange);
         navMeshAgent.speed = stat.moveSpeed;
@@ -48,6 +60,8 @@ public class HeroController : BaseController
         this.statusInfo.Copy(stat);
 
         hero.ResetAbility();
+
+        eventMark.SetActive(isEventMark);
 
         for (int i = 0; i < stat.weapon.Length; i++)
         {
