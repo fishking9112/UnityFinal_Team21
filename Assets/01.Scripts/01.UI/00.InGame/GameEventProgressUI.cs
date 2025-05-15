@@ -26,7 +26,6 @@ public class GameEventProgressUI : MonoBehaviour
     private readonly Queue<ScheduledEvent> scheduledEvents = new();
     private readonly List<GameEventBase> activeEvents = new();
 
-    public Button eventBtn;
     public Vector2 currentEventPosition = new();
 
     public List<MiniCastle> miniCastles = new();
@@ -36,12 +35,17 @@ public class GameEventProgressUI : MonoBehaviour
     private float totalTime => GameManager.Instance.gameLimitTime;
     private float curTime => GameManager.Instance.curTime.Value;
 
-    [Header("이벤트를 위한 프리팹")]
+    [Header("이벤트 Context를 위한 프리팹")]
+    public Transform contextTransform;
+    public GameEventContextUI contextUIPrefab;
+    public EventMarkIcon eventMarkIconPrefab;
+
+    [Header("이벤트 생성을 위한 프리팹")]
     public MiniCastle miniCastlePrefab;
+    public MiniBarrack miniBarrackPrefab;
 
     private void Start()
     {
-        eventBtn.onClick.AddListener(CameraMoveEvent);
         CreateEvent(rank: 1, fillPosition: 1 / 4f);
         CreateEvent(rank: 2, fillPosition: 2 / 4f);
         CreateEvent(rank: 3, fillPosition: 3 / 4f);
@@ -101,20 +105,21 @@ public class GameEventProgressUI : MonoBehaviour
         GameEventBase eventInstance = null;
 
         Vector2 spawnPos = Vector2.zero; // 원하는 위치
+        var contextUI = Instantiate(contextUIPrefab, contextTransform);
 
         switch (eventTableInfo.type)
         {
             case EventTableType.Type_1: // 임의의 적 소환
                 spawnPos = GetRandomEdgePosition(98, 98); // 원하는 위치
                 var heros = HeroManager.Instance.SummonHeros(spawnPos, eventTableInfo.count);
-                eventInstance = new KillEnemiesEvent(heros);
+                eventInstance = new KillEnemiesEvent(heros, eventTableInfo, contextUI);
                 break;
 
             case EventTableType.Type_2:
                 // 영웅 소환
                 spawnPos = GetRandomEdgePosition(90, 90); // 원하는 위치
                 var bossHero = HeroManager.Instance.SummonBoss(spawnPos, 1);//eventTableInfo.createId);
-                eventInstance = new KillEnemiesEvent(bossHero);
+                eventInstance = new KillEnemiesEvent(bossHero, eventTableInfo, contextUI);
                 break;
 
             case EventTableType.Type_3: // 성 방어 이벤트
@@ -122,12 +127,20 @@ public class GameEventProgressUI : MonoBehaviour
                 MiniCastle castlePrefab = Instantiate(miniCastlePrefab);
                 castlePrefab.transform.position = spawnPos;
 
-                eventInstance = new DefendAreaEvent(castlePrefab, spawnPos, eventTableInfo.timer);
+                eventInstance = new DefendAreaEvent(castlePrefab, spawnPos, eventTableInfo.timer, eventTableInfo, contextUI);
+                break;
+
+            case EventTableType.Type_4: // 배럭 공격 이벤트
+                spawnPos = GetRandomEdgePosition(90, 90); // 원하는 위치
+                MiniBarrack barrackPrefab = Instantiate(miniBarrackPrefab);
+                barrackPrefab.transform.position = spawnPos;
+
+                eventInstance = new AttackAreaEvent(barrackPrefab, spawnPos, eventTableInfo.spawnDuration, eventTableInfo, contextUI);
                 break;
         }
 
+        Instantiate(eventMarkIconPrefab, spawnPos, Quaternion.identity);
         currentEventPosition = spawnPos;
-        eventBtn.gameObject.SetActive(true);
 
         if (eventInstance != null)
         {
@@ -148,6 +161,10 @@ public class GameEventProgressUI : MonoBehaviour
         var selected = candidates[Random.Range(0, candidates.Count)];
 
         Image icon = Instantiate(eventIconPrefab, background);
+        if (selected.icon != null && selected.icon != "")
+        {
+            icon.sprite = DataManager.Instance.iconAtlas.GetSprite(selected.icon);
+        }
         Vector2 spawnPos = GetIconSpawnPosition(fillPosition);
         icon.GetComponent<RectTransform>().anchoredPosition = spawnPos;
 
@@ -181,7 +198,6 @@ public class GameEventProgressUI : MonoBehaviour
     /// </summary>
     public void CameraMoveEvent()
     {
-        eventBtn.gameObject.SetActive(false);
         GameManager.Instance.cameraController.MiniMapCameraMove(currentEventPosition);
     }
 

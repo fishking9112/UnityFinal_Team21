@@ -10,11 +10,14 @@ public class DefendAreaEvent : GameEventBase
     private Vector2 spawnPosition;
 
     // 생성자에서 성 프리팹과 위치 전달
-    public DefendAreaEvent(MiniCastle castleInstance, Vector2 spawnPosition, float defendDuration)
+    public DefendAreaEvent(MiniCastle castleInstance, Vector2 spawnPosition, float defendDuration, EventTableInfo eventTableInfo, GameEventContextUI contextUI)
     {
         this.castleInstance = castleInstance;
         this.spawnPosition = spawnPosition;
         this.defendDuration = defendDuration;
+        this.contextUI = contextUI;
+        this.contextUI.titleText.text = $"◆ {eventTableInfo.name}";
+        UpdateText();
     }
 
     public override void StartEvent()
@@ -35,6 +38,7 @@ public class DefendAreaEvent : GameEventBase
         }
 
         castleInstance.timerText.text = $"{Mathf.CeilToInt(defendDuration)}s";
+        UpdateText();
         defendDuration -= Time.deltaTime;
 
         base.UpdateEvent(); // 성공/실패 판정
@@ -54,12 +58,19 @@ public class DefendAreaEvent : GameEventBase
     {
         Utils.Log("성을 성공적으로 방어했습니다! 보상 지급!");
         GameObject.Destroy(castleInstance.gameObject);
+        GameObject.Destroy(contextUI.gameObject);
         // 보상 지급 로직 추가 가능
     }
 
     protected override void OnFail()
     {
         Utils.Log("성이 파괴되었습니다! 방어 실패!");
+        GameObject.Destroy(contextUI.gameObject);
         // 패널티 로직 추가 가능
+    }
+
+    private void UpdateText()
+    {
+        contextUI.contentText.text = $"생성된 거점을 일정시간 방어하세요 <color=green>{Mathf.CeilToInt(defendDuration)}s</color>";
     }
 }

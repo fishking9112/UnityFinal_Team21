@@ -9,6 +9,7 @@ public enum EventTableType
     Type_1,
     Type_2,
     Type_3,
+    Type_4,
 }
 
 [Serializable]
@@ -25,6 +26,7 @@ public class EventTableInfo : IInfo
     public int createId;
     public float createHp;
     public float timer;
+    public float spawnDuration;
 
     public int ID => id;
     public string Name => name;
@@ -79,6 +81,9 @@ public class EventTableData : SheetDataReaderBase
                     break;
                 case "timer":
                     eventInfo.timer = Utils.StringToFloat(cell.value);
+                    break;
+                case "spawnDuration":
+                    eventInfo.spawnDuration = Utils.StringToFloat(cell.value);
                     break;
             }
         }

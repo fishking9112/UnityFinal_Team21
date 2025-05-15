@@ -5,14 +5,24 @@ using UnityEngine;
 public class KillEnemiesEvent : GameEventBase
 {
     private List<GameObject> heros = new();
+    private int maxCount = 0;
+    private int curCount = 0;
 
-    public KillEnemiesEvent(List<GameObject> spawnedHeros)
+    public KillEnemiesEvent(List<GameObject> spawnedHeros, EventTableInfo eventTableInfo, GameEventContextUI contextUI)
     {
         this.heros = spawnedHeros;
+        maxCount = heros.Count;
+        this.contextUI = contextUI;
+        contextUI.titleText.text = $"◆ {eventTableInfo.name}";
+        UpdateText();
     }
-    public KillEnemiesEvent(GameObject spawnedHero)
+    public KillEnemiesEvent(GameObject spawnedHero, EventTableInfo eventTableInfo, GameEventContextUI contextUI)
     {
         this.heros.Add(spawnedHero);
+        maxCount = heros.Count;
+        this.contextUI = contextUI;
+        contextUI.titleText.text = $"◆ {eventTableInfo.name}";
+        UpdateText();
     }
 
     public override void StartEvent()
@@ -30,6 +40,13 @@ public class KillEnemiesEvent : GameEventBase
     protected override bool CheckCompletionCondition()
     {
         heros.RemoveAll(e => e.gameObject.activeSelf == false);
+
+        if (maxCount - heros.Count != curCount)
+        {
+            curCount = maxCount - heros.Count;
+            UpdateText();
+        }
+
         return heros.Count == 0;
     }
 
@@ -41,11 +58,18 @@ public class KillEnemiesEvent : GameEventBase
 
     protected override void GiveReward()
     {
+        GameObject.Destroy(contextUI.gameObject);
         Utils.Log("모든 몬스터 처치 완료! 보상 지급!");
     }
 
     protected override void OnFail()
     {
+        GameObject.Destroy(contextUI.gameObject);
         Utils.Log("실패? 없을텐데 왜?");
+    }
+
+    private void UpdateText()
+    {
+        contextUI.contentText.text = $"소환된 히어로를 처치하세요 <color=red>{curCount}/{maxCount}</color>";
     }
 }
