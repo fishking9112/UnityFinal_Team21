@@ -33,22 +33,18 @@ public class AttackAreaEvent : GameEventBase
 
     public override void UpdateEvent()
     {
-        if (barrackInstance == null)
+        if (barrackInstance != null)
         {
-            // 배럭이 파괴된 경우
-            IsCompleted = true;
-            return;
-        }
+            barrackInstance.spawnDurationText.text = $"{Mathf.CeilToInt(spawnCurrentDuration)}s";
+            UpdateText();
+            spawnCurrentDuration -= Time.deltaTime;
 
-        barrackInstance.spawnDurationText.text = $"{Mathf.CeilToInt(spawnCurrentDuration)}s";
-        UpdateText();
-        spawnCurrentDuration -= Time.deltaTime;
-
-        if (spawnCurrentDuration <= 0f)
-        {
-            // 소환 및 스폰 타임 초기화
-            spawnCurrentDuration = spawnDuration;
-            HeroManager.Instance.SummonHeros(spawnPosition, 1, false);//eventTableInfo.createId);
+            if (spawnCurrentDuration <= 0f)
+            {
+                // 소환 및 스폰 타임 초기화
+                spawnCurrentDuration = spawnDuration;
+                HeroManager.Instance.SummonHeros(spawnPosition, 1, false);//eventTableInfo.createId);
+            }
         }
 
         base.UpdateEvent(); // 성공/실패 판정
@@ -67,7 +63,6 @@ public class AttackAreaEvent : GameEventBase
     protected override void GiveReward()
     {
         Utils.Log("배럭을 성공적으로 부셨습니다! 보상 지급!");
-        GameObject.Destroy(barrackInstance.gameObject);
         GameObject.Destroy(contextUI.gameObject);
         // 보상 지급 로직 추가 가능
     }

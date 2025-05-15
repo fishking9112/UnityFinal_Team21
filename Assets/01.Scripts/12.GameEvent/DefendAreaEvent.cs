@@ -37,9 +37,12 @@ public class DefendAreaEvent : GameEventBase
             return;
         }
 
-        castleInstance.timerText.text = $"{Mathf.CeilToInt(defendDuration)}s";
-        UpdateText();
-        defendDuration -= Time.deltaTime;
+        if (castleInstance != null)
+        {
+            castleInstance.timerText.text = $"{Mathf.CeilToInt(defendDuration)}s";
+            UpdateText();
+            defendDuration -= Time.deltaTime;
+        }
 
         base.UpdateEvent(); // 성공/실패 판정
     }

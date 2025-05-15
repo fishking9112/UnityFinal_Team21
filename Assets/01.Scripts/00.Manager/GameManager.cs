@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum CursorState
@@ -13,6 +14,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     public Queen queen;
     public Castle castle;
+    public Dictionary<GameObject, MiniCastle> miniCastles = new();
+    public Dictionary<GameObject, MiniBarrack> miniBarracks = new();
     private CursorState curCursorState;
     public CameraController cameraController;
 
@@ -101,6 +104,8 @@ public class GameManager : MonoSingleton<GameManager>
     {
         curTime.Value = gameLimitTime;
         isTimeOver = false;
+        miniCastles.Clear();
+        miniBarracks.Clear();
     }
 
     public void GameClear()

@@ -477,7 +477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 16448
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -485,6 +485,7 @@ MonoBehaviour:
   statHandler: {fileID: 8630020140936709011}
   buffController: {fileID: -1919209602402898860}
   takeDamagedRendererTimer: 0.5
+  originScale: {x: 0, y: 0, z: 0}
 --- !u!114 &-1919209602402898860
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -101,6 +101,12 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
                 StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[id].allDamage += finalAttackDamage;
             }
 
+            else if (GameManager.Instance.miniBarracks.ContainsKey(collision.gameObject))
+            {
+                GameManager.Instance.miniBarracks[collision.gameObject].TakeDamaged(finalAttackDamage);
+                var id = baseController.monsterInfo.id;
+                StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[id].allDamage += finalAttackDamage;
+            }
             DestroyProjectile(collision.ClosestPoint(transform.position), fxOnDestory);
         }
     }

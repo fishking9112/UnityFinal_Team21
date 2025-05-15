@@ -22,6 +22,7 @@ public class MiniBarrack : MonoBehaviour
     private void Awake()
     {
         // GameManager.Instance.castle = this;
+        GameManager.Instance.miniBarracks.Add(gameObject, this);
 
         cur = condition.CurCastleHealth;
         max = condition.MaxCastleHealth;
@@ -49,15 +50,15 @@ public class MiniBarrack : MonoBehaviour
     /// <param name="amount"> 입힐 데미지 양 </param>
     public virtual void TakeDamaged(float amount)
     {
-        Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
-        Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
-        if (condition.IsInvincible)
-        {
-            StaticUIManager.Instance.damageLayer.ShowDamage(0, worldPos + Vector3.up * 0.5f, fontSize: 1f);
-            return;
-        }
-        StaticUIManager.Instance.damageLayer.ShowDamage(amount, worldPos + Vector3.up * 0.5f, fontSize: 1f);
-        TakeDamagedRenderer();
+        // Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
+        // Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
+        // if (condition.IsInvincible)
+        // {
+        //     StaticUIManager.Instance.damageLayer.ShowDamage(0, worldPos + Vector3.up * 0.5f, fontSize: 1f);
+        //     return;
+        // }
+        // StaticUIManager.Instance.damageLayer.ShowDamage(amount, worldPos + Vector3.up * 0.5f, fontSize: 1f);
+        // TakeDamagedRenderer();
 
 
         condition.AdjustCurHealth(-amount);
@@ -91,6 +92,8 @@ public class MiniBarrack : MonoBehaviour
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
         _takeDamagedRendererCts = null;
+
+        GameManager.Instance.miniBarracks.Remove(gameObject);
     }
 
     // UniTask 실행 함수

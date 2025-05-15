@@ -22,6 +22,7 @@ public class MiniCastle : MonoBehaviour
     private void Awake()
     {
         // GameManager.Instance.castle = this;
+        GameManager.Instance.miniCastles.Add(gameObject, this);
 
         cur = condition.CurCastleHealth;
         max = condition.MaxCastleHealth;
@@ -91,6 +92,8 @@ public class MiniCastle : MonoBehaviour
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
         _takeDamagedRendererCts = null;
+
+        GameManager.Instance.miniCastles.Remove(gameObject);
     }
 
     // UniTask 실행 함수

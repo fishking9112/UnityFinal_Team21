@@ -28,8 +28,6 @@ public class GameEventProgressUI : MonoBehaviour
 
     public Vector2 currentEventPosition = new();
 
-    public List<MiniCastle> miniCastles = new();
-
     private bool isPaused => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused;
     private bool isTimeOver => GameManager.Instance.isTimeOver;
     private float totalTime => GameManager.Instance.gameLimitTime;
@@ -158,7 +156,7 @@ public class GameEventProgressUI : MonoBehaviour
         var candidates = DataManager.Instance.eventDic.Values.Where(x => x.rank == rank).ToList();
         if (candidates.Count == 0) return;
 
-        var selected = candidates[Random.Range(0, candidates.Count)];
+        var selected = candidates[candidates.Count - 1];//Random.Range(0, candidates.Count)];
 
         Image icon = Instantiate(eventIconPrefab, background);
         if (selected.icon != null && selected.icon != "")
