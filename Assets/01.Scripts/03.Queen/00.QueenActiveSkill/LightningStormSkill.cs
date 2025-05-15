@@ -20,7 +20,7 @@ public class LightingStormSkill : QueenActiveSkillBase
         LightningStormEffect(mousePos, info.size, tickCount).Forget();
 
         skillParticle = ParticleManager.Instance.SpawnParticle("LightningStorm_Range", mousePos, Vector3.one, Quaternion.identity);
-        Invoke("ParticleDelayDespawn", 3f);
+        Invoke("ParticleDespawn", 3f);
 
         for (int i = 0; i < tickCount; i++)
         {
@@ -49,7 +49,7 @@ public class LightingStormSkill : QueenActiveSkillBase
         }
     }
 
-    private void ParticleDelayDespawn()
+    private void ParticleDespawn()
     {
         skillParticle.OnDespawn();
     }

@@ -50,8 +50,7 @@ public class EvolutionTreeUI : SingleUI
 
     private void OnEnable()
     {
-        curIndex = 0;
-        ShowPage(curIndex);
+        ShowPage(0);
     }
 
     private void Start()
@@ -91,6 +90,9 @@ public class EvolutionTreeUI : SingleUI
         if (index >= 0 && index < pageList.Count)
         {
             currentTreePage = pageList[index].evolutionTree.GetComponent<EvolutionTree>();
+
+            currentTreePage.Init(this);
+            SetSlotList(currentTreePage);
         }
 
         // 해당 카테고리의 선택 표시 UI 활성화
@@ -105,8 +107,9 @@ public class EvolutionTreeUI : SingleUI
     {
         MonsterInfo info = node.monsterInfo;
 
+        monsterName.text = info.name;
         descriptionImage.enabled = true;
-        descriptionImage.sprite = node.image.sprite;
+        descriptionImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.icon);
         description.text = info.description;
         healthText.text = $"기본 체력 : {info.health}";
         attackText.text = $"기본 공격력 : {info.attack}";

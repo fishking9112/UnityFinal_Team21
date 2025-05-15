@@ -15,7 +15,7 @@ MonoBehaviour:
   sheetURL: 1Of0EBz6S6NjUCNtNGPNnWgAcb5RdXT_xJnsCn-1LZ4w
   sheetName: Monster
   startRowIndex: 2
-  endRowIndex: 20
+  endRowIndex: 30
   infoList:
   - id: 1001
     name: "\uC2AC\uB77C\uC784"
@@ -352,3 +352,182 @@ MonoBehaviour:
     projectile: MagicMissile
     tire: 2
     preNode: 1204
+  - id: 1401
+    name: "\uC5D8\uD504 \uC815\uCC30\uBCD1"
+    description: "\uC5D8\uD504\uC871 \uAE30\uBCF8 \uC720\uB2DB. \uBE60\uB978 \uC774\uB3D9\uC18D\uB3C4\uB85C
+      \uC815\uCC30\uC744 \uB2F4\uB2F9\uD55C\uB2E4."
+    health: 30
+    moveSpeed: 1.5
+    reward: 1
+    cost: 2
+    outfit: Elf_Scout
+    icon: Elf_Scout
+    attack: 5
+    attackRange: 5
+    attackSpeed: 0.5
+    monsterAttackType: 2
+    monsterBrood: 0
+    projectile: Arrow
+    tire: 0
+    preNode: -1
+  - id: 1402
+    name: "\uC5D8\uD504 \uAD81\uC218"
+    description: "\uC5D8\uD504\uC871 \uACE0\uC720\uC758 \uD65C \uAE30\uC220\uC744
+      \uC0AC\uC6A9\uD558\uB294 \uAD81\uC218"
+    health: 40
+    moveSpeed: 1.5
+    reward: 1
+    cost: 4
+    outfit: Elf_Archer
+    icon: Elf_Archer
+    attack: 7
+    attackRange: 10
+    attackSpeed: 0.5
+    monsterAttackType: 2
+    monsterBrood: 0
+    projectile: Arrow
+    tire: 1
+    preNode: 1401
+  - id: 1403
+    name: "\uC5D8\uD504 \uD5CC\uD130"
+    description: "\uB354\uC6B1 \uBA3C \uAC70\uB9AC\uC5D0\uC11C \uD65C\uC744 \uC3D8\uB294
+      \uC5D8\uD504 \uC785\uB2C8\uB2E4."
+    health: 50
+    moveSpeed: 1.5
+    reward: 1
+    cost: 6
+    outfit: Elf_Hunter
+    icon: Elf_Hunter
+    attack: 10
+    attackRange: 13
+    attackSpeed: 0.5
+    monsterAttackType: 2
+    monsterBrood: 0
+    projectile: Arrow
+    tire: 2
+    preNode: 1402
+  - id: 1404
+    name: "\uC5D8\uD504 \uC13C\uD2F0\uB12C"
+    description: "\uBE60\uB978 \uC774\uB3D9\uC18D\uB3C4\uB97C \uAE30\uBC18\uC73C\uB85C
+      \uADFC\uC811 \uC804\uD22C\uB97C \uBC8C\uC774\uB294 \uC5D8\uD504"
+    health: 60
+    moveSpeed: 1.5
+    reward: 1
+    cost: 4
+    outfit: Elf_Sentinel
+    icon: Elf_Sentinel
+    attack: 10
+    attackRange: 1
+    attackSpeed: 1
+    monsterAttackType: 1
+    monsterBrood: 0
+    projectile: 
+    tire: 1
+    preNode: 1401
+  - id: 1405
+    name: "\uC5D8\uD504 \uAC00\uB514\uC5B8"
+    description: "\uC232\uC744 \uC9C0\uD0A4\uB294 \uC5D8\uD504\uC871\uC758 \uAE30\uC0AC
+      \uC785\uB2C8\uB2E4."
+    health: 80
+    moveSpeed: 1.5
+    reward: 1
+    cost: 6
+    outfit: Elf_Guardian
+    icon: Elf_Guardian
+    attack: 15
+    attackRange: 1
+    attackSpeed: 1
+    monsterAttackType: 1
+    monsterBrood: 0
+    projectile: 
+    tire: 2
+    preNode: 1404
+  - id: 1501
+    name: "\uB2E4\uD06C\uC5D8\uD504"
+    description: "\uC232\uC758 \uC554\uC0B4\uC790\uB77C \uBD88\uB9AC\uB294 \uB2E4\uD06C\uC5D8\uD504
+      \uC885\uC871\uC785\uB2C8\uB2E4."
+    health: 50
+    moveSpeed: 2
+    reward: 1
+    cost: 2
+    outfit: 
+    icon: 
+    attack: 5
+    attackRange: 1
+    attackSpeed: 1.5
+    monsterAttackType: 2
+    monsterBrood: 0
+    projectile: 
+    tire: 0
+    preNode: -1
+  - id: 1502
+    name: "\uB2E4\uD06C\uC5D8\uD504 \uC2DC\uD504"
+    description: "\uB450\uC790\uB8E8\uC758 \uB2E8\uAC80\uC744 \uC0AC\uC6A9\uD558\uB294
+      \uC554\uC0B4\uC790 \uC785\uB2C8\uB2E4."
+    health: 70
+    moveSpeed: 2.5
+    reward: 1
+    cost: 4
+    outfit: 
+    icon: 
+    attack: 10
+    attackRange: 1
+    attackSpeed: 2
+    monsterAttackType: 1
+    monsterBrood: 0
+    projectile: 
+    tire: 1
+    preNode: 1501
+  - id: 1503
+    name: "\uB2E4\uD06C\uC5D8\uD504 \uC5B4\uC384\uC2E0"
+    description: "\uB354\uC6B1 \uBE68\uB77C\uC9C4 \uC18D\uB3C4\uB97C \uAC00\uC9C4
+      \uC5B4\uC384\uC2E0"
+    health: 80
+    moveSpeed: 3
+    reward: 1
+    cost: 6
+    outfit: 
+    icon: 
+    attack: 15
+    attackRange: 1
+    attackSpeed: 2.5
+    monsterAttackType: 1
+    monsterBrood: 0
+    projectile: 
+    tire: 2
+    preNode: 1502
+  - id: 1504
+    name: "\uB2E4\uD06C\uC5D8\uD504 \uB098\uC774\uD2B8"
+    description: "\uD22C\uCC99\uBB34\uAE30\uB97C \uC0AC\uC6A9\uD558\uC5EC \uC801\uC744
+      \uC554\uC0B4\uD558\uB294 \uB2E4\uD06C\uC5D8\uD504"
+    health: 60
+    moveSpeed: 2
+    reward: 1
+    cost: 4
+    outfit: 
+    icon: 
+    attack: 7
+    attackRange: 5
+    attackSpeed: 2
+    monsterAttackType: 2
+    monsterBrood: 0
+    projectile: Arrow
+    tire: 1
+    preNode: 1501
+  - id: 1505
+    name: "\uB2E4\uD06C\uC5D8\uD504 \uB098\uC774\uD2B8\uB85C\uB4DC"
+    description: "\uAC00\uC7A5 \uB6F0\uC5B4\uB09C \uC554\uC0B4\uC790 \uC785\uB2C8\uB2E4"
+    health: 70
+    moveSpeed: 2
+    reward: 1
+    cost: 6
+    outfit: 
+    icon: 
+    attack: 10
+    attackRange: 5
+    attackSpeed: 2
+    monsterAttackType: 2
+    monsterBrood: 0
+    projectile: Arrow
+    tire: 2
+    preNode: 1504
