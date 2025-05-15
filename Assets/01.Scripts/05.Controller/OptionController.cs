@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class OptionController : MonoBehaviour
 {
+    [SerializeField] private GameObject OptionPanelUI;
+
     [SerializeField] private Slider bgmSlider;
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Button saveButton;
@@ -55,7 +57,7 @@ public class OptionController : MonoBehaviour
     {
         tempBGMVolume = SoundManager.Instance.BGMVolume;
         tempSFXVolume = SoundManager.Instance.SFXVolume;
-        gameObject.SetActive(false);
+        OptionPanelUI.SetActive(false);
     }
 
     /// <summary>
@@ -69,6 +71,6 @@ public class OptionController : MonoBehaviour
         bgmSlider.value = tempBGMVolume;
         sfxSlider.value = tempSFXVolume;
 
-        gameObject.SetActive(false);
+        OptionPanelUI.SetActive(false);
     }
 }
