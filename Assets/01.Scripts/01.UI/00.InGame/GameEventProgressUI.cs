@@ -156,7 +156,7 @@ public class GameEventProgressUI : MonoBehaviour
         var candidates = DataManager.Instance.eventDic.Values.Where(x => x.rank == rank).ToList();
         if (candidates.Count == 0) return;
 
-        var selected = candidates[candidates.Count - 1];//Random.Range(0, candidates.Count)];
+        var selected = candidates[Random.Range(0, candidates.Count)];
 
         Image icon = Instantiate(eventIconPrefab, background);
         if (selected.icon != null && selected.icon != "")
