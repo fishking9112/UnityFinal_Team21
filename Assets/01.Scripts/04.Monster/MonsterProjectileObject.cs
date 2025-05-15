@@ -45,7 +45,7 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
         pivot = transform.GetChild(0);
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (!isReady)
         {
