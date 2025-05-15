@@ -46,6 +46,7 @@ public class GameHUD : HUDUI
     public GameObject EtcUIGroup;
     public GameObject OptionUIGroup;
     public Button OptionBtn;
+    public Button ExitBtn;
 
     [Header("현재 상태")]
     public bool isPaused = false;
