@@ -8,6 +8,8 @@ public enum MonsterAttackType
     NULL,
     MELEE,
     RANGED,
+    MAGIC,
+    SHURIKEN
 }
 
 public enum MonsterBrood

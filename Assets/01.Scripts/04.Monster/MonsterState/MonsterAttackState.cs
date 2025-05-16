@@ -16,19 +16,39 @@ public class MonsterAttackState : MonsterBaseState
         base.Enter();
         navMeshAgent.ResetPath();
         navMeshAgent.velocity = Vector2.zero;
-        spum.PlayAnimation(PlayerState.ATTACK, 0);
         spum.SetAttackSpeed(stat.attackSpeed.Value);
 
+
+        var attackType = stateMachine.Controller.monsterInfo.monsterAttackType;
+
+        switch (attackType)
+        {
+            case MonsterAttackType.MELEE:
+                spum.PlayAnimation(PlayerState.ATTACK, 0);
+                break;
+            case MonsterAttackType.RANGED:
+                spum.PlayAnimation(PlayerState.ATTACK, 2);
+                break;
+            case MonsterAttackType.MAGIC:
+                spum.PlayAnimation(PlayerState.ATTACK, 4);
+                break;
+            case MonsterAttackType.SHURIKEN:
+                spum.PlayAnimation(PlayerState.ATTACK, 0);
+                break;
+        }
+
+
         // 원거리 공격은 projectile 생성
-        if (stateMachine.Controller.monsterInfo.monsterAttackType == MonsterAttackType.RANGED)
+        if (attackType == MonsterAttackType.RANGED || attackType == MonsterAttackType.MAGIC || attackType == MonsterAttackType.SHURIKEN)
         {
             RangedAttack();
             return;
         }
 
         // 근거리 공격
-        if (stateMachine.Controller.monsterInfo.monsterAttackType == MonsterAttackType.MELEE)
+        if (attackType == MonsterAttackType.MELEE)
         {
+            spum.PlayAnimation(PlayerState.ATTACK, 0);
             MeleeAttack();
             return;
         }
@@ -158,7 +178,7 @@ public class MonsterAttackState : MonsterBaseState
         cts = new CancellationTokenSource();
 
         // 1초 프레임에서 0.65때 발사
-        UniTask.Delay((int)(650 * (1f / stat.attackSpeed.Value)), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
+        UniTask.Delay((int)(600 * (1f / stat.attackSpeed.Value)), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
         {
             var projectileObject = ObjectPoolManager.Instance.GetObject<MonsterProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
             projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);
