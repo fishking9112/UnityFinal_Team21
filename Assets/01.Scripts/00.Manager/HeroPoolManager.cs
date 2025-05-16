@@ -56,6 +56,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         GameObject hPrefab = Instantiate(bossList.ElementAt(rand), Vector3.zero, Quaternion.identity, hObj.transform);
         hObj.InitHero();
         hObj.transform.position = pos;
+        HeroManager.Instance.hero[hObj.gameObject] = hObj;
 
         return hObj;
     }
