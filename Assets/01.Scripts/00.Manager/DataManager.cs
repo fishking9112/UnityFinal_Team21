@@ -17,6 +17,7 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private MonsterData monsterData;
     [SerializeField] private QueenAbilityData queenAbilityData;
     [SerializeField] private HeroAbilityData heroAbilityData;
+    [SerializeField] private HeroAbilityLevelUpData heroAbilityLevelUpData;
     [SerializeField] private QueenEnhanceData queenEnhanceData;
     [SerializeField] private HeroStatusData heroStatusData;
     [SerializeField] private QueenActiveSkillData queenActiveSkillData;
@@ -31,6 +32,7 @@ public class DataManager : MonoSingleton<DataManager>
     public Dictionary<int, MonsterInfo> monsterDic = new Dictionary<int, MonsterInfo>();
     public Dictionary<int, QueenAbilityInfo> queenAbilityDic = new Dictionary<int, QueenAbilityInfo>();
     public Dictionary<int, HeroAbilityInfo> heroAbilityDic = new Dictionary<int, HeroAbilityInfo>();
+    public Dictionary<int, HeroAbilityLevelUpInfo> heroAbilityLevelUpDic = new Dictionary<int, HeroAbilityLevelUpInfo>();
     public Dictionary<int, QueenEnhanceInfo> queenEnhanceDic = new Dictionary<int, QueenEnhanceInfo>();
     public Dictionary<int, HeroStatusInfo> heroStatusDic = new Dictionary<int, HeroStatusInfo>();
     public Dictionary<int, QueenActiveSkillInfo> queenActiveSkillDic = new Dictionary<int, QueenActiveSkillInfo>();
@@ -45,6 +47,7 @@ public class DataManager : MonoSingleton<DataManager>
         Init<MonsterInfo>(monsterData.infoList, monsterDic);
         Init<QueenAbilityInfo>(queenAbilityData.infoList, queenAbilityDic);
         Init<HeroAbilityInfo>(heroAbilityData.infoList, heroAbilityDic);
+        Init<HeroAbilityLevelUpInfo>(heroAbilityLevelUpData.infoList, heroAbilityLevelUpDic);
         Init<QueenEnhanceInfo>(queenEnhanceData.infoList, queenEnhanceDic);
         Init<HeroStatusInfo>(heroStatusData.infoList, heroStatusDic);
         Init<QueenActiveSkillInfo>(queenActiveSkillData.infoList, queenActiveSkillDic);
