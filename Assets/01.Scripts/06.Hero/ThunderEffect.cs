@@ -9,8 +9,6 @@ public class ThunderEffect : MonoBehaviour,IPoolable
 {
     private Action<Component> returnToPool;
 
-    private ObjectPoolManager poolManager;
-
     private float damage;
     private float knockback;
     private float size;

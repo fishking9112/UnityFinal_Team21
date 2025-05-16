@@ -67,7 +67,8 @@ public class HeroAbilityHold : HeroAbilitySystem
 
             Vector2 randomPos = center + new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * distance;
 
-            var eff = ParticleManager.Instance.SpawnParticle("", randomPos, size);
+            var hold = objectPoolManager.GetObject<HoldObject>("HoldObject", randomPos);
+            hold.SetData(damage, knockback, size.x, damage_Range, damage_Delay);
 
             await UniTask.Delay(TimeSpan.FromSeconds(countDelay),cancellationToken:tk);
         }
