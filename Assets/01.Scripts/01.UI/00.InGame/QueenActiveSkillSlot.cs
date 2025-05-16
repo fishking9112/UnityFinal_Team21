@@ -26,6 +26,20 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
         }
     }
 
+    public void AddSlotToEmpty(QueenActiveSkillBase skill)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (!slotDic.ContainsKey(i))
+            {
+                AddSlot(i, skill);
+                return;
+            }
+        }
+
+        Utils.Log("비어 있는 슬롯이 없습니다.");
+    }
+
     public void StartCoolTimeUI(int index, float coolTime)
     {
         if (index < 0 || index >= coolTimeMask.Count)
