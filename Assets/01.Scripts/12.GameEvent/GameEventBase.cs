@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class GameEventBase
 {
+    public GameEventContextUI contextUI;
     public bool IsCompleted { get; protected set; }
     public bool IsFailed { get; protected set; }
 

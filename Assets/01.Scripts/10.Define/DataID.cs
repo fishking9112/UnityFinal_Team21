@@ -59,6 +59,12 @@ public enum IDMonster
     ELF_HUNTER,
     ELF_SENTINEL,
     ELF_GUARDIAN,
+
+    DARKELF_DARKELF = 1501,
+    DARKELF_THIEF,
+    DARKELF_ASSASSIN,
+    DARKELF_NIGHT,
+    DARKELF_NIGHTLOAD,
 }
 
 public enum IDQueenEnhance

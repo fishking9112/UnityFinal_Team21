@@ -62,6 +62,10 @@ public class QueenEnhanceUI : SingleUI
 
         switch (info.type)
         {
+            case QueenEnhanceType.AddSkill:
+                AcquireQueenSkill(id);
+                break;
+
             case QueenEnhanceType.QueenPassive:
                 ApplyQueenPassive(id, value);
                 break;
@@ -207,5 +211,18 @@ public class QueenEnhanceUI : SingleUI
     public int GetEnhanceLevel(int id)
     {
         return acquiredEnhanceLevels.TryGetValue(id, out var level) ? level : 0;
+    }
+
+    // 스킬 획득 함수명
+    private void AcquireQueenSkill(int id)
+    {
+        // 스킬 ID 값 넘겨주기
+    }
+
+    // 외부 스크립트에서 현재 강화 수치 레벨 다운(스킬 전용)
+    public void SetMiusAcquiredEnhanceLevels(int id)
+    {
+        if (acquiredEnhanceLevels.ContainsKey(id))
+            acquiredEnhanceLevels[id]--;
     }
 }

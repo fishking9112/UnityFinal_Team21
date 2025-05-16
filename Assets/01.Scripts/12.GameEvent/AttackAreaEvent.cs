@@ -1,0 +1,81 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Play.Publisher.Editor;
+using UnityEngine;
+
+public class AttackAreaEvent : GameEventBase
+{
+    private MiniBarrack barrackInstance;
+    public float spawnDuration;
+    public float spawnCurrentDuration;
+    private Vector2 spawnPosition;
+
+
+
+    // 생성자에서 성 프리팹과 위치 전달
+    public AttackAreaEvent(MiniBarrack barrackInstance, Vector2 spawnPosition, float spawnDuration, EventTableInfo eventTableInfo, GameEventContextUI contextUI)
+    {
+        this.barrackInstance = barrackInstance;
+        this.spawnPosition = spawnPosition;
+        this.spawnDuration = spawnDuration;
+        this.spawnCurrentDuration = spawnDuration;
+        this.contextUI = contextUI;
+        this.contextUI.titleText.text = $"◆ {eventTableInfo.name}";
+        UpdateText();
+    }
+
+    public override void StartEvent()
+    {
+        base.StartEvent();
+
+        Utils.Log($"히어로 막사가 소환했습니다. 부셔야 합니다.");
+    }
+
+    public override void UpdateEvent()
+    {
+        if (barrackInstance != null)
+        {
+            barrackInstance.spawnDurationText.text = $"{Mathf.CeilToInt(spawnCurrentDuration)}s";
+            UpdateText();
+            spawnCurrentDuration -= Time.deltaTime;
+
+            if (spawnCurrentDuration <= 0f)
+            {
+                // 소환 및 스폰 타임 초기화
+                spawnCurrentDuration = spawnDuration;
+                HeroManager.Instance.SummonHeros(spawnPosition, 1, false);//eventTableInfo.createId);
+            }
+        }
+
+        base.UpdateEvent(); // 성공/실패 판정
+    }
+
+    protected override bool CheckCompletionCondition()
+    {
+        return barrackInstance == null;
+    }
+
+    protected override bool CheckFailureCondition()
+    {
+        return false;
+    }
+
+    protected override void GiveReward()
+    {
+        Utils.Log("배럭을 성공적으로 부셨습니다! 보상 지급!");
+        GameObject.Destroy(contextUI.gameObject);
+        // 보상 지급 로직 추가 가능
+    }
+
+    protected override void OnFail()
+    {
+        Utils.Log("실패? 없을텐데 왜?");
+        GameObject.Destroy(contextUI.gameObject);
+        // 패널티 로직 추가 가능
+    }
+
+    private void UpdateText()
+    {
+        contextUI.contentText.text = $"히어로나 나옵니다 빨리 막사를 점령하세요 <color=red>{Mathf.CeilToInt(spawnCurrentDuration)}s</color>";
+    }
+}

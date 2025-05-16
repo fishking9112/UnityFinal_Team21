@@ -59,6 +59,12 @@ public class MonsterAttackState : MonsterBaseState
         attackTimer += Time.deltaTime;
         if (attackTimer < (1f / stat.attackSpeed.Value)) return;
 
+        if (target == null)
+        {
+            stateMachine.ChangeState(stateMachine.Tracking);
+            return;
+        }
+
         targetDistance = (target.position - navMeshAgent.transform.position).magnitude - (0.45f * target.transform.localScale.z);
 
         // 타겟과의 거리가 적절해졌다면
@@ -126,6 +132,11 @@ public class MonsterAttackState : MonsterBaseState
                     if (HeroManager.Instance.hero.ContainsKey(nearHit.gameObject))
                     {
                         HeroManager.Instance.hero[nearHit.gameObject].TakeDamaged(stat.attack.Value);
+                        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += stat.attack.Value;
+                    }
+                    else if (GameManager.Instance.miniBarracks.ContainsKey(nearHit.gameObject))
+                    {
+                        GameManager.Instance.miniBarracks[nearHit.gameObject].TakeDamaged(stat.attack.Value);
                         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += stat.attack.Value;
                     }
                 }
