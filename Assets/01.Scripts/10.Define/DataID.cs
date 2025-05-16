@@ -18,13 +18,39 @@ public enum IDHeroAbility
     TARGETTING,
     BURST,
     SPEAR,
+    HOLD,
+    THUNDER,
+}
+
+public enum IDHeroAbility_LevelUp
+{
+    SWORD = 201,
+    WAND,
+    BIBLE,
+    GARLIC,
+    AXE,
+    CHAIN,
+    TARGETTING,
+    BURST,
+    SPEAR,
+    HOLD,
+    THUNDER,
 }
 
 public enum IDHeroStatus
 {
-    HERO1 = 201,
+    HERO1 = 301,
     HERO2,
     HERO3,
+    HERO4,
+    HERO5,
+    HERO6,
+    HERO7,
+    HERO8,
+    HERO9,
+    HERO10,
+    HERO11,
+    HERO12,
 }
 
 public enum IDMonster
