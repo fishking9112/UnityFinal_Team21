@@ -117,12 +117,6 @@ public class HeroAbilityData : SheetDataReaderBase
                 case "damage_Range":
                     heroAbilityInfo.damage_Range = Utils.StringToFloat(cell.value);
                     break;
-                case "damage_Delay":
-                    heroAbilityInfo.damage_Delay = Utils.StringToFloat(cell.value);
-                    break;
-                case "damage_Range":
-                    heroAbilityInfo.damage_Range = Utils.StringToFloat(cell.value);
-                    break;
             }
         }
         infoList.Add(heroAbilityInfo);
