@@ -3,7 +3,7 @@ using System.Threading;
 using System;
 using UnityEngine;
 
-public class BaseBuffStrategy : MonoBehaviour
+public class BaseBuffStrategy
 {
     // 틱 데미지
     protected async UniTask TakeTickDamaged(BaseController target, BuffInfo info, CancellationTokenSource token, int level, float amount)

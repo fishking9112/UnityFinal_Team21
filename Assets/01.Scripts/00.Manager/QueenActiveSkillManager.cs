@@ -1,41 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QueenActiveSkillManager : MonoBehaviour
+public class QueenActiveSkillManager : MonoSingleton<QueenActiveSkillManager>
 {
     public GameObject allSkill;
     public Dictionary<int, QueenActiveSkillBase> queenActiveSkillDic;
+    private QueenActiveSkillSlot skillSlot;
 
     private void Start()
     {
         Init();
-
-        // 테스트 코드
-        Utils.DelayedTimeAction(() =>
-        {
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(0, queenActiveSkillDic[(int)IDQueenActiveSkill.SKELETON_LEGION]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(1, queenActiveSkillDic[(int)IDQueenActiveSkill.ATTACK_DAMAGE_UP]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(2, queenActiveSkillDic[(int)IDQueenActiveSkill.HEAL_WAVE]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(3, queenActiveSkillDic[(int)IDQueenActiveSkill.HEAL_RAIN]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(4, queenActiveSkillDic[(int)IDQueenActiveSkill.FIRE_EXPLOSION]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.HEAL_RAIN]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.SACRIFICE]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.MANA_RECYCLE]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.OVERWORK]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.RECALL]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.SKELETONLEGION]);
-            // GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.DEATHSYMBOL]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.CASTLE_INVINCIBLE]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.SUMMON_MILITIA]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.WARCRY]);
-            //GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.BLOOD_ROAR]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(0, queenActiveSkillDic[(int)IDQueenActiveSkill.GIANT_FORM]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(1, queenActiveSkillDic[(int)IDQueenActiveSkill.DECAY]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(2, queenActiveSkillDic[(int)IDQueenActiveSkill.SUMMON_OBSTACLE]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(3, queenActiveSkillDic[(int)IDQueenActiveSkill.LIGHTNING_STORM]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(4, queenActiveSkillDic[(int)IDQueenActiveSkill.LASER]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.GRAVITYBALL]);
-        }, 3);
     }
 
     private void Init()
@@ -53,5 +27,22 @@ public class QueenActiveSkillManager : MonoBehaviour
                 queenActiveSkillDic[skill.info.id] = skill;
             }
         }
+
+        skillSlot = GameManager.Instance.queen.controller.queenActiveSkillSlot;
+    }
+
+    public void AddSkill(int id)
+    {
+        skillSlot.AddSlotToEmpty(queenActiveSkillDic[id]);
+    }
+
+    public void AddSkill(int index, int id)
+    {
+        skillSlot.AddSlot(index, queenActiveSkillDic[id]);
+    }
+
+    public void RemoveSkill(int index)
+    {
+        skillSlot.RemoveSlot(index);
     }
 }
