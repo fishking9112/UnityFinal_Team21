@@ -13,6 +13,8 @@ public class HeroAbilityThunder : HeroAbilitySystem
     private ObjectPoolManager objectPoolManager;
     private CancellationTokenSource tk;
 
+    private ParticleSystem particle;
+
     /// <summary>
     /// 선언과 동시에 호출하기. 값 입력
     /// </summary>
@@ -25,7 +27,7 @@ public class HeroAbilityThunder : HeroAbilitySystem
     {
         hero = this.GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
-
+        particle = GetComponentInChildren<ParticleSystem>();
     }
     private void OnEnable()
     {
@@ -49,7 +51,7 @@ public class HeroAbilityThunder : HeroAbilitySystem
         Thunder(tk.Token).Forget();
     }
 
-    private async UniTaskVoid Thunder(CancellationToken tk)
+    private async UniTask Thunder(CancellationToken tk)
     {
         if (hero == null || token == null)
         {
@@ -69,12 +71,11 @@ public class HeroAbilityThunder : HeroAbilitySystem
         Vector2 randomPos = center + new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * distance;
 
 
-        var thunder = objectPoolManager.GetObject<ThunderEffect>("Thunder", hero.transform.position);
+        var thunder = objectPoolManager.GetObject<ThunderEffect>("HeroThunder", hero.transform.position);
         thunder.SetData(damage,knockback,size.x,damage_Range);
 
-
-        await UniTask.Delay(TimeSpan.FromSeconds(countDelay), cancellationToken: tk);
-       
+        await UniTask.WaitUntil(() => !particle.IsAlive(true));
+        thunder.OnDespawn();
     }
 
     public override void AbilityLevelUp()
