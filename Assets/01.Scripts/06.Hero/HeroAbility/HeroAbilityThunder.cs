@@ -21,7 +21,6 @@ public class HeroAbilityThunder : HeroAbilitySystem
         base.Initialize(id);
 
     }
-
     private void Start()
     {
         hero = this.GetComponent<Hero>();
@@ -30,7 +29,7 @@ public class HeroAbilityThunder : HeroAbilitySystem
     }
     private void OnEnable()
     {
-        Initialize((int)IDHeroAbility.WAND);
+        Initialize((int)IDHeroAbility.THUNDER);
         tk = new CancellationTokenSource();
 
     }

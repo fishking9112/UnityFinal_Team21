@@ -11,6 +11,7 @@ public class HoldObject : MonoBehaviour, IPoolable
 
     private Action<Component> returnToPool;
 
+    private float duration;
     private float damage;
     private float knockback;
     private float size;
@@ -19,8 +20,9 @@ public class HoldObject : MonoBehaviour, IPoolable
 
     private CancellationTokenSource token;
 
-    public void SetData(float dmg, float kback, float size, float dmgRange,float dmgDelay)
+    public void SetData(float dur,float dmg, float kback, float size, float dmgRange,float dmgDelay)
     {
+        duration = dur;
         damage = dmg;
         knockback = kback;
         this.size = size;
@@ -49,7 +51,12 @@ public class HoldObject : MonoBehaviour, IPoolable
 
     public void OnSpawn()
     {
-
+        LifeCycle().Forget();
+    }
+    private async UniTask LifeCycle()
+    {
+        await UniTask.WaitForSeconds(duration, false, PlayerLoopTiming.Update, this.destroyCancellationToken);
+        OnDespawn();
     }
 
 
