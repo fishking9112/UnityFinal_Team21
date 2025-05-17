@@ -38,7 +38,7 @@ public class HeroAbilityInfo : IInfo
     public float countDelay_Base;
     public float damage_Delay;
     public float damage_Range;
-
+    public int levelUp_ID;
     public int ID => id;
     public string Name => name;
     public string Description => description;
@@ -116,6 +116,9 @@ public class HeroAbilityData : SheetDataReaderBase
                     break;
                 case "damage_Range":
                     heroAbilityInfo.damage_Range = Utils.StringToFloat(cell.value);
+                    break;
+                case "levelUp_ID":
+                    heroAbilityInfo.levelUp_ID = Utils.StringToInt(cell.value);
                     break;
             }
         }
