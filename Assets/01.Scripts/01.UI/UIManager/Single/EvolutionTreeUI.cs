@@ -42,6 +42,11 @@ public class EvolutionTreeUI : SingleUI
     [Header("QuickSlot")]
     [SerializeField] private List<EvolutionSlot> slotList;
 
+    [Header("DragIcon")]
+    [SerializeField] private EvolutionDragIcon evolutionDragIcon;
+    public EvolutionDragIcon EvolutionDragIcon => evolutionDragIcon;
+    public Transform tfEvolutionDragIcon => evolutionDragIcon.transform;
+
     private int curIndex;
     private EvolutionTree currentTreePage;
 
@@ -138,5 +143,10 @@ public class EvolutionTreeUI : SingleUI
             slotList[i].evolutionTree = evolutionTree;
             slotList[i].slotIndex = i;
         }
+    }
+
+    public void PassEvolutionNodeInfo(EvolutionNode node)
+    {
+        evolutionDragIcon.SetEvolutionNode(node);
     }
 }

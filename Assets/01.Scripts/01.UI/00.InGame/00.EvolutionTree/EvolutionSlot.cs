@@ -1,38 +1,45 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EvolutionSlot : MonoBehaviour
+public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler
 {
     public EvolutionTree evolutionTree;
 
+    [SerializeField] private GameObject SelectedUI;
     [SerializeField] private Image slotIcon;
     [SerializeField] private Button slotButton;
 
     public int slotIndex;
     public EvolutionNode slotMonsterData;
 
-    private void Start()
+    private void OnEnable()
     {
-        slotButton.onClick.AddListener(OnClickSlot);
+        SelectedUI.SetActive(false);
     }
 
-    private void OnClickSlot()
+    public void OnDrop(PointerEventData eventData)
     {
-        // 아무 몬스터도 선택하지 않고 슬롯을 클릭하면 해당 슬롯 초기화
-        if(slotMonsterData != null)
-        {
-            ClearSlot();
-            evolutionTree.RemoveQueenSlot(slotIndex);
-            return;
-        }
+        var dragged = evolutionTree.EvolutionTreeUI.EvolutionDragIcon.GetComponent<EvolutionDragIcon>();
 
-        EvolutionNode node = evolutionTree.selectedNode;
-
-        if(node != null && node.isUnlock)
+        if (dragged != null)
         {
-            evolutionTree.RemovePreSlotData(node);
-            SetSlot(node);
-            evolutionTree.AddQueenSlot(node.monsterInfo, slotIndex);
+            // 아무 몬스터도 선택하지 않고 슬롯을 클릭하면 해당 슬롯 초기화
+            if (slotMonsterData != null)
+            {
+                ClearSlot();
+                evolutionTree.RemoveQueenSlot(slotIndex);
+                return;
+            }
+
+            EvolutionNode node = dragged.node;
+
+            if (node != null && node.isUnlock)
+            {
+                evolutionTree.RemovePreSlotData(node);
+                SetSlot(node);
+                evolutionTree.AddQueenSlot(node.monsterInfo, slotIndex);
+            }
         }
     }
 
@@ -55,5 +62,21 @@ public class EvolutionSlot : MonoBehaviour
     {
         slotMonsterData = null;
         slotIcon.enabled = false;
+    }
+
+    /// <summary>
+    /// 마우스가 버튼에 들어왔을 때 호출되는 함수.
+    /// </summary>
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SelectedUI.SetActive(true);
+    }
+
+    /// <summary>
+    /// 마우스가 버튼에서 나갔을 때 호출되는 함수.
+    /// </summary>
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        SelectedUI.SetActive(false);
     }
 }
