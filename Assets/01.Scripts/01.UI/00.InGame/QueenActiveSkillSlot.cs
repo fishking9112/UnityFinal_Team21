@@ -24,6 +24,13 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
         {
             coolTimeMask[index].fillAmount = 0f;
         }
+
+        // 해당 슬롯에 스킬설명을 위한 스킬 정보 넣기
+        var trigger = slotIconList[index].GetComponent<SkillDescriptionUITrigger>();
+        if (trigger != null)
+        {
+            trigger.skill = skill;
+        }
     }
 
     public void AddSlotToEmpty(QueenActiveSkillBase skill)
