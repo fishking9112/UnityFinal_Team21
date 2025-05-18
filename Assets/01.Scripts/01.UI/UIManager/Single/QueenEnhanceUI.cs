@@ -1,16 +1,32 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QueenEnhanceUI : SingleUI
 {
     [SerializeField] private QueenEnhanceStatusUI queenEnhanceStatusUI;
     [SerializeField] private SelectInhanceItem[] itemSlots;
+    [SerializeField] private QueenSkillSwapItem[] skillSwapSlots;
+    [SerializeField] private GameObject queenSkillSwapPopup;
+    [SerializeField] private Button SkillSwapPopupExitBtn;
 
     private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
     public IReadOnlyDictionary<int, int> AcquiredEnhanceLevels => acquiredEnhanceLevels;
 
+    private int tmpSkillID;
+
+    private void Awake()
+    {
+        SkillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
+    }
+
     private void OnEnable()
     {
+        SkillSwapPopupExitBtn.onClick.RemoveAllListeners();
+        SkillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
+
+        queenSkillSwapPopup.SetActive(false);
         var randomOptions = GetRandomInhanceOptions();
         ShowSelectUI(randomOptions);
     }
@@ -42,10 +58,24 @@ public class QueenEnhanceUI : SingleUI
     }
 
     /// <summary>
+    /// 스킬 교체 팝업 UI 닫기
+    /// </summary>
+    private void CloseSkillSwapPopupUI()
+    {
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            itemSlots[i].ResetButton();
+        }
+        queenSkillSwapPopup.SetActive(false);
+    }
+
+    /// <summary>
     /// 강화 항목을 실제로 적용한다.
     /// </summary>
-    public void ApplyInhance(QueenEnhanceInfo info)
+    public bool ApplyInhance(QueenEnhanceInfo info)
     {
+        bool result = true;
+
         int id = info.ID;
 
         if (acquiredEnhanceLevels.ContainsKey(id))
@@ -62,7 +92,7 @@ public class QueenEnhanceUI : SingleUI
         switch (info.type)
         {
             case QueenEnhanceType.AddSkill:
-                AcquireQueenSkill(info.skill_ID);
+                result = AcquireQueenSkill(info.skill_ID);
                 break;
 
             case QueenEnhanceType.QueenPassive:
@@ -77,6 +107,8 @@ public class QueenEnhanceUI : SingleUI
                 GameManager.Instance.queen.condition.AdjustEvolutionPoint(1f);
                 break;
         }
+
+        return result;
     }
 
     /// <summary>
@@ -176,7 +208,7 @@ public class QueenEnhanceUI : SingleUI
 
         while (result.Count < 3 && availableList.Count > 0)
         {
-            int index = Random.Range(0, availableList.Count);
+            int index = UnityEngine.Random.Range(0, availableList.Count);
             result.Add(availableList[index]);
             availableList.RemoveAt(index);
         }
@@ -213,13 +245,43 @@ public class QueenEnhanceUI : SingleUI
     }
 
     // 스킬 획득 함수명
-    private void AcquireQueenSkill(int id)
+    private bool AcquireQueenSkill(int id)
     {
-        QueenActiveSkillManager.Instance.AddSkill(id);
+        if(QueenActiveSkillManager.Instance.HasAvailableSkillSlot()) // 신규 스킬 습득 가능함.
+        {
+            QueenActiveSkillManager.Instance.AddSkill(id);
+
+            return true;
+        }
+        else // 스킬이 이미 가득참.
+        {
+            tmpSkillID = id;
+
+            queenSkillSwapPopup.SetActive(true);
+
+            for (int i = 0; i < skillSwapSlots.Length; i++)
+            {
+                skillSwapSlots[i].SetSkillinfo(QueenActiveSkillManager.Instance.ReturnSkillIDbyIndex(skillSwapSlots[i].Index));
+            }
+
+            return false;
+        }
     }
 
-    // 외부 스크립트에서 현재 강화 수치 레벨 다운(스킬 전용)
-    public void SetMiusAcquiredEnhanceLevels(int id)
+    public void SwapClickEvent(int index, int skillID)
+    {
+        SetMiusAcquiredEnhanceLevels(skillID);
+
+        QueenActiveSkillManager.Instance.AddSkill(index, tmpSkillID);
+
+        queenSkillSwapPopup.SetActive(false);
+
+        GameManager.Instance.queen.condition.EnhancePoint--;
+        CloseUI();
+    }
+
+    // 현재 강화 수치 레벨 다운(스킬 전용)
+    private void SetMiusAcquiredEnhanceLevels(int id)
     {
         if (acquiredEnhanceLevels.ContainsKey(id))
             acquiredEnhanceLevels[id]--;

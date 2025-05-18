@@ -105,6 +105,8 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         isSelected = true;
 
+        bool PassPopup = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.ApplyInhance(currentInfo);
+
         targetTransform.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutBounce).SetUpdate(true)
             .OnComplete(() =>
             {
@@ -118,11 +120,16 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 // 연출을 위해 0.1초 정도 텀을 주고 종료
                 DOVirtual.DelayedCall(0.1f, () =>
                 {
-                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.ApplyInhance(currentInfo);
-                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.CloseUI();
+                    if (PassPopup)
+                    {
+                        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.CloseUI();
+                    }
                 });
             });
 
-        GameManager.Instance.queen.condition.EnhancePoint--;
+        if (PassPopup)
+        {
+            GameManager.Instance.queen.condition.EnhancePoint--;
+        }
     }
 }

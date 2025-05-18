@@ -47,6 +47,29 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
         Utils.Log("비어 있는 슬롯이 없습니다.");
     }
 
+    public bool HasEmptySkillSlot()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (!slotDic.ContainsKey(i))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int GetSkillIDbyIndex(int index)
+    {
+        if (slotDic.TryGetValue(index, out var skill) && skill != null)
+        {
+            return skill.info.ID;
+        }
+
+        return -1;
+    }
+
     public void StartCoolTimeUI(int index, float coolTime)
     {
         if (index < 0 || index >= coolTimeMask.Count)
