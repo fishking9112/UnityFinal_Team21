@@ -255,9 +255,9 @@ public class QueenController : MonoBehaviour
             return;
         }
 
-        // 커서, 미니맵콜라이더 레이어를 제외한 레이어와 충돌 처리가 일어나면 몬스터 소환 불가
+        // 미니맵콜라이더 레이어를 제외한 레이어와 충돌 처리가 일어나면 몬스터 소환 불가
         ContactFilter2D layerFilter = new ContactFilter2D();
-        layerFilter.SetLayerMask(~LayerMask.GetMask("Cursor", "MiniMapCollider"));
+        layerFilter.SetLayerMask(~LayerMask.GetMask("MiniMapCollider"));
         Collider2D[] results = new Collider2D[1];
 
         int hitCount = Physics2D.OverlapCircle(worldMousePos, 0.5f, layerFilter, results);

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShurikenProjectile : MonsterProjectileObject
 {
-    [SerializeField] private float rotationSpeed = 360f;
+    [SerializeField] private float rotationSpeed = 1080f;
 
     protected override void Update()
     {
