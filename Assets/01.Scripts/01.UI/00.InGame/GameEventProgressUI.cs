@@ -225,4 +225,17 @@ public class GameEventProgressUI : MonoBehaviour
         return new Vector2(x, z);
     }
 
+    public IEnumerable<ScheduledEvent> GetScheduledEvents()
+    {
+        return scheduledEvents.ToArray();
+    }
+    public float GetProgressAmount()
+    {
+        return progressBarFill.fillAmount;
+    }
+
+    public bool IsEventScheduled(ScheduledEvent evt)
+    {
+        return scheduledEvents.Contains(evt);
+    }
 }
