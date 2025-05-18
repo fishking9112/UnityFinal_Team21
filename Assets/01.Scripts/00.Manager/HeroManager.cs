@@ -74,7 +74,7 @@ public class HeroManager : MonoSingleton<HeroManager>
             return;
         }
 
-        HeroController hero = HeroPoolManager.Instance.GetObject(RandomSummonPos(98, 98));
+        HeroController hero = HeroPoolManager.Instance.GetObject(SpawnPointManager.Instance.heroPoint.GetRandomPosition());
         hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
     }
 
