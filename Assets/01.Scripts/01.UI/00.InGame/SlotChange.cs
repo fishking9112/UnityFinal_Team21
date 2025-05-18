@@ -9,6 +9,7 @@ public class SlotChange : MonoBehaviour
     public RectTransform queenActiveSkillGroupTransform;
     public RectTransform monsterGroupTransform;
     public RectTransform panelTransform;
+    public RectTransform slotNumGroup;
 
     public GameObject queenActiveSkillGauge;
     public GameObject summonGauge;
@@ -33,6 +34,7 @@ public class SlotChange : MonoBehaviour
     {
         panelTransform.SetAsFirstSibling();
         monsterGroupTransform.SetAsLastSibling();
+        slotNumGroup.SetAsLastSibling();
         summonGauge.SetActive(true);
         queenActiveSkillGauge.SetActive(false);
         monsterGroup.alpha = 1f;
@@ -96,6 +98,7 @@ public class SlotChange : MonoBehaviour
             queenActiveSkillGroup.DOFade(0.5f, 0.2f);
             monsterGroup.DOFade(1f, 0.2f);
         }
+        slotNumGroup.SetAsLastSibling();
     }
 
     // 슬롯 변경이 끝날 때 호출. 현재 슬롯의 상태를 바꿔줌

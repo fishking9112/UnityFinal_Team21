@@ -182,3 +182,80 @@ public enum IDTrophy
     Trophy3,
     Trophy4,
 }
+
+public class GameLog
+{
+    public const string funnel = "Funnel_Step";
+    public const string tutorial = "Tutorial";
+    public const string enhance = "Enhance";
+
+    public const string funnel_step = "Funnel_Step_Num";
+
+    public enum Contents
+    {
+        NONE=0,
+        App=1,
+        Account,
+        Play,
+        Character,
+        Collection,
+        Archieve,
+        QueenAbility,
+        Leaderboard,
+        
+        Funnel,
+    }
+
+    public enum LogType
+    {
+        NONE=0,
+
+        //App
+        AppStart=1,
+
+        //Account
+        Join,
+        Login,
+        CreateNickName,
+        Tutorial,   // 분리 가능성 있음
+
+
+        //Play
+        GameStart,
+        Enhance,    // 분리 가능성 있음
+        Mission,
+        GameExit,
+        GameClear,
+        GameFail,
+
+        // Character
+        ChangeCharacter,
+
+        // Collection
+        OpenCollection,
+
+        // Archive
+        OpenArchieve,
+        ClearArchieve,
+        RewardArchieve,
+
+        // QueenAbility
+        UpgradeAbility,
+        DegradeAbility,
+        ResetAbility,
+
+
+        // LeaderBoard
+        OpenLeaderBoard,
+
+        // Funnel
+        FunnelStep,     // 분리 가능성 있음
+    }
+
+    public enum FunnelType
+    {
+        NONE=0,
+        GameStart,
+
+    }
+}
