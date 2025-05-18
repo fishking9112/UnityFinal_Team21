@@ -14,7 +14,7 @@ public class QueenEnhanceUI : SingleUI
     private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
     public IReadOnlyDictionary<int, int> AcquiredEnhanceLevels => acquiredEnhanceLevels;
 
-    private int tmpSkillID;
+    private QueenEnhanceInfo tmpQueenEnhanceInfo;
 
     private void Awake()
     {
@@ -92,7 +92,7 @@ public class QueenEnhanceUI : SingleUI
         switch (info.type)
         {
             case QueenEnhanceType.AddSkill:
-                result = AcquireQueenSkill(info.skill_ID);
+                result = AcquireQueenSkill(info);
                 break;
 
             case QueenEnhanceType.QueenPassive:
@@ -245,18 +245,18 @@ public class QueenEnhanceUI : SingleUI
     }
 
     // 스킬 획득 함수명
-    private bool AcquireQueenSkill(int id)
+    private bool AcquireQueenSkill(QueenEnhanceInfo enhanceInfo)
     {
-        if(QueenActiveSkillManager.Instance.HasAvailableSkillSlot()) // 신규 스킬 습득 가능함.
+        tmpQueenEnhanceInfo = enhanceInfo;
+
+        if (QueenActiveSkillManager.Instance.HasAvailableSkillSlot()) // 신규 스킬 습득 가능함.
         {
-            QueenActiveSkillManager.Instance.AddSkill(id);
+            QueenActiveSkillManager.Instance.AddSkill(tmpQueenEnhanceInfo.skill_ID);
 
             return true;
         }
         else // 스킬이 이미 가득참.
         {
-            tmpSkillID = id;
-
             queenSkillSwapPopup.SetActive(true);
 
             for (int i = 0; i < skillSwapSlots.Length; i++)
@@ -272,7 +272,7 @@ public class QueenEnhanceUI : SingleUI
     {
         SetMiusAcquiredEnhanceLevels(skillID);
 
-        QueenActiveSkillManager.Instance.AddSkill(index, tmpSkillID);
+        QueenActiveSkillManager.Instance.AddSkill(index, tmpQueenEnhanceInfo.skill_ID);
 
         queenSkillSwapPopup.SetActive(false);
 
@@ -281,9 +281,23 @@ public class QueenEnhanceUI : SingleUI
     }
 
     // 현재 강화 수치 레벨 다운(스킬 전용)
-    private void SetMiusAcquiredEnhanceLevels(int id)
+    private void SetMiusAcquiredEnhanceLevels(int enhanceID)
     {
-        if (acquiredEnhanceLevels.ContainsKey(id))
-            acquiredEnhanceLevels[id]--;
+        int tmp = 0;
+
+        foreach (var item in DataManager.Instance.queenEnhanceDic)
+        {
+            if (item.Value.skill_ID == enhanceID)
+            {
+                tmp = item.Value.ID;
+            }
+        }
+        
+        if (acquiredEnhanceLevels.ContainsKey(tmp))
+        {
+            acquiredEnhanceLevels[tmp]--;
+
+            return;
+        }
     }
 }
