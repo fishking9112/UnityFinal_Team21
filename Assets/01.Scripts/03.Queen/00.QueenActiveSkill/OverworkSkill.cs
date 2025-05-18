@@ -1,6 +1,10 @@
+using UnityEngine;
+
 public class OverworkSkill : QueenActiveSkillBase
 {
     float returnToValue;
+
+    private ParticleObject skillParticle;
 
     public override void Init()
     {
@@ -10,6 +14,7 @@ public class OverworkSkill : QueenActiveSkillBase
     }
     public override void UseSkill()
     {
+        skillParticle = ParticleManager.Instance.SpawnParticle("Overwork", GameManager.Instance.castle.transform.position, new Vector3(1.5f, 1.5f, 1.5f));
         condition.AdjustCurSummonGauge(condition.MaxSummonGauge.Value);
         returnToValue = condition.SummonGaugeRecoverySpeed;
         condition.AdjustSummonGaugeRecoverySpeed(-returnToValue);
@@ -19,6 +24,7 @@ public class OverworkSkill : QueenActiveSkillBase
 
     private void ReturnValue()
     {
+        skillParticle.OnDespawn();
         condition.AdjustSummonGaugeRecoverySpeed(returnToValue);
     }
 }
