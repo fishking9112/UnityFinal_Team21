@@ -983,6 +983,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73028f2f860e01e42b32de8cf58cb8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterSlot: {fileID: 0}
+  queenActiveSkillSlot: {fileID: 0}
   selectedSlotIndex: -1
   skillRangeObject: {fileID: 1849800243}
   skillSizeObject: {fileID: 648000347}
@@ -1037,8 +1039,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfae8e215b528d44aaa8279cd6dec07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initSummonGaugeRecoverySpeed: 10
-  initQueenActiveSkillGaugeRecoverySpeed: 5
+  initSummonGaugeRecoverySpeed: 5
+  initQueenActiveSkillGaugeRecoverySpeed: 2.5
   initMaxQueenActiveSkillGauge: 100
   initMaxSummonGauge: 100
   initCurExpGauge: 0
@@ -103319,34 +103321,6 @@ PrefabInstance:
     - target: {fileID: 5796722060532569848, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
       propertyPath: m_Name
       value: ObjectPoolManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.size
-      value: 58
-      objectReference: {fileID: 0}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[56].key
-      value: HoldObject
-      objectReference: {fileID: 0}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[57].key
-      value: HeroThunder
-      objectReference: {fileID: 0}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[56].prefab
-      value: 
-      objectReference: {fileID: 1149227411583792917, guid: e1d4aa1f1da9feb49977372da6dbf80c, type: 3}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[57].prefab
-      value: 
-      objectReference: {fileID: 2337730212949841628, guid: 3466fe102ffe64943aad42908a179be7, type: 3}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[56].initPoolSize
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[57].initPoolSize
-      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
