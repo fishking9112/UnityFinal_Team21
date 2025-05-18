@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,8 +13,9 @@ public enum QueenSlot
 
 public class QueenController : MonoBehaviour
 {
-    public MonsterSlot monsterSlot => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().monsterSlot;
-    public QueenActiveSkillSlot queenActiveSkillSlot => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenActiveSkillSlot;
+    private GameHUD gameHUD;
+    public MonsterSlot monsterSlot;
+    public QueenActiveSkillSlot queenActiveSkillSlot;
     public int selectedSlotIndex = -1;
 
 
@@ -41,10 +43,7 @@ public class QueenController : MonoBehaviour
     private bool isDrag;
     private float summonDistance;
     private Vector3 lastSummonPosition;
-
-    private GameHUD gameHUD => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>();
-
-    private void Start()
+    private async void Start()
     {
         condition = GameManager.Instance.queen.condition;
         objectPoolManager = ObjectPoolManager.Instance;
@@ -56,6 +55,8 @@ public class QueenController : MonoBehaviour
 
         skillSizeSpriteRadius = skillSizeSprite.bounds.size.x;
         skillRangeSpriteRadius = skillRangeSprite.bounds.size.x;
+
+        await GameHuDInit();
     }
 
     private void Update()
@@ -63,6 +64,15 @@ public class QueenController : MonoBehaviour
         ImageFollowCursor();
         RecoveryGauge();
         SkillRangeView();
+    }
+
+    private async UniTask GameHuDInit()
+    {
+        await UniTask.WaitUntil(() => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>() != null);
+
+        gameHUD = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>();
+        monsterSlot = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().monsterSlot;
+        queenActiveSkillSlot = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenActiveSkillSlot;
     }
 
     private void SkillRangeView()
