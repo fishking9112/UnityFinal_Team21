@@ -1,6 +1,4 @@
-using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -26,53 +24,83 @@ public class QueenSelectUI : MonoBehaviour
     public QueenBasicSkillDescription QueenBasicSkillDescription;
     public QueenBasicSkillDescription[] ArrayQueenPassiveSkillDescription;
 
-    public void Start()
+    private void Start()
     {
         queenSelectToggleList.Clear();
+        InitializeQueenItems();
+        RegisterToggleEvents();
 
+        if (queenSelectToggleList.Count > 0)
+            queenSelectToggleList[0].isOn = true;
+    }
+
+    private void InitializeQueenItems()
+    {
         foreach (var pair in DataManager.Instance.queenStatusDic)
         {
-            int id = pair.Key;
-            QueenStatusInfo info = pair.Value;
-
-            QueenSelectItem queenSelectItem = Instantiate(prefabsQueenSelectItem, parentQueenSelectItem);
-            queenSelectItem.SetQueenSelectItem(pair.Value.ID, queenSelectToggleGroup);
-            queenSelectToggleList.Add(queenSelectItem.ThisToggle);
+            int queenID = pair.Key;
+            QueenSelectItem item = Instantiate(prefabsQueenSelectItem, parentQueenSelectItem);
+            item.SetQueenSelectItem(queenID, queenSelectToggleGroup);
+            queenSelectToggleList.Add(item.ThisToggle);
         }
+    }
 
-        // TODO : 게임 시작 버튼 초기화
+    private void RegisterToggleEvents()
+    {
         for (int i = 0; i < queenSelectToggleList.Count; i++)
         {
-            int index = i; // 클로저 캡처 방지용
+            int index = i; // 클로저 문제 방지
             queenSelectToggleList[i].onValueChanged.AddListener((isOn) =>
             {
                 if (isOn)
                 {
-                    SelectQueen(queenSelectToggleList[index].GetComponent<QueenSelectItem>().QueenID);
+                    var item = queenSelectToggleList[index].GetComponent<QueenSelectItem>();
+                    SelectQueen(item.QueenID);
                 }
             });
         }
-
-        // 첫번째 무조건 선택
-        queenSelectToggleList[0].isOn = true;
     }
 
     public void SelectQueen(int queenID)
     {
         GameManager.Instance.QueenCharaterID = queenID;
-        MainQueenImage.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenStatusDic[queenID].Image);
 
-        // 보유 스킬
-        int activeSkillID = DataManager.Instance.queenStatusDic[queenID].baseActiveSkill;
-        QueenBasicSkillDescription.SkillIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenActiveSkillDic[activeSkillID].Icon);
-        QueenBasicSkillDescription.SkillName.text = DataManager.Instance.queenActiveSkillDic[activeSkillID].Name;
-        QueenBasicSkillDescription.SkillDescription.text = DataManager.Instance.queenActiveSkillDic[activeSkillID].Description;
+        var queenInfo = DataManager.Instance.queenStatusDic[queenID];
+        MainQueenImage.sprite = DataManager.Instance.iconAtlas.GetSprite(queenInfo.Image);
 
-        // 기본 지속 효과
-        // int passiveSkillID_0 = DataManager.Instance.queenStatusDic[queenID].basePassiveSkill_1;
-        // QueenBasicSkillDescription.SkillIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenActiveSkillDic[activeSkillID].Icon);
-        // QueenBasicSkillDescription.SkillName.text = DataManager.Instance.queenActiveSkillDic[activeSkillID].Name;
-        // QueenBasicSkillDescription.SkillDescription.text = DataManager.Instance.queenActiveSkillDic[activeSkillID].Description;
+        // 액티브 스킬 설정
+        var activeSkill = DataManager.Instance.queenActiveSkillDic[queenInfo.baseActiveSkill];
+        SetSkillInfo(QueenBasicSkillDescription, activeSkill);
+
+        // 패시브 스킬 설정
+        int[] passiveSkillIDs = new int[]
+        {
+            queenInfo.basePassiveSkill_1,
+            queenInfo.basePassiveSkill_2,
+            queenInfo.basePassiveSkill_3
+        };
+
+        for (int i = 0; i < ArrayQueenPassiveSkillDescription.Length && i < passiveSkillIDs.Length; i++)
+        {
+            var passiveSkill = DataManager.Instance.queenPassiveSkillDic[passiveSkillIDs[i]];
+            SetSkillInfo(ArrayQueenPassiveSkillDescription[i], passiveSkill);
+        }
+    }
+
+    // QueenActiveSkillInfo에 맞는 오버로드
+    private void SetSkillInfo(QueenBasicSkillDescription ui, QueenActiveSkillInfo skill)
+    {
+        ui.SkillIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(skill.Icon);
+        ui.SkillName.text = skill.Name;
+        ui.SkillDescription.text = skill.Description;
+    }
+
+    // QueenPassiveSkillInfo에 맞는 오버로드
+    private void SetSkillInfo(QueenBasicSkillDescription ui, QueenPassiveSkillInfo skill)
+    {
+        ui.SkillIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(skill.Icon);
+        ui.SkillName.text = skill.Name;
+        ui.SkillDescription.text = skill.Description;
     }
 
 }
