@@ -47,6 +47,10 @@ public class GameHUD : HUDUI
     public GameObject OptionUIGroup;
     public Button OptionBtn;
     public Button ExitBtn;
+    public Button EvolutionBtn;
+    public GameObject EvolutionSelectUI;
+    public Button PauseBtn;
+    public GameObject PauseSelectUI;
 
     [Header("현재 상태")]
     public bool isPaused = false;
@@ -95,7 +99,13 @@ public class GameHUD : HUDUI
         OptionBtn.onClick.AddListener(() => ShowWindow<OptionController>());
 
         // Exit 버튼 이벤트 연결 
-        ExitBtn.onClick.AddListener(() => HideWindow());
+        ExitBtn.onClick.AddListener(HideWindow);
+
+        // 진화트리 버튼 이벤트 연결 
+        EvolutionBtn.onClick.AddListener(ShowEvolutionTreeUI);
+
+        // 일시정지 버튼 이벤트 연결 
+        PauseBtn.onClick.AddListener(ShowPauseUI);
 
         inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
         inputAction.started += OnPauseUI;
@@ -119,11 +129,13 @@ public class GameHUD : HUDUI
                 return;
             }
 
-            // 기타 UI 그룹 숨기기
+            // 기타 UI 숨기기
             HUDGroup.SetActive(false);
             BackgroundGroup.SetActive(false);
             TopButtonGroup.SetActive(false);
             EtcUIGroup.SetActive(false);
+            EvolutionSelectUI.SetActive(false);
+            PauseSelectUI.SetActive(false);
         }
 
         // 타입별로 분리
@@ -136,6 +148,7 @@ public class GameHUD : HUDUI
         {
             // 다른 타입 처리
             openWindow = evolutionTreeUI.gameObject;
+            EvolutionSelectUI.SetActive(true);
             TopButtonGroup.SetActive(true);
             EtcUIGroup.SetActive(true);
             BackgroundGroup.SetActive(true);
@@ -144,6 +157,7 @@ public class GameHUD : HUDUI
         {
             openWindow = pauseUI.gameObject;
             GameManager.Instance.cameraController.miniMapRect = pauseUI.cameraRect;
+            PauseSelectUI.SetActive(true);
             TopButtonGroup.SetActive(true);
             EtcUIGroup.SetActive(true);
             BackgroundGroup.SetActive(true);
@@ -234,6 +248,18 @@ public class GameHUD : HUDUI
                 GameManager.Instance.queen.controller.OnClickSlotButton(index, QueenSlot.QueenActiveSkill);
             });
         }
+    }
+
+    private void ShowEvolutionTreeUI()
+    {
+        HideWindow();
+        ShowWindow<EvolutionTreeUI>();
+    }
+
+    private void ShowPauseUI()
+    {
+        HideWindow();
+        ShowWindow<PauseUI>();
     }
 
     public void OnPauseUI(InputAction.CallbackContext context)

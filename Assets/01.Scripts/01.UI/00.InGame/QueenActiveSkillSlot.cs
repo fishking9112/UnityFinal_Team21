@@ -24,6 +24,13 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
         {
             coolTimeMask[index].fillAmount = 0f;
         }
+
+        // 해당 슬롯에 스킬설명을 위한 스킬 정보 넣기
+        var trigger = slotIconList[index].GetComponent<SkillDescriptionUITrigger>();
+        if (trigger != null)
+        {
+            trigger.skill = skill;
+        }
     }
 
     public void AddSlotToEmpty(QueenActiveSkillBase skill)
@@ -38,6 +45,29 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
         }
 
         Utils.Log("비어 있는 슬롯이 없습니다.");
+    }
+
+    public bool HasEmptySkillSlot()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (!slotDic.ContainsKey(i))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int GetSkillIDbyIndex(int index)
+    {
+        if (slotDic.TryGetValue(index, out var skill) && skill != null)
+        {
+            return skill.info.ID;
+        }
+
+        return -1;
     }
 
     public void StartCoolTimeUI(int index, float coolTime)

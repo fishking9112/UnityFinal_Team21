@@ -1,13 +1,12 @@
 using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public abstract class RewardBase : MonoBehaviour, IPoolable
 {
     #region IPoolable
     private Action<Component> returnToPool;
 
-    public void Init(Action<Component> returnAction)
+    public virtual void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
     }
@@ -25,6 +24,7 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
     #endregion 
 
     [Header("자석 효과")]
+    [SerializeField] private Transform magnetTarget;
     [SerializeField] private float magnetRadius = 3f;
     [SerializeField] private float magnetPower = 5f;
 
@@ -40,11 +40,16 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
 
     private void Update()
     {
-        CursorMagnet();
+        TargetMagnet();
     }
 
-    private void CursorMagnet()
+    private void TargetMagnet()
     {
+        if (magnetTarget == null)
+        {
+            return;
+        }
+
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float distance = Vector2.Distance(transform.position, mousePos);
        
@@ -55,16 +60,20 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
 
         if (isMagnet)
         {
-            Vector3 dir = (mousePos - transform.position).normalized;
+            Vector3 dir = (magnetTarget.position - transform.position).normalized;
             transform.position += dir * magnetPower * Time.deltaTime;
         }
+    }
+    protected void SetMagnetTarget(Transform target)
+    {
+        magnetTarget = target;
     }
 
     protected abstract void GainReward();
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Cursor"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("RewardGain"))
         {
             GainReward();
             OnDespawn();

@@ -5,6 +5,7 @@ using UnityEngine;
 public class EvolutionTree : MonoBehaviour
 {
     private EvolutionTreeUI evolutionTreeUI;
+    public EvolutionTreeUI EvolutionTreeUI => evolutionTreeUI;
 
     private QueenCondition queenCondition;
     private QueenController queenController;
@@ -28,7 +29,7 @@ public class EvolutionTree : MonoBehaviour
 
         foreach (EvolutionNode node in evolutionNodeList)
         {
-            node.Init();
+            node.Init(treeUI);
             node.onClickNode = OnClickNodeButton;
 
             if (!evolutionNodeDic.ContainsKey((int)node.monsterInfoId))

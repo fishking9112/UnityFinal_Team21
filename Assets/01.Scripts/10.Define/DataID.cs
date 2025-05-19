@@ -182,3 +182,96 @@ public enum IDTrophy
     Trophy3,
     Trophy4,
 }
+
+public class GameLog
+{
+    public const string funnel = "Funnel_Step";
+    public const string tutorial = "Tutorial";
+    public const string enhance = "Enhance";
+
+    public const string funnel_step = "Funnel_Step_Num";
+
+
+    public const string account = "Account";
+    public const string InGame = "PlayLog";
+    public const string lobby = "LobbyLog";
+    public const string EndGame = "EndGame";
+
+    public const string logType = "LogType";
+    public const string eventID = "ID";
+    public const string time = "Time";
+    public const string isClear = "Clear";
+    public const string mostSummon_ID = "MostSummonID";
+    public const string mostSummonCnt = "MostSummon";
+    public const string leastSummon_ID = "LeastSummonID";
+    public const string leastSummonCnt = "LeastSummon";
+    public const string MVP_ID = "MVPID";
+
+
+    public enum Contents
+    {
+        NONE=0,
+        Account,
+        Play,
+        Lobby,
+        Funnel,
+    }
+
+    public enum LogType
+    {
+        NONE=0,
+
+        // Account, InGame, Lobby
+
+
+        //Account
+        Login,
+        Tutorial,   // 분리 가능성 있음
+
+        //Play
+        GameStart,
+        GameEnd,
+
+        // Funnel
+        FunnelStep,     // 분리 가능성 있음
+    }
+
+    public enum FunnelType
+    {
+        NONE=0,
+        GameStart,
+        Lobby,
+        TouchPlay,
+        EnterInGame,
+        Minite_1,
+        Minite_2,
+        Minite_3,
+        Minite_4,
+        Minite_5,
+        Minite_6,
+        Minite_7,
+        Minite_8,
+        Minite_9,
+        Minite_10,
+        Minite_11,
+        Minite_12,
+        Minite_13,
+        Minite_14,
+        Minite_15,
+        Minite_16,
+        Minite_17,
+        Minite_18,
+        Minite_19,
+        Minite_20,
+        Minite_21,
+        Minite_22,
+        Minite_23,
+        Minite_24,
+        Minite_25,
+        Minite_26,
+        Minite_27,
+        Minite_28,
+        Minite_29,
+        Minite_30,
+    }
+}

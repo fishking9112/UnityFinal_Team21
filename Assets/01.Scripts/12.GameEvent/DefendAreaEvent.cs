@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class DefendAreaEvent : GameEventBase
 {
+    private EventTableInfo tableInfo;
     private MiniCastle castleInstance;
     private float defendDuration = 5f;
     private Vector2 spawnPosition;
@@ -16,6 +17,7 @@ public class DefendAreaEvent : GameEventBase
         this.spawnPosition = spawnPosition;
         this.defendDuration = defendDuration;
         this.contextUI = contextUI;
+        tableInfo = eventTableInfo;
         this.contextUI.titleText.text = $"◆ {eventTableInfo.name}";
         UpdateText();
     }
@@ -60,6 +62,7 @@ public class DefendAreaEvent : GameEventBase
     protected override void GiveReward()
     {
         Utils.Log("성을 성공적으로 방어했습니다! 보상 지급!");
+        GameManager.Instance.queen.condition.AdjustCurExpGauge(tableInfo.reward);
         GameObject.Destroy(castleInstance.gameObject);
         GameObject.Destroy(contextUI.gameObject);
         // 보상 지급 로직 추가 가능

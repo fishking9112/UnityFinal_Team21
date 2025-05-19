@@ -16,8 +16,9 @@ public class HeroDeadStete : HeroBaseState
         DeathAnim().Forget();
 
         // 보상 떨구기/획득하기
-        RewardGold gold = ObjectPoolManager.Instance.GetObject<RewardGold>("GoldReward", state.hero.gameObject.transform.position);
-        gold.rewardAmount = state.controller.statusInfo.reward;
+        RewardManager.Instance.SpawnReward("GoldReward", state.hero.gameObject.transform.position, state.controller.statusInfo.reward);
+        //RewardGold gold = ObjectPoolManager.Instance.GetObject<RewardGold>("GoldReward", state.hero.gameObject.transform.position);
+        //gold.rewardAmount = state.controller.statusInfo.reward;
     }
 
     private async UniTask DeathAnim()
