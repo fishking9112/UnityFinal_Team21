@@ -9,6 +9,7 @@ public class QueenSelectItem : MonoBehaviour
     public Toggle ThisToggle => thisToggle;
     [SerializeField] private Image queenIcon;
     private int queenID;
+    public int QueenID => queenID;
 
     public void SetQueenSelectItem(int queenID, ToggleGroup queenSelectToggleGroup)
     {

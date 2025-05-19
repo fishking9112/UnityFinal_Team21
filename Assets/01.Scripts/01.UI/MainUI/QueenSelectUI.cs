@@ -19,12 +19,12 @@ public class QueenSelectUI : MonoBehaviour
 {
     public List<Toggle> queenSelectToggleList;
 
+    public Image MainQueenImage;
     public QueenSelectItem prefabsQueenSelectItem;
     public Transform parentQueenSelectItem;
     public ToggleGroup queenSelectToggleGroup;
-    public QueenBasicSkillDescription[] QueenBasicSkillDescription;
+    public QueenBasicSkillDescription QueenBasicSkillDescription;
     public QueenBasicSkillDescription[] ArrayQueenPassiveSkillDescription;
-    public int toggleIndex = -1;
 
     public void Start()
     {
@@ -40,7 +40,6 @@ public class QueenSelectUI : MonoBehaviour
             queenSelectToggleList.Add(queenSelectItem.ThisToggle);
         }
 
-
         // TODO : 게임 시작 버튼 초기화
         for (int i = 0; i < queenSelectToggleList.Count; i++)
         {
@@ -49,7 +48,7 @@ public class QueenSelectUI : MonoBehaviour
             {
                 if (isOn)
                 {
-                    SelectToggle(index);
+                    SelectQueen(queenSelectToggleList[index].GetComponent<QueenSelectItem>().QueenID);
                 }
             });
         }
@@ -58,10 +57,22 @@ public class QueenSelectUI : MonoBehaviour
         queenSelectToggleList[0].isOn = true;
     }
 
-    public void SelectToggle(int index)
+    public void SelectQueen(int queenID)
     {
-        // TODO : 나중에 어떻게 토글을 이용해 퀸 스텟 바뀔 지 쓰기
-        toggleIndex = index;
+        GameManager.Instance.QueenCharaterID = queenID;
+        MainQueenImage.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenStatusDic[queenID].Image);
+
+        // 보유 스킬
+        int activeSkillID = DataManager.Instance.queenStatusDic[queenID].baseActiveSkill;
+        QueenBasicSkillDescription.SkillIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenActiveSkillDic[activeSkillID].Icon);
+        QueenBasicSkillDescription.SkillName.text = DataManager.Instance.queenActiveSkillDic[activeSkillID].Name;
+        QueenBasicSkillDescription.SkillDescription.text = DataManager.Instance.queenActiveSkillDic[activeSkillID].Description;
+
+        // 기본 지속 효과
+        // int passiveSkillID_0 = DataManager.Instance.queenStatusDic[queenID].basePassiveSkill_1;
+        // QueenBasicSkillDescription.SkillIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenActiveSkillDic[activeSkillID].Icon);
+        // QueenBasicSkillDescription.SkillName.text = DataManager.Instance.queenActiveSkillDic[activeSkillID].Name;
+        // QueenBasicSkillDescription.SkillDescription.text = DataManager.Instance.queenActiveSkillDic[activeSkillID].Description;
     }
 
 }

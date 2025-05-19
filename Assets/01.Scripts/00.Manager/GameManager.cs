@@ -12,6 +12,7 @@ public class GameManager : MonoSingleton<GameManager>
 {
     public ReactiveProperty<int> Gold { get; private set; } = new();
 
+    public int QueenCharaterID;
     public Queen queen;
     public Castle castle;
     public Dictionary<GameObject, MiniCastle> miniCastles = new();
