@@ -213,6 +213,8 @@ GameObject:
   - component: {fileID: 4796377309810063318}
   - component: {fileID: -5830836639515715495}
   - component: {fileID: 3502579387859761738}
+  - component: {fileID: 5160593078459084739}
+  - component: {fileID: 9109771397352087423}
   - component: {fileID: 7958608897836801452}
   - component: {fileID: -6293166092204535445}
   - component: {fileID: 1084063505513460701}
@@ -382,6 +384,8 @@ MonoBehaviour:
   countDelay: 0
   countDelay_LevelUp: 0
   knockback: 1
+  damage_Delay: 0
+  damage_Range: 0
   curLevel: 3
 --- !u!114 &388765593493363859
 MonoBehaviour:
@@ -418,6 +422,8 @@ MonoBehaviour:
   countDelay: 0
   countDelay_LevelUp: 0
   knockback: 1
+  damage_Delay: 0
+  damage_Range: 0
   curLevel: 1
 --- !u!114 &-8899919222466052609
 MonoBehaviour:
@@ -454,6 +460,8 @@ MonoBehaviour:
   countDelay: 0
   countDelay_LevelUp: 0
   knockback: 1
+  damage_Delay: 0
+  damage_Range: 0
   curLevel: 1
 --- !u!114 &-6065295390783855606
 MonoBehaviour:
@@ -490,6 +498,8 @@ MonoBehaviour:
   countDelay: 0
   countDelay_LevelUp: 0
   knockback: 1
+  damage_Delay: 0
+  damage_Range: 0
   curLevel: 1
   magicCircle: {fileID: 5542499996132306539, guid: e2ae32258b8da4245970ece9add3945b, type: 3}
 --- !u!114 &-1041513511482003167
@@ -527,6 +537,8 @@ MonoBehaviour:
   countDelay: 0
   countDelay_LevelUp: 0
   knockback: 1
+  damage_Delay: 0
+  damage_Range: 0
   curLevel: 1
 --- !u!114 &4796377309810063318
 MonoBehaviour:
@@ -563,6 +575,8 @@ MonoBehaviour:
   countDelay: 0.1
   countDelay_LevelUp: 0
   knockback: 1
+  damage_Delay: 0
+  damage_Range: 0
   curLevel: 1
 --- !u!114 &-5830836639515715495
 MonoBehaviour:
@@ -599,6 +613,8 @@ MonoBehaviour:
   countDelay: 0
   countDelay_LevelUp: 0
   knockback: 1
+  damage_Delay: 0
+  damage_Range: 0
   curLevel: 1
 --- !u!114 &3502579387859761738
 MonoBehaviour:
@@ -635,6 +651,84 @@ MonoBehaviour:
   countDelay: 0
   countDelay_LevelUp: 0
   knockback: 1
+  damage_Delay: 0
+  damage_Range: 0
+  curLevel: 1
+--- !u!114 &5160593078459084739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3469463355210438680}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 275e5bb75b8566045a53989dc7f4ba47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 110
+  maxLevel: 8
+  pivot: {x: 3, y: 3, z: 0}
+  damage: 1
+  damage_LevelUp: 0.2
+  delay: 4
+  delay_LevelUp: 0
+  pierce: -1
+  pierce_LevelUp: 0
+  size: {x: 1, y: 1, z: 1}
+  size_LevelUp: {x: 0.1, y: 0.1, z: 0.1}
+  type: 8
+  speed: 0
+  speed_LevelUp: 0
+  rotateSpeed: 180
+  rotateSpeed_LevelUp: 0
+  duration: 3
+  duration_LevelUp: 0
+  count: 1
+  count_LevelUp: 0.5
+  countDelay: 0
+  countDelay_LevelUp: 0
+  knockback: 0
+  damage_Delay: 0
+  damage_Range: 0
+  curLevel: 1
+--- !u!114 &9109771397352087423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3469463355210438680}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5735f1ae132593a45b79c603b2ceab0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 111
+  maxLevel: 8
+  pivot: {x: 5, y: 5, z: 0}
+  damage: 30
+  damage_LevelUp: 10
+  delay: 3
+  delay_LevelUp: 0.25
+  pierce: -1
+  pierce_LevelUp: 0
+  size: {x: 1, y: 1, z: 1}
+  size_LevelUp: {x: 0.2, y: 0.2, z: 0.2}
+  type: 4
+  speed: 0
+  speed_LevelUp: 0
+  rotateSpeed: 0
+  rotateSpeed_LevelUp: 0
+  duration: 0
+  duration_LevelUp: 0
+  count: 1
+  count_LevelUp: 0
+  countDelay: 0
+  countDelay_LevelUp: 0
+  knockback: 0
+  damage_Delay: 0
+  damage_Range: 0
   curLevel: 1
 --- !u!114 &7958608897836801452
 MonoBehaviour:
