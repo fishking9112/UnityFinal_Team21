@@ -35,6 +35,16 @@ public class QueenActiveSkillManager : MonoSingleton<QueenActiveSkillManager>
         }
     }
 
+    public int ReturnSkillIDbyIndex(int index)
+    {
+        return skillSlot.GetSkillIDbyIndex(index);
+    }
+
+    public bool HasAvailableSkillSlot()
+    {
+        return skillSlot.HasEmptySkillSlot();
+    }
+
     public void AddSkill(int id)
     {
         skillSlot.AddSlotToEmpty(queenActiveSkillDic[id]);

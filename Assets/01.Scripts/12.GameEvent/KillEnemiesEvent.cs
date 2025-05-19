@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class KillEnemiesEvent : GameEventBase
 {
+    private EventTableInfo tableInfo;
     private List<GameObject> heros = new();
     private int maxCount = 0;
     private int curCount = 0;
@@ -13,7 +14,8 @@ public class KillEnemiesEvent : GameEventBase
         this.heros = spawnedHeros;
         maxCount = heros.Count;
         this.contextUI = contextUI;
-        contextUI.titleText.text = $"◆ {eventTableInfo.name}";
+        tableInfo = eventTableInfo;
+        contextUI.titleText.text = $"◆ {tableInfo.name}";
         UpdateText();
     }
     public KillEnemiesEvent(GameObject spawnedHero, EventTableInfo eventTableInfo, GameEventContextUI contextUI)
@@ -21,7 +23,8 @@ public class KillEnemiesEvent : GameEventBase
         this.heros.Add(spawnedHero);
         maxCount = heros.Count;
         this.contextUI = contextUI;
-        contextUI.titleText.text = $"◆ {eventTableInfo.name}";
+        tableInfo = eventTableInfo;
+        contextUI.titleText.text = $"◆ {tableInfo.name}";
         UpdateText();
     }
 
@@ -58,8 +61,9 @@ public class KillEnemiesEvent : GameEventBase
 
     protected override void GiveReward()
     {
-        GameObject.Destroy(contextUI.gameObject);
         Utils.Log("모든 몬스터 처치 완료! 보상 지급!");
+        GameObject.Destroy(contextUI.gameObject);
+        GameManager.Instance.queen.condition.AdjustCurExpGauge(tableInfo.reward);
     }
 
     protected override void OnFail()

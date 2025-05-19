@@ -1,14 +1,18 @@
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EvolutionNode : MonoBehaviour
+public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [Header("UI")]
     public Image image;
     [SerializeField] private Button button;
     [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private GameObject selectedUI;
+    [SerializeField] private EvolutionTreeUI evolutionTreeUI;
 
     public bool isUnlock;
     public bool nodeLock;
@@ -17,14 +21,19 @@ public class EvolutionNode : MonoBehaviour
 
     public UnityAction<EvolutionNode> onClickNode;
 
-    public void Init()
+    public void Init(EvolutionTreeUI treeUI)
     {
-        if(DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoId,out var info))
+        evolutionTreeUI = treeUI;
+
+        selectedUI = transform.Find("Select")?.gameObject;
+
+        if (DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoId,out var info))
         {
             monsterInfo = info;
             image.sprite = DataManager.Instance.iconAtlas.GetSprite(monsterInfo.outfit);
         }
 
+        selectedUI.SetActive(false);
         button.onClick.AddListener(() => onClickNode?.Invoke(this));
     }
 
@@ -63,5 +72,46 @@ public class EvolutionNode : MonoBehaviour
                 button.interactable = false;
             }
         }
+    }
+
+
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (isUnlock)
+            evolutionTreeUI.EvolutionDragIcon.OnBeginDrag();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (isUnlock)
+            evolutionTreeUI.EvolutionDragIcon.OnDrag(eventData);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (isUnlock)
+            evolutionTreeUI.EvolutionDragIcon.OnEndDrag();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (isUnlock)
+        {
+            evolutionTreeUI.PassEvolutionNodeInfo(this);
+            evolutionTreeUI.tfEvolutionDragIcon.position = transform.position;
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if(isUnlock)
+            selectedUI.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (isUnlock)
+            selectedUI.SetActive(false);
     }
 }

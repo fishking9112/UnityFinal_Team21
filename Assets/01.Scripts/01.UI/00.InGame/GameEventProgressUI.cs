@@ -55,7 +55,7 @@ public class GameEventProgressUI : MonoBehaviour
             return;
 
         // 프로그래스 바 진행도
-        float fillAmount = (1 - (curTime / totalTime)) * 40f;
+        float fillAmount = 1 - (curTime / totalTime);
         progressBarFill.fillAmount = fillAmount;
 
         CheckEvent(fillAmount);
@@ -108,20 +108,20 @@ public class GameEventProgressUI : MonoBehaviour
         switch (eventTableInfo.type)
         {
             case EventTableType.Type_1: // 임의의 적 소환
-                spawnPos = GetRandomEdgePosition(98, 98); // 원하는 위치
+                spawnPos = SpawnPointManager.Instance.heroPoint.GetRandomPosition();// GetRandomEdgePosition(98, 98); // 원하는 위치
                 var heros = HeroManager.Instance.SummonHeros(spawnPos, eventTableInfo.count);
                 eventInstance = new KillEnemiesEvent(heros, eventTableInfo, contextUI);
                 break;
 
             case EventTableType.Type_2:
                 // 영웅 소환
-                spawnPos = GetRandomEdgePosition(90, 90); // 원하는 위치
+                spawnPos = SpawnPointManager.Instance.heroPoint.GetRandomPosition(); // 원하는 위치
                 var bossHero = HeroManager.Instance.SummonBoss(spawnPos, 1);//eventTableInfo.createId);
                 eventInstance = new KillEnemiesEvent(bossHero, eventTableInfo, contextUI);
                 break;
 
             case EventTableType.Type_3: // 성 방어 이벤트
-                spawnPos = GetRandomEdgePosition(25, 25); // 원하는 위치
+                spawnPos = SpawnPointManager.Instance.MiniCastlePoint.GetRandomPosition(true); // 원하는 위치
                 MiniCastle castlePrefab = Instantiate(miniCastlePrefab);
                 castlePrefab.transform.position = spawnPos;
 
@@ -129,7 +129,7 @@ public class GameEventProgressUI : MonoBehaviour
                 break;
 
             case EventTableType.Type_4: // 배럭 공격 이벤트
-                spawnPos = GetRandomEdgePosition(90, 90); // 원하는 위치
+                spawnPos = SpawnPointManager.Instance.BarrackPoint.GetRandomPosition(true); // 원하는 위치
                 MiniBarrack barrackPrefab = Instantiate(miniBarrackPrefab);
                 barrackPrefab.transform.position = spawnPos;
 
@@ -225,4 +225,17 @@ public class GameEventProgressUI : MonoBehaviour
         return new Vector2(x, z);
     }
 
+    public IEnumerable<ScheduledEvent> GetScheduledEvents()
+    {
+        return scheduledEvents.ToArray();
+    }
+    public float GetProgressAmount()
+    {
+        return progressBarFill.fillAmount;
+    }
+
+    public bool IsEventScheduled(ScheduledEvent evt)
+    {
+        return scheduledEvents.Contains(evt);
+    }
 }

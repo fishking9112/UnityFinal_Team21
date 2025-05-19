@@ -44,6 +44,7 @@ public class DataReaderEditorWindow : EditorWindow
             new DataInfo("Buff 데이터", "BuffData"),
             new DataInfo("Trophy 데이터", "TrophyData"),
             new DataInfo("Event 데이터", "EventData"),
+            new DataInfo("QueenStatus 데이터", "QueenStatusData"),
         };
 
         foreach (var info in dataInfo)

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AttackAreaEvent : GameEventBase
 {
+    private EventTableInfo tableInfo;
     private MiniBarrack barrackInstance;
     public float spawnDuration;
     public float spawnCurrentDuration;
@@ -20,7 +21,8 @@ public class AttackAreaEvent : GameEventBase
         this.spawnDuration = spawnDuration;
         this.spawnCurrentDuration = spawnDuration;
         this.contextUI = contextUI;
-        this.contextUI.titleText.text = $"◆ {eventTableInfo.name}";
+        tableInfo = eventTableInfo;
+        this.contextUI.titleText.text = $"◆ {tableInfo.name}";
         UpdateText();
     }
 
@@ -63,6 +65,7 @@ public class AttackAreaEvent : GameEventBase
     protected override void GiveReward()
     {
         Utils.Log("배럭을 성공적으로 부셨습니다! 보상 지급!");
+        GameManager.Instance.queen.condition.AdjustCurExpGauge(tableInfo.reward);
         GameObject.Destroy(contextUI.gameObject);
         // 보상 지급 로직 추가 가능
     }
