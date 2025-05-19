@@ -55,8 +55,7 @@ public class GameResultUI : SingleUI
 
     private void InitMiddlePanel()
     {
-        // TODO : 1800f -> 게임 시간 관리 로직 리팩토링 시 수정
-        gameTimeText.text = Utils.GetMMSSTime((int)(1800f - GameManager.Instance.curTime.Value));
+        gameTimeText.text = Utils.GetMMSSTime((int)(GameManager.Instance.gameLimitTime - GameManager.Instance.curTime.Value));
         killCountText.text = "000";
         resourceText.text = GameManager.Instance.queen.condition.Gold.Value.ToString();
     }
