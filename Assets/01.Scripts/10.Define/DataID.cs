@@ -141,6 +141,17 @@ public enum IDQueenActiveSkill
     GRAVITYBALL,
 }
 
+public enum IDQueenPassiveSkill
+{
+    CASTLE_HEALTH_UP = 31001,
+    MAX_MANA_UP,
+    MANA_REGEN_UP,
+    MAX_SUMMONGAUGE_UP,
+    SUMMONGAUGE_REGEN_UP,
+    SKELETON_ATTACK_UP,
+    ORC_HEALTH_UP,
+}
+
 public enum IDQueenAbility
 {
     MONSTER_ATTACK_DAMAGE_UP = 30001,
