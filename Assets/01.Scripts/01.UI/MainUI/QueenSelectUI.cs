@@ -17,6 +17,7 @@ public class QueenSelectUI : MonoBehaviour
 {
     public List<Toggle> queenSelectToggleList;
 
+    public Button SelectBtn;
     public Image MainQueenImage;
     public QueenSelectItem prefabsQueenSelectItem;
     public Transform parentQueenSelectItem;
@@ -27,6 +28,7 @@ public class QueenSelectUI : MonoBehaviour
     private void Start()
     {
         queenSelectToggleList.Clear();
+        SelectBtn.onClick.AddListener(() => gameObject.SetActive(false));
         InitializeQueenItems();
         RegisterToggleEvents();
 
