@@ -195,6 +195,7 @@ public class GameLog
     public const string account = "Account";
     public const string InGame = "PlayLog";
     public const string lobby = "LobbyLog";
+    public const string EndGame = "EndGame";
 
     public const string logType = "LogType";
     public const string eventID = "ID";
