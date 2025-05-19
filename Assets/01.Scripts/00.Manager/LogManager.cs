@@ -69,7 +69,7 @@ public class LogManager : MonoSingleton<LogManager>
     public void PlayEndLog(int queenid, int time, int clear, int mostSummon_ID, int mostSummonCnt,
         int leastSummon_ID, int leastSummonCnt, int MVPid)
     {
-        var playEvent = new CustomEvent(GameLog.InGame);
+        var playEvent = new CustomEvent(GameLog.EndGame);
         playEvent[GameLog.logType] = GameLog.LogType.GameEnd;
         playEvent[GameLog.eventID] = queenid;
         playEvent[GameLog.time] = time;
