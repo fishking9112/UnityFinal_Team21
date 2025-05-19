@@ -50,13 +50,12 @@ public class GameResultUI : SingleUI
     }
     private void InitQueenResult()
     {
-        queenLevelText.text = "Lv. " + GameManager.Instance.queen.condition.Level.ToString();
+        queenLevelText.text = "Lv. " + GameManager.Instance.queen.condition.Level.Value.ToString();
     }
 
     private void InitMiddlePanel()
     {
-        // TODO : 1800f -> 게임 시간 관리 로직 리팩토링 시 수정
-        gameTimeText.text = Utils.GetMMSSTime((int)(1800f - GameManager.Instance.curTime.Value));
+        gameTimeText.text = Utils.GetMMSSTime((int)(GameManager.Instance.gameLimitTime - GameManager.Instance.curTime.Value));
         killCountText.text = "000";
         resourceText.text = GameManager.Instance.queen.condition.Gold.Value.ToString();
     }
@@ -85,9 +84,9 @@ public class GameResultUI : SingleUI
 
         foreach (var data in StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas)
         {
-            if (mvpPerDamage <= data.Value.spawnCount / data.Value.allDamage)
+            if (mvpPerDamage <= data.Value.allDamage / data.Value.spawnCount)
             {
-                mvpPerDamage = data.Value.spawnCount / data.Value.allDamage;
+                mvpPerDamage = data.Value.allDamage / data.Value.spawnCount;
                 mvpId = data.Key;
             }
         }
@@ -105,6 +104,7 @@ public class GameResultUI : SingleUI
 
     private void ReturnToTitle()
     {
+        GameManager.Instance.curTime.Value = 0f;
         SceneLoadManager.Instance.LoadScene(LoadSceneEnum.MenuScene).Forget();
     }
 
