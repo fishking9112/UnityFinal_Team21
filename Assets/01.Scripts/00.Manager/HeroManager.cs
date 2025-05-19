@@ -84,6 +84,7 @@ public class HeroManager : MonoSingleton<HeroManager>
 
         for (int i = 0; i < count; i++)
         {
+            SetNextHero();
             HeroController hero = HeroPoolManager.Instance.GetObject(GetRandomPos(v, 3));
             hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI, isEventMark);
             heroList.Add(hero.gameObject);
