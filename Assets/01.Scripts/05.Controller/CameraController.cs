@@ -111,6 +111,11 @@ public class CameraController : MonoBehaviour
     // 마우스 휠 값을 받아옴
     public void OnZoomCamera(InputAction.CallbackContext context)
     {
+        if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused)
+        {
+            return;
+        }
+
         Vector2 scrollValue = context.ReadValue<Vector2>();
 
         if (scrollValue.y == 0)
