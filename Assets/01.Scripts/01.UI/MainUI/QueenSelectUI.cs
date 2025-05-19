@@ -1,16 +1,46 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+
+[Serializable]
+public class QueenBasicSkillDescription
+{
+    public Image SkillIcon;
+    public TextMeshProUGUI SkillName;
+    public TextMeshProUGUI SkillDescription;
+}
 
 public class QueenSelectUI : MonoBehaviour
 {
     public List<Toggle> queenSelectToggleList;
+
+    public QueenSelectItem prefabsQueenSelectItem;
+    public Transform parentQueenSelectItem;
+    public ToggleGroup queenSelectToggleGroup;
+    public QueenBasicSkillDescription[] QueenBasicSkillDescription;
+    public QueenBasicSkillDescription[] ArrayQueenPassiveSkillDescription;
     public int toggleIndex = -1;
 
     public void Start()
     {
+        queenSelectToggleList.Clear();
+
+        foreach (var pair in DataManager.Instance.queenStatusDic)
+        {
+            int id = pair.Key;
+            QueenStatusInfo info = pair.Value;
+
+            QueenSelectItem queenSelectItem = Instantiate(prefabsQueenSelectItem, parentQueenSelectItem);
+            queenSelectItem.SetQueenSelectItem(pair.Value.ID, queenSelectToggleGroup);
+            queenSelectToggleList.Add(queenSelectItem.ThisToggle);
+        }
+
+
         // TODO : 게임 시작 버튼 초기화
         for (int i = 0; i < queenSelectToggleList.Count; i++)
         {
