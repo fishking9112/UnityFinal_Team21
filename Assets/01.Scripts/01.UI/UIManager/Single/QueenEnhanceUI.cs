@@ -15,6 +15,7 @@ public class QueenEnhanceUI : SingleUI
     public IReadOnlyDictionary<int, int> AcquiredEnhanceLevels => acquiredEnhanceLevels;
 
     private QueenEnhanceInfo tmpQueenEnhanceInfo;
+    [HideInInspector] public bool isOpen = false;
 
     private void Awake()
     {
@@ -29,6 +30,11 @@ public class QueenEnhanceUI : SingleUI
         queenSkillSwapPopup.SetActive(false);
         var randomOptions = GetRandomInhanceOptions();
         ShowSelectUI(randomOptions);
+        isOpen = true;
+    }
+    private void OnDisable()
+    {
+        isOpen = false;
     }
 
     /// <summary>
@@ -292,7 +298,7 @@ public class QueenEnhanceUI : SingleUI
                 tmp = item.Value.ID;
             }
         }
-        
+
         if (acquiredEnhanceLevels.ContainsKey(tmp))
         {
             acquiredEnhanceLevels[tmp]--;

@@ -12,6 +12,7 @@ public class GameManager : MonoSingleton<GameManager>
 {
     public ReactiveProperty<int> Gold { get; private set; } = new();
 
+    public int QueenCharaterID;
     public Queen queen;
     public Castle castle;
     public Dictionary<GameObject, MiniCastle> miniCastles = new();
@@ -110,7 +111,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void GameClear()
     {
-        curTime.Value = 0f;
+        // curTime.Value = 0f;
         isTimeOver = true;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
@@ -118,7 +119,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void GameOver()
     {
-        curTime.Value = 0f;
+        // curTime.Value = 0f;
         isTimeOver = true;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;

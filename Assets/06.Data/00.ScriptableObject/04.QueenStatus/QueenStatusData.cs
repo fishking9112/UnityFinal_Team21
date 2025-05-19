@@ -17,10 +17,10 @@ public class QueenStatusInfo : IInfo
     public float summon_LevelUp;
     public float mana_Recorvery;
     public float summon_Recorvery;
-    public float baseActiveSkill;
-    public float basePassiveSkill_1;
-    public float basePassiveSkill_2;
-    public float basePassiveSkill_3;
+    public int baseActiveSkill;
+    public int basePassiveSkill_1;
+    public int basePassiveSkill_2;
+    public int basePassiveSkill_3;
 
     public int ID => id;
     public string Name => name;
@@ -78,7 +78,7 @@ public class QueenStatusData : SheetDataReaderBase
                     queenStatusInfo.summon_Recorvery = Utils.StringToFloat(cell.value);
                     break;
                 case "baseActiveSkill":
-                    queenStatusInfo.baseActiveSkill = Utils.StringToFloat(cell.value);
+                    queenStatusInfo.baseActiveSkill = Utils.StringToInt(cell.value);
                     break;
                 case "basePassiveSkill_1":
                     queenStatusInfo.basePassiveSkill_1 = Utils.StringToInt(cell.value);
