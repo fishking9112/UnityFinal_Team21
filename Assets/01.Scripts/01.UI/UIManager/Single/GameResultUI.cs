@@ -17,6 +17,7 @@ public class GameResultUI : SingleUI
     public GameObject dpsPopupUI;
     public Transform unitListParent;
     public GameUnitResultUI gameUnitResultUIPrefab;
+    public Image mvpImg;
 
     [Header("Text Components")]
     public TextMeshProUGUI queenLevelText;
@@ -44,6 +45,7 @@ public class GameResultUI : SingleUI
         InitMiddlePanel();
         InitUnitResult();
         ApplyStageGold();
+        SetMonsterMVP();
         QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
     }
     private void InitQueenResult()
@@ -65,7 +67,8 @@ public class GameResultUI : SingleUI
         {
             GameUnitResultUI unitResultPanel = Instantiate(gameUnitResultUIPrefab, unitListParent);
             string unitName = DataManager.Instance.monsterDic[data.Key].name;
-            unitResultPanel.Init(unitName, data.Value.spawnCount, data.Value.allDamage);
+            string unitIcon = DataManager.Instance.monsterDic[data.Key].icon;
+            unitResultPanel.Init(unitIcon, unitName, data.Value.spawnCount, data.Value.allDamage);
         }
     }
 
@@ -73,6 +76,31 @@ public class GameResultUI : SingleUI
     {
         int goldToAdd = Mathf.FloorToInt(GameManager.Instance.queen.condition.Gold.Value);
         GameManager.Instance.AddGold(goldToAdd);
+    }
+
+    private void SetMonsterMVP()
+    {
+        int mvpId = int.MinValue;
+        float mvpPerDamage = float.MinValue;
+
+        foreach (var data in StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas)
+        {
+            if (mvpPerDamage <= data.Value.spawnCount / data.Value.allDamage)
+            {
+                mvpPerDamage = data.Value.spawnCount / data.Value.allDamage;
+                mvpId = data.Key;
+            }
+        }
+
+        if (mvpId != int.MinValue)
+        {
+            string unitIcon = DataManager.Instance.monsterDic[mvpId].icon;
+            mvpImg.sprite = DataManager.Instance.iconAtlas.GetSprite(unitIcon);
+        }
+        else
+        {
+            mvpImg.gameObject.SetActive(false);
+        }
     }
 
     private void ReturnToTitle()
