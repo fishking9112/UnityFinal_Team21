@@ -1,13 +1,12 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using UnityEngine;
 
 public class QueenCondition : MonoBehaviour
 {
+    private QueenStatusInfo queenStatus;
+
     [Header("초기 설정")]
-    public float initSummonGaugeRecoverySpeed = 5f;
-    public float initQueenActiveSkillGaugeRecoverySpeed = 2.5f;
-    public float initMaxQueenActiveSkillGauge = 100f;
-    public float initMaxSummonGauge = 100f;
     public float initCurExpGauge = 0f;
     public float initMaxExpGauge = 100f;
     public float initEvolutionPoint = 0f;
@@ -39,19 +38,37 @@ public class QueenCondition : MonoBehaviour
 
     private void Awake()
     {
-        SummonGaugeRecoverySpeed = initSummonGaugeRecoverySpeed;
-        QueenActiveSkillGaugeRecoverySpeed = initQueenActiveSkillGaugeRecoverySpeed;
+        queenStatus = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID];
 
-        CurQueenActiveSkillGauge.Value = initMaxQueenActiveSkillGauge;
-        MaxQueenActiveSkillGauge.Value = initMaxQueenActiveSkillGauge;
-        CurSummonGauge.Value = initMaxSummonGauge;
-        MaxSummonGauge.Value = initMaxSummonGauge;
+        SummonGaugeRecoverySpeed = queenStatus.summon_Recorvery;
+        QueenActiveSkillGaugeRecoverySpeed = queenStatus.mana_Recorvery;
+        CurQueenActiveSkillGauge.Value = queenStatus.mana_Base;
+        MaxQueenActiveSkillGauge.Value = queenStatus.mana_Base;
+        CurSummonGauge.Value = queenStatus.summon_Base;
+        MaxSummonGauge.Value = queenStatus.summon_Base;
+
         Level.Value = initLevel;
         CurExpGauge.Value = initCurExpGauge;
         MaxExpGauge.Value = initMaxExpGauge;
         EvolutionPoint.Value = initEvolutionPoint;
         Gold.Value = initGold;
         EnhancePoint = initEnhnacePoint;
+    }
+
+    private async void Start()
+    {
+        await InitSkill();
+    }
+
+    private async UniTask InitSkill()
+    {
+        await UniTask.WaitUntil(() => QueenActiveSkillManager.Instance.queenActiveSkillDic != null &&
+                                      QueenPassiveSkillManager.Instance.queenPassiveSkillDic != null);
+
+        QueenActiveSkillManager.Instance.AddSkill(0, queenStatus.baseActiveSkill);
+        QueenPassiveSkillManager.Instance.AddSkill(queenStatus.basePassiveSkill_1);
+        QueenPassiveSkillManager.Instance.AddSkill(queenStatus.basePassiveSkill_2);
+        QueenPassiveSkillManager.Instance.AddSkill(queenStatus.basePassiveSkill_3);
     }
 
     /// <summary>
@@ -136,6 +153,8 @@ public class QueenCondition : MonoBehaviour
     {
         Level.Value++;
         EnhancePoint++;
+        AdjustMaxQueenActiveSkillGauge(queenStatus.mana_LevelUp);
+        AdjustMaxSummonGauge(queenStatus.summon_LevelUp);
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<QueenEnhanceUI>();
     }
 
