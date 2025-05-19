@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class QueenCondition : MonoBehaviour
@@ -32,6 +33,9 @@ public class QueenCondition : MonoBehaviour
 
     private float ExpGainMultiplier => 1f + (expGainMultiplierPercent * 0.01f);
     private float GoldGainMultiplier => 1f + (goldGainMultiplierPercent * 0.01f);
+
+    private int levelUpCount = 0;
+    private bool isLevelUpDoing = false;
 
     private void Awake()
     {
@@ -117,11 +121,12 @@ public class QueenCondition : MonoBehaviour
 
         while (temp >= MaxExpGauge.Value)
         {
-            LevelUp();
+            levelUpCount++;
             temp -= MaxExpGauge.Value;
         }
 
         CurExpGauge.Value = temp;
+        StartCoroutine(CoroutineLevelUp());
     }
 
     /// <summary>
@@ -132,6 +137,21 @@ public class QueenCondition : MonoBehaviour
         Level.Value++;
         EnhancePoint++;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<QueenEnhanceUI>();
+    }
+
+    public IEnumerator CoroutineLevelUp()
+    {
+        if (isLevelUpDoing) yield break;
+        isLevelUpDoing = true;
+
+        while (levelUpCount > 0)
+        {
+            LevelUp();
+            yield return new WaitUntil(() => !StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.isOpen);
+            levelUpCount--;
+        }
+
+        isLevelUpDoing = false;
     }
 
     /// <summary>
