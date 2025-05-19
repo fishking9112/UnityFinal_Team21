@@ -65,7 +65,8 @@ public class GameResultUI : SingleUI
         {
             GameUnitResultUI unitResultPanel = Instantiate(gameUnitResultUIPrefab, unitListParent);
             string unitName = DataManager.Instance.monsterDic[data.Key].name;
-            unitResultPanel.Init(unitName, data.Value.spawnCount, data.Value.allDamage);
+            string unitIcon = DataManager.Instance.monsterDic[data.Key].icon;
+            unitResultPanel.Init(unitIcon, unitName, data.Value.spawnCount, data.Value.allDamage);
         }
     }
 
