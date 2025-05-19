@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler
+public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler, IPointerClickHandler
 {
     public EvolutionTree evolutionTree;
 
@@ -24,14 +24,6 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (dragged != null)
         {
-            // 아무 몬스터도 선택하지 않고 슬롯을 클릭하면 해당 슬롯 초기화
-            if (slotMonsterData != null)
-            {
-                ClearSlot();
-                evolutionTree.RemoveQueenSlot(slotIndex);
-                return;
-            }
-
             EvolutionNode node = dragged.node;
 
             if (node != null && node.isUnlock)
@@ -78,5 +70,20 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerExit(PointerEventData eventData)
     {
         SelectedUI.SetActive(false);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Right)
+        {
+            if(slotMonsterData != null)
+            {
+                if (slotMonsterData != null)
+                {
+                    ClearSlot();
+                    evolutionTree.RemoveQueenSlot(slotIndex);
+                }
+            }
+        }
     }
 }

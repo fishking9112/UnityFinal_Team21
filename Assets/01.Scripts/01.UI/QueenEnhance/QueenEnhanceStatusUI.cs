@@ -59,7 +59,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         builder.AppendLine($"마나 : {(int)curMana} / {(int)maxMana}");
 
         // 마나 회복량 = 기본 회복량 + 강화 효과
-        float manaRegenBase = queenCondition.initQueenActiveSkillGaugeRecoverySpeed;
+        float manaRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].mana_Recorvery;
         float manaRegenEnhance = queenCondition.QueenActiveSkillGaugeRecoverySpeed - manaRegenBase;
         builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / sec");
     }
@@ -79,7 +79,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendSummonRegenStatus(StringBuilder builder)
     {
-        float summonRegenBase = queenCondition.initSummonGaugeRecoverySpeed;
+        float summonRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].summon_Recorvery;
         float summonRegenEnhance = queenCondition.SummonGaugeRecoverySpeed - summonRegenBase;
         builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / sec");
     }

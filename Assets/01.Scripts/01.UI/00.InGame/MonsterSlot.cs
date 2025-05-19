@@ -15,5 +15,12 @@ public class MonsterSlot : BaseSlot<MonsterInfo>
         slotIconList[index].sprite = DataManager.Instance.iconAtlas.GetSprite(monster.outfit);
         slotIconList[index].enabled = true;
         slotIconList[index].preserveAspect = true;
+
+        // 해당 슬롯에 몬스터 설명을 위한 스킬 정보 넣기
+        var trigger = slotIconList[index].GetComponent<MonsterDescriptionTrigger>();
+        if (trigger != null)
+        {
+            trigger.monster = monster;
+        }
     }
 }
