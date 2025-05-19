@@ -13,7 +13,6 @@ public class HeroAbilityThunder : HeroAbilitySystem
     private ObjectPoolManager objectPoolManager;
     private CancellationTokenSource tk;
 
-    private ParticleSystem particle;
 
     /// <summary>
     /// 선언과 동시에 호출하기. 값 입력
@@ -27,7 +26,6 @@ public class HeroAbilityThunder : HeroAbilitySystem
     {
         hero = this.GetComponent<Hero>();
         objectPoolManager = ObjectPoolManager.Instance;
-        particle = GetComponentInChildren<ParticleSystem>();
     }
     private void OnEnable()
     {
@@ -74,7 +72,7 @@ public class HeroAbilityThunder : HeroAbilitySystem
         var thunder = objectPoolManager.GetObject<ThunderEffect>("HeroThunder", hero.transform.position);
         thunder.SetData(damage,knockback,size.x,damage_Range);
 
-        await UniTask.WaitUntil(() => !particle.IsAlive(true));
+        await UniTask.WaitUntil(() => !thunder.IsAlive());
         thunder.OnDespawn();
     }
 

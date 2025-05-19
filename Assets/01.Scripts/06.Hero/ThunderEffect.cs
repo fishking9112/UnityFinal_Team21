@@ -13,6 +13,7 @@ public class ThunderEffect : MonoBehaviour,IPoolable
     private float knockback;
     private float size;
     private float damageRange;
+    private ParticleSystem particle;
 
     public void SetData(float dmg, float kback, float size,float dmgRange)
     {
@@ -31,6 +32,7 @@ public class ThunderEffect : MonoBehaviour,IPoolable
     public void Init(Action<Component> returnAction)
     {
         returnToPool = returnAction;
+        particle = GetComponentInChildren<ParticleSystem>();
 
 
     }
@@ -64,6 +66,12 @@ public class ThunderEffect : MonoBehaviour,IPoolable
                 GameManager.Instance.castle.TakeDamaged(damage);
             }
         }
+    }
+
+    public bool IsAlive()
+    {
+        return particle.IsAlive(true);
+
     }
 
 
