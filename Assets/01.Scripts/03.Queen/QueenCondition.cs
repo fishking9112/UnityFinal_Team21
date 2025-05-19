@@ -6,13 +6,12 @@ public class QueenCondition : MonoBehaviour
 {
     private QueenStatusInfo queenStatus;
 
-    [Header("초기 설정")]
-    public float initCurExpGauge = 0f;
-    public float initMaxExpGauge = 100f;
-    public float initEvolutionPoint = 0f;
-    public float initLevel = 1f;
-    public float initGold = 0f;
-    public int initEnhnacePoint = 0;
+    private float initCurExpGauge = 0f;
+    private float initMaxExpGauge = 15f;
+    private float initEvolutionPoint = 0f;
+    private float initLevel = 1f;
+    private float initGold = 0f;
+    private int initEnhnacePoint = 0;
 
     private float expGainMultiplierPercent = 0f;
     private float goldGainMultiplierPercent = 0f;
@@ -151,11 +150,19 @@ public class QueenCondition : MonoBehaviour
     /// </summary>
     private void LevelUp()
     {
+        print(MaxExpGauge.Value);
         Level.Value++;
         EnhancePoint++;
+        ExpIncrease();
         AdjustMaxQueenActiveSkillGauge(queenStatus.mana_LevelUp);
         AdjustMaxSummonGauge(queenStatus.summon_LevelUp);
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<QueenEnhanceUI>();
+    }
+
+    private void ExpIncrease()
+    {
+        float stepBonus = 50 * (Level.Value / 10);
+        MaxExpGauge.Value = initMaxExpGauge * Mathf.Pow(Level.Value, 1.5f) + stepBonus; 
     }
 
     public IEnumerator CoroutineLevelUp()
