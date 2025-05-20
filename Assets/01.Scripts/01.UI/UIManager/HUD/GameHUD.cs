@@ -22,6 +22,7 @@ public class GameHUD : HUDUI
     [Header("게이지")]
     [SerializeField] private GaugeUI queenActiveSkillGaugeUI;
     [SerializeField] private GaugeUI summonGaugeUI;
+    [SerializeField] private GaugeUI castleGaugeUI;
     [SerializeField] private GaugeUI expGaugeUI;
 
     [Header("타이머")]
@@ -91,6 +92,7 @@ public class GameHUD : HUDUI
 
         summonGaugeUI.Bind(condition.CurSummonGauge, condition.MaxSummonGauge);
         queenActiveSkillGaugeUI.Bind(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
+        castleGaugeUI.Bind(GameManager.Instance.castle.condition.CurCastleHealth, GameManager.Instance.castle.condition.MaxCastleHealth);
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
 
         GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;

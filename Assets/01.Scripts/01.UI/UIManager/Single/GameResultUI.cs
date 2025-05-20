@@ -19,6 +19,7 @@ public class GameResultUI : SingleUI
     public GameUnitResultUI gameUnitResultUIPrefab;
     public Image mvpImg;
     public Image queenImg;
+    public Image resultQueenImage;
     public Transform parentEnhanceGrid;
     public Transform parentSkillGrid;
     public Transform descriptionPopupUI;
