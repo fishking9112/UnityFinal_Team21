@@ -37,6 +37,7 @@ public class HeroAbilityFireball : HeroAbilitySystem
             return;
         }
 
+
         ShootFireball();
     }
 
@@ -49,16 +50,7 @@ public class HeroAbilityFireball : HeroAbilitySystem
 
         float angle;
 
-        if (target == null)
-        {
-            return;
-        }
-        else
-        {
-            //angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
-            //    target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
-            angle = UnityEngine.Random.Range(0f, 360f);
-        }
+        angle = UnityEngine.Random.Range(0f, 360f);
 
         Vector2 nor= new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)).normalized;
         Vector2 targetPos = (Vector2)hero.transform.position + nor * 3f;
