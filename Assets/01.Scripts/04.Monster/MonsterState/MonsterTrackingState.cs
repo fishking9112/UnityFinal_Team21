@@ -155,7 +155,7 @@ public class MonsterTrackingState : MonsterBaseState
         float distance = direction.magnitude;
 
         boxSize.x = distance;
-        boxSize.y = stateMachine.Controller.projectileSize.y;
+        boxSize.y = stateMachine.Controller.projectileSize.y * stateMachine.Controller.monsterInfo.projectile_size;
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
