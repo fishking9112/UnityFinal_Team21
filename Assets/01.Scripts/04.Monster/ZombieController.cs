@@ -15,7 +15,7 @@ public class ZombieController : MonsterController
         base.OnSpawn();
 
         isDie = false;
-        Invoke(die, 5f);
+        Invoke(die, lifeTime);
     }
 
 
@@ -41,14 +41,5 @@ public class ZombieController : MonsterController
                 hero.TakeDamaged(explosionDamage);
             }
         }
-    }
-
-    // 테스트 코드
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f); // 주황색 반투명
-        Gizmos.DrawWireSphere(transform.position, explosionSize);
-        Gizmos.color = new Color(1f, 0.5f, 0f, 0.15f);
-        Gizmos.DrawSphere(transform.position, explosionSize);
     }
 }

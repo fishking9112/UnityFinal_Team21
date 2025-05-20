@@ -111,6 +111,11 @@ public class CameraController : MonoBehaviour
     // 마우스 휠 값을 받아옴
     public void OnZoomCamera(InputAction.CallbackContext context)
     {
+        if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused)
+        {
+            return;
+        }
+
         Vector2 scrollValue = context.ReadValue<Vector2>();
 
         if (scrollValue.y == 0)
@@ -130,8 +135,8 @@ public class CameraController : MonoBehaviour
                                                         zoomSmoothValue);
     }
 
-    // Spacebar 입력시 카메라를 히어로가 있는 쪽으로 옮김
-    public void OnCameraMoveToHero(InputAction.CallbackContext context)
+    // Spacebar 입력시 카메라를 성이 있는 쪽으로 옮김
+    public void OnCameraMoveToCastle(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
         {

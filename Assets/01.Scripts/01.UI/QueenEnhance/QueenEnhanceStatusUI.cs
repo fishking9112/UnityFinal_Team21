@@ -1,19 +1,46 @@
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QueenEnhanceStatusUI : MonoBehaviour
 {
+    [Header("UI Component")]
     [SerializeField] private QueenCondition queenCondition;
+    [SerializeField] private Transform descriptionPopupUI;
+    public GameObject DescriptionPopupUI => descriptionPopupUI.gameObject;
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private TextMeshProUGUI enhanceText;
+
+    [Header("DescriptionPopupUI")]
+    [SerializeField] private Image popupUIAbilityImage;
+    [SerializeField] private TextMeshProUGUI popupUIAbilityName;
+    [SerializeField] private TextMeshProUGUI popupUIAbilityDec;
+    [SerializeField] private TextMeshProUGUI popupUIAbilityLevel;
+
+    [Header("EnhanceGrid")]
+    [SerializeField] private Transform enhanceContent;
+    [SerializeField] private OwnedEnhanceItem prefabsOwnedEnhanceItem;
 
     // 앞으로 추가될 퍼센트 타입들도 여기 넣으면 됨
     public static readonly HashSet<ValueType> PercentValueTypes = new HashSet<ValueType>
     {
         ValueType.MoveSpeed,
     };
+
+    /// <summary>
+    /// 팝업 UI가 마우스를 따라다니도록 위치를 계속 갱신합니다.
+    /// </summary>
+    public async UniTaskVoid FollowMouse()
+    {
+        while (DescriptionPopupUI.activeSelf)
+        {
+            descriptionPopupUI.position = Input.mousePosition;
+            await UniTask.Yield();
+        }
+    }
 
     /// <summary>
     /// 퀸의 상태 정보를 설정합니다.
@@ -47,7 +74,28 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         // 텍스트 UI에 각각 설정
         statusText.text = statusBuilder.ToString();
         enhanceText.text = enhanceBuilder.ToString();
+
+        descriptionPopupUI.gameObject.SetActive(false);
+
+        GenerateOwnedEnhanceItems();
     } 
+
+    private void GenerateOwnedEnhanceItems()
+    {
+        foreach (Transform child in enhanceContent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        QueenEnhanceUI queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
+
+
+        foreach(var items in queenEnhanceUI.AcquiredEnhanceLevels)
+        {
+            OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, enhanceContent);
+            ownedEnhanceItem.SetEnhanceItem(items.Key);
+        }
+    }
 
     /// <summary>
     /// 마나 상태를 문자열로 추가합니다.
@@ -161,5 +209,38 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     private string FormatNumber(float value)
     {
         return value % 1 == 0 ? ((int)value).ToString() : value.ToString("F1");
+    }
+
+    /// <summary>
+    /// 보유 현황의 마우스 오버 팝업창UI 표기
+    /// </summary>
+    /// <param name="enhanceID"></param>
+    public void SetDescriptionPopupUIInfo(int enhanceID)
+    {
+        QueenEnhanceInfo info = DataManager.Instance.queenEnhanceDic[enhanceID];
+
+        int currentLevel = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
+
+        popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
+        popupUIAbilityName.text = info.name;
+
+        float previewValue = currentLevel == 0
+            ? info.state_Base
+            : info.state_Base + (info.state_LevelUp * currentLevel);
+
+        string formattedValue = PercentValueTypes.Contains(info.valueType)
+            ? $"{previewValue * 100:F0}%"
+            : $"{previewValue}";
+
+        popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
+
+        if (info.type != QueenEnhanceType.AddSkill)
+        {
+            popupUIAbilityLevel.text = "Lv. " + StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.AcquiredEnhanceLevels[enhanceID].ToString();
+        }
+        else
+        {
+            popupUIAbilityLevel.text = "-";
+        }
     }
 }

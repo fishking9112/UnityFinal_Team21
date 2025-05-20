@@ -8,6 +8,11 @@ public class MiniMapClick : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused)
+        {
+            return;
+        }
+
         isDragging = true;
         cameraController.MiniMapClickCameraMove(eventData.position);
     }

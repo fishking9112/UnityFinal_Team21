@@ -8730,7 +8730,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2116450947}
         m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: OnCameraMoveToHero
+        m_MethodName: OnCameraMoveToCastle
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8915,12 +8915,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfae8e215b528d44aaa8279cd6dec07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initCurExpGauge: 0
-  initMaxExpGauge: 100
-  initEvolutionPoint: 0
-  initLevel: 1
-  initGold: 0
-  initEnhnacePoint: 0
   EnhancePoint: 0
 --- !u!1 &175794782
 GameObject:
@@ -130162,7 +130156,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 999
   m_Sprite: {fileID: 434625534, guid: ce1f953be7e3c924fbbf16fa9d9a82a3, type: 3}
   m_Color: {r: 1, g: 1, b: 0, a: 1}
   m_FlipX: 0
