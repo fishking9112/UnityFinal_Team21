@@ -80,6 +80,7 @@ public class GameHUD : HUDUI
         UpdateGoldText(condition.Gold.Value);
 
         condition.KillCnt.AddAction(UpdateKullCntText);
+        UpdateKullCntText(condition.KillCnt.Value);
 
         curTime.AddAction(UpdateTimerText);
         UpdateTimerText(curTime.Value);
