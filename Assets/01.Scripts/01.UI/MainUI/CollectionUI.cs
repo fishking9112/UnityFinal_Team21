@@ -22,6 +22,9 @@ public class CollectionUI : MonoBehaviour
     public Transform contentTransform; // 생성 할 위치
     public CollectionIcon iconPrefab; // 생성될 프리팹
 
+    [Header("뒤로가기 버튼")]
+    public Button closeButton;
+
     public Dictionary<int, CollectionIcon> allIcons = new(); // 프리팹으로 생성 된 Icon 목록들
     public Dictionary<int, CollectionIcon> monsterIcons = new();
     public Dictionary<int, CollectionIcon> queenIcons = new();
@@ -69,6 +72,8 @@ public class CollectionUI : MonoBehaviour
         iconList.Add(activeSkillIcons);
         iconList.Add(heroIcons);
         iconList.Add(heroAbilityIcons);
+
+        closeButton.onClick.AddListener(() => gameObject.SetActive(false));
     }
 
     /// <summary>
