@@ -21,6 +21,14 @@ public class GameResultUI : SingleUI
     public Image queenImg;
     public Transform parentEnhanceGrid;
     public Transform parentSkillGrid;
+    public Transform descriptionPopupUI;
+    public GameObject DescriptionPopupUI => descriptionPopupUI.gameObject;
+
+    [Header("DescriptionPopupUI")]
+    public Image popupUIAbilityImage;
+    public TextMeshProUGUI popupUIAbilityName;
+    public TextMeshProUGUI popupUIAbilityDec;
+    public TextMeshProUGUI popupUIAbilityLevel;
 
     [Header("Enhance/Skill Item Prefabs")]
     public OwnedEnhanceItem prefabsOwnedEnhanceItem;
@@ -57,6 +65,18 @@ public class GameResultUI : SingleUI
         QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
     }
 
+    /// <summary>
+    /// 팝업 UI가 마우스를 따라다니도록 위치를 계속 갱신합니다.
+    /// </summary>
+    public async UniTaskVoid FollowMouse()
+    {
+        while (DescriptionPopupUI.activeSelf)
+        {
+            descriptionPopupUI.position = Input.mousePosition;
+            await UniTask.Yield();
+        }
+    }
+
     private void InitQueenEnhance()
     {
         foreach (Transform child in parentEnhanceGrid)
@@ -70,11 +90,9 @@ public class GameResultUI : SingleUI
         {
             if (DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.QueenPassive || DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.MonsterPassive)
             {
-
+                OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentEnhanceGrid);
+                ownedEnhanceItem.SetEnhanceItem(items.Key, true);
             }
-
-            OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentEnhanceGrid);
-            ownedEnhanceItem.SetEnhanceItem(items.Key);
         }
     }
 
@@ -85,10 +103,15 @@ public class GameResultUI : SingleUI
             Destroy(child.gameObject);
         }
 
-        foreach (var items in QueenActiveSkillManager.Instance.queenActiveSkillDic)
+        QueenEnhanceUI queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
+
+        foreach (var items in queenEnhanceUI.AcquiredEnhanceLevels)
         {
-            OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentSkillGrid);
-            ownedEnhanceItem.SetEnhanceItem(items.Key);
+            if (DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.AddSkill)
+            {
+                OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentSkillGrid);
+                ownedEnhanceItem.SetEnhanceItem(items.Key, true);
+            }
         }
     }
 
@@ -156,5 +179,38 @@ public class GameResultUI : SingleUI
     private void DpsPopup(bool value)
     {
         dpsPopupUI.SetActive(value);
+    }
+
+    /// <summary>
+    /// 보유 현황의 마우스 오버 팝업창UI 표기
+    /// </summary>
+    /// <param name="enhanceID"></param>
+    public void SetDescriptionPopupUIInfo(int enhanceID)
+    {
+        QueenEnhanceInfo info = DataManager.Instance.queenEnhanceDic[enhanceID];
+
+        int currentLevel = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
+
+        popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
+        popupUIAbilityName.text = info.name;
+
+        float previewValue = currentLevel == 0
+            ? info.state_Base
+            : info.state_Base + (info.state_LevelUp * currentLevel);
+
+        string formattedValue = QueenEnhanceStatusUI.PercentValueTypes.Contains(info.valueType)
+            ? $"{previewValue * 100:F0}%"
+            : $"{previewValue}";
+
+        popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
+
+        if (info.type != QueenEnhanceType.AddSkill)
+        {
+            popupUIAbilityLevel.text = "Lv. " + StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.AcquiredEnhanceLevels[enhanceID].ToString();
+        }
+        else
+        {
+            popupUIAbilityLevel.text = "-";
+        }
     }
 }
