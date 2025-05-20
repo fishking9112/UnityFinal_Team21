@@ -47,8 +47,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     {
         heroAbilityInfo = DataManager.Instance.heroAbilityDic[id];
 
-        // 임시로 데이터 테이블 id가 달라서 임시로 100번 높은 값 불러오게 만들어 놨어요 이 부분 수정해주세요!
-        heroAbilityLevelUpInfo = DataManager.Instance.heroAbilityLevelUpDic[id + 100];
+        heroAbilityLevelUpInfo = DataManager.Instance.heroAbilityLevelUpDic[heroAbilityInfo.levelUp_ID];
 
         Init();
     }
