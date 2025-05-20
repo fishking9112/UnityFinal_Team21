@@ -5534,11 +5534,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2371144776781480220}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8458236777867652101
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13392,12 +13392,14 @@ MonoBehaviour:
   TopButtonGroup: {fileID: 1277818170965468205}
   EtcUIGroup: {fileID: 8690573562032449057}
   OptionUIGroup: {fileID: 1716646405294148309}
+  EvolutionSelectUI: {fileID: 4164532619274245542}
+  PauseSelectUI: {fileID: 2981438731858318736}
   OptionBtn: {fileID: 8221758740650080330}
   ExitBtn: {fileID: 4642735858847973854}
   EvolutionBtn: {fileID: 1628076273112855620}
-  EvolutionSelectUI: {fileID: 4164532619274245542}
   PauseBtn: {fileID: 5371661901018939176}
-  PauseSelectUI: {fileID: 2981438731858318736}
+  HudEvolutionBtn: {fileID: 6572482033453233000}
+  HudPauseBtn: {fileID: 5685532426857520707}
   isPaused: 0
   LevelUPTestButton: {fileID: 5024922437878790963}
   HealthUITestButton: {fileID: 4071273458717655158}

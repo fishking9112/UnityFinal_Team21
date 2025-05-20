@@ -46,12 +46,16 @@ public class GameHUD : HUDUI
     public GameObject TopButtonGroup;
     public GameObject EtcUIGroup;
     public GameObject OptionUIGroup;
+    public GameObject EvolutionSelectUI;
+    public GameObject PauseSelectUI;
+
+    [Header("버튼 오브젝트")]
     public Button OptionBtn;
     public Button ExitBtn;
     public Button EvolutionBtn;
-    public GameObject EvolutionSelectUI;
     public Button PauseBtn;
-    public GameObject PauseSelectUI;
+    public Button HudEvolutionBtn;
+    public Button HudPauseBtn;
 
     [Header("현재 상태")]
     public bool isPaused = false;
@@ -107,9 +111,11 @@ public class GameHUD : HUDUI
 
         // 진화트리 버튼 이벤트 연결 
         EvolutionBtn.onClick.AddListener(ShowEvolutionTreeUI);
+        HudEvolutionBtn.onClick.AddListener(ShowEvolutionTreeUI);
 
         // 일시정지 버튼 이벤트 연결 
         PauseBtn.onClick.AddListener(ShowPauseUI);
+        HudPauseBtn.onClick.AddListener(ShowPauseUI);
 
         inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
         inputAction.started += OnPauseUI;
