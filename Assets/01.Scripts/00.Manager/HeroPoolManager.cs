@@ -20,6 +20,8 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
 
     private List<HeroController> poolList = new List<HeroController>();
 
+    private QueenCondition condition;
+
     protected override void Awake()
     {
         base.Awake();
@@ -32,7 +34,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         {
             return;
         }
-
+        condition = GameManager.Instance.queen.condition;
         list = AddressableManager.Instance.LoadDataAssets<GameObject>("Hero");
         bossList = AddressableManager.Instance.LoadDataAssets<GameObject>("BossHero");
         System.Random rand = new System.Random();
@@ -83,5 +85,6 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
     {
         HeroManager.Instance.hero.Remove(obj.gameObject);
         obj.gameObject.SetActive(false);
+        condition.KillCnt.Value++;
     }
 }
