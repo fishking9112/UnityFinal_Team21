@@ -108,7 +108,7 @@ public class MonsterTrackingState : MonsterBaseState
         // 움직임-----
         spum.PlayAnimation(PlayerState.MOVE, 0);
         // 속도 0.1f 곱해서 너프시킴
-        float animationSpeed = Mathf.Clamp(stat.moveSpeed.Value, 0.1f, float.MaxValue);
+        float animationSpeed = Mathf.Clamp(stat.moveSpeed.Value * stateMachine.Controller.moveAnimSpeed, 0.1f, float.MaxValue);
         spum.SetMoveSpeed(animationSpeed);
         navMeshAgent.speed = stat.moveSpeed.Value;
 
@@ -155,7 +155,7 @@ public class MonsterTrackingState : MonsterBaseState
         float distance = direction.magnitude;
 
         boxSize.x = distance;
-        boxSize.y = stateMachine.Controller.projectileSize.y;
+        boxSize.y = stateMachine.Controller.projectileSize.y * stateMachine.Controller.monsterInfo.projectile_size;
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
