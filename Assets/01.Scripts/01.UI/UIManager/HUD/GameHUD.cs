@@ -121,6 +121,11 @@ public class GameHUD : HUDUI
         inputAction.started += OnPauseUI;
 
         slot.Init(GameManager.Instance.queen.controller, GameManager.Instance.queen.input.actions["SlotChange"]);
+
+        queenEnhanceUI.gameObject.SetActive(false);
+        evolutionTreeUI.gameObject.SetActive(false);
+        pauseUI.gameObject.SetActive(false);
+        gameResultUI.gameObject.SetActive(false);
     }
 
     /// <summary>

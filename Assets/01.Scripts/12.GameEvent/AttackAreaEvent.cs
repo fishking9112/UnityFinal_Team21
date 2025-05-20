@@ -79,6 +79,8 @@ public class AttackAreaEvent : GameEventBase
 
     private void UpdateText()
     {
-        contextUI.contentText.text = $"히어로나 나옵니다 빨리 막사를 점령하세요 <color=red>{Mathf.CeilToInt(spawnCurrentDuration)}s</color>";
+        string tmp = DataManager.Instance.eventDic[tableInfo.ID].description;
+        string result = string.Format(tmp, Mathf.CeilToInt(spawnCurrentDuration));
+        contextUI.SetText(result);
     }
 }
