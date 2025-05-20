@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2939779929653664404}
   - component: {fileID: 5629912258522652611}
   - component: {fileID: 1462333042655869120}
+  - component: {fileID: 2263040872284688655}
   m_Layer: 0
   m_Name: HeroFireball_Explode
   m_TagString: Untagged
@@ -49,7 +50,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -4901,6 +4902,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &2263040872284688655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3857440254077484886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbfc330da27083e4f9b34801f7390d53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particle: {fileID: 0}
 --- !u!1 &5408741530746784102
 GameObject:
   m_ObjectHideFlags: 0
