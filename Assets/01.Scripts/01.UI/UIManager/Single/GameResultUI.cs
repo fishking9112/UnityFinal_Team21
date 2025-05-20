@@ -19,6 +19,11 @@ public class GameResultUI : SingleUI
     public GameUnitResultUI gameUnitResultUIPrefab;
     public Image mvpImg;
     public Image queenImg;
+    public Transform parentEnhanceGrid;
+    public Transform parentSkillGrid;
+
+    [Header("Enhance/Skill Item Prefabs")]
+    public OwnedEnhanceItem prefabsOwnedEnhanceItem;
 
     [Header("Text Components")]
     public TextMeshProUGUI queenLevelText;
@@ -42,6 +47,8 @@ public class GameResultUI : SingleUI
 
     private void OnEnable()
     {
+        InitQueenEnhance();
+        InitQueenSkill();
         InitQueenResult();
         InitMiddlePanel();
         InitUnitResult();
@@ -49,6 +56,42 @@ public class GameResultUI : SingleUI
         SetMonsterMVP();
         QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
     }
+
+    private void InitQueenEnhance()
+    {
+        foreach (Transform child in parentEnhanceGrid)
+        {
+            Destroy(child.gameObject);
+        }
+
+        QueenEnhanceUI queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
+
+        foreach (var items in queenEnhanceUI.AcquiredEnhanceLevels)
+        {
+            if (DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.QueenPassive || DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.MonsterPassive)
+            {
+
+            }
+
+            OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentEnhanceGrid);
+            ownedEnhanceItem.SetEnhanceItem(items.Key);
+        }
+    }
+
+    private void InitQueenSkill()
+    {
+        foreach (Transform child in parentSkillGrid)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (var items in QueenActiveSkillManager.Instance.queenActiveSkillDic)
+        {
+            OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentSkillGrid);
+            ownedEnhanceItem.SetEnhanceItem(items.Key);
+        }
+    }
+
     private void InitQueenResult()
     {
         queenImg.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].Icon);
