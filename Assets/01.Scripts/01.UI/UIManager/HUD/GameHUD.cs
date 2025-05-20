@@ -17,6 +17,7 @@ public class GameHUD : HUDUI
     [Header("레벨 / 골드")]
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI killCntText;
 
     [Header("게이지")]
     [SerializeField] private GaugeUI queenActiveSkillGaugeUI;
@@ -77,6 +78,8 @@ public class GameHUD : HUDUI
 
         condition.Gold.AddAction(UpdateGoldText);
         UpdateGoldText(condition.Gold.Value);
+
+        condition.KillCnt.AddAction(UpdateKullCntText);
 
         curTime.AddAction(UpdateTimerText);
         UpdateTimerText(curTime.Value);
@@ -222,6 +225,11 @@ public class GameHUD : HUDUI
     public void UpdateGoldText(float gold)
     {
         goldText.text = Utils.GetThousandCommaText((int)gold);
+    }
+
+    public void UpdateKullCntText(int kullCnt)
+    {
+        killCntText.text = Utils.GetThousandCommaText(kullCnt);
     }
 
     public void UpdateTimerText(float time)

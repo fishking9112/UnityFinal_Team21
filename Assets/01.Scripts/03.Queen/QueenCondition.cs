@@ -28,6 +28,7 @@ public class QueenCondition : MonoBehaviour
     public ReactiveProperty<float> EvolutionPoint { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> Level { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> Gold { get; private set; } = new ReactiveProperty<float>();
+    public ReactiveProperty<int> KillCnt { get; private set; } = new ReactiveProperty<int>();
     public int EnhancePoint;
 
     private float ExpGainMultiplier => 1f + (expGainMultiplierPercent * 0.01f);
