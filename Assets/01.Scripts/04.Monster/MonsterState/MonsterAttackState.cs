@@ -16,7 +16,8 @@ public class MonsterAttackState : MonsterBaseState
         base.Enter();
         navMeshAgent.ResetPath();
         navMeshAgent.velocity = Vector2.zero;
-        spum.SetAttackSpeed(stat.attackSpeed.Value);
+        float animationSpeed = Mathf.Clamp(stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed, 0.1f, float.MaxValue);
+        spum.SetAttackSpeed(animationSpeed);
 
 
         var attackType = stateMachine.Controller.monsterInfo.monsterAttackType;
