@@ -60,6 +60,8 @@ public class MenuHUD : HUDUI
                     SetActivePanel(panel);
                 });
             }
+
+            mainUISet.panel.SetActive(false);
         }
 
         backBtn.onClick.AddListener(() =>
