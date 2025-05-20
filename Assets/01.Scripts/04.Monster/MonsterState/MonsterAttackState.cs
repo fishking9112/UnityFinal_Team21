@@ -130,7 +130,7 @@ public class MonsterAttackState : MonsterBaseState
         try
         {
             // 1초 프레임에서 0.55때 공격됨
-            UniTask.Delay((int)(550 * (1f / stat.attackSpeed.Value)), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
+            UniTask.Delay((int)(550 * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed))), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
             {
                 float minDist = float.MaxValue;
                 Vector2 origin = navMeshAgent.transform.position;
@@ -179,7 +179,7 @@ public class MonsterAttackState : MonsterBaseState
         cts = new CancellationTokenSource();
 
         // 1초 프레임에서 0.65때 발사
-        UniTask.Delay((int)(600 * (1f / stat.attackSpeed.Value)), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
+        UniTask.Delay((int)(600 * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed))), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
         {
             var projectileObject = ObjectPoolManager.Instance.GetObject<MonsterProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
             projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);
