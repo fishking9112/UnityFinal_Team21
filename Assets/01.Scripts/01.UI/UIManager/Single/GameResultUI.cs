@@ -18,6 +18,7 @@ public class GameResultUI : SingleUI
     public Transform unitListParent;
     public GameUnitResultUI gameUnitResultUIPrefab;
     public Image mvpImg;
+    public Image queenImg;
 
     [Header("Text Components")]
     public TextMeshProUGUI queenLevelText;
@@ -50,14 +51,15 @@ public class GameResultUI : SingleUI
     }
     private void InitQueenResult()
     {
+        queenImg.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].Icon);
         queenLevelText.text = "Lv. " + GameManager.Instance.queen.condition.Level.Value.ToString();
     }
 
     private void InitMiddlePanel()
     {
         gameTimeText.text = Utils.GetMMSSTime((int)(GameManager.Instance.gameLimitTime - GameManager.Instance.curTime.Value));
-        killCountText.text = "000";
-        resourceText.text = GameManager.Instance.queen.condition.Gold.Value.ToString();
+        killCountText.text = Utils.GetThousandCommaText(GameManager.Instance.queen.condition.KillCnt.Value);
+        resourceText.text = Utils.GetThousandCommaText((int)GameManager.Instance.queen.condition.Gold.Value);
     }
 
     private void InitUnitResult()
