@@ -41,8 +41,11 @@ public class QueenController : MonoBehaviour
     [NonSerialized] public QueenActiveSkillBase selectedQueenActiveSkill;
 
     private bool isDrag;
+    public bool isMinimapDrag;
     private float summonDistance;
     private Vector3 lastSummonPosition;
+
+
     private async void Start()
     {
         condition = GameManager.Instance.queen.condition;
@@ -244,6 +247,11 @@ public class QueenController : MonoBehaviour
     // 몬스터 소환
     private void SummonMonster()
     {
+        if (isMinimapDrag)
+        {
+            return;
+        }
+
         if (selectedMonsterId == -1)
         {
             return;

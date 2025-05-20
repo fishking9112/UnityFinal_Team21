@@ -14,6 +14,7 @@ public class MiniMapClick : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
         }
 
         isDragging = true;
+        GameManager.Instance.queen.controller.isMinimapDrag = true;
         cameraController.MiniMapClickCameraMove(eventData.position);
     }
 
@@ -28,5 +29,6 @@ public class MiniMapClick : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
     public void OnPointerUp(PointerEventData eventData)
     {
         isDragging = false;
+        GameManager.Instance.queen.controller.isMinimapDrag = false;
     }
 }
