@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ public class QueenSelectUI : MonoBehaviour
     public List<Toggle> queenSelectToggleList;
 
     public Button SelectBtn;
+    public Button CloseBtn;
     public Image MainQueenImage;
     public QueenSelectItem prefabsQueenSelectItem;
     public Transform parentQueenSelectItem;
@@ -25,15 +27,18 @@ public class QueenSelectUI : MonoBehaviour
     public QueenBasicSkillDescription QueenBasicSkillDescription;
     public QueenBasicSkillDescription[] ArrayQueenPassiveSkillDescription;
 
-    private void Start()
+    public void Init()
     {
         queenSelectToggleList.Clear();
         SelectBtn.onClick.AddListener(() => gameObject.SetActive(false));
+        CloseBtn.onClick.AddListener(() => gameObject.SetActive(false));
         InitializeQueenItems();
         RegisterToggleEvents();
 
         if (queenSelectToggleList.Count > 0)
             queenSelectToggleList[0].isOn = true;
+
+        SelectQueen(DataManager.Instance.queenStatusDic.First().Key);
     }
 
     private void InitializeQueenItems()

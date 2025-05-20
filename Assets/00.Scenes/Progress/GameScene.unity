@@ -7023,6 +7023,7 @@ MonoBehaviour:
   worldMousePos: {x: 0, y: 0, z: 0}
   cursorIcon: {fileID: 90943526}
   curSlot: 0
+  isMinimapDrag: 0
 --- !u!114 &166616948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20795,34 +20796,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ObjectPoolManager
       objectReference: {fileID: 0}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.size
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[58].key
-      value: HeroThunder
-      objectReference: {fileID: 0}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[59].key
-      value: HoldObject
-      objectReference: {fileID: 0}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[58].prefab
-      value: 
-      objectReference: {fileID: 2337730212949841628, guid: 3466fe102ffe64943aad42908a179be7, type: 3}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[59].prefab
-      value: 
-      objectReference: {fileID: 1149227411583792917, guid: e1d4aa1f1da9feb49977372da6dbf80c, type: 3}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[58].initPoolSize
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8161107454925081147, guid: 6319cf738daf65c4dbac029181980efd, type: 3}
-      propertyPath: poolPrefabs.Array.data[59].initPoolSize
-      value: 5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21233,7 +21206,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0.13999999, y: 0.13999999, z: 0}
   m_MaxChunkCount: 16
@@ -122065,6 +122038,7 @@ MonoBehaviour:
   cameraController: {fileID: 0}
   gameLimitTime: 1800
   isTimeOver: 1
+  stageLevel: 0
 --- !u!4 &1623829574
 Transform:
   m_ObjectHideFlags: 0
@@ -122253,6 +122227,7 @@ MonoBehaviour:
   MiniCastlePoint: {fileID: 806110143}
   BarrackPoint: {fileID: 1214187222}
   MonsterPoint: {fileID: 1794865267}
+  areaVisualizerPrefab: {fileID: 6555166315882270385, guid: 097298b87517f9f4cb5d3df5d3bbe9c1, type: 3}
 --- !u!4 &1843878461
 Transform:
   m_ObjectHideFlags: 0

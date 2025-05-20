@@ -8,4 +8,6 @@ public class SpawnPointManager : MonoSingleton<SpawnPointManager>
     public SpawnPointController MiniCastlePoint;
     public SpawnPointController BarrackPoint;
     public SpawnPointController MonsterPoint;
+
+    public SpriteRenderer areaVisualizerPrefab;
 }

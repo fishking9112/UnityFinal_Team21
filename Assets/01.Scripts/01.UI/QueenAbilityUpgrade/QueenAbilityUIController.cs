@@ -8,7 +8,9 @@ public class QueenAbilityUIController : MonoBehaviour
     [SerializeField] private Transform contentTransform;
     public Transform ContentTransform => contentTransform;
 
+    [SerializeField] private GameObject UIPanel;
     [SerializeField] private Button resetButton;
+    [SerializeField] private Button clostButton;
     [SerializeField] private RectTransform descriptionPopupUI;
     [SerializeField] private TextMeshProUGUI popupUIAbilityName;
     [SerializeField] private TextMeshProUGUI popupUIAbilityDec;
@@ -24,7 +26,7 @@ public class QueenAbilityUIController : MonoBehaviour
     /// </summary>
     private void OnValidate()
     {
-        if(popupUIAbilityName == null)
+        if (popupUIAbilityName == null)
         {
             popupUIAbilityName = descriptionPopupUI.Find("AbilityNameText").GetComponent<TextMeshProUGUI>();
             popupUIAbilityDec = descriptionPopupUI.Find("AbilityDecText").GetComponent<TextMeshProUGUI>();
@@ -32,7 +34,7 @@ public class QueenAbilityUIController : MonoBehaviour
             popupUIAbilityImage = descriptionPopupUI.Find("AbilityIcon").GetComponent<Image>();
         }
 
-        if(uiQueenAbilityPanelRoot == null)
+        if (uiQueenAbilityPanelRoot == null)
         {
             uiQueenAbilityPanelRoot = transform.Find("UIQueenAbilityPanelRoot").gameObject;
         }
@@ -57,6 +59,7 @@ public class QueenAbilityUIController : MonoBehaviour
         QueenAbilityUpgradeManager.Instance.SetQueenAbilityUIController(this);
         resetButton.onClick.RemoveAllListeners();
         resetButton.onClick.AddListener(OnClickResetButton);
+        clostButton.onClick.AddListener(() => UIPanel.SetActive(false));
         gameObject.SetActive(true);
         uiQueenAbilityPanelRoot.SetActive(true);
         descriptionPopupUI.gameObject.SetActive(false);
@@ -71,7 +74,7 @@ public class QueenAbilityUIController : MonoBehaviour
     {
         popupUIAbilityName.text = info.name;
         popupUIAbilityDec.text = info.description;
-        popupUIAbilityCost.text = currentLevel >= info.maxLevel? "―" : info.levelInfo[currentLevel].cost.ToString();
+        popupUIAbilityCost.text = currentLevel >= info.maxLevel ? "―" : info.levelInfo[currentLevel].cost.ToString();
 
         popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
 
