@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class QueenEnhanceUI : SingleUI
 {
     [SerializeField] private QueenEnhanceStatusUI queenEnhanceStatusUI;
+    public QueenEnhanceStatusUI QueenEnhanceStatusUI => queenEnhanceStatusUI;
     [SerializeField] private SelectInhanceItem[] itemSlots;
     [SerializeField] private QueenSkillSwapItem[] skillSwapSlots;
     [SerializeField] private GameObject queenSkillSwapPopup;
