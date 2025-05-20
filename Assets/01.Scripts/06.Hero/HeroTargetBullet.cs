@@ -106,8 +106,9 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
                 GameManager.Instance.castle.TakeDamaged(damage);
             }
         }
+
+        ParticleManager.Instance.SpawnParticle("HeroFireball_Explode", transform.position, Vector3.one);
+
         OnDespawn();
     }
-
-
 }
