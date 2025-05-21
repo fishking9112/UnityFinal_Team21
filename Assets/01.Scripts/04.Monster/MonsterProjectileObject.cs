@@ -57,7 +57,6 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
             DestroyProjectile(transform.position, false);
         }
 
-        Debug.Log(baseController.monsterInfo.projectile_speed);
         _rigidbody.velocity = direction * baseController.monsterInfo.projectile_speed * 5;
     }
 
@@ -71,7 +70,6 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
         this.baseController = baseController;
         this.direction = direction;
         currentDuration = 0;
-        Debug.Log(baseController.monsterInfo.projectile_size);
         transform.localScale = Vector3.one * baseController.monsterInfo.projectile_size;
 
         transform.right = this.direction;
