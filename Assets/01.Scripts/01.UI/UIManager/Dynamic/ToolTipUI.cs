@@ -80,6 +80,9 @@ public class ToolTipUI : BaseUI
 
         if (pageText != null)
             pageText.text = $"{curPage + 1} / {historyList.Count}";
+
+        if (tooltipImg != null && DataManager.Instance.toolTipDic[curId].image != String.Empty)
+            tooltipImg.sprite = DataManager.Instance.tooltipAtlas.GetSprite(DataManager.Instance.toolTipDic[curId].image);
     }
 
     public void ButtonUpdate()

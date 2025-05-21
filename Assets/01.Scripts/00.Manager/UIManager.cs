@@ -95,8 +95,14 @@ public class UIManager : MonoSingleton<UIManager>
     /// <param name="message">팝업 메시지</param>
     /// <param name="onConfirmAction">확인 버튼 동작</param>
     /// <param name="onCancelAction">취소 버튼 동작</param>
-    public void ShowTooltip(int id, Action onFinishAction = null)
+    public void ShowTooltip(int id, bool forceRun = true, Action onFinishAction = null)
     {
+        // 한번 실행했다면 작동 X
+        if (PlayerPrefs.GetInt(id.ToString()) == 1 && !forceRun)
+            return;
+
+        PlayerPrefs.SetInt(id.ToString(), 1); // 실행 기록 저장
+        PlayerPrefs.Save(); // 저장 즉시 적용
         var popup = ShowUI<ToolTipUI>();
         popup.Setup(id, onFinishAction);
     }
