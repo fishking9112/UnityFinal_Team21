@@ -28,6 +28,8 @@ public class QueenSelectUI : MonoBehaviour
     public QueenBasicSkillDescription[] ArrayQueenPassiveSkillDescription;
     public TextMeshProUGUI queenNameText;
 
+    private int selcetedQueenID;
+
     private void OnEnable()
     {
         for (int i = 0; i < queenSelectToggleList.Count; i++)
@@ -47,7 +49,10 @@ public class QueenSelectUI : MonoBehaviour
     public void Init()
     {
         queenSelectToggleList.Clear();
-        SelectBtn.onClick.AddListener(() => gameObject.SetActive(false));
+        SelectBtn.onClick.AddListener(() => { GameManager.Instance.QueenCharaterID = selcetedQueenID;
+                                                gameObject.SetActive(false);
+                                                });
+
         CloseBtn.onClick.AddListener(() => gameObject.SetActive(false));
         InitializeQueenItems();
         RegisterToggleEvents();
@@ -55,7 +60,34 @@ public class QueenSelectUI : MonoBehaviour
         if (queenSelectToggleList.Count > 0)
             queenSelectToggleList[0].isOn = true;
 
-        SelectQueen(DataManager.Instance.queenStatusDic.First().Key);
+        InitQueen(DataManager.Instance.queenStatusDic.First().Key);
+    }
+
+    private void InitQueen(int queenID)
+    {
+        GameManager.Instance.QueenCharaterID = queenID;
+
+        var queenInfo = DataManager.Instance.queenStatusDic[queenID];
+        queenNameText.text = queenInfo.Name;
+        MainQueenImage.sprite = DataManager.Instance.iconAtlas.GetSprite(queenInfo.Image);
+
+        // 액티브 스킬 설정
+        var activeSkill = DataManager.Instance.queenActiveSkillDic[queenInfo.baseActiveSkill];
+        SetSkillInfo(QueenBasicSkillDescription, activeSkill);
+
+        // 패시브 스킬 설정
+        int[] passiveSkillIDs = new int[]
+        {
+            queenInfo.basePassiveSkill_1,
+            queenInfo.basePassiveSkill_2,
+            queenInfo.basePassiveSkill_3
+        };
+
+        for (int i = 0; i < ArrayQueenPassiveSkillDescription.Length && i < passiveSkillIDs.Length; i++)
+        {
+            var passiveSkill = DataManager.Instance.queenPassiveSkillDic[passiveSkillIDs[i]];
+            SetSkillInfo(ArrayQueenPassiveSkillDescription[i], passiveSkill);
+        }
     }
 
     private void InitializeQueenItems()
@@ -87,7 +119,7 @@ public class QueenSelectUI : MonoBehaviour
 
     public void SelectQueen(int queenID)
     {
-        GameManager.Instance.QueenCharaterID = queenID;
+        selcetedQueenID = queenID;
 
         var queenInfo = DataManager.Instance.queenStatusDic[queenID];
         queenNameText.text = queenInfo.Name;

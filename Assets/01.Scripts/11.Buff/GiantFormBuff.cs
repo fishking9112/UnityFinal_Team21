@@ -3,12 +3,15 @@ using UnityEngine;
 
 public class GiantFormBuff : BaseBuffStrategy, IBuffStrategy
 {
+    Vector3 originScale;
+
     public void Apply(BaseController target, Buff buff, BuffInfo info, float amount)
     {
         target.statHandler.health.AddModifier(ModifierType.Multiply, (int)IDBuff.GIANT_FORM, 1 + amount);
         target.statHandler.attackRange.AddModifier(ModifierType.Multiply, (int)IDBuff.GIANT_FORM, 1 + amount);
 
-        Vector3 giantScale = target.transform.localScale * (1 + amount);
+        originScale = target.transform.localScale;
+        Vector3 giantScale = originScale * (1 + amount);
         SmoothSetScale(target, target.transform.localScale, giantScale, 0.5f).Forget();
     }
 
@@ -17,7 +20,7 @@ public class GiantFormBuff : BaseBuffStrategy, IBuffStrategy
         target.statHandler.health.RemoveModifier(ModifierType.Multiply, (int)IDBuff.GIANT_FORM);
         target.statHandler.attackRange.RemoveModifier(ModifierType.Multiply, (int)IDBuff.GIANT_FORM);
 
-        SmoothSetScale(target, target.transform.localScale, new Vector3(1f, 1f, 1f), 0.5f).Forget();
+        SmoothSetScale(target, target.transform.localScale, originScale, 0.5f).Forget();
     }
 
     private async UniTask SmoothSetScale(BaseController target, Vector3 from, Vector3 to, float duration)
