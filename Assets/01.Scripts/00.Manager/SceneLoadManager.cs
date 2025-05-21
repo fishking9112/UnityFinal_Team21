@@ -4,18 +4,20 @@ using UnityEngine.SceneManagement;
 
 public enum LoadSceneEnum
 {
-    LoginScene,
+    AppScene,
     MenuScene,
     GameScene,
 }
 
 public class SceneLoadManager : MonoSingleton<SceneLoadManager>
 {
+    public TapToStartUI tapToStartUI;
+    public TitleProgressText titleProgressText;
     private LoadingUI loadingUI => StaticUIManager.Instance.loadingUI;
     private bool isSceneLoading = false;
     void Start()
     {
-        LoadScene(LoadSceneEnum.LoginScene).Forget();
+        LoadScene(LoadSceneEnum.AppScene).Forget();
     }
 
     public async UniTask LoadScene(LoadSceneEnum sceneEnum)
@@ -30,11 +32,31 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
 
         switch (sceneEnum)
         {
-            case LoadSceneEnum.LoginScene: // 로그인 씬 일 경우
-                await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
-                await LoadSceneAsync("LoginScene"); // 로드 씬으로 이동
-                await AddressableManager.Instance.InitDownloadAsync(); // Addressable 다운로드
-                await UGSManager.Instance.InitAsync(); // UGS 초기화
+            case LoadSceneEnum.AppScene: // 로그인 씬 일 경우
+
+                if (titleProgressText != null)
+                {
+                    titleProgressText.ActiveUIGroup(true);
+                    titleProgressText.SetAnimText("로그인 중");
+                    titleProgressText.StartAnimating();
+                    await UGSManager.Instance.InitAsync(); // UGS 초기화
+                    titleProgressText.StopAnimating();
+
+                    titleProgressText.SetAnimText("데이터 로딩 중");
+                    titleProgressText.StartAnimating();
+                    await AddressableManager.Instance.InitDownloadAsync(); // Addressable 다운로드
+                    titleProgressText.StopAnimating();
+                    titleProgressText.ActiveUIGroup(false);
+                }
+
+                // Tap 대기 처리
+                if (tapToStartUI != null)
+                {
+                    tapToStartUI.ActiveUIGroup(true);
+                    await WaitForUserTapAsync();
+                    tapToStartUI.ActiveUIGroup(false);
+                }
+
                 isSceneLoading = false; // 여기서 다른 씬을 로드하기 위해 필요
                 await LoadScene(LoadSceneEnum.MenuScene); // 다 됬으면 메뉴 씬으로 이동
                 break;
@@ -75,6 +97,19 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
         }
 
         isSceneLoading = false;
+    }
+
+    private async UniTask WaitForUserTapAsync()
+    {
+        // 탭이 감지될 때까지 대기
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                break;
+            }
+            await UniTask.Yield(); // 다음 프레임까지 대기
+        }
     }
 
     private bool IsValidScene(string sceneName)

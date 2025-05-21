@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Play.Publisher.Editor;
 using UnityEngine;
 
 public class AttackAreaEvent : GameEventBase
