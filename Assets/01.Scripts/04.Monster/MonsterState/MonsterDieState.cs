@@ -14,7 +14,7 @@ public class MonsterDieState : MonsterBaseState
         base.Enter();
         navMeshAgent.ResetPath();
         navMeshAgent.velocity = Vector2.zero;
-        // navMeshAgent.enabled = false;
+        navMeshAgent.enabled = false;
 
         collider.enabled = false;
 

@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
@@ -26,6 +28,12 @@ public class HeroController : BaseController
 
     [SerializeField] public HeroStatusInfo statusInfo;
 
+
+    [Header("빨간색 점등 관련 데이터")]
+    [NonSerialized] public List<SpriteRenderer> renderers;
+    private List<Color> originalColors = new(); // 원본 색상 저장용
+    private CancellationTokenSource _takeDamagedRendererCts;
+    [SerializeField] private float takeDamagedRendererTimer = 0.5f;
     private void Update()
     {
         if (transform.position != lastPos)
@@ -76,11 +84,38 @@ public class HeroController : BaseController
         stateMachine.ChangeState(stateMachine.moveState);
         token = new CancellationTokenSource();
 
+        if (renderers == null)
+        {
+            renderers = new();
+            renderers = pivot.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow").ToList();
+
+            // 각 renderer의 현재 색상 저장
+            foreach (var renderer in renderers)
+            {
+                originalColors.Add(renderer.color);
+            }
+        }
+        else
+        {
+            // 저장한 색상으로 복원
+            for (int i = 0; i < renderers.Count; i++)
+            {
+                if (i < originalColors.Count)
+                {
+                    renderers[i].color = originalColors[i];
+                }
+            }
+        }
     }
 
     public override void TakeDamaged(float damage)
     {
+
+        Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f));
+        Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y + 0.6f, 0f);
+        StaticUIManager.Instance.damageLayer.ShowDamage(damage, worldPos + Vector3.up * 0.5f);
         base.TakeDamaged(damage);
+        TakeDamagedRenderer();
     }
 
     private async UniTaskVoid CheckFlip(CancellationToken tk)
@@ -151,5 +186,39 @@ public class HeroController : BaseController
         //token?.Dispose();
         SetMove(false);
         SetAttack(false);
+    }
+
+    // UniTask 실행 함수
+    public void TakeDamagedRenderer()
+    {
+        _takeDamagedRendererCts?.Cancel();
+        _takeDamagedRendererCts?.Dispose();
+        // 새로운 CancellationTokenSource 만들기 (OnDisable용 토큰도 연동)
+        _takeDamagedRendererCts = new CancellationTokenSource();
+
+        // Task 시작
+        TakeDamagedRendererTask(_takeDamagedRendererCts.Token).Forget();
+    }
+
+    // UniTask 본문
+    private async UniTaskVoid TakeDamagedRendererTask(CancellationToken token)
+    {
+        foreach (var renderer in renderers)
+        {
+            renderer.color = Color.red;
+        }
+
+        await UniTask.Delay(TimeSpan.FromSeconds(takeDamagedRendererTimer), cancellationToken: token);
+
+        if (this == null) return;
+
+        // 저장한 색상으로 복원
+        for (int i = 0; i < renderers.Count; i++)
+        {
+            if (i < originalColors.Count)
+            {
+                renderers[i].color = originalColors[i];
+            }
+        }
     }
 }

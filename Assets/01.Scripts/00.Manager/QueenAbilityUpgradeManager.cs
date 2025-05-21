@@ -146,7 +146,6 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// </summary>
     public void ApplyAllEffects()
     {
-        Debug.Log("fsefse");
         foreach (var kvp in upgradeLevels)
         {
             int id = kvp.Key;
@@ -184,7 +183,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
     private void ApplyAttackPowerBuff(float value)
     {
-        foreach (var kvp in DataManager.Instance.monsterDic)
+        foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
         {
             kvp.Value.attack += value;
         }
@@ -192,7 +191,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
     private void ApplyMoveSpeedBuff(float value)
     {
-        foreach (var kvp in DataManager.Instance.monsterDic)
+        foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
         {
             kvp.Value.moveSpeed += value;
         }
