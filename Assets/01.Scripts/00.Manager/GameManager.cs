@@ -34,6 +34,10 @@ public class GameManager : MonoSingleton<GameManager>
     private CancellationTokenSource token;
     private GameLog.FunnelType funnelType;
 
+    // 게임 트라이 횟수
+    private int tryCount;
+
+
     // private PauseController pauseController;
 
 
@@ -43,6 +47,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         curCursorState = CursorState.CONFINED;
         Time.timeScale = 1f;
+        tryCount = 0;
     }
 
     private void Update()
@@ -118,6 +123,9 @@ public class GameManager : MonoSingleton<GameManager>
         miniBarracks.Clear();
         stageLevel = 0;
         token = new CancellationTokenSource();
+        tryCount = PlayerPrefs.GetInt("TryCount");
+        tryCount++;
+        PlayerPrefs.SetInt("TryCount", tryCount);
         funnelType = GameLog.FunnelType.Minite_1;
         MiniteCount(token.Token).Forget();
     }
