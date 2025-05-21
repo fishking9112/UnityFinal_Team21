@@ -34,6 +34,10 @@ public class GameManager : MonoSingleton<GameManager>
     private CancellationTokenSource token;
     private GameLog.FunnelType funnelType;
 
+    // 게임 트라이 횟수
+    private int tryCount;
+
+
     // private PauseController pauseController;
 
 
@@ -43,6 +47,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         curCursorState = CursorState.CONFINED;
         Time.timeScale = 1f;
+        tryCount = 0;
     }
 
     private void Update()
@@ -55,6 +60,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
         if (Input.GetKeyDown(KeyCode.G))
         {
+            GameClear();
             AddGold(100);
         }
         if (Input.GetKeyDown(KeyCode.S))
@@ -117,6 +123,9 @@ public class GameManager : MonoSingleton<GameManager>
         miniBarracks.Clear();
         stageLevel = 0;
         token = new CancellationTokenSource();
+        tryCount = PlayerPrefs.GetInt("TryCount");
+        tryCount++;
+        PlayerPrefs.SetInt("TryCount", tryCount);
         funnelType = GameLog.FunnelType.Minite_1;
         MiniteCount(token.Token).Forget();
     }
@@ -137,6 +146,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         // curTime.Value = 0f;
         isTimeOver = true;
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = true;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
         token?.Cancel();
@@ -147,6 +157,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         // curTime.Value = 0f;
         isTimeOver = true;
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
         token?.Cancel();
