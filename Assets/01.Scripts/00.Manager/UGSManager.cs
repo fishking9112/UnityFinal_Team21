@@ -16,6 +16,8 @@ public class UGSManager : MonoSingleton<UGSManager>
 
     public event Action OnRequireNickname;
 
+    private UniTaskCompletionSource<bool> nicknameRegisterTCS;
+
     protected override void Awake()
     {
         base.Awake();
@@ -50,11 +52,28 @@ public class UGSManager : MonoSingleton<UGSManager>
 
         if (!hasNickname)
         {
-            OnRequireNickname?.Invoke();  // 외부에서 UI 띄우도록 연결
-            return;
+            nicknameRegisterTCS = new UniTaskCompletionSource<bool>();
+
+            OnRequireNickname?.Invoke(); // 외부에서 UI 띄우도록 연결
+
+            // 닉네임 등록이 완료될 때까지 대기
+            await nicknameRegisterTCS.Task;
+
+            // 닉네임 저장 완료 후, 재확인
+            hasNickname = await Auth.HasNicknameAsync();
+            if (!hasNickname)
+            {
+                Debug.LogError("닉네임 저장 실패");
+                return;
+            }
         }
 
         await LoadPlayerDataAsync();
+    }
+
+    public void CompleteNicknameRegistration()
+    {
+        nicknameRegisterTCS?.TrySetResult(true);
     }
 
     /// <summary>
