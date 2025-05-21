@@ -28,6 +28,8 @@ public class QueenSelectUI : MonoBehaviour
     public QueenBasicSkillDescription[] ArrayQueenPassiveSkillDescription;
     public TextMeshProUGUI queenNameText;
 
+    private int selcetedQueenID;
+
     private void OnEnable()
     {
         for (int i = 0; i < queenSelectToggleList.Count; i++)
@@ -47,7 +49,10 @@ public class QueenSelectUI : MonoBehaviour
     public void Init()
     {
         queenSelectToggleList.Clear();
-        SelectBtn.onClick.AddListener(() => gameObject.SetActive(false));
+        SelectBtn.onClick.AddListener(() => { GameManager.Instance.QueenCharaterID = selcetedQueenID;
+                                                gameObject.SetActive(false);
+                                                });
+
         CloseBtn.onClick.AddListener(() => gameObject.SetActive(false));
         InitializeQueenItems();
         RegisterToggleEvents();
@@ -87,7 +92,7 @@ public class QueenSelectUI : MonoBehaviour
 
     public void SelectQueen(int queenID)
     {
-        GameManager.Instance.QueenCharaterID = queenID;
+        selcetedQueenID = queenID;
 
         var queenInfo = DataManager.Instance.queenStatusDic[queenID];
         queenNameText.text = queenInfo.Name;
