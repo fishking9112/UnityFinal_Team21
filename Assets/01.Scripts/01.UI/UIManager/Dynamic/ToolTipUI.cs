@@ -54,7 +54,7 @@ public class ToolTipUI : BaseUI
     {
         historyList.Clear();
         int nextId = id;
-        while (nextId != -1 || nextId != 0)
+        while (nextId != -1)
         {
             historyList.Add(DataManager.Instance.toolTipDic[nextId].id);
             nextId = DataManager.Instance.toolTipDic[nextId].nextId;
