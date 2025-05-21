@@ -146,6 +146,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     /// </summary>
     public void ApplyAllEffects()
     {
+        Debug.Log("fsefse");
         foreach (var kvp in upgradeLevels)
         {
             int id = kvp.Key;
@@ -164,19 +165,19 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     public void ResetQueenAbilityMonsterValues()
     {
         // 공격력 감소
-        if (upgradeLevels.TryGetValue(0, out int atkLevel) && atkLevel > 0)
+        if (upgradeLevels.TryGetValue((int)IDQueenAbility.MONSTER_ATTACK_DAMAGE_UP, out int atkLevel) && atkLevel > 0)
         {
-            var atkAbility = GetAbilityById(0);
+            var atkAbility = GetAbilityById((int)IDQueenAbility.MONSTER_ATTACK_DAMAGE_UP);
             float atkValue = atkAbility.levelInfo[atkLevel - 1].eff;
             ApplyAttackPowerBuff(-atkValue);
         }
 
         // 이동속도 감소
-        if (upgradeLevels.TryGetValue(1, out int speedLevel) && speedLevel > 0)
+        if (upgradeLevels.TryGetValue((int)IDQueenAbility.MONSTER_MOVE_SPEED_UP, out int speedLevel) && speedLevel > 0)
         {
-            var speedAbility = GetAbilityById(1);
+            var speedAbility = GetAbilityById((int)IDQueenAbility.MONSTER_MOVE_SPEED_UP);
             float speedValue = speedAbility.levelInfo[speedLevel - 1].eff;
-            ApplyMoveSpeedBuff(-speedValue);
+            ApplyMoveSpeedBuff(-speedValue);    
         }
 
     }

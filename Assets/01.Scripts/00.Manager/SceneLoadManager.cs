@@ -64,6 +64,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
                 await LoadSceneAsync("MenuScene"); // 메뉴 씬으로 이동
                 await StaticUIManager.Instance.LoadUI(LoadSceneEnum.MenuScene);
+                UIManager.Instance.ShowTooltip((int)IDToolTip.MainMenu);
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
                 break;
@@ -71,6 +72,20 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
                 await LoadSceneAsync("GameScene");
                 await StaticUIManager.Instance.LoadUI(LoadSceneEnum.GameScene);
+
+                // 시간 멈춤
+                Time.timeScale = 0f;
+                StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused = true;
+
+                // 만약 OpenWindow가 없다면 시간 흐르게 하기
+                UIManager.Instance.ShowTooltip((int)IDToolTip.InGame, onFinishAction: () =>
+                {
+                    if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().openWindow == null)
+                    {
+                        Time.timeScale = 1f; // 시간 흐름
+                        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused = false;
+                    }
+                });
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
                 GameManager.Instance.GameStart(); // 게임 스타트(?)
