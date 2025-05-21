@@ -26,7 +26,9 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
     [Header("자석 효과")]
     [SerializeField] private Transform magnetTarget;
     [SerializeField] private float magnetRadius = 3f;
-    [SerializeField] private float magnetPower = 5f;
+    [SerializeField] private float magnetAcceleration = 10f;
+
+    private float curMagnetSpeed = 0f;
 
     protected QueenCondition condition;
     public float rewardAmount;
@@ -56,12 +58,15 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
         if(!isMagnet && distance < magnetRadius)
         {
             isMagnet = true;
+            curMagnetSpeed = 0f;
         }
 
         if (isMagnet)
         {
+            curMagnetSpeed += magnetAcceleration * Time.deltaTime;
+
             Vector3 dir = (magnetTarget.position - transform.position).normalized;
-            transform.position += dir * magnetPower * Time.deltaTime;
+            transform.position += dir * curMagnetSpeed * Time.deltaTime;
         }
     }
     protected void SetMagnetTarget(Transform target)
