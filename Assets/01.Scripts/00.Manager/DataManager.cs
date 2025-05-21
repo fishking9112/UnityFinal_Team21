@@ -66,6 +66,12 @@ public class DataManager : MonoSingleton<DataManager>
         Init<EventTableInfo>(eventData.infoList, eventDic);
         Init<QueenStatusInfo>(queenStatusData.infoList, queenStatusDic);
         Init<QueenPassiveSkillInfo>(queenPassiveSkillData.infoList, queenPassiveSkillDic);
+        Init<ToolTipInfo>(toolTipData.infoList, toolTipDic);
+
+        foreach(var monsterData in monsterDic.Values)
+        {
+            queenAbilityMonsterStatDic[monsterData.ID] = new MonsterInfo(monsterData);
+        }
     }
 
     // 딕셔너리 초기화
