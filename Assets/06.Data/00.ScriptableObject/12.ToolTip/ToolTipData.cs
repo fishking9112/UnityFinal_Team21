@@ -10,11 +10,12 @@ public class ToolTipInfo : IInfo
     public string name;
     public string description;
     public string image;
+    public int nextId;
 
     public int ID => id;
     public string Name => name;
     public string Description => description;
-    public string Icon => null;
+    public string Icon => String.Empty;
 }
 
 [CreateAssetMenu(fileName = "ToolTipData", menuName = "Scriptable Object/New ToolTipData")]
@@ -43,6 +44,9 @@ public class ToolTipData : SheetDataReaderBase
                     break;
                 case "image":
                     toolTipInfo.image = cell.value;
+                    break;
+                case "nextId":
+                    toolTipInfo.nextId = Utils.StringToInt(cell.value);
                     break;
             }
         }

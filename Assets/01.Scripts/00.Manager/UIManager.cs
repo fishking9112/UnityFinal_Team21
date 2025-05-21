@@ -88,6 +88,19 @@ public class UIManager : MonoSingleton<UIManager>
         popup.Setup(title, message, onConfirmAction, onCancelAction);
     }
 
+
+    /// <summary>
+    /// 팝업 호출
+    /// </summary>
+    /// <param name="message">팝업 메시지</param>
+    /// <param name="onConfirmAction">확인 버튼 동작</param>
+    /// <param name="onCancelAction">취소 버튼 동작</param>
+    public void ShowTooltip(int id, Action onFinishAction = null)
+    {
+        var popup = ShowUI<ToolTipUI>();
+        popup.Setup(id, onFinishAction);
+    }
+
     /// <summary>
     /// 특정 UI 제거
     /// </summary>
