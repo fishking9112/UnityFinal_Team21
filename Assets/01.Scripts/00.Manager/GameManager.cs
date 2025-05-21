@@ -55,6 +55,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
         if (Input.GetKeyDown(KeyCode.G))
         {
+            GameClear();
             AddGold(100);
         }
         if (Input.GetKeyDown(KeyCode.S))
@@ -137,6 +138,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         // curTime.Value = 0f;
         isTimeOver = true;
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = true;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
         token?.Cancel();
@@ -147,6 +149,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         // curTime.Value = 0f;
         isTimeOver = true;
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
         token?.Cancel();

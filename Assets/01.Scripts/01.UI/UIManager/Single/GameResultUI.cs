@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class GameResultUnitData
 {
@@ -12,20 +12,23 @@ public class GameResultUnitData
 
 public class GameResultUI : SingleUI
 {
+    public bool isClear;
+
     [Header("UI Components")]
     public GameObject resultWindow;
     public GameObject dpsPopupUI;
     public Transform unitListParent;
     public GameUnitResultUI gameUnitResultUIPrefab;
+    public Image titleImg;
     public Image mvpImg;
     public Image queenImg;
     public Image resultQueenImage;
     public Transform parentEnhanceGrid;
     public Transform parentSkillGrid;
-    public Transform descriptionPopupUI;
-    public GameObject DescriptionPopupUI => descriptionPopupUI.gameObject;
 
     [Header("DescriptionPopupUI")]
+    public Transform descriptionPopupUI;
+    public GameObject DescriptionPopupUI => descriptionPopupUI.gameObject;
     public Image popupUIAbilityImage;
     public TextMeshProUGUI popupUIAbilityName;
     public TextMeshProUGUI popupUIAbilityDec;
@@ -47,6 +50,11 @@ public class GameResultUI : SingleUI
 
     public Dictionary<int, GameResultUnitData> resultDatas = new();
 
+    private const string backgroundVictory = "ResultBackground_Victory";
+    private const string backgroundDefeat = "ResultBackground_Defeat";
+    private const string resultTitleVictory = "ResultTitleVictory";
+    private const string resultTitleDefeat = "ResultTitleDefeat";
+
     private void Start()
     {
         titleMenuBtn.onClick.AddListener(ReturnToTitle);
@@ -56,6 +64,7 @@ public class GameResultUI : SingleUI
 
     private void OnEnable()
     {
+        InitResultTextImage();
         InitQueenEnhance();
         InitQueenSkill();
         InitQueenResult();
@@ -63,6 +72,7 @@ public class GameResultUI : SingleUI
         InitUnitResult();
         ApplyStageGold();
         SetMonsterMVP();
+
         QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
     }
 
@@ -78,21 +88,27 @@ public class GameResultUI : SingleUI
         }
     }
 
+    private void InitResultTextImage()
+    {
+        var atlas = DataManager.Instance.iconAtlas;
+        titleImg.sprite = atlas.GetSprite(isClear ? resultTitleVictory : resultTitleDefeat);
+        resultQueenImage.sprite = atlas.GetSprite(isClear ? backgroundVictory : backgroundDefeat);
+    }
+
     private void InitQueenEnhance()
     {
         foreach (Transform child in parentEnhanceGrid)
-        {
             Destroy(child.gameObject);
-        }
 
-        QueenEnhanceUI queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
+        var enhanceLevels = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.AcquiredEnhanceLevels;
 
-        foreach (var items in queenEnhanceUI.AcquiredEnhanceLevels)
+        foreach (var item in enhanceLevels)
         {
-            if (DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.QueenPassive || DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.MonsterPassive)
+            var info = DataManager.Instance.queenEnhanceDic[item.Key];
+            if (info.type is QueenEnhanceType.QueenPassive or QueenEnhanceType.MonsterPassive)
             {
-                OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentEnhanceGrid);
-                ownedEnhanceItem.SetEnhanceItem(items.Key, true);
+                var enhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentEnhanceGrid);
+                enhanceItem.SetEnhanceItem(item.Key, true);
             }
         }
     }
@@ -100,26 +116,26 @@ public class GameResultUI : SingleUI
     private void InitQueenSkill()
     {
         foreach (Transform child in parentSkillGrid)
-        {
             Destroy(child.gameObject);
-        }
 
-        QueenEnhanceUI queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
+        var enhanceLevels = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.AcquiredEnhanceLevels;
 
-        foreach (var items in queenEnhanceUI.AcquiredEnhanceLevels)
+        foreach (var item in enhanceLevels)
         {
-            if (DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.AddSkill)
+            if (DataManager.Instance.queenEnhanceDic[item.Key].type == QueenEnhanceType.AddSkill)
             {
-                OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentSkillGrid);
-                ownedEnhanceItem.SetEnhanceItem(items.Key, true);
+                var skillItem = Instantiate(prefabsOwnedEnhanceItem, parentSkillGrid);
+                skillItem.SetEnhanceItem(item.Key, true);
             }
         }
     }
 
     private void InitQueenResult()
     {
-        queenImg.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].Icon);
-        queenLevelText.text = "Lv. " + GameManager.Instance.queen.condition.Level.Value.ToString();
+        int queenId = GameManager.Instance.QueenCharaterID;
+        var queenInfo = DataManager.Instance.queenStatusDic[queenId];
+        queenImg.sprite = DataManager.Instance.iconAtlas.GetSprite(queenInfo.Icon);
+        queenLevelText.text = $"Lv. {GameManager.Instance.queen.condition.Level.Value}";
     }
 
     private void InitMiddlePanel()
@@ -131,7 +147,7 @@ public class GameResultUI : SingleUI
 
     private void InitUnitResult()
     {
-        foreach (var data in StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas)
+        foreach (var data in resultDatas)
         {
             GameUnitResultUI unitResultPanel = Instantiate(gameUnitResultUIPrefab, unitListParent);
             string unitName = DataManager.Instance.monsterDic[data.Key].name;
