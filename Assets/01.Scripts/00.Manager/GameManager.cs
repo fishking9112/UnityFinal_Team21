@@ -138,6 +138,7 @@ public class GameManager : MonoSingleton<GameManager>
         // curTime.Value = 0f;
         isTimeOver = true;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = true;
         // Time.timeScale = 0f;
         token?.Cancel();
         token?.Dispose();
@@ -148,6 +149,7 @@ public class GameManager : MonoSingleton<GameManager>
         // curTime.Value = 0f;
         isTimeOver = true;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
         // Time.timeScale = 0f;
         token?.Cancel();
         token?.Dispose();

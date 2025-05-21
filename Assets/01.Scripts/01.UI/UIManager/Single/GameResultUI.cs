@@ -12,11 +12,14 @@ public class GameResultUnitData
 
 public class GameResultUI : SingleUI
 {
+    public bool isClear;
+
     [Header("UI Components")]
     public GameObject resultWindow;
     public GameObject dpsPopupUI;
     public Transform unitListParent;
     public GameUnitResultUI gameUnitResultUIPrefab;
+    public Image titleImg;
     public Image mvpImg;
     public Image queenImg;
     public Image resultQueenImage;
@@ -47,6 +50,11 @@ public class GameResultUI : SingleUI
 
     public Dictionary<int, GameResultUnitData> resultDatas = new();
 
+    private const string backgroundVictory = "ResultBackground_Victory";
+    private const string backgroundDefeat = "ResultBackground_Defeat";
+    private const string resultTitleVictory = "ResultTitleVictory";
+    private const string resultTitleDefeat = "ResultTitleDefeat";
+
     private void Start()
     {
         titleMenuBtn.onClick.AddListener(ReturnToTitle);
@@ -56,6 +64,7 @@ public class GameResultUI : SingleUI
 
     private void OnEnable()
     {
+        InitResultTextImage();
         InitQueenEnhance();
         InitQueenSkill();
         InitQueenResult();
@@ -76,6 +85,22 @@ public class GameResultUI : SingleUI
             descriptionPopupUI.position = Input.mousePosition;
             await UniTask.Yield();
         }
+    }
+
+    private void InitResultTextImage()
+    {
+        if (isClear)
+        {
+            titleImg.sprite = DataManager.Instance.iconAtlas.GetSprite(resultTitleVictory);
+            resultQueenImage.sprite = DataManager.Instance.iconAtlas.GetSprite(backgroundVictory);
+        }
+        else
+        {
+            titleImg.sprite = DataManager.Instance.iconAtlas.GetSprite(resultTitleDefeat);
+            resultQueenImage.sprite = DataManager.Instance.iconAtlas.GetSprite(backgroundDefeat);
+        }
+
+
     }
 
     private void InitQueenEnhance()
