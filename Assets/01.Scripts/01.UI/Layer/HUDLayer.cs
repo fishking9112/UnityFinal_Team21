@@ -13,7 +13,7 @@ public class HUDLayer : MonoBehaviour
 
         switch (sceneEnum)
         {
-            case LoadSceneEnum.LoginScene: // 로그인 씬 일 경우
+            case LoadSceneEnum.AppScene: // 로그인 씬 일 경우
                 break;
             case LoadSceneEnum.MenuScene: // 메뉴 씬 일 경우
                 MenuHUD menuHUD = await LoadCurrentHUD("MenuHUD") as MenuHUD;

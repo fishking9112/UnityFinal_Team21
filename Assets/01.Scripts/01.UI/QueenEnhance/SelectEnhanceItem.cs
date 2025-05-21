@@ -59,6 +59,11 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
             : $"{previewValue}";
 
         enhanceDecText.text = info.description.Replace("n", formattedValue);
+
+        if(info.skill_ID != 0)
+        {
+            enhanceDecText.text += $"\n\n<color=#FFB600>* {DataManager.Instance.queenActiveSkillDic[info.skill_ID].name} : {DataManager.Instance.queenActiveSkillDic[info.skill_ID].description}</color>";
+        }
     }
 
     /// <summary>
