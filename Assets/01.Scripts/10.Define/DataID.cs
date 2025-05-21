@@ -194,6 +194,13 @@ public enum IDTrophy
     Trophy4,
 }
 
+public enum IDToolTip
+{
+    // 업적 이름 추후 수정 필요
+    MainMenu = 3000001,
+    InGame = 3000002,
+}
+
 public class GameLog
 {
     public const string funnel = "Funnel_Step";
@@ -221,7 +228,7 @@ public class GameLog
 
     public enum Contents
     {
-        NONE=0,
+        NONE = 0,
         Account,
         Play,
         Lobby,
@@ -230,7 +237,7 @@ public class GameLog
 
     public enum LogType
     {
-        NONE=0,
+        NONE = 0,
 
         // Account, InGame, Lobby
 
@@ -249,7 +256,7 @@ public class GameLog
 
     public enum FunnelType
     {
-        NONE=0,
+        NONE = 0,
         GameStart,
         Lobby,
         TouchPlay,

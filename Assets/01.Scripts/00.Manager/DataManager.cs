@@ -27,9 +27,11 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private EventTableData eventData;
     [SerializeField] private QueenStatusData queenStatusData;
     [SerializeField] private QueenPassiveSkillData queenPassiveSkillData;
+    [SerializeField] private ToolTipData toolTipData;
 
     // iconData는 id값으로 초기화 하지 않으므로, iconData 안에 Dictionary 존재
     public SpriteAtlas iconAtlas;
+    public SpriteAtlas tooltipAtlas;
 
     // 모든 데이터 딕셔너리
     public Dictionary<int, MonsterInfo> monsterDic = new Dictionary<int, MonsterInfo>();
@@ -44,6 +46,7 @@ public class DataManager : MonoSingleton<DataManager>
     public Dictionary<int, EventTableInfo> eventDic = new Dictionary<int, EventTableInfo>();
     public Dictionary<int, QueenStatusInfo> queenStatusDic = new Dictionary<int, QueenStatusInfo>();
     public Dictionary<int, QueenPassiveSkillInfo> queenPassiveSkillDic = new Dictionary<int, QueenPassiveSkillInfo>();
+    public Dictionary<int, ToolTipInfo> toolTipDic = new Dictionary<int, ToolTipInfo>();
 
     public Dictionary<int, MonsterInfo> queenAbilityMonsterStatDic = new Dictionary<int, MonsterInfo>();
 
@@ -63,11 +66,6 @@ public class DataManager : MonoSingleton<DataManager>
         Init<EventTableInfo>(eventData.infoList, eventDic);
         Init<QueenStatusInfo>(queenStatusData.infoList, queenStatusDic);
         Init<QueenPassiveSkillInfo>(queenPassiveSkillData.infoList, queenPassiveSkillDic);
-
-        foreach(var monsterData in DataManager.Instance.monsterDic.Values)
-        {
-            queenAbilityMonsterStatDic[monsterData.ID] = new MonsterInfo(monsterData);
-        }
     }
 
     // 딕셔너리 초기화
