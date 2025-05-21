@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class HeroMoveState : HeroBaseState
 {
@@ -37,6 +38,7 @@ public class HeroMoveState : HeroBaseState
             {
                 break;
             }
+            navMeshAgent.speed = stat.moveSpeed.Value;
 
             Search();
 
