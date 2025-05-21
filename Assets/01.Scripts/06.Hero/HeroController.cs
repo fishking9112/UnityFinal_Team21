@@ -80,6 +80,10 @@ public class HeroController : BaseController
 
     public override void TakeDamaged(float damage)
     {
+
+        Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f));
+        Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
+        StaticUIManager.Instance.damageLayer.ShowDamage(damage, worldPos + Vector3.up * 0.5f);
         base.TakeDamaged(damage);
     }
 
