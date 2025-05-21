@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -79,7 +80,7 @@ public class GameResultUI : SingleUI
     /// <summary>
     /// 팝업 UI가 마우스를 따라다니도록 위치를 계속 갱신합니다.
     /// </summary>
-    public async UniTaskVoid FollowMouse()
+    public async UniTaskVoid FollowMouse(CancellationToken token)
     {
         while (DescriptionPopupUI.activeSelf)
         {

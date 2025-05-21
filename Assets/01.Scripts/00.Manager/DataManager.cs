@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -47,6 +48,8 @@ public class DataManager : MonoSingleton<DataManager>
     public Dictionary<int, QueenPassiveSkillInfo> queenPassiveSkillDic = new Dictionary<int, QueenPassiveSkillInfo>();
     public Dictionary<int, ToolTipInfo> toolTipDic = new Dictionary<int, ToolTipInfo>();
 
+    public Dictionary<int, MonsterInfo> queenAbilityMonsterStatDic = new Dictionary<int, MonsterInfo>();
+
     protected override void Awake()
     {
         base.Awake();
@@ -64,6 +67,11 @@ public class DataManager : MonoSingleton<DataManager>
         Init<QueenStatusInfo>(queenStatusData.infoList, queenStatusDic);
         Init<QueenPassiveSkillInfo>(queenPassiveSkillData.infoList, queenPassiveSkillDic);
         Init<ToolTipInfo>(toolTipData.infoList, toolTipDic);
+
+        foreach(var monsterData in monsterDic.Values)
+        {
+            queenAbilityMonsterStatDic[monsterData.ID] = new MonsterInfo(monsterData);
+        }
     }
 
     // 딕셔너리 초기화

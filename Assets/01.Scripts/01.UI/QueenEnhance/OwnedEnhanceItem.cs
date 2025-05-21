@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,6 +13,8 @@ public class OwnedEnhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     private int enhanceID;
     private bool isResult;
+
+    private CancellationTokenSource followMouseCTS; // 추가
 
     public void SetEnhanceItem(int enhanceID, bool isResult)
     {
@@ -35,18 +38,21 @@ public class OwnedEnhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        followMouseCTS?.Cancel(); // 기존 작업 취소
+        followMouseCTS = new CancellationTokenSource();
+
         if (isResult)
         {
             gameResultUI.DescriptionPopupUI.SetActive(true);
             gameResultUI.SetDescriptionPopupUIInfo(enhanceID);
-            gameResultUI.FollowMouse().Forget();
+            gameResultUI.FollowMouse(followMouseCTS.Token).Forget();
         }
         else
         {
             var statusUI = queenEnhanceUI.QueenEnhanceStatusUI;
             statusUI.DescriptionPopupUI.SetActive(true);
             statusUI.SetDescriptionPopupUIInfo(enhanceID);
-            statusUI.FollowMouse().Forget();
+            statusUI.FollowMouse(followMouseCTS.Token).Forget();
         }
 
         selectedUI.SetActive(true);
@@ -54,6 +60,9 @@ public class OwnedEnhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        followMouseCTS?.Cancel();
+        followMouseCTS = null;
+
         if (isResult)
         {
             gameResultUI.DescriptionPopupUI.SetActive(false);

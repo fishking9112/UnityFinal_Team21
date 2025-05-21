@@ -65,6 +65,14 @@ public class QueenAbilityUIController : MonoBehaviour
         descriptionPopupUI.gameObject.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (isFollowingMouse && descriptionPopupUI.gameObject.activeSelf)
+        {
+            descriptionPopupUI.position = Input.mousePosition;
+        }
+    }
+
     /// <summary>
     /// 능력 정보에 따라 팝업 UI를 설정하고 표시합니다.
     /// </summary>
@@ -81,21 +89,8 @@ public class QueenAbilityUIController : MonoBehaviour
         descriptionPopupUI.gameObject.SetActive(true);
         descriptionPopupUI.position = Input.mousePosition;
 
-        // 마우스를 따라다니는 UniTask 시작
+        // 마우스 따라다니기 시작
         isFollowingMouse = true;
-        FollowMouse().Forget();
-    }
-
-    /// <summary>
-    /// 팝업 UI가 마우스를 따라다니도록 위치를 계속 갱신합니다.
-    /// </summary>
-    private async UniTaskVoid FollowMouse()
-    {
-        while (isFollowingMouse && descriptionPopupUI.gameObject.activeSelf)
-        {
-            descriptionPopupUI.position = Input.mousePosition;
-            await UniTask.Yield();
-        }
     }
 
     /// <summary>
