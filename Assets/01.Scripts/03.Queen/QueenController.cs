@@ -41,8 +41,15 @@ public class QueenController : MonoBehaviour
     [NonSerialized] public QueenActiveSkillBase selectedQueenActiveSkill;
 
     private bool isDrag;
+    public bool isMinimapDrag;
     private float summonDistance;
     private Vector3 lastSummonPosition;
+
+    public ToastMessage toastMessage;
+
+    private float lastSummon;
+    private float cooldown;
+
     private async void Start()
     {
         condition = GameManager.Instance.queen.condition;
@@ -55,6 +62,8 @@ public class QueenController : MonoBehaviour
 
         skillSizeSpriteRadius = skillSizeSprite.bounds.size.x;
         skillRangeSpriteRadius = skillRangeSprite.bounds.size.x;
+        lastSummon = Time.time;
+        cooldown = 0.1f;
 
         await GameHuDInit();
     }
@@ -231,9 +240,11 @@ public class QueenController : MonoBehaviour
         switch (curSlot)
         {
             case QueenSlot.MONSTER:
-                if (context.ReadValue<Vector2>() != Vector2.zero)
+                if (context.ReadValue<Vector2>() != Vector2.zero
+                    && Time.time-lastSummon>=cooldown)
                 {
                     SummonMonster();
+                    lastSummon = Time.time;
                 }
                 break;
             case QueenSlot.QueenActiveSkill:
@@ -244,6 +255,11 @@ public class QueenController : MonoBehaviour
     // 몬스터 소환
     private void SummonMonster()
     {
+        if (isMinimapDrag)
+        {
+            return;
+        }
+
         if (selectedMonsterId == -1)
         {
             return;
@@ -255,15 +271,26 @@ public class QueenController : MonoBehaviour
         {
             return;
         }
-        if (condition.CurSummonGauge.Value < tempMonster.cost)
-        {
-            return;
-        }
         // 마지막 생성위치에서 일정 거리 이상 떨어져야 소환가능
         if (Vector3.Distance(worldMousePos, lastSummonPosition) < summonDistance)
         {
             return;
         }
+
+        if (!SpawnPointManager.Instance.MonsterPoint.IsAreaIn(worldMousePos))
+        {
+            SpawnPointManager.Instance.MonsterPoint.ShowAndHideAreas();
+            return;
+        }
+        if (condition.CurSummonGauge.Value < tempMonster.cost)
+        {
+            // 테이블 나오면 적용 필요
+            ToastMessage msg = Instantiate(toastMessage,gameHUD.HUDGroup.transform);
+            msg.SetText("<color=red>마나가 부족합니다.</color>");
+
+            return;
+        }
+       
 
         // 미니맵콜라이더 레이어를 제외한 레이어와 충돌 처리가 일어나면 몬스터 소환 불가
         ContactFilter2D layerFilter = new ContactFilter2D();
@@ -298,6 +325,9 @@ public class QueenController : MonoBehaviour
         }
         if (condition.CurQueenActiveSkillGauge.Value < selectedQueenActiveSkill.info.cost)
         {
+            // 테이블 나오면 적용 필요
+            ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
+            msg.SetText("<color=red>마나가 부족합니다.</color>");
             return;
         }
         if (selectedQueenActiveSkill.info.range != -1f)

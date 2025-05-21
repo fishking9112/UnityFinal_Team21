@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Threading;
 using UnityEngine;
 
@@ -58,8 +59,12 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         {
             angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
                 target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
+
             animator.SetBool("1_Move", false);
             animator.SetBool("2_Attack", true);
+
+            await UniTask.Delay(300, false, PlayerLoopTiming.Update, cancellationToken: this.GetCancellationTokenOnDestroy());
+            SpawnSwingSwordParticle(angle);
         }
 
         await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f, cancellationToken: tk);
@@ -69,6 +74,20 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
         await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f, cancellationToken: tk);
 
+    }
+
+    public void SpawnSwingSwordParticle(float angle)
+    {
+        if (target == null)
+        {
+            return;
+        }
+
+        Vector3 spawnPos = hero.transform.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * 0.5f;
+
+        ParticleObject particle = ParticleManager.Instance.SpawnParticle("HeroAbilityMeleeAttack", spawnPos, new Vector3(0.5f, 0.5f, 1f));
+        var main = particle.particle.main;
+        main.startRotation = angle - 90f;
     }
 
     public override void AbilityLevelUp()

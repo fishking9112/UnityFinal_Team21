@@ -34,6 +34,8 @@ public class MonsterInfo : BaseStatData, IInfo
     public MonsterAttackType monsterAttackType;
     public MonsterBrood monsterBrood;
     public string projectile;
+    public float projectile_size;
+    public float projectile_speed;
     public int tire;
     public int preNode;
     public MonsterInfo() { }
@@ -48,6 +50,8 @@ public class MonsterInfo : BaseStatData, IInfo
         monsterAttackType = other.monsterAttackType;
         monsterBrood = other.monsterBrood;
         projectile = other.projectile;
+        projectile_size = other.projectile_size;
+        projectile_speed = other.projectile_speed;
         tire = other.tire;
         preNode = other.preNode;
     }
@@ -142,6 +146,12 @@ public class MonsterData : SheetDataReaderBase
                     break;
                 case "projectile":
                     monsterInfo.projectile = cell.value;
+                    break;
+                case "projectile_size":
+                    monsterInfo.projectile_size = Utils.StringToFloat(cell.value);
+                    break;
+                case "projectile_speed":
+                    monsterInfo.projectile_speed = Utils.StringToFloat(cell.value);
                     break;
                 case "tire":
                     monsterInfo.tire = Utils.StringToInt(cell.value);

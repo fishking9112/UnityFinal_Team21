@@ -5,10 +5,8 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class HeroTargetBullet : MonoBehaviour,IPoolable
+public class HeroTargetBullet : MonoBehaviour, IPoolable
 {
-    private GameObject target;
-
     private float speed;
     private float damage;
     private float radius;
@@ -26,7 +24,7 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
 
     public void OnDespawn()
     {
-        isDispose= true;
+        isDispose = true;
 
         try
         {
@@ -46,17 +44,17 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
 
     }
 
-    public void SetBullet(float dmg,float spd,float knockback,Vector2 t,float rad)
+    public void SetBullet(float dmg, float spd, float knockback, Vector2 t, float rad)
     {
         damage = dmg;
         speed = spd;
         radius = rad;
         this.knockback = knockback;
-        cancel=new CancellationTokenSource();
+        cancel = new CancellationTokenSource();
         isDispose = false;
 
         targetPos = t;
-        
+
         Move(cancel.Token).Forget();
     }
 
@@ -67,10 +65,10 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
         {
             while (!token.IsCancellationRequested)
             {
-                Vector3 pos= Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+                Vector3 pos = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
                 transform.position = pos;
 
-                if(Vector3.Distance(transform.position,targetPos)<=0.1f)
+                if (Vector3.Distance(transform.position, targetPos) <= 0.01f)
                 {
                     Explode();
                     return;
@@ -91,7 +89,8 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
 
     private void Explode()
     {
-        Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, radius, 1 << 7| 1<<13);
+        Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, radius, 1 << 7 | 1 << 13);
+        ParticleManager.Instance.SpawnParticle("HeroFireball_Explode", transform.position, new Vector3(0.8f, 0.8f, 1f));
 
         foreach (var c in col)
         {
@@ -106,8 +105,5 @@ public class HeroTargetBullet : MonoBehaviour,IPoolable
                 GameManager.Instance.castle.TakeDamaged(damage);
             }
         }
-        OnDespawn();
     }
-
-
 }

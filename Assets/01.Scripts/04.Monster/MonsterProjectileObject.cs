@@ -35,8 +35,6 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
     private Rigidbody2D _rigidbody;
     public BoxCollider2D _boxCollider;
 
-    private float bulletSpeed = 5f;
-    private float bulletSize = 1f;
     float finalAttackDamage => baseController.statHandler.attack.Value;
 
     private void Awake()
@@ -59,7 +57,8 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
             DestroyProjectile(transform.position, false);
         }
 
-        _rigidbody.velocity = direction * bulletSpeed;
+        Debug.Log(baseController.monsterInfo.projectile_speed);
+        _rigidbody.velocity = direction * baseController.monsterInfo.projectile_speed * 5;
     }
 
     /// <summary>
@@ -72,7 +71,8 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
         this.baseController = baseController;
         this.direction = direction;
         currentDuration = 0;
-        transform.localScale = Vector3.one * bulletSize;
+        Debug.Log(baseController.monsterInfo.projectile_size);
+        transform.localScale = Vector3.one * baseController.monsterInfo.projectile_size;
 
         transform.right = this.direction;
 
@@ -123,7 +123,7 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
             // TODO : 화살 충돌 후 터지는 파티클
             // ex) projectileManager.CreateImpactParticlesAtPostion(position, rangeWeaponHandler);
         }
-
+        transform.localScale = Vector2.one;
         isReady = false;
         OnDespawn();
     }

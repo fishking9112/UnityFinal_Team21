@@ -23,7 +23,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
     private Dictionary<int, Action<float>> applyEffectActions;
 
-
+    public ToastMessage toastMessage;
 
     protected override void Awake()
     {
@@ -106,6 +106,9 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         int cost = ability.levelInfo[currentLevel].cost;
         if (!GameManager.Instance.TrySpendGold(cost))
         {
+            // 테이블 나오면 적용 필요
+            ToastMessage msg = Instantiate(toastMessage, queenAbilityUIController.transform);
+            msg.SetText("<color=red>골드가 부족합니다.</color>");
             Utils.Log("골드 부족으로 업그레이드 실패");
             return;
         }

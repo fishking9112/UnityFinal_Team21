@@ -1,6 +1,9 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+using static GameLog;
 
 public enum CursorState
 {
@@ -26,6 +29,15 @@ public class GameManager : MonoSingleton<GameManager>
     public ReactiveProperty<float> curTime = new ReactiveProperty<float>();
 
 
+    // 게임 스테이지 레벨
+    public int stageLevel;
+    private CancellationTokenSource token;
+    private GameLog.FunnelType funnelType;
+
+    // 게임 트라이 횟수
+    private int tryCount;
+
+
     // private PauseController pauseController;
 
 
@@ -35,6 +47,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         curCursorState = CursorState.CONFINED;
         Time.timeScale = 1f;
+        tryCount = 0;
     }
 
     private void Update()
@@ -47,6 +60,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
         if (Input.GetKeyDown(KeyCode.G))
         {
+            GameClear();
             AddGold(100);
         }
         if (Input.GetKeyDown(KeyCode.S))
@@ -107,22 +121,47 @@ public class GameManager : MonoSingleton<GameManager>
         isTimeOver = false;
         miniCastles.Clear();
         miniBarracks.Clear();
+        stageLevel = 0;
+        token = new CancellationTokenSource();
+        tryCount = PlayerPrefs.GetInt("TryCount");
+        tryCount++;
+        PlayerPrefs.SetInt("TryCount", tryCount);
+        funnelType = GameLog.FunnelType.Minite_1;
+        MiniteCount(token.Token).Forget();
+    }
+
+    private async UniTask MiniteCount(CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            stageLevel++;
+
+            await UniTask.Delay(TimeSpan.FromMinutes(1), cancellationToken: token);
+            //LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)funnelType);
+            funnelType++;
+        }
     }
 
     public void GameClear()
     {
         // curTime.Value = 0f;
         isTimeOver = true;
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = true;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
+        token?.Cancel();
+        token?.Dispose();
     }
 
     public void GameOver()
     {
         // curTime.Value = 0f;
         isTimeOver = true;
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
+        token?.Cancel();
+        token?.Dispose();
     }
 
     public bool TrySpendGold(int amount)

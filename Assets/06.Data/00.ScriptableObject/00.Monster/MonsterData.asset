@@ -15,114 +15,13 @@ MonoBehaviour:
   sheetURL: 1Of0EBz6S6NjUCNtNGPNnWgAcb5RdXT_xJnsCn-1LZ4w
   sheetName: Monster
   startRowIndex: 2
-  endRowIndex: 30
+  endRowIndex: 24
   infoList:
-  - id: 1001
-    name: "\uC2AC\uB77C\uC784"
-    description: "\uAE30\uBCF8 \uC2AC\uB77C\uC784 \uC785\uB2C8\uB2E4"
-    health: 20
-    moveSpeed: 1
-    reward: 1
-    cost: 1
-    outfit: 
-    icon: 
-    attack: 5
-    attackRange: 1
-    attackSpeed: 1
-    monsterAttackType: 1
-    monsterBrood: 2
-    projectile: 
-    tire: 0
-    preNode: -1
-  - id: 1002
-    name: "\uC2AC\uB77C\uC784mk2"
-    description: "\uC870\uAE08 \uB354 \uAC15\uD574\uC9C4 \uC2AC\uB77C\uC784"
-    health: 40
-    moveSpeed: 1.5
-    reward: 1
-    cost: 2
-    outfit: 
-    icon: 
-    attack: 7
-    attackRange: 1
-    attackSpeed: 1
-    monsterAttackType: 1
-    monsterBrood: 2
-    projectile: 
-    tire: 1
-    preNode: 1001
-  - id: 1003
-    name: "\uAC70\uB300\uC2AC\uB77C\uC784"
-    description: "\uD06C\uAE30\uAC00 \uCEE4\uC9C4 \uC2AC\uB77C\uC784 \uC785\uB2C8\uB2E4"
-    health: 100
-    moveSpeed: 1
-    reward: 1
-    cost: 4
-    outfit: 
-    icon: 
-    attack: 15
-    attackRange: 2
-    attackSpeed: 0.5
-    monsterAttackType: 1
-    monsterBrood: 2
-    projectile: 
-    tire: 2
-    preNode: 1002
-  - id: 1004
-    name: "\uC18D\uB3C4\uC2AC\uB77C\uC784"
-    description: "\uB354 \uBBFC\uCCA9\uD55C \uC2AC\uB77C\uC784 \uC785\uB2C8\uB2E4."
-    health: 30
-    moveSpeed: 2.5
-    reward: 1
-    cost: 2
-    outfit: 
-    icon: 
-    attack: 5
-    attackRange: 1
-    attackSpeed: 1.5
-    monsterAttackType: 1
-    monsterBrood: 2
-    projectile: 
-    tire: 2
-    preNode: 1002
-  - id: 1005
-    name: "\uB3C5\uC2AC\uB77C\uC784"
-    description: "\uC2AC\uB77C\uC784\uC774 \uB3C5 \uC18D\uC131\uC744 \uAC16\uAC8C
-      \uB418\uC5C8\uC2B5\uB2C8\uB2E4."
-    health: 40
-    moveSpeed: 1.5
-    reward: 1
-    cost: 3
-    outfit: 
-    icon: 
-    attack: 7
-    attackRange: 1
-    attackSpeed: 1
-    monsterAttackType: 1
-    monsterBrood: 2
-    projectile: 
-    tire: 1
-    preNode: 1001
-  - id: 1006
-    name: "\uB3C5\uC2AC\uB77C\uC784mk2"
-    description: "\uB9F9\uB3C5\uC744 \uD488\uC740 \uC2AC\uB77C\uC784 \uC785\uB2C8\uB2E4."
-    health: 60
-    moveSpeed: 1.5
-    reward: 1
-    cost: 3
-    outfit: 
-    icon: 
-    attack: 7
-    attackRange: 1
-    attackSpeed: 1
-    monsterAttackType: 1
-    monsterBrood: 2
-    projectile: 
-    tire: 2
-    preNode: 1005
   - id: 1101
     name: "\uC624\uD06C"
-    description: "\uC624\uD06C\uC871 \uAE30\uBCF8 \uC720\uB2DB \uC785\uB2C8\uB2E4."
+    description: "\uC544\uCE68\uC5D0\uB3C4 \uACE0\uAE30, \uC810\uC2EC\uC5D0\uB3C4
+      \uACE0\uAE30! \uB2E8\uC21C\uD558\uC9C0\uB9CC \uAC15\uB825\uD55C \uD798\uC744
+      \uC790\uB791\uD558\uB294 \uC624\uD06C\uC871\uC758 \uAE30\uBCF8 \uC720\uB2DB\uC785\uB2C8\uB2E4."
     health: 50
     moveSpeed: 1
     reward: 1
@@ -135,12 +34,15 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 3
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 0
     preNode: -1
   - id: 1102
-    name: "\uC624\uD06C\uC804\uC0AC"
-    description: "\uAC15\uB825\uD55C \uD798\uC744 \uAC00\uC9C4 \uC624\uD06C\uC871
-      \uC804\uC0AC \uC785\uB2C8\uB2E4."
+    name: "\uC624\uD06C \uC804\uC0AC"
+    description: "\uBA38\uB9AC\uB294 \uC4F0\uC9C0 \uC54A\uC9C0\uB9CC \uD798\uC740
+      \uC501\uB2C8\uB2E4. \uC815\uBA74 \uB3CC\uD30C\uAC00 \uC0B6\uC758 \uCCA0\uD559\uC778
+      \uBB34\uB300\uD3EC \uC804\uC0AC\uC785\uB2C8\uB2E4."
     health: 75
     moveSpeed: 1
     reward: 1
@@ -153,12 +55,16 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 3
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 1
     preNode: 1101
   - id: 1103
-    name: "\uC624\uD06C\uC8FC\uC220\uC0AC"
-    description: "\uC624\uD06C\uC871 \uC911 \uC8FC\uC220\uC744 \uBD80\uB9AC\uB294
-      \uC8FC\uC220\uC0AC \uC785\uB2C8\uB2E4."
+    name: "\uC624\uD06C \uC8FC\uC220\uC0AC"
+    description: "\uC8FC\uC220\uC5D0 \uC2E4\uD328\uD574\uB3C4 \u2018\uC774\uAC8C
+      \uC6D0\uB798 \uD6A8\uACFC\uC57C\u2019\uB77C\uBA70 \uB2F9\uB2F9\uD558\uAC8C
+      \uC6B0\uAE41\uB2C8\uB2E4. \uC9C4\uC2E4\uC740 \uC624\uC9C1 \uBCF8\uC778\uB9CC\uC774
+      \uC54C\uACE0 \uC788\uC8E0."
     health: 50
     moveSpeed: 1
     reward: 1
@@ -171,12 +77,15 @@ MonoBehaviour:
     monsterAttackType: 3
     monsterBrood: 3
     projectile: Fireball
+    projectile_size: 1.5
+    projectile_speed: 1
     tire: 1
     preNode: 1101
   - id: 1104
-    name: "\uC624\uD06C\uC815\uC608\uC804\uC0AC"
-    description: "\uC624\uD06C\uC804\uC0AC \uC911 \uAC00\uC7A5 \uB6F0\uC5B4\uB09C
-      \uAC1C\uCCB4 \uC785\uB2C8\uB2E4."
+    name: "\uC624\uD06C \uC815\uC608\uC804\uC0AC"
+    description: "\uC2F8\uC6B0\uB2E4\uBCF4\uB2C8 \uC5B4\uB290\uC0CC\uAC00 \uC0B4\uC544\uB0A8\uC558\uACE0,
+      \uADF8\uB798\uC11C \uAC15\uD574\uC84C\uC2B5\uB2C8\uB2E4. \uC624\uD06C\uACC4\uC758
+      \uC778\uC7AC\uC785\uB2C8\uB2E4."
     health: 100
     moveSpeed: 1
     reward: 1
@@ -189,12 +98,15 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 3
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 2
     preNode: 1102
   - id: 1105
-    name: "\uC624\uD06C\uAD11\uC804\uC0AC"
-    description: "\uB450\uB824\uC6C0\uC774 \uC5C6\uB294 \uC624\uD06C \uC804\uC0AC
-      \uC785\uB2C8\uB2E4."
+    name: "\uC624\uD06C \uAD11\uC804\uC0AC"
+    description: "\uBD84\uB178 \uAC8C\uC774\uC9C0\uB294 \uD0DC\uC5B4\uB0A0 \uB54C\uBD80\uD130
+      \uD480\uCDA9\uC804! \uB54C\uB9AC\uACE0 \uBD80\uC218\uB294 \uAC8C \uC778\uC0DD\uC758
+      \uB099\uC785\uB2C8\uB2E4."
     health: 80
     moveSpeed: 1
     reward: 1
@@ -207,12 +119,15 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 3
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 2
     preNode: 1102
   - id: 1106
-    name: "\uC624\uD06C\uC8FC\uC220\uC0ACmk2"
-    description: "\uC0C1\uAE09 \uC8FC\uC220\uC744 \uBD80\uB9AC\uB294 \uC8FC\uC220\uC0AC
-      \uC785\uB2C8\uB2E4."
+    name: "\uC624\uD06C \uC0E4\uBA3C\uB85C\uB4DC"
+    description: "\uC774\uC81C\uB294 \uC2E4\uD328\uD55C \uC8FC\uC220\uB3C4 \"\uACE0\uCC28\uC6D0\uC774\uB77C
+      \uC774\uD574 \uBABB \uD55C \uAC70\uC57C\"\uB77C\uACE0 \uD569\uB2C8\uB2E4. \uC8FC\uBCC0
+      \uC624\uD06C\uB4E4\uC740 \uADF8\uB0E5 \uBBFF\uC5B4\uC8FC\uAE30\uB85C \uD588\uC2B5\uB2C8\uB2E4."
     health: 70
     moveSpeed: 1
     reward: 1
@@ -225,11 +140,15 @@ MonoBehaviour:
     monsterAttackType: 3
     monsterBrood: 3
     projectile: Fireball
+    projectile_size: 2
+    projectile_speed: 1
     tire: 2
     preNode: 1103
   - id: 1201
     name: "\uC2A4\uCF08\uB808\uD1A4"
-    description: "\uAE30\uBCF8 \uD574\uACE8 \uC2A4\uCF08\uB808\uD1A4 \uC785\uB2C8\uB2E4."
+    description: "\uBF08\uBC16\uC5D0 \uC5C6\uC9C0\uB9CC \uBF08\uAC00 \uD2BC\uD2BC\uD569\uB2C8\uB2E4.
+      \uAE30\uBCF8 \uC911\uC758 \uAE30\uBCF8, \uC2F8\uC6CC\uC8FC\uB294 \uAC8C \uACE0\uB9C8\uC6B4
+      \uD574\uACE8\uC785\uB2C8\uB2E4."
     health: 30
     moveSpeed: 1
     reward: 1
@@ -242,12 +161,14 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 4
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 0
     preNode: -1
   - id: 1202
-    name: "\uC804\uC0AC\uC2A4\uCF08\uB808\uD1A4"
-    description: "\uADFC\uAC70\uB9AC \uBB34\uAE30\uB97C \uC0AC\uC6A9\uD558\uB294
-      \uC2A4\uCF08\uB808\uD1A4 \uC785\uB2C8\uB2E4."
+    name: "\uC804\uC0AC \uC2A4\uCF08\uB808\uD1A4"
+    description: "\uBF08\uBC16\uC5D0 \uC5C6\uC5B4\uB3C4 \uCE7C\uC815\uB3C8 \uAC70\uB72C\uD558\uB2E4!
+      \uC57D\uACE8\uCC98\uB7FC \uBCF4\uC5EC\uB3C4 \uC870\uC2EC\uD558\uC138\uC694."
     health: 50
     moveSpeed: 1
     reward: 1
@@ -260,12 +181,15 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 4
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 1
     preNode: 1201
   - id: 1203
-    name: "\uC544\uCC98\uC2A4\uCF08\uB808\uD1A4"
-    description: "\uD65C\uC744 \uC0AC\uC6A9\uD558\uB294 \uC2A4\uCF08\uB808\uD1A4
-      \uC785\uB2C8\uB2E4."
+    name: "\uC544\uCC98 \uC2A4\uCF08\uB808\uD1A4"
+    description: "\uAD00\uC808\uC740 \uC090\uAC71\uB300\uB3C4 \uC2E4\uB825\uC740
+      \uB179\uC2AC\uC9C0 \uC54A\uC558\uC2B5\uB2C8\uB2E4. \uC090\uADF8\uB355 \uD558\uACE0
+      \uC18C\uB9AC \uB098\uBA74 \uB204\uAD70\uAC00\uB294 \uB9DE\uC744 \uC2DC\uAC04\uC785\uB2C8\uB2E4."
     health: 40
     moveSpeed: 1
     reward: 1
@@ -278,12 +202,15 @@ MonoBehaviour:
     monsterAttackType: 2
     monsterBrood: 4
     projectile: Arrow
+    projectile_size: 1
+    projectile_speed: 1
     tire: 1
     preNode: 1201
   - id: 1204
-    name: "\uC2A4\uCF08\uB808\uD1A4\uBA54\uC774\uC9C0"
-    description: "\uB9C8\uBC95\uC744 \uC0AC\uC6A9\uD558\uB294 \uC2A4\uCF08\uB808\uD1A4
-      \uC785\uB2C8\uB2E4."
+    name: "\uC2A4\uCF08\uB808\uD1A4 \uBA54\uC774\uC9C0"
+    description: "\uBF08\uB2E4\uADC0 \uB9C8\uBC95\uC0AC\uB77C\uACE0 \uBB34\uC2DC\uD558\uC9C0
+      \uB9C8\uC138\uC694. \uC8FC\uBB38\uC744 \uC678\uC6B0\uBA74 \uC801\uB4E4\uC774
+      \uC21C\uC2DD\uAC04\uC5D0 \uACE8\uACE8\uACE8 \uC18C\uB9AC\uB97C \uB0C5\uB2C8\uB2E4."
     health: 40
     moveSpeed: 1
     reward: 1
@@ -296,12 +223,15 @@ MonoBehaviour:
     monsterAttackType: 3
     monsterBrood: 4
     projectile: MagicMissile
+    projectile_size: 1
+    projectile_speed: 1
     tire: 1
     preNode: 1201
   - id: 1205
-    name: "\uAE30\uC0AC\uC2A4\uCF08\uB808\uD1A4"
-    description: "\uAE30\uC0AC\uC600\uB358 \uC804\uC0DD\uC758 \uAE30\uC5B5\uC774
-      \uB0A8\uC544\uC788\uB294 \uC2A4\uCF08\uB808\uD1A4"
+    name: "\uAE30\uC0AC \uC2A4\uCF08\uB808\uD1A4"
+    description: "\uC0DD\uC804 \uAE30\uC0AC\uC600\uB2E4\uB294 \uC2A4\uCF08\uB808\uD1A4\uC785\uB2C8\uB2E4.
+      \uBCF8\uC778\uC740 \uAE30\uC5B5 \uBABB \uD558\uC9C0\uB9CC \uD3FC\uC740 \uC81C\uB300\uB85C
+      \uB0A9\uB2C8\uB2E4."
     health: 75
     moveSpeed: 1
     reward: 1
@@ -314,12 +244,16 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 4
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 2
     preNode: 1202
   - id: 1206
-    name: "\uC2A4\uCF08\uB808\uD1A4\uB808\uC778\uC800"
-    description: "\uC7A5\uAD81\uC744 \uC0AC\uC6A9\uD558\uC5EC \uBA3C \uAC70\uB9AC\uB97C
-      \uC800\uACA9\uD558\uB294 \uC2A4\uCF08\uB808\uD1A4"
+    name: "\uC2A4\uCF08\uB808\uD1A4 \uB808\uC778\uC800"
+    description: "\uBF08\uB9C8\uB514\uB9C8\uB2E4 \uC9D1\uC911\uB825\uC744 \uBAA8\uC544
+      \uBA3C \uAC70\uB9AC\uC5D0\uC11C \uC870\uC6A9\uD788 \uD55C \uBC29\uC744 \uAF42\uC2B5\uB2C8\uB2E4.
+      \uBA40\uB9AC \uC788\uC5B4\uB3C4 \uBC29\uC2EC\uD558\uBA74 \uC21C\uC2DD\uAC04\uC5D0
+      \uBF08\uAC00 \uBD80\uB7EC\uC9C8 \uD14C\uB2C8 \uC870\uC2EC\uD558\uC138\uC694."
     health: 50
     moveSpeed: 1
     reward: 1
@@ -332,12 +266,14 @@ MonoBehaviour:
     monsterAttackType: 2
     monsterBrood: 4
     projectile: Arrow
+    projectile_size: 1.2
+    projectile_speed: 1
     tire: 2
     preNode: 1203
   - id: 1207
-    name: "\uC2A4\uCF08\uB808\uD1A4\uC704\uC790\uB4DC"
-    description: "\uB354 \uAC15\uB825\uD55C \uB9C8\uBC95\uC744 \uC0AC\uC6A9\uD558\uB294
-      \uC2A4\uCF08\uB808\uD1A4 \uC785\uB2C8\uB2E4."
+    name: "\uC2A4\uCF08\uB808\uD1A4 \uC704\uC790\uB4DC"
+    description: "\uD574\uACE8\uC778\uB370 \uAC15\uB825\uD55C \uB9C8\uBC95\uAE4C\uC9C0...
+      \uB204\uAC00 \uBCF4\uBA74 \uCD5C\uC885 \uBCF4\uC2A4\uB77C \uCC29\uAC01\uD560\uC9C0\uB3C4?"
     health: 70
     moveSpeed: 1
     reward: 1
@@ -350,12 +286,16 @@ MonoBehaviour:
     monsterAttackType: 3
     monsterBrood: 4
     projectile: MagicMissile
+    projectile_size: 1
+    projectile_speed: 1
     tire: 2
     preNode: 1204
   - id: 1401
     name: "\uC5D8\uD504 \uC815\uCC30\uBCD1"
-    description: "\uC5D8\uD504\uC871 \uAE30\uBCF8 \uC720\uB2DB. \uBE60\uB978 \uC774\uB3D9\uC18D\uB3C4\uB85C
-      \uC815\uCC30\uC744 \uB2F4\uB2F9\uD55C\uB2E4."
+    description: "\uD65C\uC744 \uB4E0 \uCC44 \uC232\uC18D\uC744 \uB204\uBE44\uB294
+      \uC5D8\uD504\uC871 \uAE30\uBCF8 \uC815\uCC30\uBCD1\uC785\uB2C8\uB2E4. \u201C\uBE60\uB974\uACE0
+      \uC815\uD655\uD558\uAC8C, \uC232\uC18D \uBAA8\uB4E0 \uC18C\uC2DD\uC744 \uC804\uD574
+      \uB4DC\uB9BD\uB2C8\uB2E4!\u201D"
     health: 30
     moveSpeed: 1.5
     reward: 1
@@ -368,12 +308,16 @@ MonoBehaviour:
     monsterAttackType: 2
     monsterBrood: 0
     projectile: Arrow
+    projectile_size: 1
+    projectile_speed: 1
     tire: 0
     preNode: -1
   - id: 1402
     name: "\uC5D8\uD504 \uAD81\uC218"
-    description: "\uC5D8\uD504\uC871 \uACE0\uC720\uC758 \uD65C \uAE30\uC220\uC744
-      \uC0AC\uC6A9\uD558\uB294 \uAD81\uC218"
+    description: "\uBC14\uB78C\uBCF4\uB2E4 \uBE60\uB978 \uD654\uC0B4\uC744 \uC3D8\uB294
+      \uC5D8\uD504\uC871 \uC804\uD1B5 \uD65C\uC7A1\uC774\uC785\uB2C8\uB2E4. \uD55C
+      \uBC88 \uC870\uC900\uD558\uBA74, \uC801\uC740 \uB9DE\uC744 \uB54C\uAE4C\uC9C0
+      \uB3C4\uB9DD\uCE60 \uC0DD\uAC01\uB3C4 \uBABB \uD569\uB2C8\uB2E4."
     health: 40
     moveSpeed: 1.5
     reward: 1
@@ -386,12 +330,16 @@ MonoBehaviour:
     monsterAttackType: 2
     monsterBrood: 0
     projectile: Arrow
+    projectile_size: 1
+    projectile_speed: 1
     tire: 1
     preNode: 1401
   - id: 1403
     name: "\uC5D8\uD504 \uD5CC\uD130"
-    description: "\uB354\uC6B1 \uBA3C \uAC70\uB9AC\uC5D0\uC11C \uD65C\uC744 \uC3D8\uB294
-      \uC5D8\uD504 \uC785\uB2C8\uB2E4."
+    description: "\uB354\uC6B1 \uBA3C \uAC70\uB9AC\uC5D0\uC11C\uB3C4 \uC815\uD655\uD788
+      \uBA85\uC911\uC2DC\uD0A4\uB294 \uC5D8\uD504\uC871 \uC7A5\uAC70\uB9AC \uC0AC\uB0E5\uAFBC\uC785\uB2C8\uB2E4.
+      \u201C\uB208 \uAC10\uACE0\uB3C4 \uB9DE\uD790 \uC218 \uC788\uB2E4\u201D\uB294
+      \uC18C\uBB38\uC774 \uC788\uC9C0\uB9CC, \uB208\uC740 \uAF2D \uB728\uACE0 \uC788\uB2F5\uB2C8\uB2E4."
     health: 50
     moveSpeed: 1.5
     reward: 1
@@ -404,12 +352,16 @@ MonoBehaviour:
     monsterAttackType: 2
     monsterBrood: 0
     projectile: Arrow
+    projectile_size: 1
+    projectile_speed: 1
     tire: 2
     preNode: 1402
   - id: 1404
     name: "\uC5D8\uD504 \uC13C\uD2F0\uB12C"
-    description: "\uBE60\uB978 \uC774\uB3D9\uC18D\uB3C4\uB97C \uAE30\uBC18\uC73C\uB85C
-      \uADFC\uC811 \uC804\uD22C\uB97C \uBC8C\uC774\uB294 \uC5D8\uD504"
+    description: "\uBE60\uB978 \uC6C0\uC9C1\uC784\uACFC \uB0A0\uB835\uD55C \uAC80\uC220\uC744
+      \uACB8\uBE44\uD55C \uC232\uC18D\uC758 \uADFC\uC811 \uC804\uD22C \uC804\uBB38\uAC00\uC785\uB2C8\uB2E4.
+      \uC5B8\uC81C \uC5B4\uB514\uC11C \uD280\uC5B4\uB098\uC62C\uC9C0 \uBAA8\uB978\uB2E4\uB294
+      \uAC8C \uC801\uB4E4\uC758 \uACF5\uD3EC \uD3EC\uC778\uD2B8\uC8E0."
     health: 60
     moveSpeed: 1.5
     reward: 1
@@ -422,12 +374,16 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 0
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 1
     preNode: 1401
   - id: 1405
     name: "\uC5D8\uD504 \uAC00\uB514\uC5B8"
-    description: "\uC232\uC744 \uC9C0\uD0A4\uB294 \uC5D8\uD504\uC871\uC758 \uAE30\uC0AC
-      \uC785\uB2C8\uB2E4."
+    description: "\uC232\uC744 \uC9C0\uD0A4\uB294 \uB4E0\uB4E0\uD55C \uC5D8\uD504\uC871
+      \uAE30\uC0AC\uC785\uB2C8\uB2E4. \uD654\uB824\uD55C \uAC11\uC637 \uB4A4\uC5D4
+      \u201C\uB0B4\uAC00 \uC232\uC758 \uC218\uD638\uC2E0\u201D\uC774\uB77C\uB294
+      \uC790\uBD80\uC2EC\uC774 \uB4EC\uBFCD \uB2F4\uACA8 \uC788\uC8E0."
     health: 80
     moveSpeed: 1.5
     reward: 1
@@ -440,12 +396,16 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 0
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 2
     preNode: 1404
   - id: 1501
     name: "\uB2E4\uD06C\uC5D8\uD504"
-    description: "\uC232\uC758 \uC554\uC0B4\uC790\uB77C \uBD88\uB9AC\uB294 \uB2E4\uD06C\uC5D8\uD504
-      \uC885\uC871\uC785\uB2C8\uB2E4."
+    description: "\uC232 \uC18D \uADF8\uB9BC\uC790\uCC98\uB7FC \uC870\uC6A9\uD788
+      \uB2E4\uAC00\uC640 \uC801\uC744 \uBB34\uB108\uB728\uB9AC\uB294 \uB2E4\uD06C\uC5D8\uD504\uC785\uB2C8\uB2E4.
+      \"\uC5B4\uB460 \uC18D\uC5D0\uC11C \uAE30\uD68C\uB97C \uC5FF\uBCF4\uB294 \uC790,
+      \uBC14\uB85C \uC6B0\uB9AC\uC8E0.\""
     health: 50
     moveSpeed: 2
     reward: 1
@@ -458,12 +418,15 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 0
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 0
     preNode: -1
   - id: 1502
     name: "\uB2E4\uD06C\uC5D8\uD504 \uC2DC\uD504"
-    description: "\uB450\uC790\uB8E8\uC758 \uB2E8\uAC80\uC744 \uC0AC\uC6A9\uD558\uB294
-      \uC554\uC0B4\uC790 \uC785\uB2C8\uB2E4."
+    description: "\uBE5B\uCC98\uB7FC \uBE60\uB978 \uBAB8\uB180\uB9BC\uC73C\uB85C
+      \uC801\uC744 \uB180\uB798\uD0A4\uB294 \uC554\uC0B4\uC790\uC785\uB2C8\uB2E4.
+      \uAE5C\uC9DD \uB180\uB784 \uB54C \uCBE4\uC5D4 \uC774\uBBF8 \uB05D!"
     health: 70
     moveSpeed: 2.5
     reward: 1
@@ -476,12 +439,17 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 0
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 1
     preNode: 1501
   - id: 1503
     name: "\uB2E4\uD06C\uC5D8\uD504 \uC5B4\uC384\uC2E0"
-    description: "\uB354\uC6B1 \uBE68\uB77C\uC9C4 \uC18D\uB3C4\uB97C \uAC00\uC9C4
-      \uC5B4\uC384\uC2E0"
+    description: "\uB450 \uC790\uB8E8 \uB2E8\uAC80\uC73C\uB85C \uC5B4\uB460 \uC18D\uC5D0\uC11C
+      \uCDA4\uCD94\uB4EF \uC2F8\uC6B0\uB294 \uC554\uC0B4\uC790\uC785\uB2C8\uB2E4.
+      \uC190\uB05D\uC5D0\uC11C \uD53C\uC5B4\uB098\uB294 \uCE58\uBA85\uC801\uC778
+      \uCDA4\uC0AC\uC704\uC5D0 \uC801\uB4E4\uC740 \uC18D\uC218\uBB34\uCC45\uC73C\uB85C
+      \uC4F0\uB7EC\uC9D1\uB2C8\uB2E4."
     health: 80
     moveSpeed: 3
     reward: 1
@@ -494,12 +462,15 @@ MonoBehaviour:
     monsterAttackType: 1
     monsterBrood: 0
     projectile: 
+    projectile_size: 0
+    projectile_speed: 0
     tire: 2
     preNode: 1502
   - id: 1504
     name: "\uB2E4\uD06C\uC5D8\uD504 \uB098\uC774\uD2B8"
-    description: "\uD22C\uCC99\uBB34\uAE30\uB97C \uC0AC\uC6A9\uD558\uC5EC \uC801\uC744
-      \uC554\uC0B4\uD558\uB294 \uB2E4\uD06C\uC5D8\uD504"
+    description: "\uBA40\uB9AC\uC11C \uB2E8\uAC80 \uD55C \uBC29! \uC801\uC774 \uB208\uCE58
+      \uCC4C \uD2C8\uB3C4 \uC5C6\uC774 \uCE68\uBB35\uC2DC\uD0A4\uB294 \uAC83\uC774
+      \uD2B9\uAE30\uC785\uB2C8\uB2E4."
     health: 60
     moveSpeed: 2
     reward: 1
@@ -512,11 +483,15 @@ MonoBehaviour:
     monsterAttackType: 4
     monsterBrood: 0
     projectile: Kunai
+    projectile_size: 1
+    projectile_speed: 1
     tire: 1
     preNode: 1501
   - id: 1505
     name: "\uB2E4\uD06C\uC5D8\uD504 \uB098\uC774\uD2B8\uB85C\uB4DC"
-    description: "\uAC00\uC7A5 \uB6F0\uC5B4\uB09C \uC554\uC0B4\uC790 \uC785\uB2C8\uB2E4"
+    description: "\uC5B4\uB460 \uC18D\uC5D0\uC11C \uAD70\uB9BC\uD558\uB294 \uCD5C\uACE0\uC758
+      \uC554\uC0B4\uC790, \uADF8 \uB204\uAD6C\uB3C4 \uC774 \uADF8\uB9BC\uC790\uB97C
+      \uD53C\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
     health: 70
     moveSpeed: 2
     reward: 1
@@ -529,5 +504,7 @@ MonoBehaviour:
     monsterAttackType: 4
     monsterBrood: 0
     projectile: Shuriken
+    projectile_size: 1
+    projectile_speed: 1
     tire: 2
     preNode: 1504

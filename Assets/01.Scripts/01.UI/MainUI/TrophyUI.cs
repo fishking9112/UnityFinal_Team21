@@ -16,7 +16,8 @@ public class TrophyUI : MonoBehaviour
     public List<TrophyInfo> infos = new();
     public List<Toggle> toggleList = new();
 
-
+    [Header("뒤로가기 버튼")]
+    public Button closeButton;
 
     void Start()
     {
@@ -44,6 +45,8 @@ public class TrophyUI : MonoBehaviour
 
         // 첫번째 무조건 선택
         toggleList[0].isOn = true;
+
+        closeButton.onClick.AddListener(() => gameObject.SetActive(false));
     }
 
     /// <summary>

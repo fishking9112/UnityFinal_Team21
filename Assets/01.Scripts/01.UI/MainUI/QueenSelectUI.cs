@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,22 +19,43 @@ public class QueenSelectUI : MonoBehaviour
     public List<Toggle> queenSelectToggleList;
 
     public Button SelectBtn;
+    public Button CloseBtn;
     public Image MainQueenImage;
     public QueenSelectItem prefabsQueenSelectItem;
     public Transform parentQueenSelectItem;
     public ToggleGroup queenSelectToggleGroup;
     public QueenBasicSkillDescription QueenBasicSkillDescription;
     public QueenBasicSkillDescription[] ArrayQueenPassiveSkillDescription;
+    public TextMeshProUGUI queenNameText;
 
-    private void Start()
+    private void OnEnable()
+    {
+        for (int i = 0; i < queenSelectToggleList.Count; i++)
+        {
+            int index = i; // 클로저 문제 방지
+            if (queenSelectToggleList[index].transform.GetComponent<QueenSelectItem>().QueenID == GameManager.Instance.QueenCharaterID)
+            {
+                queenSelectToggleList[index].isOn = true;
+            }
+            else
+            {
+                queenSelectToggleList[index].isOn = false;
+            }
+        }
+    }
+
+    public void Init()
     {
         queenSelectToggleList.Clear();
         SelectBtn.onClick.AddListener(() => gameObject.SetActive(false));
+        CloseBtn.onClick.AddListener(() => gameObject.SetActive(false));
         InitializeQueenItems();
         RegisterToggleEvents();
 
         if (queenSelectToggleList.Count > 0)
             queenSelectToggleList[0].isOn = true;
+
+        SelectQueen(DataManager.Instance.queenStatusDic.First().Key);
     }
 
     private void InitializeQueenItems()
@@ -68,6 +90,7 @@ public class QueenSelectUI : MonoBehaviour
         GameManager.Instance.QueenCharaterID = queenID;
 
         var queenInfo = DataManager.Instance.queenStatusDic[queenID];
+        queenNameText.text = queenInfo.Name;
         MainQueenImage.sprite = DataManager.Instance.iconAtlas.GetSprite(queenInfo.Image);
 
         // 액티브 스킬 설정

@@ -26,6 +26,17 @@ public class MenuHUD : HUDUI
     public Transform BlackBackground;
     private GameObject activePanel;
 
+    public QueenSelectUI queenSelectUI;
+
+    private void Update()
+    {
+        // ESC 키를 누르면 모든 팝업이 닫힘
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ClosePanel();
+        }
+    }
+
     public override async UniTask Initialize()
     {
         await UniTask.Yield(PlayerLoopTiming.Update);
@@ -49,12 +60,14 @@ public class MenuHUD : HUDUI
                     SetActivePanel(panel);
                 });
             }
+
+            mainUISet.panel.SetActive(false);
         }
 
         backBtn.onClick.AddListener(() =>
         {
             // buttonMenu.SetActive(true);
-          //  uiMenu.SetActive(false);
+            //  uiMenu.SetActive(false);
             activePanel.SetActive(false);
         });
 
@@ -67,6 +80,8 @@ public class MenuHUD : HUDUI
 
         BlackBackground.SetAsFirstSibling();
         BlackBackground.gameObject.SetActive(false);
+
+        queenSelectUI.Init();
     }
     private void SetActivePanel(GameObject panel)
     {
@@ -83,5 +98,17 @@ public class MenuHUD : HUDUI
     {
         // TODO : 바뀐 스텟으로 시작(?)
         SceneLoadManager.Instance.LoadScene(LoadSceneEnum.GameScene).Forget();
+    }
+
+    // 모든 창 닫기
+    private void ClosePanel()
+    {
+        if (activePanel != null && activePanel.activeSelf)
+        {
+            activePanel.SetActive(false);
+            activePanel = null;
+        }
+
+        activePanel = null;
     }
 }
