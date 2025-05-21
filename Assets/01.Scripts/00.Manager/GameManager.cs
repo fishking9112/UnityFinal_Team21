@@ -60,7 +60,6 @@ public class GameManager : MonoSingleton<GameManager>
         }
         if (Input.GetKeyDown(KeyCode.G))
         {
-            GameClear();
             AddGold(100);
         }
         if (Input.GetKeyDown(KeyCode.S))

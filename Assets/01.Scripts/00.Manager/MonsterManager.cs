@@ -16,6 +16,7 @@ public class MonsterManager : MonoSingleton<MonsterManager>
 
     void Start()
     {
+        Debug.Log("fsef22222222222222se");
         foreach (var monsterdata in DataManager.Instance.monsterDic.Values)
         {
             monsterInfoList[monsterdata.ID] = new MonsterInfo(monsterdata);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class QueenAbilityEffectTrigger : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
         QueenAbilityUpgradeManager.Instance.ApplyAllEffects();
     }
