@@ -3,6 +3,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum HeroType
+{
+    NULL,
+    NORMAL,
+    BOSS,
+}
+
 [Serializable]
 public class HeroStatusInfo : BaseStatData, IInfo
 {
@@ -11,6 +19,7 @@ public class HeroStatusInfo : BaseStatData, IInfo
     public int[] weaponLevel;
     public float detectedRange;
     public int custom;
+    public HeroType heroType;
     public HeroStatusInfo() { }
     public HeroStatusInfo(HeroStatusInfo other) : base(other)
     {
@@ -19,6 +28,7 @@ public class HeroStatusInfo : BaseStatData, IInfo
         weaponLevel = other.weaponLevel;
         detectedRange = other.detectedRange;
         custom = other.custom;
+        heroType = other.heroType;
     }
     public void Copy(HeroStatusInfo other)
     {
@@ -89,6 +99,10 @@ public class HeroStatusData : SheetDataReaderBase
                     break;
                 case "custom":
                     heroStatusInfo.custom = Utils.StringToInt(cell.value);
+                    break;
+                case "heroType":
+                    Debug.Log(cell.value);
+                    heroStatusInfo.heroType = Utils.StringToEnum<HeroType>(cell.value, HeroType.NULL);
                     break;
             }
         }

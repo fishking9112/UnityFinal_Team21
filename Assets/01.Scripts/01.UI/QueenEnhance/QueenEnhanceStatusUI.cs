@@ -93,7 +93,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         foreach(var items in queenEnhanceUI.AcquiredEnhanceLevels)
         {
             OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, enhanceContent);
-            ownedEnhanceItem.SetEnhanceItem(items.Key);
+            ownedEnhanceItem.SetEnhanceItem(items.Key, false);
         }
     }
 

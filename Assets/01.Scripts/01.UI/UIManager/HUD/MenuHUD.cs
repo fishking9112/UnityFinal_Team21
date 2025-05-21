@@ -26,6 +26,8 @@ public class MenuHUD : HUDUI
     public Transform BlackBackground;
     private GameObject activePanel;
 
+    public QueenSelectUI queenSelectUI;
+
     private void Update()
     {
         // ESC 키를 누르면 모든 팝업이 닫힘
@@ -58,12 +60,14 @@ public class MenuHUD : HUDUI
                     SetActivePanel(panel);
                 });
             }
+
+            mainUISet.panel.SetActive(false);
         }
 
         backBtn.onClick.AddListener(() =>
         {
             // buttonMenu.SetActive(true);
-          //  uiMenu.SetActive(false);
+            //  uiMenu.SetActive(false);
             activePanel.SetActive(false);
         });
 
@@ -76,6 +80,8 @@ public class MenuHUD : HUDUI
 
         BlackBackground.SetAsFirstSibling();
         BlackBackground.gameObject.SetActive(false);
+
+        queenSelectUI.Init();
     }
     private void SetActivePanel(GameObject panel)
     {

@@ -22,6 +22,7 @@ public class GameHUD : HUDUI
     [Header("게이지")]
     [SerializeField] private GaugeUI queenActiveSkillGaugeUI;
     [SerializeField] private GaugeUI summonGaugeUI;
+    [SerializeField] private GaugeUI castleGaugeUI;
     [SerializeField] private GaugeUI expGaugeUI;
 
     [Header("타이머")]
@@ -46,12 +47,16 @@ public class GameHUD : HUDUI
     public GameObject TopButtonGroup;
     public GameObject EtcUIGroup;
     public GameObject OptionUIGroup;
+    public GameObject EvolutionSelectUI;
+    public GameObject PauseSelectUI;
+
+    [Header("버튼 오브젝트")]
     public Button OptionBtn;
     public Button ExitBtn;
     public Button EvolutionBtn;
-    public GameObject EvolutionSelectUI;
     public Button PauseBtn;
-    public GameObject PauseSelectUI;
+    public Button HudEvolutionBtn;
+    public Button HudPauseBtn;
 
     [Header("현재 상태")]
     public bool isPaused = false;
@@ -87,6 +92,7 @@ public class GameHUD : HUDUI
 
         summonGaugeUI.Bind(condition.CurSummonGauge, condition.MaxSummonGauge);
         queenActiveSkillGaugeUI.Bind(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
+        castleGaugeUI.Bind(GameManager.Instance.castle.condition.CurCastleHealth, GameManager.Instance.castle.condition.MaxCastleHealth);
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
 
         GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
@@ -107,14 +113,21 @@ public class GameHUD : HUDUI
 
         // 진화트리 버튼 이벤트 연결 
         EvolutionBtn.onClick.AddListener(ShowEvolutionTreeUI);
+        HudEvolutionBtn.onClick.AddListener(ShowEvolutionTreeUI);
 
         // 일시정지 버튼 이벤트 연결 
         PauseBtn.onClick.AddListener(ShowPauseUI);
+        HudPauseBtn.onClick.AddListener(ShowPauseUI);
 
         inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
         inputAction.started += OnPauseUI;
 
         slot.Init(GameManager.Instance.queen.controller, GameManager.Instance.queen.input.actions["SlotChange"]);
+
+        queenEnhanceUI.gameObject.SetActive(false);
+        evolutionTreeUI.gameObject.SetActive(false);
+        pauseUI.gameObject.SetActive(false);
+        gameResultUI.gameObject.SetActive(false);
     }
 
     /// <summary>

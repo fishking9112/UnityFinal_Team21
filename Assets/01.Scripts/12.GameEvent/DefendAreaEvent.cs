@@ -75,6 +75,8 @@ public class DefendAreaEvent : GameEventBase
 
     private void UpdateText()
     {
-        contextUI.contentText.text = $"생성된 거점을 일정시간 방어하세요 <color=green>{Mathf.CeilToInt(defendDuration)}s</color>";
+        string tmp = DataManager.Instance.eventDic[tableInfo.ID].description;
+        string result = string.Format(tmp, Mathf.CeilToInt(defendDuration));
+        contextUI.SetText(result);
     }
 }

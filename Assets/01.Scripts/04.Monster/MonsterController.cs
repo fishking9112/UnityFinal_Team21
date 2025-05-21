@@ -53,6 +53,10 @@ public class MonsterController : BaseController, IPoolable
     [NonSerialized] public float knockbackPower = 0f;
     [NonSerialized] public float knockbackDuration = 0f;
 
+    [Header("애니메이션 속도만 임의 수정")]
+    public float moveAnimSpeed = 1f;
+    public float attackAnimSpeed = 1f;
+
     [Header("빨간색 점등 관련 데이터")]
     private CancellationTokenSource _takeDamagedRendererCts;
     [SerializeField] private float takeDamagedRendererTimer = 0.5f;

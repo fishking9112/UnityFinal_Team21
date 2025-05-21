@@ -74,6 +74,8 @@ public class KillEnemiesEvent : GameEventBase
 
     private void UpdateText()
     {
-        contextUI.contentText.text = $"소환된 히어로를 처치하세요 <color=red>{curCount}/{maxCount}</color>";
+        string tmp = DataManager.Instance.eventDic[tableInfo.ID].description;
+        string result = string.Format(tmp, curCount, maxCount);
+        contextUI.SetText(result);
     }
 }

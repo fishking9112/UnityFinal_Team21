@@ -103,7 +103,7 @@ public class HeroManager : MonoSingleton<HeroManager>
     {
         //int cnt = DataManager.Instance.heroStatusDic.Select(x=>x.Value.id==201);
 
-        statusInfo = DataManager.Instance.heroStatusDic[201];
+        statusInfo = DataManager.Instance.heroStatusDic[type];
 
         // HeroController boss = HeroPoolManager.Instance.GetBossObject(RandomSummonPos(90, 90));
         HeroController boss = HeroPoolManager.Instance.GetBossObject(GetRandomPos(v, 3));

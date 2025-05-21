@@ -18,6 +18,21 @@ public class GameResultUI : SingleUI
     public Transform unitListParent;
     public GameUnitResultUI gameUnitResultUIPrefab;
     public Image mvpImg;
+    public Image queenImg;
+    public Image resultQueenImage;
+    public Transform parentEnhanceGrid;
+    public Transform parentSkillGrid;
+    public Transform descriptionPopupUI;
+    public GameObject DescriptionPopupUI => descriptionPopupUI.gameObject;
+
+    [Header("DescriptionPopupUI")]
+    public Image popupUIAbilityImage;
+    public TextMeshProUGUI popupUIAbilityName;
+    public TextMeshProUGUI popupUIAbilityDec;
+    public TextMeshProUGUI popupUIAbilityLevel;
+
+    [Header("Enhance/Skill Item Prefabs")]
+    public OwnedEnhanceItem prefabsOwnedEnhanceItem;
 
     [Header("Text Components")]
     public TextMeshProUGUI queenLevelText;
@@ -41,6 +56,8 @@ public class GameResultUI : SingleUI
 
     private void OnEnable()
     {
+        InitQueenEnhance();
+        InitQueenSkill();
         InitQueenResult();
         InitMiddlePanel();
         InitUnitResult();
@@ -48,16 +65,68 @@ public class GameResultUI : SingleUI
         SetMonsterMVP();
         QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
     }
+
+    /// <summary>
+    /// 팝업 UI가 마우스를 따라다니도록 위치를 계속 갱신합니다.
+    /// </summary>
+    public async UniTaskVoid FollowMouse()
+    {
+        while (DescriptionPopupUI.activeSelf)
+        {
+            descriptionPopupUI.position = Input.mousePosition;
+            await UniTask.Yield();
+        }
+    }
+
+    private void InitQueenEnhance()
+    {
+        foreach (Transform child in parentEnhanceGrid)
+        {
+            Destroy(child.gameObject);
+        }
+
+        QueenEnhanceUI queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
+
+        foreach (var items in queenEnhanceUI.AcquiredEnhanceLevels)
+        {
+            if (DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.QueenPassive || DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.MonsterPassive)
+            {
+                OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentEnhanceGrid);
+                ownedEnhanceItem.SetEnhanceItem(items.Key, true);
+            }
+        }
+    }
+
+    private void InitQueenSkill()
+    {
+        foreach (Transform child in parentSkillGrid)
+        {
+            Destroy(child.gameObject);
+        }
+
+        QueenEnhanceUI queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
+
+        foreach (var items in queenEnhanceUI.AcquiredEnhanceLevels)
+        {
+            if (DataManager.Instance.queenEnhanceDic[items.Key].type == QueenEnhanceType.AddSkill)
+            {
+                OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, parentSkillGrid);
+                ownedEnhanceItem.SetEnhanceItem(items.Key, true);
+            }
+        }
+    }
+
     private void InitQueenResult()
     {
+        queenImg.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].Icon);
         queenLevelText.text = "Lv. " + GameManager.Instance.queen.condition.Level.Value.ToString();
     }
 
     private void InitMiddlePanel()
     {
         gameTimeText.text = Utils.GetMMSSTime((int)(GameManager.Instance.gameLimitTime - GameManager.Instance.curTime.Value));
-        killCountText.text = "000";
-        resourceText.text = GameManager.Instance.queen.condition.Gold.Value.ToString();
+        killCountText.text = Utils.GetThousandCommaText(GameManager.Instance.queen.condition.KillCnt.Value);
+        resourceText.text = Utils.GetThousandCommaText((int)GameManager.Instance.queen.condition.Gold.Value);
     }
 
     private void InitUnitResult()
@@ -111,5 +180,38 @@ public class GameResultUI : SingleUI
     private void DpsPopup(bool value)
     {
         dpsPopupUI.SetActive(value);
+    }
+
+    /// <summary>
+    /// 보유 현황의 마우스 오버 팝업창UI 표기
+    /// </summary>
+    /// <param name="enhanceID"></param>
+    public void SetDescriptionPopupUIInfo(int enhanceID)
+    {
+        QueenEnhanceInfo info = DataManager.Instance.queenEnhanceDic[enhanceID];
+
+        int currentLevel = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
+
+        popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
+        popupUIAbilityName.text = info.name;
+
+        float previewValue = currentLevel == 0
+            ? info.state_Base
+            : info.state_Base + (info.state_LevelUp * currentLevel);
+
+        string formattedValue = QueenEnhanceStatusUI.PercentValueTypes.Contains(info.valueType)
+            ? $"{previewValue * 100:F0}%"
+            : $"{previewValue}";
+
+        popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
+
+        if (info.type != QueenEnhanceType.AddSkill)
+        {
+            popupUIAbilityLevel.text = "Lv. " + StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.AcquiredEnhanceLevels[enhanceID].ToString();
+        }
+        else
+        {
+            popupUIAbilityLevel.text = "-";
+        }
     }
 }

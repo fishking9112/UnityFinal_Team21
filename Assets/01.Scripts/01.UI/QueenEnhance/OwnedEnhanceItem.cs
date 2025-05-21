@@ -6,28 +6,63 @@ public class OwnedEnhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
 {
     [SerializeField] private GameObject selectedUI;
     [SerializeField] private Image enhanceIcon;
+
     private QueenEnhanceUI queenEnhanceUI;
+    private GameResultUI gameResultUI;
+
     private int enhanceID;
+    private bool isResult;
 
-    public void SetEnhanceItem(int enhanceID)
+    public void SetEnhanceItem(int enhanceID, bool isResult)
     {
+        this.isResult = isResult;
         this.enhanceID = enhanceID;
-        queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
 
-        enhanceIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(DataManager.Instance.queenEnhanceDic[enhanceID].Icon);
+        // 아이콘 설정
+        var iconName = DataManager.Instance.queenEnhanceDic[enhanceID].Icon;
+        enhanceIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(iconName);
+
+        // UI 캐싱
+        if (isResult)
+        {
+            gameResultUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI;
+        }
+        else
+        {
+            queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        queenEnhanceUI.QueenEnhanceStatusUI.DescriptionPopupUI.SetActive(true);
-        queenEnhanceUI.QueenEnhanceStatusUI.SetDescriptionPopupUIInfo(enhanceID);
-        queenEnhanceUI.QueenEnhanceStatusUI.FollowMouse().Forget();
+        if (isResult)
+        {
+            gameResultUI.DescriptionPopupUI.SetActive(true);
+            gameResultUI.SetDescriptionPopupUIInfo(enhanceID);
+            gameResultUI.FollowMouse().Forget();
+        }
+        else
+        {
+            var statusUI = queenEnhanceUI.QueenEnhanceStatusUI;
+            statusUI.DescriptionPopupUI.SetActive(true);
+            statusUI.SetDescriptionPopupUIInfo(enhanceID);
+            statusUI.FollowMouse().Forget();
+        }
+
         selectedUI.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        queenEnhanceUI.QueenEnhanceStatusUI.DescriptionPopupUI.SetActive(false);
+        if (isResult)
+        {
+            gameResultUI.DescriptionPopupUI.SetActive(false);
+        }
+        else
+        {
+            queenEnhanceUI.QueenEnhanceStatusUI.DescriptionPopupUI.SetActive(false);
+        }
+
         selectedUI.SetActive(false);
     }
 }

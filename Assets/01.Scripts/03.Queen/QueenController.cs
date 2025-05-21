@@ -273,6 +273,12 @@ public class QueenController : MonoBehaviour
             return;
         }
 
+        if (!SpawnPointManager.Instance.MonsterPoint.IsAreaIn(worldMousePos))
+        {
+            SpawnPointManager.Instance.MonsterPoint.ShowAndHideAreas();
+            return;
+        }
+
         // 미니맵콜라이더 레이어를 제외한 레이어와 충돌 처리가 일어나면 몬스터 소환 불가
         ContactFilter2D layerFilter = new ContactFilter2D();
         layerFilter.SetLayerMask(~LayerMask.GetMask("MiniMapCollider"));

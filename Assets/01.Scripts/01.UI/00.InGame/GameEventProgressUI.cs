@@ -55,7 +55,7 @@ public class GameEventProgressUI : MonoBehaviour
             return;
 
         // 프로그래스 바 진행도
-        float fillAmount = 1 - (curTime / totalTime);
+        float fillAmount = (1 - (curTime / totalTime));
         progressBarFill.fillAmount = fillAmount;
 
         CheckEvent(fillAmount);
@@ -116,7 +116,11 @@ public class GameEventProgressUI : MonoBehaviour
             case EventTableType.Type_2:
                 // 영웅 소환
                 spawnPos = SpawnPointManager.Instance.heroPoint.GetRandomPosition(); // 원하는 위치
-                var bossHero = HeroManager.Instance.SummonBoss(spawnPos, 1);//eventTableInfo.createId);
+                var bossList = DataManager.Instance.heroStatusDic
+                                .Where(stat => stat.Value.heroType == HeroType.BOSS)
+                                .Select(stat => stat.Value)
+                                .ToList();
+                var bossHero = HeroManager.Instance.SummonBoss(spawnPos, bossList[Random.Range(0, bossList.Count)].id);//eventTableInfo.createId);
                 eventInstance = new KillEnemiesEvent(bossHero, eventTableInfo, contextUI);
                 break;
 
