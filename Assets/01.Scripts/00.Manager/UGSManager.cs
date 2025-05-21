@@ -54,10 +54,14 @@ public class UGSManager : MonoSingleton<UGSManager>
         {
             nicknameRegisterTCS = new UniTaskCompletionSource<bool>();
 
+            SceneLoadManager.Instance.titleProgressText.ActiveUIGroup(false);
+
             OnRequireNickname?.Invoke(); // 외부에서 UI 띄우도록 연결
 
             // 닉네임 등록이 완료될 때까지 대기
             await nicknameRegisterTCS.Task;
+
+            SceneLoadManager.Instance.titleProgressText.ActiveUIGroup(true);
 
             // 닉네임 저장 완료 후, 재확인
             hasNickname = await Auth.HasNicknameAsync();
