@@ -1,11 +1,15 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
 {
     public List<Image> coolTimeMask;
+
+    private Dictionary<int, CancellationTokenSource> coolTimeTokenDic = new Dictionary<int, CancellationTokenSource>();
 
     public override void AddSlot(int index, QueenActiveSkillBase skill)
     {
@@ -24,6 +28,14 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
         {
             coolTimeMask[index].fillAmount = 0f;
         }
+
+        if (coolTimeTokenDic.TryGetValue(index, out var existToken))
+        {
+            existToken.Cancel();
+            existToken.Dispose();
+        }
+
+        coolTimeTokenDic[index] = new CancellationTokenSource();
 
         // 해당 슬롯에 스킬설명을 위한 스킬 정보 넣기
         var trigger = slotIconList[index].GetComponent<SkillDescriptionUITrigger>();
@@ -77,26 +89,58 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
             return;
         }
 
-        _ = ApplyCoolTimeUI(index, coolTime);
+        if (coolTimeTokenDic.TryGetValue(index, out var existToken))
+        {
+            existToken.Cancel();
+            existToken.Dispose();
+        }
+
+        CancellationTokenSource newToken = new CancellationTokenSource();
+        coolTimeTokenDic[index] = newToken;
+
+        _ = ApplyCoolTimeUI(index, coolTime, newToken.Token);
     }
 
-    private async UniTaskVoid ApplyCoolTimeUI(int index, float coolTime)
+    private async UniTaskVoid ApplyCoolTimeUI(int index, float coolTime, CancellationToken token)
     {
-        var token = this.GetCancellationTokenOnDestroy();
-
         float time = 0f;
 
-        while (time < coolTime)
+        try
         {
-            time += Time.deltaTime;
-
-            if(index < coolTimeMask.Count)
+            while (time < coolTime)
             {
-                coolTimeMask[index].fillAmount = 1f - (time / coolTime);
+                time += Time.deltaTime;
+
+                if (index < coolTimeMask.Count)
+                {
+                    coolTimeMask[index].fillAmount = 1f - (time / coolTime);
+                }
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
-            await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
-        if(index < coolTimeMask.Count)
+        catch (OperationCanceledException)
+        {
+            // 쿨타임 도중 취소된 경우. 무시해도 됨
+        }
+        
+        if (index < coolTimeMask.Count)
+        {
+            coolTimeMask[index].fillAmount = 0f;
+        }
+    }
+
+    public override void RemoveSlot(int index)
+    {
+        base.RemoveSlot(index);
+
+        if(coolTimeTokenDic.TryGetValue(index,out var token))
+        {
+            token.Cancel();
+            token.Dispose();
+            coolTimeTokenDic.Remove(index);
+        }
+
+        if (index >= 0 && index < coolTimeMask.Count)
         {
             coolTimeMask[index].fillAmount = 0f;
         }
