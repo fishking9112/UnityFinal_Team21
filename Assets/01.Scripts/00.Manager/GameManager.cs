@@ -53,7 +53,7 @@ public class GameManager : MonoSingleton<GameManager>
     private void Update()
     {
         ApplyCursorState();
-
+        /*
         if (Input.GetKeyDown(KeyCode.H))
         {
             castle.TakeDamaged(100f);
@@ -65,7 +65,7 @@ public class GameManager : MonoSingleton<GameManager>
         if (Input.GetKeyDown(KeyCode.S))
         {
             UGSManager.Instance.SaveLoad.SaveAsync().Forget();
-        }
+        }*/
 
         OnTimer(); // TODO : 임시로 달아둠 나중에 반드시 옮기기
     }
