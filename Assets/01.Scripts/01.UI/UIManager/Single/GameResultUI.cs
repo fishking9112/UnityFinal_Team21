@@ -75,6 +75,8 @@ public class GameResultUI : SingleUI
         SetMonsterMVP();
 
         QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
+
+        UGSManager.Instance.SaveLoad.SaveAsync().Forget();
     }
 
     /// <summary>
