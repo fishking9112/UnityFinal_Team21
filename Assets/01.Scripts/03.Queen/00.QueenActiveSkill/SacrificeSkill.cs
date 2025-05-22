@@ -13,6 +13,11 @@ public class SacrificeSkill : QueenActiveSkillBase
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
+        if(hits.Length == 0)
+        {
+            return;
+        }
+
         GameObject targetMonster = hits[0].gameObject;
         float minDistance = Vector2.Distance(mousePos, hits[0].transform.position);
 
