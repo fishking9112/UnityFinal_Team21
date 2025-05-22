@@ -40,7 +40,7 @@ public class HeroMoveState : HeroBaseState
             }
             navMeshAgent.speed = stat.moveSpeed.Value;
 
-            Search();
+            Search().Forget();
 
             await UniTask.Yield(cancellationToken: tk);
         }
@@ -62,7 +62,7 @@ public class HeroMoveState : HeroBaseState
         //state.hero.transform.Translate(state.moveSpeed * Time.deltaTime * state.dir);
     }
 
-    private void Search()
+    private async UniTask Search()
     {
         // Find Enemy that inside check area
         Utils.DrawOverlapCircle(state.hero.transform.position, detectedRange, Color.red);
@@ -73,6 +73,7 @@ public class HeroMoveState : HeroBaseState
         }
         else
         {
+            await UniTask.NextFrame();
             state.ChangeState(state.attackState);
         }
     }
