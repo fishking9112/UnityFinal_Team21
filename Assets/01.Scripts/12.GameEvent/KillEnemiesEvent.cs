@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class KillEnemiesEvent : GameEventBase
 {
-    private EventTableInfo tableInfo;
+    private EventInfo tableInfo;
     private List<GameObject> heros = new();
     private int maxCount = 0;
     private int curCount = 0;
 
-    public KillEnemiesEvent(List<GameObject> spawnedHeros, EventTableInfo eventTableInfo, GameEventContextUI contextUI)
+    public KillEnemiesEvent(List<GameObject> spawnedHeros, EventInfo eventTableInfo, GameEventContextUI contextUI)
     {
         this.heros = spawnedHeros;
         maxCount = heros.Count;
@@ -18,7 +18,7 @@ public class KillEnemiesEvent : GameEventBase
         contextUI.titleText.text = $"◆ {tableInfo.name}";
         UpdateText();
     }
-    public KillEnemiesEvent(GameObject spawnedHero, EventTableInfo eventTableInfo, GameEventContextUI contextUI)
+    public KillEnemiesEvent(GameObject spawnedHero, EventInfo eventTableInfo, GameEventContextUI contextUI)
     {
         this.heros.Add(spawnedHero);
         maxCount = heros.Count;

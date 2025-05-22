@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class LaserSkill : QueenActiveSkillBase
@@ -21,7 +22,11 @@ public class LaserSkill : QueenActiveSkillBase
         {
             if (HeroManager.Instance.hero.TryGetValue(hit.gameObject, out var hero))
             {
-                ParticleManager.Instance.SpawnParticle("Laser", hero.transform.position, new Vector3(0.5f, 0.5f, 1f), Quaternion.identity, hero.transform);
+                Vector3 targetScale = hero.transform.localScale;
+                Vector3 particlePos = hero.transform.position;
+                Vector3 particleScale = targetScale * 0.5f;
+
+                ParticleManager.Instance.SpawnParticle("Laser", particlePos, particleScale, Quaternion.identity, hero.transform);
                 hero.TakeDamaged(info.value);
                 UniTask slowTask = BuffManager.Instance.ApplyBuff(hero, info.buff_ID, info.buff_Level);
                 tasks.Add(slowTask);

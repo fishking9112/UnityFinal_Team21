@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class DefendAreaEvent : GameEventBase
 {
-    private EventTableInfo tableInfo;
+    private EventInfo tableInfo;
     private MiniCastle castleInstance;
     private float defendDuration = 5f;
     private Vector2 spawnPosition;
 
     // 생성자에서 성 프리팹과 위치 전달
-    public DefendAreaEvent(MiniCastle castleInstance, Vector2 spawnPosition, float defendDuration, EventTableInfo eventTableInfo, GameEventContextUI contextUI)
+    public DefendAreaEvent(MiniCastle castleInstance, Vector2 spawnPosition, float defendDuration, EventInfo eventTableInfo, GameEventContextUI contextUI)
     {
         this.castleInstance = castleInstance;
         this.spawnPosition = spawnPosition;
