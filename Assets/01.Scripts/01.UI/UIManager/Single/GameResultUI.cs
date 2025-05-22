@@ -75,6 +75,7 @@ public class GameResultUI : SingleUI
         ApplyStageGold();
         int mvpID= SetMonsterMVP();
 
+        DescriptionPopupUI.SetActive(false);
         QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
 
         int queenid = GameManager.Instance.QueenCharaterID;
