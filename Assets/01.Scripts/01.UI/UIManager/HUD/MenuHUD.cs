@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static GameLog;
 
 [Serializable]
 public class MainUIButtonPanel
@@ -96,6 +97,8 @@ public class MenuHUD : HUDUI
 
     public void OnClickGameStart()
     {
+        LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.TouchPlay);
+
         // TODO : 바뀐 스텟으로 시작(?)
         SceneLoadManager.Instance.LoadScene(LoadSceneEnum.GameScene).Forget();
     }

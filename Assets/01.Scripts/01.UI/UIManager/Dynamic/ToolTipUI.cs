@@ -109,6 +109,8 @@ public class ToolTipUI : BaseUI
     /// </summary>
     private void OnClickFinish()
     {
+        LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Tutorial);
+
         onFinishAction?.Invoke();
         OnHide();
     }
