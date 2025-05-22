@@ -13,6 +13,11 @@ public class SacrificeSkill : QueenActiveSkillBase
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
+        if (hits.Length == 0)
+        {
+            return;
+        }
+
         GameObject targetMonster = hits[0].gameObject;
         float minDistance = Vector2.Distance(mousePos, hits[0].transform.position);
 
@@ -30,7 +35,11 @@ public class SacrificeSkill : QueenActiveSkillBase
 
         if (MonsterManager.Instance.monsters.TryGetValue(targetMonster, out var monster))
         {
-            ParticleObject skillParticle = ParticleManager.Instance.SpawnParticle("Sacrifice", monster.transform.position + new Vector3(0, 0.5f, 0), new Vector3(0.2f, 0.2f, 1f));
+            Vector3 targetScale = monster.transform.localScale;
+            Vector3 particlePos = monster.transform.position + new Vector3(0, targetScale.y * 0.5f, 0);
+            Vector3 particleScale = targetScale * 0.2f;
+
+            ParticleObject skillParticle = ParticleManager.Instance.SpawnParticle("Sacrifice", particlePos, particleScale);
 
             monster.Die();
         }

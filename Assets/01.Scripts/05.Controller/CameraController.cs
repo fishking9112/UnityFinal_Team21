@@ -138,6 +138,11 @@ public class CameraController : MonoBehaviour
     // Spacebar 입력시 카메라를 성이 있는 쪽으로 옮김
     public void OnCameraMoveToCastle(InputAction.CallbackContext context)
     {
+        if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             cameraTransform.position = castleTransform.position;
