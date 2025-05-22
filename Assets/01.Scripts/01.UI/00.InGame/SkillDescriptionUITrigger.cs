@@ -19,7 +19,7 @@ public class SkillDescriptionUITrigger : MonoBehaviour, IPointerEnterHandler, IP
                     info.name,
                     info.description,
                     $"{info.coolTime}초",
-                    $"{info.cost}초"
+                    $"{info.cost}"
                 );
             }
         }
