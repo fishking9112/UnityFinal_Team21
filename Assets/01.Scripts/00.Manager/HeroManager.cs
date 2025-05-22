@@ -58,11 +58,11 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private void SetNextHero()
     {
-        int cnt = DataManager.Instance.heroStatusDic.Count;
+        var list = DataManager.Instance.heroStatusDic.Where(x => x.Value.heroType == HeroType.NORMAL).Select(x=>x.Value).ToList();
 
-        int rand = UnityEngine.Random.Range(0, cnt);
+        var val = list[UnityEngine.Random.Range(0, list.Count)];
 
-        statusInfo = DataManager.Instance.heroStatusDic.ElementAt(rand).Value;
+        statusInfo = val;
 
     }
 
@@ -92,13 +92,6 @@ public class HeroManager : MonoSingleton<HeroManager>
         return heroList;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            SummonBoss(RandomSummonPos(90, 90), 1);
-        }
-    }
     public GameObject SummonBoss(Vector2 v, int type, bool isEventMark = true)
     {
         //int cnt = DataManager.Instance.heroStatusDic.Select(x=>x.Value.id==201);

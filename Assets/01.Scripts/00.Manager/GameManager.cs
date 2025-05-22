@@ -94,24 +94,26 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
+    /*
     private async void OnApplicationQuit()
     {
-        //await UGSManager.Instance.SaveLoad.SaveAsync();
+       // await UGSManager.Instance.SaveLoad.SaveAsync();
     }
-
+    
     private void OnApplicationPause(bool pause)
     {
-        // if (pause)
-        // {
-        //     // if (GameManager.Instance.IsPaused()) return;
-
-        //     if (pauseController != null)
-        //     {
-        //         pauseController.ForcePause();
-        //     }
-        //     //_ = UGSManager.Instance.SaveLoad.SaveAsync();
-        // }
-    }
+        
+        if (pause)
+        {
+            // if (GameManager.Instance.IsPaused()) return;
+            
+            if (pauseController != null)
+            {
+                pauseController.ForcePause();
+            }
+            //_ = UGSManager.Instance.SaveLoad.SaveAsync();
+        }
+    }*/
 
     // 씬로드에서 불러내기?
     public void GameStart()  // TODO : 임시로 달아둠 나중에 반드시 옮기기(?) 이건 미정
