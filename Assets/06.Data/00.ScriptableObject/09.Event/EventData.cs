@@ -13,7 +13,7 @@ public enum EventTableType
 }
 
 [Serializable]
-public class EventTableInfo : IInfo
+public class EventInfo : IInfo
 {
     public int id;
     public string name;
@@ -35,15 +35,15 @@ public class EventTableInfo : IInfo
 }
 
 [CreateAssetMenu(fileName = "EventData", menuName = "Scriptable Object/New EventData")]
-public class EventTableData : SheetDataReaderBase
+public class EventData : SheetDataReaderBase
 {
-    public List<EventTableInfo> infoList = new List<EventTableInfo>();
+    public List<EventInfo> infoList = new List<EventInfo>();
 
-    private EventTableInfo eventInfo;
+    private EventInfo eventInfo;
 
     public override void UpdateStat(List<GSTU_Cell> list)
     {
-        eventInfo = new EventTableInfo();
+        eventInfo = new EventInfo();
 
         foreach (var cell in list)
         {
