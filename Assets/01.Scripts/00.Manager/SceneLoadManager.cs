@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static GameLog;
 
 public enum LoadSceneEnum
 {
@@ -36,6 +37,8 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
 
                 if (titleProgressText != null)
                 {
+                    LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.GameStart);
+
                     titleProgressText.ActiveUIGroup(true);
                     titleProgressText.SetAnimText("로그인 중");
                     titleProgressText.StartAnimating();
@@ -64,6 +67,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
                 await LoadSceneAsync("MenuScene"); // 메뉴 씬으로 이동
                 await StaticUIManager.Instance.LoadUI(LoadSceneEnum.MenuScene);
+                LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Lobby);
                 UIManager.Instance.ShowTooltip((int)IDToolTip.MainMenu);
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
@@ -88,6 +92,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 });
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
+                LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.EnterInGame);
                 GameManager.Instance.GameStart(); // 게임 스타트(?)
                 break;
             default:
