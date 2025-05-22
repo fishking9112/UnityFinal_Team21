@@ -127,6 +127,7 @@ public class GameManager : MonoSingleton<GameManager>
         tryCount = PlayerPrefs.GetInt("TryCount");
         tryCount++;
         PlayerPrefs.SetInt("TryCount", tryCount);
+        LogManager.Instance.PlayStartLog(tryCount);
         funnelType = GameLog.FunnelType.Minite_1;
         MiniteCount(token.Token).Forget();
     }
@@ -138,7 +139,7 @@ public class GameManager : MonoSingleton<GameManager>
             stageLevel++;
 
             await UniTask.Delay(TimeSpan.FromMinutes(1), cancellationToken: token);
-            //LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)funnelType);
+            LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)funnelType);
             funnelType++;
         }
     }

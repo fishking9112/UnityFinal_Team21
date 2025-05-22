@@ -226,7 +226,7 @@ public class GameLog
     public const string leastSummon_ID = "LeastSummonID";
     public const string leastSummonCnt = "LeastSummon";
     public const string MVP_ID = "MVPID";
-
+    public const string tryCount = "tryCount";
 
     public enum Contents
     {
@@ -263,6 +263,7 @@ public class GameLog
         Lobby,
         TouchPlay,
         EnterInGame,
+        Tutorial,
         Minite_1,
         Minite_2,
         Minite_3,

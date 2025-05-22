@@ -198,7 +198,8 @@ public class QueenEnhanceUI : SingleUI
     /// </summary>
     private List<QueenEnhanceInfo> GetRandomInhanceOptions()
     {
-        List<QueenEnhanceInfo> availableList = new List<QueenEnhanceInfo>();
+        List<QueenEnhanceInfo> addSkillList = new List<QueenEnhanceInfo>();
+        List<QueenEnhanceInfo> otherList = new List<QueenEnhanceInfo>();
 
         foreach (var pair in DataManager.Instance.queenEnhanceDic)
         {
@@ -208,16 +209,32 @@ public class QueenEnhanceUI : SingleUI
             acquiredEnhanceLevels.TryGetValue(id, out int currentLevel);
 
             if (currentLevel < info.maxLevel)
-                availableList.Add(info);
+            {
+                if (info.type == QueenEnhanceType.AddSkill)
+                {
+                    addSkillList.Add(info);
+                }
+                else
+                {
+                    otherList.Add(info);
+                }
+            }
         }
 
         List<QueenEnhanceInfo> result = new List<QueenEnhanceInfo>();
 
-        while (result.Count < 3 && availableList.Count > 0)
+        if (addSkillList.Count > 0)
         {
-            int index = UnityEngine.Random.Range(0, availableList.Count);
-            result.Add(availableList[index]);
-            availableList.RemoveAt(index);
+            int index = UnityEngine.Random.Range(0, addSkillList.Count);
+            result.Add(addSkillList[index]);
+            otherList.RemoveAt(index);
+        }
+
+        while (result.Count < 3 && otherList.Count > 0)
+        {
+            int index = UnityEngine.Random.Range(0, otherList.Count);
+            result.Add(otherList[index]);
+            otherList.RemoveAt(index);
         }
 
         return result;
