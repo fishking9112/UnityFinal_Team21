@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AttackAreaEvent : GameEventBase
 {
-    private EventTableInfo tableInfo;
+    private EventInfo tableInfo;
     private MiniBarrack barrackInstance;
     public float spawnDuration;
     public float spawnCurrentDuration;
@@ -11,7 +11,7 @@ public class AttackAreaEvent : GameEventBase
 
 
     // 생성자에서 성 프리팹과 위치 전달
-    public AttackAreaEvent(MiniBarrack barrackInstance, Vector2 spawnPosition, float spawnDuration, EventTableInfo eventTableInfo, GameEventContextUI contextUI)
+    public AttackAreaEvent(MiniBarrack barrackInstance, Vector2 spawnPosition, float spawnDuration, EventInfo eventTableInfo, GameEventContextUI contextUI)
     {
         this.barrackInstance = barrackInstance;
         this.spawnPosition = spawnPosition;
