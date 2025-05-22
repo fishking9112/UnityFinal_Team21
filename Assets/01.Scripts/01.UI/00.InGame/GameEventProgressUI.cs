@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class ScheduledEvent
 {
-    public EventTableInfo eventInfo;
+    public EventInfo eventInfo;
     public float triggerProgress;
     public Image icon;
 
-    public ScheduledEvent(EventTableInfo info, float progress, Image iconObj)
+    public ScheduledEvent(EventInfo info, float progress, Image iconObj)
     {
         eventInfo = info;
         triggerProgress = progress;
@@ -96,7 +96,7 @@ public class GameEventProgressUI : MonoBehaviour
     /// 이벤트 실행
     /// </summary>
     /// <param name="eventTableInfo"></param>
-    private void RunEvent(EventTableInfo eventTableInfo)
+    private void RunEvent(EventInfo eventTableInfo)
     {
         Utils.Log($"{eventTableInfo.ID} 이벤트 실행!");
 
