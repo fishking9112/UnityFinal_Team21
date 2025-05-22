@@ -1,10 +1,18 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MiniMapClick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
+    private RawImage rawImage;
     public CameraController cameraController => GameManager.Instance.cameraController;
     private bool isDragging = false;
+
+    private void Start()
+    {
+        rawImage = GetComponent<RawImage>();
+        rawImage.texture = GameManager.Instance.cameraController.renderTexture;
+    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
