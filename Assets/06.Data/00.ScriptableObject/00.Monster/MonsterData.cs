@@ -16,9 +16,10 @@ public enum MonsterBrood
 {
     NULL,
     None,
-    Slime,
+    Elf,
     Orc,
     Skeleton,
+    DarkElf,
 }
 
 [Serializable]
