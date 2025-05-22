@@ -20,7 +20,12 @@ public class HealWaveSkill : QueenActiveSkillBase
             if (MonsterManager.Instance.monsters.TryGetValue(hit.gameObject, out var monster))
             {
                 monster.Heal(info.value);
-                ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", monster.transform.position + new Vector3(0, 0.1f, 0), new Vector3(0.1f, 0.1f, 1f), Quaternion.identity, monster.transform);
+
+                Vector3 targetScale = monster.transform.localScale;
+                Vector3 particlePos = monster.transform.position + new Vector3(0, targetScale.y * 0.1f, 0);
+                Vector3 particleScale = targetScale * 0.1f;
+
+                ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", particlePos, particleScale, Quaternion.identity, monster.transform);
             }
         }
     }
