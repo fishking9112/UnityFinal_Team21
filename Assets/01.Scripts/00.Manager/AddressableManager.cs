@@ -81,7 +81,7 @@ public class AddressableManager : MonoSingleton<AddressableManager>
         {
             var list = Addressables.LoadAssetsAsync<T>(label, (obj) =>
             {
-                Debug.Log(obj.ToString());
+                // Debug.Log(obj.ToString());
             }).WaitForCompletion();
             List<T> assets = list != null ? new List<T>(list) : new List<T>();
             return assets;
