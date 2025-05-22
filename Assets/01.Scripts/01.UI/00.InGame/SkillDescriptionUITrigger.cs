@@ -19,13 +19,18 @@ public class SkillDescriptionUITrigger : MonoBehaviour, IPointerEnterHandler, IP
                     info.name,
                     info.description,
                     $"{info.coolTime}초",
-                    $"{info.cost}초"
+                    $"{info.cost}"
                 );
             }
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
+    {
+        descriptionUI.HideUI();
+    }
+
+    private void OnDisable()
     {
         descriptionUI.HideUI();
     }
