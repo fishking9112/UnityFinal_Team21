@@ -29,4 +29,9 @@ public class SkillDescriptionUITrigger : MonoBehaviour, IPointerEnterHandler, IP
     {
         descriptionUI.HideUI();
     }
+
+    private void OnDisable()
+    {
+        descriptionUI.HideUI();
+    }
 }
