@@ -26,4 +26,9 @@ public class MonsterDescriptionTrigger : MonoBehaviour, IPointerEnterHandler, IP
     {
         descriptionUI.HideUI();
     }
+
+    private void OnDisable()
+    {
+        descriptionUI.HideUI();
+    }
 }

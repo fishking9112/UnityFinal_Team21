@@ -14,7 +14,11 @@ public class OverworkSkill : QueenActiveSkillBase
     }
     public override void UseSkill()
     {
-        skillParticle = ParticleManager.Instance.SpawnParticle("Overwork", GameManager.Instance.castle.transform.position, new Vector3(1.5f, 1.5f, 1.5f));
+        Vector3 targetScale = GameManager.Instance.castle.transform.localScale;
+        Vector3 particlePos = GameManager.Instance.castle.transform.position;
+        Vector3 particleScale = targetScale * 1.5f;
+
+        skillParticle = ParticleManager.Instance.SpawnParticle("Overwork", particlePos, particleScale);
         condition.AdjustCurSummonGauge(condition.MaxSummonGauge.Value);
         returnToValue = condition.SummonGaugeRecoverySpeed;
         condition.AdjustSummonGaugeRecoverySpeed(-returnToValue);

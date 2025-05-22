@@ -212,9 +212,7 @@ public class GameResultUI : SingleUI
         popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
         popupUIAbilityName.text = info.name;
 
-        float previewValue = currentLevel == 0
-            ? info.state_Base
-            : info.state_Base + (info.state_LevelUp * currentLevel);
+        float previewValue = (currentLevel / 2f) * (2 * info.state_Base + (currentLevel - 1) * info.state_LevelUp);
 
         string formattedValue = QueenEnhanceStatusUI.PercentValueTypes.Contains(info.valueType)
             ? $"{previewValue * 100:F0}%"

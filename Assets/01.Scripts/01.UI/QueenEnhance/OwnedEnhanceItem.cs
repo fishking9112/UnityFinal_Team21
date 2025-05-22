@@ -8,7 +8,7 @@ public class OwnedEnhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
     [SerializeField] private GameObject selectedUI;
     [SerializeField] private Image enhanceIcon;
 
-    private QueenEnhanceUI queenEnhanceUI;
+    private QueenEnhanceStatusUI queenEnhanceStatusUI;
     private GameResultUI gameResultUI;
 
     private int enhanceID;
@@ -32,7 +32,7 @@ public class OwnedEnhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
         else
         {
-            queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
+            queenEnhanceStatusUI = GetComponentInParent<QueenEnhanceStatusUI>();
         }
     }
 
@@ -49,7 +49,7 @@ public class OwnedEnhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
         else
         {
-            var statusUI = queenEnhanceUI.QueenEnhanceStatusUI;
+            var statusUI = queenEnhanceStatusUI;
             statusUI.DescriptionPopupUI.SetActive(true);
             statusUI.SetDescriptionPopupUIInfo(enhanceID);
             statusUI.FollowMouse(followMouseCTS.Token).Forget();
@@ -69,7 +69,7 @@ public class OwnedEnhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
         else
         {
-            queenEnhanceUI.QueenEnhanceStatusUI.DescriptionPopupUI.SetActive(false);
+            queenEnhanceStatusUI.DescriptionPopupUI.SetActive(false);
         }
 
         selectedUI.SetActive(false);
