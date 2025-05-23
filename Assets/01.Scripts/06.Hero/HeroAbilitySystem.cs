@@ -6,7 +6,8 @@ using System.Threading;
 
 public abstract class HeroAbilitySystem : MonoBehaviour
 {
-    public HeroAbilityInfo heroAbilityInfo;
+    private HeroAbilityInfo heroAbilityInfo;
+    private HeroAbilityLevelUpInfo heroAbilityLevelUpInfo;
 
     protected GameObject target;
 
@@ -34,6 +35,9 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     [SerializeField] protected float countDelay;
     [SerializeField] protected float countDelay_LevelUp;
     [SerializeField] protected float knockback;
+    [SerializeField] protected float damage_Delay;
+    [SerializeField] protected float damage_Range;
+
     [SerializeField] protected int curLevel;
 
 
@@ -43,6 +47,8 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     {
         heroAbilityInfo = DataManager.Instance.heroAbilityDic[id];
 
+        heroAbilityLevelUpInfo = DataManager.Instance.heroAbilityLevelUpDic[heroAbilityInfo.levelUp_ID];
+
         Init();
     }
 
@@ -50,25 +56,27 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     {
         id = heroAbilityInfo.id;
         delay = heroAbilityInfo.delay_Base;
-        delay_LevelUp = heroAbilityInfo.delay_LevelUp;
+        delay_LevelUp = heroAbilityLevelUpInfo.delay_LevelUp;
         damage = heroAbilityInfo.damage_Base;
-        damage_LevelUp = heroAbilityInfo.damage_LevelUp;
+        damage_LevelUp = heroAbilityLevelUpInfo.damage_LevelUp;
         pierce = heroAbilityInfo.piercing_Base;
-        pierce_LevelUp = heroAbilityInfo.piercing_LevelUp;
+        pierce_LevelUp = heroAbilityLevelUpInfo.piercing_LevelUp;
         size = heroAbilityInfo.size_Base;
-        size_LevelUp = heroAbilityInfo.size_LevelUp;
+        size_LevelUp = heroAbilityLevelUpInfo.size_LevelUp;
         type = heroAbilityInfo.type;
         speed = heroAbilityInfo.speed_Base;
-        speed_LevelUp = heroAbilityInfo.speed_LevelUp;
+        speed_LevelUp = heroAbilityLevelUpInfo.speed_LevelUp;
         rotateSpeed = heroAbilityInfo.rotateSpeed_Base;
-        rotateSpeed_LevelUp = heroAbilityInfo.rotateSpeed_LevelUp;
+        rotateSpeed_LevelUp = heroAbilityLevelUpInfo.rotateSpeed_LevelUp;
         duration = heroAbilityInfo.duration_Base;
-        duration_LevelUp = heroAbilityInfo.duration_LevelUp;
+        duration_LevelUp = heroAbilityLevelUpInfo.duration_LevelUp;
         count = heroAbilityInfo.count_Base;
-        count_LevelUp = heroAbilityInfo.count_LevelUp;
+        count_LevelUp = heroAbilityLevelUpInfo.count_LevelUp;
         countDelay = heroAbilityInfo.countDelay_Base;
-        countDelay_LevelUp = heroAbilityInfo.countDelay_LevelUp;
-        knockback = 1; // 임시 값
+        countDelay_LevelUp = heroAbilityLevelUpInfo.countDelay_LevelUp;
+        knockback = heroAbilityInfo.knockback;
+        damage_Delay = heroAbilityInfo.damage_Delay;
+        damage_Range= heroAbilityInfo.damage_Range;
         maxLevel = heroAbilityInfo.maxLevel;
         pivot = heroAbilityInfo.pivot;
         curLevel = 1;
@@ -94,7 +102,7 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         {
             while (!tk.IsCancellationRequested && this != null)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, tk,true);
+                await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, cancellationToken: tk);
 
                 if (tk.IsCancellationRequested || this == null)
                 {

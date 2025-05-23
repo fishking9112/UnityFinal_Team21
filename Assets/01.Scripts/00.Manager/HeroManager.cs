@@ -3,15 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class HeroManager : MonoSingleton<HeroManager>
 {
     public Dictionary<GameObject, HeroController> hero = new Dictionary<GameObject, HeroController>();
-
-    private List<int> idList = new List<int>();
-    private List<int> levelList = new List<int>();
 
     public Dictionary<int, HeroAbilitySystem> allAbilityDic = new Dictionary<int, HeroAbilitySystem>();
 
@@ -23,6 +19,8 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private float time;
     private int heroCnt;
+
+    private List<GameObject> heroList = new();
 
     private void Start()
     {
@@ -36,7 +34,7 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private async UniTask IncreaseCnt(CancellationToken tk)
     {
-        while(!tk.IsCancellationRequested)
+        while (!tk.IsCancellationRequested)
         {
             await UniTask.Delay(TimeSpan.FromMinutes(1), cancellationToken: this.GetCancellationTokenOnDestroy());
             heroCnt++;
@@ -60,11 +58,11 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private void SetNextHero()
     {
-        int cnt = DataManager.Instance.heroStatusDic.Count;
+        var list = DataManager.Instance.heroStatusDic.Where(x => x.Value.heroType == HeroType.NORMAL).Select(x=>x.Value).ToList();
 
-        int rand = UnityEngine.Random.Range(0, cnt);
+        var val = list[UnityEngine.Random.Range(0, list.Count)];
 
-        statusInfo = DataManager.Instance.heroStatusDic.ElementAt(rand).Value;
+        statusInfo = val;
 
     }
 
@@ -76,10 +74,47 @@ public class HeroManager : MonoSingleton<HeroManager>
             return;
         }
 
-        HeroController hero = HeroPoolManager.Instance.GetObject(RandomSummonPos(98, 98));
+        HeroController hero = HeroPoolManager.Instance.GetObject(SpawnPointManager.Instance.heroPoint.GetRandomPosition());
         hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI);
     }
 
+    public List<GameObject> SummonHeros(Vector2 v, int count, bool isEventMark = true)
+    {
+        heroList.Clear();
+
+        for (int i = 0; i < count; i++)
+        {
+            SetNextHero();
+            HeroController hero = HeroPoolManager.Instance.GetObject(GetRandomPos(v, 3));
+            hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI, isEventMark);
+            heroList.Add(hero.gameObject);
+        }
+        return heroList;
+    }
+
+    public GameObject SummonBoss(Vector2 v, int type, bool isEventMark = true)
+    {
+        //int cnt = DataManager.Instance.heroStatusDic.Select(x=>x.Value.id==201);
+
+        statusInfo = DataManager.Instance.heroStatusDic[type];
+
+        // HeroController boss = HeroPoolManager.Instance.GetBossObject(RandomSummonPos(90, 90));
+        HeroController boss = HeroPoolManager.Instance.GetBossObject(GetRandomPos(v, 3));
+        boss?.StatInit(statusInfo, HeroManager.Instance.isHealthUI, isEventMark);
+
+        return boss.gameObject;
+
+    }
+
+    private Vector2 GetRandomPos(Vector2 pos, float radius = 3f)
+    {
+        float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2);
+        float distance = UnityEngine.Random.Range(0f, radius);
+        float x = pos.x + Mathf.Cos(angle) * distance;
+        float y = pos.y + Mathf.Sin(angle) * distance;
+        return new Vector2(x, y);
+
+    }
 
     private Vector2 RandomSummonPos(float width, float height, float edge = 5f)
     {

@@ -1,18 +1,47 @@
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QueenEnhanceStatusUI : MonoBehaviour
 {
+    [Header("UI Component")]
     [SerializeField] private QueenCondition queenCondition;
+    [SerializeField] private Transform descriptionPopupUI;
+    public GameObject DescriptionPopupUI => descriptionPopupUI.gameObject;
     [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private TextMeshProUGUI enhanceText;
+
+    [Header("DescriptionPopupUI")]
+    [SerializeField] private Image popupUIAbilityImage;
+    [SerializeField] private TextMeshProUGUI popupUIAbilityName;
+    [SerializeField] private TextMeshProUGUI popupUIAbilityDec;
+    [SerializeField] private TextMeshProUGUI popupUIAbilityLevel;
+
+    [Header("EnhanceGrid")]
+    [SerializeField] private Transform enhanceContent;
+    [SerializeField] private OwnedEnhanceItem prefabsOwnedEnhanceItem;
 
     // 앞으로 추가될 퍼센트 타입들도 여기 넣으면 됨
     public static readonly HashSet<ValueType> PercentValueTypes = new HashSet<ValueType>
     {
         ValueType.MoveSpeed,
     };
+
+    /// <summary>
+    /// 팝업 UI가 마우스를 따라다니도록 위치를 계속 갱신합니다.
+    /// </summary>
+    public async UniTaskVoid FollowMouse(CancellationToken token)
+    {
+        while (DescriptionPopupUI.activeSelf)
+        {
+            descriptionPopupUI.position = Input.mousePosition;
+            await UniTask.Yield();
+        }
+    }
 
     /// <summary>
     /// 퀸의 상태 정보를 설정합니다.
@@ -30,31 +59,43 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         if (queenCondition == null)
             SetQueenCondition(GameManager.Instance.queen.condition);
 
-        var builder = new StringBuilder();
+        var statusBuilder = new StringBuilder();
+        var enhanceBuilder = new StringBuilder();
 
-        // 마나 표시
-        AppendManaStatus(builder);
+        // 마나, 게이지, 체력 상태
+        AppendManaStatus(statusBuilder);
+        AppendSummonGaugeStatus(statusBuilder);
+        AppendSummonRegenStatus(statusBuilder);
+        AppendCastleHpStatus(statusBuilder);
+        AppendCastleHpRegenStatus(statusBuilder);
 
-        // 소환 게이지 표시
-        AppendSummonGaugeStatus(builder);
+        // 종족 강화 효과는 별도 builder 사용
+        AppendBroodEnhanceStatus(enhanceBuilder);
 
-        // 소환 회복량 표시
-        AppendSummonRegenStatus(builder);
+        // 텍스트 UI에 각각 설정
+        statusText.text = statusBuilder.ToString();
+        enhanceText.text = enhanceBuilder.ToString();
 
-        // 캐슬 체력 표시
-        AppendCastleHpStatus(builder);
+        descriptionPopupUI.gameObject.SetActive(false);
 
-        // 캐슬 회복량 표시
-        AppendCastleHpRegenStatus(builder);
+        GenerateOwnedEnhanceItems();
+    } 
 
-        builder.AppendLine();
-        builder.AppendLine("─────────────────");
-        builder.AppendLine();
+    private void GenerateOwnedEnhanceItems()
+    {
+        foreach (Transform child in enhanceContent)
+        {
+            Destroy(child.gameObject);
+        }
 
-        // 종족별 강화 효과 표시 (MonsterPassive만)
-        AppendBroodEnhanceStatus(builder);
+        QueenEnhanceUI queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
 
-        statusText.text = builder.ToString();
+
+        foreach(var items in queenEnhanceUI.AcquiredEnhanceLevels)
+        {
+            OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, enhanceContent);
+            ownedEnhanceItem.SetEnhanceItem(items.Key, false);
+        }
     }
 
     /// <summary>
@@ -67,7 +108,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         builder.AppendLine($"마나 : {(int)curMana} / {(int)maxMana}");
 
         // 마나 회복량 = 기본 회복량 + 강화 효과
-        float manaRegenBase = queenCondition.initQueenActiveSkillGaugeRecoverySpeed;
+        float manaRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].mana_Recorvery;
         float manaRegenEnhance = queenCondition.QueenActiveSkillGaugeRecoverySpeed - manaRegenBase;
         builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / sec");
     }
@@ -87,7 +128,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendSummonRegenStatus(StringBuilder builder)
     {
-        float summonRegenBase = queenCondition.initSummonGaugeRecoverySpeed;
+        float summonRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].summon_Recorvery;
         float summonRegenEnhance = queenCondition.SummonGaugeRecoverySpeed - summonRegenBase;
         builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / sec");
     }
@@ -169,5 +210,36 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     private string FormatNumber(float value)
     {
         return value % 1 == 0 ? ((int)value).ToString() : value.ToString("F1");
+    }
+
+    /// <summary>
+    /// 보유 현황의 마우스 오버 팝업창UI 표기
+    /// </summary>
+    /// <param name="enhanceID"></param>
+    public void SetDescriptionPopupUIInfo(int enhanceID)
+    {
+        QueenEnhanceInfo info = DataManager.Instance.queenEnhanceDic[enhanceID];
+
+        int currentLevel = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
+
+        popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
+        popupUIAbilityName.text = info.name;
+
+        float previewValue = (currentLevel / 2f) * (2 * info.state_Base + (currentLevel - 1) * info.state_LevelUp);
+
+        string formattedValue = PercentValueTypes.Contains(info.valueType)
+            ? $"{previewValue * 100:F0}%"
+            : $"{previewValue}";
+
+        popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
+
+        if (info.type != QueenEnhanceType.AddSkill)
+        {
+            popupUIAbilityLevel.text = "Lv. " + StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.AcquiredEnhanceLevels[enhanceID].ToString();
+        }
+        else
+        {
+            popupUIAbilityLevel.text = "-";
+        }
     }
 }

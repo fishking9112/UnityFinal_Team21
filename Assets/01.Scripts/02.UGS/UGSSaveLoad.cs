@@ -137,6 +137,7 @@ public class UGSSaveLoad : MonoBehaviour
 
                 // 데이터 적용
                 OnLoadComplete(saveData);
+                Utils.Log("저장된 데이터 적용 완료");
             }
             else
             {

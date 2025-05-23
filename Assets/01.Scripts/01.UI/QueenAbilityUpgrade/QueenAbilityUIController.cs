@@ -8,7 +8,9 @@ public class QueenAbilityUIController : MonoBehaviour
     [SerializeField] private Transform contentTransform;
     public Transform ContentTransform => contentTransform;
 
+    [SerializeField] private GameObject UIPanel;
     [SerializeField] private Button resetButton;
+    [SerializeField] private Button clostButton;
     [SerializeField] private RectTransform descriptionPopupUI;
     [SerializeField] private TextMeshProUGUI popupUIAbilityName;
     [SerializeField] private TextMeshProUGUI popupUIAbilityDec;
@@ -24,7 +26,7 @@ public class QueenAbilityUIController : MonoBehaviour
     /// </summary>
     private void OnValidate()
     {
-        if(popupUIAbilityName == null)
+        if (popupUIAbilityName == null)
         {
             popupUIAbilityName = descriptionPopupUI.Find("AbilityNameText").GetComponent<TextMeshProUGUI>();
             popupUIAbilityDec = descriptionPopupUI.Find("AbilityDecText").GetComponent<TextMeshProUGUI>();
@@ -32,7 +34,7 @@ public class QueenAbilityUIController : MonoBehaviour
             popupUIAbilityImage = descriptionPopupUI.Find("AbilityIcon").GetComponent<Image>();
         }
 
-        if(uiQueenAbilityPanelRoot == null)
+        if (uiQueenAbilityPanelRoot == null)
         {
             uiQueenAbilityPanelRoot = transform.Find("UIQueenAbilityPanelRoot").gameObject;
         }
@@ -48,6 +50,11 @@ public class QueenAbilityUIController : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        UGSManager.Instance.SaveLoad.SaveAsync().Forget();
+    }
+
     /// <summary>   
     /// 시작 시 매니저가 생성될 때까지 대기한 뒤 UI를 초기화합니다.
     /// </summary>
@@ -57,9 +64,18 @@ public class QueenAbilityUIController : MonoBehaviour
         QueenAbilityUpgradeManager.Instance.SetQueenAbilityUIController(this);
         resetButton.onClick.RemoveAllListeners();
         resetButton.onClick.AddListener(OnClickResetButton);
+        clostButton.onClick.AddListener(() => UIPanel.SetActive(false));
         gameObject.SetActive(true);
         uiQueenAbilityPanelRoot.SetActive(true);
         descriptionPopupUI.gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (isFollowingMouse && descriptionPopupUI.gameObject.activeSelf)
+        {
+            descriptionPopupUI.position = Input.mousePosition;
+        }
     }
 
     /// <summary>
@@ -71,28 +87,15 @@ public class QueenAbilityUIController : MonoBehaviour
     {
         popupUIAbilityName.text = info.name;
         popupUIAbilityDec.text = info.description;
-        popupUIAbilityCost.text = currentLevel >= info.maxLevel? "―" : info.levelInfo[currentLevel].cost.ToString();
+        popupUIAbilityCost.text = currentLevel >= info.maxLevel ? "―" : info.levelInfo[currentLevel].cost.ToString();
 
         popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
 
         descriptionPopupUI.gameObject.SetActive(true);
         descriptionPopupUI.position = Input.mousePosition;
 
-        // 마우스를 따라다니는 UniTask 시작
+        // 마우스 따라다니기 시작
         isFollowingMouse = true;
-        FollowMouse().Forget();
-    }
-
-    /// <summary>
-    /// 팝업 UI가 마우스를 따라다니도록 위치를 계속 갱신합니다.
-    /// </summary>
-    private async UniTaskVoid FollowMouse()
-    {
-        while (isFollowingMouse && descriptionPopupUI.gameObject.activeSelf)
-        {
-            descriptionPopupUI.position = Input.mousePosition;
-            await UniTask.Yield();
-        }
     }
 
     /// <summary>

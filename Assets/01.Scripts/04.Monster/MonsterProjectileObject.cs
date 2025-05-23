@@ -35,9 +35,7 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
     private Rigidbody2D _rigidbody;
     public BoxCollider2D _boxCollider;
 
-    private float bulletSpeed = 5f;
-    private float bulletSize = 1f;
-    float finalAttackDamage => baseController.statData.attack * baseController.buffAttackDamage;
+    float finalAttackDamage => baseController.statHandler.attack.Value;
 
     private void Awake()
     {
@@ -45,7 +43,7 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
         pivot = transform.GetChild(0);
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (!isReady)
         {
@@ -59,7 +57,7 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
             DestroyProjectile(transform.position, false);
         }
 
-        _rigidbody.velocity = direction * bulletSpeed;
+        _rigidbody.velocity = direction * baseController.monsterInfo.projectile_speed * 5;
     }
 
     /// <summary>
@@ -72,7 +70,7 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
         this.baseController = baseController;
         this.direction = direction;
         currentDuration = 0;
-        transform.localScale = Vector3.one * bulletSize;
+        transform.localScale = Vector3.one * baseController.monsterInfo.projectile_size;
 
         transform.right = this.direction;
 
@@ -94,20 +92,19 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
         }
         else if (baseController.attackLayer.value == (baseController.attackLayer.value | (1 << collision.gameObject.layer)))
         {
-            //? LATE : 나중에 한곳에 몰아야 할 듯(Hero나 Monster나)
             if (HeroManager.Instance.hero.ContainsKey(collision.gameObject))
             {
                 HeroManager.Instance.hero[collision.gameObject].TakeDamaged(finalAttackDamage);
                 var id = baseController.monsterInfo.id;
                 StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[id].allDamage += finalAttackDamage;
             }
-            // BaseController target = MonsterManager.Instance.testTarget.GetComponent<BaseController>();
-            // if (target != null)
-            // {
-            //     target.TakeDamaged(baseController.statData.attack);
-            //     //? LATE : 넉백 적용 할 것
-            // }
 
+            else if (GameManager.Instance.miniBarracks.ContainsKey(collision.gameObject))
+            {
+                GameManager.Instance.miniBarracks[collision.gameObject].TakeDamaged(finalAttackDamage);
+                var id = baseController.monsterInfo.id;
+                StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[id].allDamage += finalAttackDamage;
+            }
             DestroyProjectile(collision.ClosestPoint(transform.position), fxOnDestory);
         }
     }
@@ -124,7 +121,7 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
             // TODO : 화살 충돌 후 터지는 파티클
             // ex) projectileManager.CreateImpactParticlesAtPostion(position, rangeWeaponHandler);
         }
-
+        transform.localScale = Vector2.one;
         isReady = false;
         OnDespawn();
     }

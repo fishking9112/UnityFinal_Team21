@@ -28,7 +28,7 @@ public class NicknameRegisterUI : MonoBehaviour
         await UGSManager.Instance.Auth.SaveNicknameAsync(nickname);
         nicknamePanel.SetActive(false);
 
-        // 닉네임 등록 완료 후 게임 흐름 재시작
-        await UGSManager.Instance.StartGameFlowAsync();
+        // UGSManager에게 등록 완료 알림
+        UGSManager.Instance.CompleteNicknameRegistration();
     }
 }

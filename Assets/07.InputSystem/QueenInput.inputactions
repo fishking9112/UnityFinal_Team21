@@ -69,6 +69,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "CloseWindow",
+                    "type": "Button",
+                    "id": "d553e196-3bb1-460e-96d1-c9c71aa4cad4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "PauseUI",
                     "type": "Button",
                     "id": "53203828-9d1f-4ce6-b15b-7b3bec352c47",
@@ -283,6 +292,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SlotChange",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d85f5ee9-2413-40a2-8756-d4c3cf67e949",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CloseWindow",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

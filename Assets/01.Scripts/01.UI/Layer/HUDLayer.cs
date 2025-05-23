@@ -6,21 +6,21 @@ public class HUDLayer : MonoBehaviour
 {
     [NonSerialized] private HUDUI currentHUD; // 인스턴스화된 HUD (HUDUI를 부모로 둔 자식 인스턴스)
 
-    public async UniTask LoadHUD(string sceneName)
+    public async UniTask LoadHUD(LoadSceneEnum sceneEnum)
     {
         // 활성화 되어 있던 HUD 반납
         await UnloadCurrentHUD();
 
-        switch (sceneName)
+        switch (sceneEnum)
         {
-            case "LoginScene":
+            case LoadSceneEnum.AppScene: // 로그인 씬 일 경우
                 break;
-            case "MenuScene":
+            case LoadSceneEnum.MenuScene: // 메뉴 씬 일 경우
                 MenuHUD menuHUD = await LoadCurrentHUD("MenuHUD") as MenuHUD;
                 // menuHUD.Setup();
 
                 break;
-            case "GameScene":
+            case LoadSceneEnum.GameScene: // 게임 씬 일 경우
                 GameHUD gameHUD = await LoadCurrentHUD("GameHUD") as GameHUD;
 
                 break;

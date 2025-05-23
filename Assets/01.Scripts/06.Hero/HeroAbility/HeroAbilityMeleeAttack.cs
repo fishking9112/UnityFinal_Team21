@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Threading;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     private LayerMask targetLayer;
 
+    private CancellationTokenSource tk;
 
     public override void Initialize(int id)
     {
@@ -30,40 +32,62 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     private void OnEnable()
     {
         Initialize((int)IDHeroAbility.SWORD);
-
+        tk = new CancellationTokenSource();
     }
     protected override void ActionAbility()
     {
-        if (hero == null)
+        if (hero == null || token.IsCancellationRequested)
         {
             return;
         }
 
         target = hero.FindNearestTarget();
-        SwingSword().Forget();
+        SwingSword(tk.Token).Forget();
     }
 
-    private async UniTaskVoid SwingSword()
+    private async UniTaskVoid SwingSword(CancellationToken tk)
     {
         float angle;
 
         if (target == null)
         {
-            angle = 0;
+            animator.SetBool("1_Move", true);
+            animator.SetBool("2_Attack", false);
+            return;
         }
         else
         {
             angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
                 target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
+
+            animator.SetBool("1_Move", false);
+            animator.SetBool("2_Attack", true);
+
+            await UniTask.Delay(300, false, PlayerLoopTiming.Update, cancellationToken: this.GetCancellationTokenOnDestroy());
+            SpawnSwingSwordParticle(angle);
         }
-        animator.SetBool("2_Attack", true);
-        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f);
+
+        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f, cancellationToken: tk);
 
         // 충돌처리
         OverlapCheck(angle);
 
-        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
+        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f, cancellationToken: tk);
 
+    }
+
+    public void SpawnSwingSwordParticle(float angle)
+    {
+        if (target == null)
+        {
+            return;
+        }
+
+        Vector3 spawnPos = hero.transform.position + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * 0.5f;
+
+        ParticleObject particle = ParticleManager.Instance.SpawnParticle("HeroAbilityMeleeAttack", spawnPos, new Vector3(0.5f, 0.5f, 1f));
+        var main = particle.particle.main;
+        main.startRotation = angle - 90f;
     }
 
     public override void AbilityLevelUp()
@@ -82,6 +106,7 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         {
             if (MonsterManager.Instance.monsters.TryGetValue(c.gameObject, out var monster))
             {
+                monster.TakeKnockback(this.transform, knockback);
                 monster.TakeDamaged(damage);
             }
             else if (GameManager.Instance.castle.gameObject == c.gameObject)
@@ -93,9 +118,14 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     public override void DespawnAbility()
     {
+        animator.SetBool("1_Move", false);
+        animator.SetBool("2_Attack", false);
+
         animator.SetBool("4_Death", true);
         token?.Cancel();
         token?.Dispose();
+        tk?.Cancel();
+        tk?.Dispose();
     }
     public override void SetAbilityLevel(int level)
     {
@@ -103,4 +133,5 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
         token = new CancellationTokenSource();
 
     }
+
 }

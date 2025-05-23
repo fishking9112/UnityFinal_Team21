@@ -13,8 +13,8 @@ public class SoundManager : MonoSingleton<SoundManager>
     [SerializeField] private int poolSize = 10; // 최초 풀 크기
     private Queue<AudioSource> audioSourcePool; // 오브젝트 풀
 
-    private float bgmVolume = 1f;
-    private float sfxVolume = 1f; 
+    private float bgmVolume = 0f;
+    private float sfxVolume = 0f;
     public float BGMVolume => bgmVolume;
     public float SFXVolume => sfxVolume;
 
@@ -36,10 +36,10 @@ public class SoundManager : MonoSingleton<SoundManager>
         // Addressables 사용으로 임시 주석 처리
         // Dictionary 초기화
         soundDict = new Dictionary<string, AudioClip>();
-        // foreach (var clip in audioClips)
-        // {
-        //     soundDict[clip.name] = clip;
-        // }
+        foreach (var clip in audioClips)
+        {
+            soundDict[clip.name] = clip;
+        }
 
         // BGM 플레이어 초기화
         bgmPlayer = gameObject.AddComponent<AudioSource>();
@@ -265,5 +265,10 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void SetSFXVolume(float volume)
     {
         sfxVolume = Mathf.Clamp01(volume);
+    }
+
+    public bool TryGetClip(string name, out AudioClip clip)
+    {
+        return soundDict.TryGetValue(name, out clip);
     }
 }

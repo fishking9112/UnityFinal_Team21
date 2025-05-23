@@ -6,11 +6,9 @@ using UnityEngine;
 public enum BuffType
 {
     NULL,
-    ATTACK_DMG,
-    ATTACK_SPEED,
-    MOVE_SPEED,
-    POISON,
-    BURN,
+    BUff,
+    Debuff,
+    Aura,
 }
 
 [Serializable]

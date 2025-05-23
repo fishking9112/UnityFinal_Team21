@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -44,8 +45,10 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         iconImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
         enhanceNameText.text = info.name;
-        enhanceNextLevelText.text = nextLevel >= info.maxLevel ? $"Lv. {nextLevel}(Max)" : $"Lv. {nextLevel}";
-        enhanceTypeText.text = info.type.ToString();
+
+        enhanceNextLevelText.text = info.type == QueenEnhanceType.AddSkill ? string.Empty : (nextLevel >= info.maxLevel ? $"Lv. {nextLevel}(Max)" : $"Lv. {nextLevel}");
+
+        enhanceTypeText.text = GetEnhanceTypeText(info.type);
 
         float previewValue = currentLevel == 0
             ? info.state_Base
@@ -56,6 +59,28 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
             : $"{previewValue}";
 
         enhanceDecText.text = info.description.Replace("n", formattedValue);
+
+        if(info.skill_ID != 0)
+        {
+            enhanceDecText.text += $"\n\n<color=#FFB600>* {DataManager.Instance.queenActiveSkillDic[info.skill_ID].name} : {DataManager.Instance.queenActiveSkillDic[info.skill_ID].description}</color>";
+        }
+    }
+
+    /// <summary>
+    /// 강화의 타입의 따라 표기 텍스트 분류
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    private string GetEnhanceTypeText(QueenEnhanceType type)
+    {
+        return type switch
+        {
+            QueenEnhanceType.Point => "포인트",
+            QueenEnhanceType.QueenPassive => "여왕 강화",
+            QueenEnhanceType.MonsterPassive => "몬스터 강화",
+            QueenEnhanceType.AddSkill => "스킬 습득",
+            _ => "알 수 없음"
+        };
     }
 
     /// <summary>
@@ -105,6 +130,8 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         isSelected = true;
 
+        bool PassPopup = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.ApplyInhance(currentInfo);
+
         targetTransform.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutBounce).SetUpdate(true)
             .OnComplete(() =>
             {
@@ -118,11 +145,16 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 // 연출을 위해 0.1초 정도 텀을 주고 종료
                 DOVirtual.DelayedCall(0.1f, () =>
                 {
-                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.ApplyInhance(currentInfo);
-                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.CloseUI();
+                    if (PassPopup)
+                    {
+                        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.CloseUI();
+                    }
                 });
             });
 
-        GameManager.Instance.queen.condition.EnhancePoint--;
+        if (PassPopup)
+        {
+            GameManager.Instance.queen.condition.EnhancePoint--;
+        }
     }
 }

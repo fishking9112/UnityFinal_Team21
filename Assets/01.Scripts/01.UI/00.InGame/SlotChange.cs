@@ -8,6 +8,9 @@ public class SlotChange : MonoBehaviour
     public CanvasGroup monsterGroup;
     public RectTransform queenActiveSkillGroupTransform;
     public RectTransform monsterGroupTransform;
+    public RectTransform panelTransform;
+    public GameObject skillSlotNumGroup;
+    public GameObject monsterSlotNumGroup;
 
     public GameObject queenActiveSkillGauge;
     public GameObject summonGauge;
@@ -21,19 +24,24 @@ public class SlotChange : MonoBehaviour
 
     private InputAction inputAction;
 
-    private void Start()
+    public void Init(QueenController queenController, InputAction slotChangeAction)
     {
-        controller = GameManager.Instance.queen.controller;
-        inputAction = GameManager.Instance.queen.input.actions["SlotChange"];
-        inputAction.started += OnChangeSlots;
+        controller = queenController;
+        slotChangeAction.started += OnChangeSlots;
         InitOrder();
     }
 
     private void InitOrder()
     {
+        panelTransform.SetAsFirstSibling();
         monsterGroupTransform.SetAsLastSibling();
+
         summonGauge.SetActive(true);
         queenActiveSkillGauge.SetActive(false);
+
+        monsterSlotNumGroup.SetActive(true);
+        skillSlotNumGroup.SetActive(false);
+
         monsterGroup.alpha = 1f;
         queenActiveSkillGroup.alpha = 0.5f;
     }
@@ -80,16 +88,22 @@ public class SlotChange : MonoBehaviour
         if (controller.curSlot == QueenSlot.MONSTER)
         {
             monsterGroupTransform.SetAsFirstSibling();
+            panelTransform.SetAsFirstSibling();
             summonGauge.SetActive(false);
             queenActiveSkillGauge.SetActive(true);
+            monsterSlotNumGroup.SetActive(false);
+            skillSlotNumGroup.SetActive(true);
             queenActiveSkillGroup.DOFade(1f, 0.2f);
             monsterGroup.DOFade(0.5f, 0.2f);
         }
         else if (controller.curSlot == QueenSlot.QueenActiveSkill)
         {
             monsterGroupTransform.SetAsLastSibling();
+            panelTransform.SetAsFirstSibling();
             summonGauge.SetActive(true);
             queenActiveSkillGauge.SetActive(false);
+            monsterSlotNumGroup.SetActive(true);
+            skillSlotNumGroup.SetActive(false);
             queenActiveSkillGroup.DOFade(0.5f, 0.2f);
             monsterGroup.DOFade(1f, 0.2f);
         }
@@ -115,6 +129,9 @@ public class SlotChange : MonoBehaviour
 
     private void OnDestroy()
     {
-        inputAction.started -= OnChangeSlots;
+        if (inputAction != null)
+        {
+            inputAction.started -= OnChangeSlots;
+        }
     }
 }

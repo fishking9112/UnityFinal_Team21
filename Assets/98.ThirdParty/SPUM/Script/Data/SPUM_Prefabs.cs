@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using System;
-using UnityEngine;
-using UnityEngine.Events;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 public enum PlayerState
 {
     IDLE,
@@ -37,6 +35,7 @@ public class SPUM_Prefabs : MonoBehaviour
 
     private int moveSpeedHash = Animator.StringToHash("MoveSpeed");
     private int attackSpeedHash = Animator.StringToHash("AttackSpeed");
+    private int knockbackSpeedHash = Animator.StringToHash("KnockbackSpeed");
 
     public void OverrideControllerInit()
     {
@@ -189,7 +188,7 @@ public class SPUM_Prefabs : MonoBehaviour
                     bool isTrigger = parameter.name.ToUpper().Contains(StateStr.ToUpper());
                     if (isTrigger)
                     {
-                        // Debug.Log($"Parameter: {parameter.name}, Type: {parameter.type}");
+                        //  Debug.Log($"Parameter: {parameter.name}, Type: {parameter.type}");
                         animator.SetTrigger(parameter.name);
                     }
                 }
@@ -205,6 +204,11 @@ public class SPUM_Prefabs : MonoBehaviour
     public void SetAttackSpeed(float _value)
     {
         _anim.SetFloat(attackSpeedHash, _value);
+    }
+
+    public void SetKnockbackSpeed(float _value)
+    {
+        _anim.SetFloat(knockbackSpeedHash, _value);
     }
 
     AnimationClip LoadAnimationClip(string clipPath)

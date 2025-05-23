@@ -12,27 +12,50 @@ public class Page
     public GameObject evolutionTree;
 }
 
+[Serializable]
+public class MonsterCategoryGroup
+{
+    public int index;
+    public string name;
+    public GameObject selectedPanel;
+    public Button selectBtn;
+}
+
 public class EvolutionTreeUI : SingleUI
 {
     [Header("UI Components")]
-    [SerializeField] private TextMeshProUGUI monsterNameText;
-    [SerializeField] private Button leftButton;
-    [SerializeField] private Button rightButton;
     [SerializeField] private Button evolutionButton;
-    [SerializeField] private List<GameObject> selectedMonster;
+    [SerializeField] private List<MonsterCategoryGroup> monsterCategoryList;
 
     [Header("Pages")]
     [SerializeField] private List<Page> pageList;
 
+    [Header("DescriptionUI")]
+    [SerializeField] private TextMeshProUGUI evolutionPointText;
+    [SerializeField] private Image descriptionImage;
+    [SerializeField] private TextMeshProUGUI monsterName;
+    [SerializeField] private TextMeshProUGUI description;
+    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private TextMeshProUGUI attackText;
+    [SerializeField] private TextMeshProUGUI costText;
+
+    [Header("QuickSlot")]
+    [SerializeField] private List<EvolutionSlot> slotList;
+
+    [Header("DragIcon")]
+    [SerializeField] private EvolutionDragIcon evolutionDragIcon;
+    public EvolutionDragIcon EvolutionDragIcon => evolutionDragIcon;
+    public Transform tfEvolutionDragIcon => evolutionDragIcon.transform;
+
     private int curIndex;
     private EvolutionTree currentTreePage;
 
+    public List<EvolutionSlot> SlotList => slotList;
     public int PageCount => pageList.Count;
 
     private void OnEnable()
     {
-        curIndex = 0;
-        ShowPage(curIndex);
+        ShowPage(0);
     }
 
     private void Start()
@@ -42,39 +65,26 @@ public class EvolutionTreeUI : SingleUI
 
     private void SetButtonCallbacks()
     {
-        leftButton.onClick.RemoveAllListeners();
-        rightButton.onClick.RemoveAllListeners();
-        evolutionButton.onClick.RemoveAllListeners();
-
-        leftButton.onClick.AddListener(OnClickLeftButton);
-        rightButton.onClick.AddListener(OnClickRightButton);
-        evolutionButton.onClick.AddListener(OnClickEvolutionButton);
-    }
-
-    private void OnClickLeftButton()
-    {
-        if (curIndex > 0)
+        for (int i = 0; i < monsterCategoryList.Count; i++)
         {
-            curIndex--;
-            ShowPage(curIndex);
+            int index = monsterCategoryList[i].index;
+
+            if (monsterCategoryList[i].selectBtn != null)
+            {
+                monsterCategoryList[i].selectBtn.onClick.RemoveAllListeners();
+                monsterCategoryList[i].selectBtn.onClick.AddListener(() => ShowPage(index));
+            }
         }
-    }
 
-    private void OnClickRightButton()
-    {
-        if (curIndex < PageCount - 1)
+        if (evolutionButton != null)
         {
-            curIndex++;
-            ShowPage(curIndex);
+            evolutionButton.onClick.RemoveAllListeners();
+            evolutionButton.onClick.AddListener(OnClickEvolutionButton);
         }
     }
 
     public void ShowPage(int index)
     {
-        // 버튼 활성화/비활성화
-        leftButton.gameObject.SetActive(index > 0);
-        rightButton.gameObject.SetActive(index < PageCount - 1);
-
         // 페이지 표시
         for (int i = 0; i < pageList.Count; i++)
         {
@@ -84,18 +94,31 @@ public class EvolutionTreeUI : SingleUI
         // 이름 표시
         if (index >= 0 && index < pageList.Count)
         {
-            monsterNameText.text = pageList[index].name;
             currentTreePage = pageList[index].evolutionTree.GetComponent<EvolutionTree>();
+
+            currentTreePage.Init(this);
+            SetSlotList(currentTreePage);
         }
 
-        // 선택된 몬스터 아이콘 크기 조정
-        for (int i = 0; i < selectedMonster.Count; i++)
+        // 해당 카테고리의 선택 표시 UI 활성화
+        for (int i = 0; i < monsterCategoryList.Count; i++)
         {
-            if (selectedMonster[i] != null)
-            {
-                selectedMonster[i].transform.localScale = (i == index) ? new Vector3(3f, 3f, 3f) : Vector3.one;
-            }
+            monsterCategoryList[i].selectedPanel.SetActive(i == index);
         }
+    }
+
+    // 설명창 초기화
+    public void UpdateDescriptionWindow(EvolutionNode node)
+    {
+        MonsterInfo info = node.monsterInfo;
+
+        monsterName.text = info.name;
+        descriptionImage.enabled = true;
+        descriptionImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.icon);
+        description.text = info.description;
+        healthText.text = $"기본 체력 : {info.health}";
+        attackText.text = $"기본 공격력 : {info.attack}";
+        costText.text = $"소환 비용 : {info.cost}";
     }
 
     public void OnClickEvolutionButton()
@@ -106,5 +129,24 @@ public class EvolutionTreeUI : SingleUI
     public void SetEvolutionButtonState(bool state)
     {
         evolutionButton.gameObject.SetActive(state);
+    }
+
+    public void UpdateEvolutionPointText(float evolutionPoint)
+    {
+        evolutionPointText.text = evolutionPoint.ToString();
+    }
+
+    public void SetSlotList(EvolutionTree evolutionTree)
+    {
+        for (int i = 0; i < slotList.Count; i++)
+        {
+            slotList[i].evolutionTree = evolutionTree;
+            slotList[i].slotIndex = i;
+        }
+    }
+
+    public void PassEvolutionNodeInfo(EvolutionNode node)
+    {
+        evolutionDragIcon.SetEvolutionNode(node);
     }
 }

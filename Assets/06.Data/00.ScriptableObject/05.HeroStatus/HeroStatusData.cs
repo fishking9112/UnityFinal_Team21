@@ -3,45 +3,46 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class HeroStatusInfo: BaseStatData, IInfo
+
+public enum HeroType
 {
-    public int id;
-    public string name;
-    public string description;
+    NULL,
+    NORMAL,
+    BOSS,
+}
+
+[Serializable]
+public class HeroStatusInfo : BaseStatData, IInfo
+{
     public int startLevel;
     public int[] weapon;
     public int[] weaponLevel;
     public float detectedRange;
-    public float reward;
     public int custom;
+    public HeroType heroType;
     public HeroStatusInfo() { }
     public HeroStatusInfo(HeroStatusInfo other) : base(other)
     {
-        id = other.id;
-        name = other.name;
-        description = other.description;
         startLevel = other.startLevel;
         weapon = other.weapon;
         weaponLevel = other.weaponLevel;
-        health = other.health;
         detectedRange = other.detectedRange;
-        moveSpeed = other.moveSpeed;
-        reward = other.reward;
         custom = other.custom;
+        heroType = other.heroType;
     }
     public void Copy(HeroStatusInfo other)
     {
         id = other.id;
         name = other.name;
         description = other.description;
+        health = other.health;
+        moveSpeed = other.moveSpeed;
+        reward = other.reward;
+
         startLevel = other.startLevel;
         weapon = other.weapon;
         weaponLevel = other.weaponLevel;
-        health = other.health;
         detectedRange = other.detectedRange;
-        moveSpeed = other.moveSpeed;
-        reward = other.reward;
         custom = other.custom;
     }
 
@@ -98,6 +99,10 @@ public class HeroStatusData : SheetDataReaderBase
                     break;
                 case "custom":
                     heroStatusInfo.custom = Utils.StringToInt(cell.value);
+                    break;
+                case "heroType":
+                    Debug.Log(cell.value);
+                    heroStatusInfo.heroType = Utils.StringToEnum<HeroType>(cell.value, HeroType.NULL);
                     break;
             }
         }

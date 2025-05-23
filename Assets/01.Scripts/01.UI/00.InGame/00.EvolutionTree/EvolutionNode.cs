@@ -1,46 +1,43 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EvolutionNode : MonoBehaviour
+public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [Header("UI")]
     public Image image;
     [SerializeField] private Button button;
     [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private GameObject selectedUI;
+    [SerializeField] private EvolutionTreeUI evolutionTreeUI;
 
     public bool isUnlock;
     public bool nodeLock;
     public IDMonster monsterInfoId;
     public MonsterInfo monsterInfo;
 
-    private EvolutionTree evolutionTree;
+    public UnityAction<EvolutionNode> onClickNode;
 
-    public void Init(EvolutionTree tree)
+    public void Init(EvolutionTreeUI treeUI)
     {
-        evolutionTree = tree;
+        evolutionTreeUI = treeUI;
 
-        if(DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoId,out var info))
+        selectedUI = transform.Find("Select")?.gameObject;
+
+        if (DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoId,out var info))
         {
             monsterInfo = info;
             image.sprite = DataManager.Instance.iconAtlas.GetSprite(monsterInfo.outfit);
         }
-        else
-        {
-            Utils.Log($"{monsterInfoId}의 info는 존재하지 않습니다.");
-        }
 
-        button.onClick.AddListener(OnClickNode);
-        UpdateButtonState();
-    }
-
-    public void OnClickNode()
-    {
-        evolutionTree.OnClickNodeButton(this);
+        selectedUI.SetActive(false);
+        button.onClick.AddListener(() => onClickNode?.Invoke(this));
     }
 
     // 현재 버튼(노드)들의 상태 업데이트
-    public void UpdateButtonState()
+    public void UpdateButtonState(bool isActive)
     {
         if (nodeLock)
         {
@@ -49,8 +46,6 @@ public class EvolutionNode : MonoBehaviour
             nameText.text = "잠김";
             return;
         }
-
-        bool isActive = evolutionTree.ActiveCheck(this);
 
         // 해금 된 노드
         if (isUnlock)
@@ -76,5 +71,46 @@ public class EvolutionNode : MonoBehaviour
                 button.interactable = false;
             }
         }
+    }
+
+
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (isUnlock)
+            evolutionTreeUI.EvolutionDragIcon.OnBeginDrag();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (isUnlock)
+            evolutionTreeUI.EvolutionDragIcon.OnDrag(eventData);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (isUnlock)
+            evolutionTreeUI.EvolutionDragIcon.OnEndDrag();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (isUnlock)
+        {
+            evolutionTreeUI.PassEvolutionNodeInfo(this);
+            evolutionTreeUI.tfEvolutionDragIcon.position = transform.position;
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if(isUnlock)
+            selectedUI.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (isUnlock)
+            selectedUI.SetActive(false);
     }
 }

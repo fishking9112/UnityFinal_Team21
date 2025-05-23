@@ -1,29 +1,24 @@
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QueenActiveSkillManager : MonoBehaviour
+public class QueenActiveSkillManager : MonoSingleton<QueenActiveSkillManager>
 {
     public GameObject allSkill;
     public Dictionary<int, QueenActiveSkillBase> queenActiveSkillDic;
+    private QueenActiveSkillSlot skillSlot;
 
-    private void Start()
+    private async void Start()
     {
-        Init();
-
-        // 테스트 코드
-        Utils.DelayedTimeAction(() =>
-        {
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(0, queenActiveSkillDic[(int)IDQueenActiveSkill.SUMMON]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(1, queenActiveSkillDic[(int)IDQueenActiveSkill.ATTACK_DAMAGE_UP]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(2, queenActiveSkillDic[(int)IDQueenActiveSkill.RANGE_HEAL]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(3, queenActiveSkillDic[(int)IDQueenActiveSkill.RANGE_SLOW]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(4, queenActiveSkillDic[(int)IDQueenActiveSkill.METEOR]);
-            GameManager.Instance.queen.controller.queenActiveSkillSlot.AddSlot(5, queenActiveSkillDic[(int)IDQueenActiveSkill.ALL_HEAL]);
-        }, 3);
+        await Init();
     }
 
-    private void Init()
+    private async UniTask Init()
     {
+        await UniTask.WaitUntil(() => GameManager.Instance.queen.controller.queenActiveSkillSlot != null);
+
+        skillSlot = GameManager.Instance.queen.controller.queenActiveSkillSlot;
+
         queenActiveSkillDic = new Dictionary<int, QueenActiveSkillBase>();
 
         QueenActiveSkillBase[] skills = allSkill.GetComponents<QueenActiveSkillBase>();
@@ -37,5 +32,30 @@ public class QueenActiveSkillManager : MonoBehaviour
                 queenActiveSkillDic[skill.info.id] = skill;
             }
         }
+    }
+
+    public int ReturnSkillIDbyIndex(int index)
+    {
+        return skillSlot.GetSkillIDbyIndex(index);
+    }
+
+    public bool HasAvailableSkillSlot()
+    {
+        return skillSlot.HasEmptySkillSlot();
+    }
+
+    public void AddSkill(int id)
+    {
+        skillSlot.AddSlotToEmpty(queenActiveSkillDic[id]);
+    }
+
+    public void AddSkill(int index, int id)
+    {
+        skillSlot.AddSlot(index, queenActiveSkillDic[id]);
+    }
+
+    public void RemoveSkill(int index)
+    {
+        skillSlot.RemoveSlot(index);
     }
 }

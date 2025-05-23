@@ -23,7 +23,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
     private Dictionary<int, Action<float>> applyEffectActions;
 
-
+    public ToastMessage toastMessage;
 
     protected override void Awake()
     {
@@ -106,6 +106,9 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         int cost = ability.levelInfo[currentLevel].cost;
         if (!GameManager.Instance.TrySpendGold(cost))
         {
+            // 테이블 나오면 적용 필요
+            ToastMessage msg = Instantiate(toastMessage, queenAbilityUIController.transform);
+            msg.SetText("<color=red>골드가 부족합니다.</color>");
             Utils.Log("골드 부족으로 업그레이드 실패");
             return;
         }
@@ -161,26 +164,26 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     public void ResetQueenAbilityMonsterValues()
     {
         // 공격력 감소
-        if (upgradeLevels.TryGetValue(0, out int atkLevel) && atkLevel > 0)
+        if (upgradeLevels.TryGetValue((int)IDQueenAbility.MONSTER_ATTACK_DAMAGE_UP, out int atkLevel) && atkLevel > 0)
         {
-            var atkAbility = GetAbilityById(0);
+            var atkAbility = GetAbilityById((int)IDQueenAbility.MONSTER_ATTACK_DAMAGE_UP);
             float atkValue = atkAbility.levelInfo[atkLevel - 1].eff;
             ApplyAttackPowerBuff(-atkValue);
         }
 
         // 이동속도 감소
-        if (upgradeLevels.TryGetValue(1, out int speedLevel) && speedLevel > 0)
+        if (upgradeLevels.TryGetValue((int)IDQueenAbility.MONSTER_MOVE_SPEED_UP, out int speedLevel) && speedLevel > 0)
         {
-            var speedAbility = GetAbilityById(1);
+            var speedAbility = GetAbilityById((int)IDQueenAbility.MONSTER_MOVE_SPEED_UP);
             float speedValue = speedAbility.levelInfo[speedLevel - 1].eff;
-            ApplyMoveSpeedBuff(-speedValue);
+            ApplyMoveSpeedBuff(-speedValue);    
         }
 
     }
 
     private void ApplyAttackPowerBuff(float value)
     {
-        foreach (var kvp in DataManager.Instance.monsterDic)
+        foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
         {
             kvp.Value.attack += value;
         }
@@ -188,7 +191,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
     private void ApplyMoveSpeedBuff(float value)
     {
-        foreach (var kvp in DataManager.Instance.monsterDic)
+        foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
         {
             kvp.Value.moveSpeed += value;
         }

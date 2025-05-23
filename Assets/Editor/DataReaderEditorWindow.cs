@@ -37,11 +37,16 @@ public class DataReaderEditorWindow : EditorWindow
             new DataInfo("Monster 데이터", "MonsterData"),
             new DataInfo("QueenAbility 데이터", "QueenAbilityData"),
             new DataInfo("HeroAbility 데이터", "HeroAbilityData"),
+            new DataInfo("HeroAbilityLevelUp 데이터", "HeroAbilityLevelUpData"),
             new DataInfo("Enhance 데이터", "QueenEnhanceData"),
             new DataInfo("HeroStatus 데이터", "HeroStatusData"),
             new DataInfo("QueenActiveSkill 데이터", "QueenActiveSkillData"),
             new DataInfo("Buff 데이터", "BuffData"),
             new DataInfo("Trophy 데이터", "TrophyData"),
+            new DataInfo("Event 데이터", "EventData"),
+            new DataInfo("QueenStatus 데이터", "QueenStatusData"),
+            new DataInfo("QueenPassiveSkill 데이터", "QueenPassiveSkillData"),
+            new DataInfo("ToolTip 데이터", "ToolTipData"),
         };
 
         foreach (var info in dataInfo)

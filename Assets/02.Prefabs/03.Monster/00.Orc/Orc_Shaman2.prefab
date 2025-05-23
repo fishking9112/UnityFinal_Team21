@@ -4519,7 +4519,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8093199388650962264}
+  - component: {fileID: 4956277207331152444}
   - component: {fileID: 7380879640195716517}
+  - component: {fileID: 5266824658737580281}
   - component: {fileID: 3309829388262035602}
   - component: {fileID: 5606942373168075264}
   - component: {fileID: 6417832614657969999}
@@ -4541,13 +4543,25 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8766549143791666692}
   - {fileID: 7700858196919725977}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4956277207331152444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 968675749530671982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 953e820a5bf2a9c4ea977cc66af5e380, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7380879640195716517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4562,14 +4576,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 16448
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1024
   healthHandler: {fileID: 3309829388262035602}
-  buffMoveSpeed: 1
-  buffAttackDamage: 1
-  buffAttackSpeed: 1
+  statHandler: {fileID: 4956277207331152444}
+  buffController: {fileID: 5266824658737580281}
+  moveAnimSpeed: 0.3
+  attackAnimSpeed: 1
+  takeDamagedRendererTimer: 0.5
+  originScale: {x: 0, y: 0, z: 0}
+--- !u!114 &5266824658737580281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 968675749530671982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64c80c1b910f8fc4e9280ff445d19595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3309829388262035602
 MonoBehaviour:
   m_ObjectHideFlags: 0

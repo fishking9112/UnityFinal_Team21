@@ -39,6 +39,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
         {
             if (MonsterManager.Instance.monsters.TryGetValue(c.gameObject, out var monster))
             {
+                monster.TakeKnockback(hero.transform, knockback);
                 monster.TakeDamaged(damage);
             }
             else if (GameManager.Instance.castle.gameObject == c.gameObject)
@@ -56,6 +57,8 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
 
     public override void DespawnAbility()
     {
+        token?.Cancel();
+        token?.Dispose();
         Destroy(circle);
     }
     public override void SetAbilityLevel(int level)

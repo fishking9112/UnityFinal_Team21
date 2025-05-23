@@ -77,22 +77,19 @@ public class AddressableManager : MonoSingleton<AddressableManager>
     /// </summary>
     public List<T> LoadDataAssets<T>(string label)
     {
-        AsyncOperationHandle<IList<T>> handle = default;
         try
         {
-            handle = Addressables.LoadAssetsAsync<T>(label, null);
-            var result = handle.WaitForCompletion();
-            return new List<T>(result);
+            var list = Addressables.LoadAssetsAsync<T>(label, (obj) =>
+            {
+                // Debug.Log(obj.ToString());
+            }).WaitForCompletion();
+            List<T> assets = list != null ? new List<T>(list) : new List<T>();
+            return assets;
         }
         catch (Exception e)
         {
             Utils.Log($"로드 중 오류 발생: {label}, {e.Message}");
             return default;
-        }
-        finally
-        {
-            if (handle.IsValid())
-                Addressables.Release(handle);
         }
     }
     /// <summary>

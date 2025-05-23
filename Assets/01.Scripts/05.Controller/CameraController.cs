@@ -1,4 +1,5 @@
 using Cinemachine;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,7 @@ public class CameraController : MonoBehaviour
     public Camera miniMapCamera;
     public RectTransform miniMapRect;
     public GameObject miniMapIcon;
+    public RenderTexture renderTexture;
 
     [Header("카메라 이동")]
     public float cameraEdge;
@@ -36,6 +38,9 @@ public class CameraController : MonoBehaviour
 
     private Vector2 keyboardMoveDir;
 
+    [Header("컷 씬")]
+    private bool isCutScene = false;
+
     private void Awake()
     {
         GameManager.Instance.cameraController = this;
@@ -50,6 +55,7 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (isCutScene) return;
         MoveCamera();
         ZoomCamera();
         ClampCameraPosition();
@@ -105,12 +111,21 @@ public class CameraController : MonoBehaviour
     // 키보드로 카메라 움직임
     public void OnKeyboradCameraMove(InputAction.CallbackContext context)
     {
+        if (isCutScene) return;
+
         keyboardMoveDir = context.ReadValue<Vector2>();
     }
 
     // 마우스 휠 값을 받아옴
     public void OnZoomCamera(InputAction.CallbackContext context)
     {
+        if (isCutScene) return;
+
+        if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused)
+        {
+            return;
+        }
+
         Vector2 scrollValue = context.ReadValue<Vector2>();
 
         if (scrollValue.y == 0)
@@ -130,9 +145,16 @@ public class CameraController : MonoBehaviour
                                                         zoomSmoothValue);
     }
 
-    // Spacebar 입력시 카메라를 히어로가 있는 쪽으로 옮김
-    public void OnCameraMoveToHero(InputAction.CallbackContext context)
+    // Spacebar 입력시 카메라를 성이 있는 쪽으로 옮김
+    public void OnCameraMoveToCastle(InputAction.CallbackContext context)
     {
+        if (isCutScene) return;
+
+        if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             cameraTransform.position = castleTransform.position;
@@ -181,6 +203,8 @@ public class CameraController : MonoBehaviour
     // 미니맵을 클릭하면 해당 위치로 카메라가 이동
     public void MiniMapClickCameraMove(Vector2 clickPosition)
     {
+        if (isCutScene) return;
+
         Vector2 localPosition;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(miniMapRect, clickPosition, null, out localPosition);
 
@@ -203,6 +227,47 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    // 미니맵을 클릭하면 해당 위치로 카메라가 이동
+    public void MiniMapCameraMove(Vector2 worldPosition)
+    {
+        if (isCutScene) return;
+        cameraTransform.position = new Vector3(worldPosition.x, worldPosition.y, cameraTransform.position.z);
+    }
+
+
+    public void StartCutScene(Vector3 target, float sceond = 1f)
+    {
+        if (isCutScene) return;
+        isCutScene = true;
+
+        virtualCamera.m_Lens.OrthographicSize = maxZoom; // 즉시 적용
+        targetZoom = maxZoom; // 이후 자연스럽게 이어가도록
+        MoveCameraToPosition(target, sceond);
+    }
+
+    public void MoveCameraToPosition(Vector3 targetPosition, float duration)
+    {
+        StartCoroutine(MoveCameraToPositionCoroutine(targetPosition, duration));
+    }
+
+    private IEnumerator MoveCameraToPositionCoroutine(Vector3 targetPosition, float duration)
+    {
+        Vector3 startPos = cameraTransform.position;
+        targetPosition.z = startPos.z; // Z 고정
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            cameraTransform.position = Vector3.Lerp(startPos, targetPosition, t);
+            yield return null;
+        }
+
+        cameraTransform.position = targetPosition; // 정확한 위치로 고정
+
+        isCutScene = false;
+    }
 
     // 카메라 제한 범위 기즈모를 그려줌
     private void OnDrawGizmosSelected()

@@ -8,58 +8,75 @@ public enum MonsterAttackType
     NULL,
     MELEE,
     RANGED,
+    MAGIC,
+    SHURIKEN
 }
 
 public enum MonsterBrood
 {
     NULL,
     None,
-    Slime,
+    Elf,
     Orc,
     Skeleton,
+    DarkElf,
 }
 
 [Serializable]
 public class MonsterInfo : BaseStatData, IInfo
 {
-    public int id;
-    public string name;
-    public string description;
     public float cost;
-    public float reward;
     public string outfit;
     public string icon;
+    public float attack;
+    public float attackRange;
+    public float attackSpeed;
 
     public MonsterAttackType monsterAttackType;
     public MonsterBrood monsterBrood;
     public string projectile;
+    public float projectile_size;
+    public float projectile_speed;
     public int tire;
     public int preNode;
     public MonsterInfo() { }
     public MonsterInfo(MonsterInfo other) : base(other)
     {
-        id = other.id;
-        name = other.name;
-        description = other.description;
         cost = other.cost;
-        reward = other.reward;
         outfit = other.outfit;
+        icon = other.icon;
+        attack = other.attack;
+        attackRange = other.attackRange;
+        attackSpeed = other.attackSpeed;
         monsterAttackType = other.monsterAttackType;
         monsterBrood = other.monsterBrood;
         projectile = other.projectile;
+        projectile_size = other.projectile_size;
+        projectile_speed = other.projectile_speed;
+        tire = other.tire;
+        preNode = other.preNode;
     }
     public void Copy(MonsterInfo other)
     {
-        base.Copy(other);
+
         id = other.id;
         name = other.name;
         description = other.description;
-        cost = other.cost;
+        health = other.health;
+        moveSpeed = other.moveSpeed;
         reward = other.reward;
+
+        cost = other.cost;
         outfit = other.outfit;
+        icon = other.icon;
+        attack = other.attack;
+        attackRange = other.attackRange;
+        attackSpeed = other.attackSpeed;
         monsterAttackType = other.monsterAttackType;
         monsterBrood = other.monsterBrood;
         projectile = other.projectile;
+        tire = other.tire;
+        preNode = other.preNode;
     }
     public int ID => id;
     public string Name => name;
@@ -130,6 +147,12 @@ public class MonsterData : SheetDataReaderBase
                     break;
                 case "projectile":
                     monsterInfo.projectile = cell.value;
+                    break;
+                case "projectile_size":
+                    monsterInfo.projectile_size = Utils.StringToFloat(cell.value);
+                    break;
+                case "projectile_speed":
+                    monsterInfo.projectile_speed = Utils.StringToFloat(cell.value);
                     break;
                 case "tire":
                     monsterInfo.tire = Utils.StringToInt(cell.value);

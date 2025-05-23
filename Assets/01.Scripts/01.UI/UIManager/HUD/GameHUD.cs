@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,35 +14,49 @@ public class GameHUD : HUDUI
 
     private QueenCondition condition => GameManager.Instance.queen.condition;
 
-    [Header("레벨")]
+    [Header("레벨 / 골드")]
     [SerializeField] private TextMeshProUGUI levelText;
-
-    [Header("골드")]
     [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI killCntText;
 
     [Header("게이지")]
     [SerializeField] private GaugeUI queenActiveSkillGaugeUI;
     [SerializeField] private GaugeUI summonGaugeUI;
+    [SerializeField] private GaugeUI castleGaugeUI;
     [SerializeField] private GaugeUI expGaugeUI;
 
     [Header("타이머")]
     // 곧 지워 질 것(?)
     [SerializeField] private TextMeshProUGUI timerText;
-    private ReactiveProperty<float> curTime => GameManager.Instance.curTime;// new ReactiveProperty<float>();
+    private ReactiveProperty<float> curTime => GameManager.Instance.curTime;
 
-    //[Header("버튼")]
-    //[SerializeField] private Button pauseButton;
     private InputAction inputAction;
 
     [Header("미니맵")]
     [SerializeField] private MiniMapClick miniMap;
-
 
     [Header("InGame에 대한 UI들")]
     public QueenEnhanceUI queenEnhanceUI;
     public EvolutionTreeUI evolutionTreeUI;
     public PauseUI pauseUI;
     public GameResultUI gameResultUI;
+
+    [Header("기타 UI 오브젝트")]
+    public GameObject HUDGroup;
+    public GameObject BackgroundGroup;
+    public GameObject TopButtonGroup;
+    public GameObject EtcUIGroup;
+    public GameObject OptionUIGroup;
+    public GameObject EvolutionSelectUI;
+    public GameObject PauseSelectUI;
+
+    [Header("버튼 오브젝트")]
+    public Button OptionBtn;
+    public Button ExitBtn;
+    public Button EvolutionBtn;
+    public Button PauseBtn;
+    public Button HudEvolutionBtn;
+    public Button HudPauseBtn;
 
     [Header("현재 상태")]
     public bool isPaused = false;
@@ -52,6 +67,9 @@ public class GameHUD : HUDUI
 
     [Header("체력 UI 테스트 버튼")]
     public Button HealthUITestButton;
+
+    [Header("Slot")]
+    public SlotChange slot;
 
     public override async UniTask Initialize()
     {
@@ -66,14 +84,16 @@ public class GameHUD : HUDUI
         condition.Gold.AddAction(UpdateGoldText);
         UpdateGoldText(condition.Gold.Value);
 
+        condition.KillCnt.AddAction(UpdateKullCntText);
+        UpdateKullCntText(condition.KillCnt.Value);
+
         curTime.AddAction(UpdateTimerText);
         UpdateTimerText(curTime.Value);
 
         summonGaugeUI.Bind(condition.CurSummonGauge, condition.MaxSummonGauge);
         queenActiveSkillGaugeUI.Bind(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
+        castleGaugeUI.Bind(GameManager.Instance.castle.condition.CurCastleHealth, GameManager.Instance.castle.condition.MaxCastleHealth);
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
-
-        //pauseButton.onClick.AddListener(() => StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<PauseUI>());
 
         GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
 
@@ -85,11 +105,30 @@ public class GameHUD : HUDUI
             HeroManager.Instance.OnClickHealthUITest();
         });
 
+        // 옵션창 버튼 이벤트 연결
+        OptionBtn.onClick.AddListener(() => ShowWindow<OptionController>());
+
+        // Exit 버튼 이벤트 연결 
+        ExitBtn.onClick.AddListener(HideWindow);
+
+        // 진화트리 버튼 이벤트 연결 
+        EvolutionBtn.onClick.AddListener(ShowEvolutionTreeUI);
+        HudEvolutionBtn.onClick.AddListener(ShowEvolutionTreeUI);
+
+        // 일시정지 버튼 이벤트 연결 
+        PauseBtn.onClick.AddListener(ShowPauseUI);
+        HudPauseBtn.onClick.AddListener(ShowPauseUI);
+
         inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
         inputAction.started += OnPauseUI;
+
+        slot.Init(GameManager.Instance.queen.controller, GameManager.Instance.queen.input.actions["SlotChange"]);
+
+        queenEnhanceUI.gameObject.SetActive(false);
+        evolutionTreeUI.gameObject.SetActive(false);
+        pauseUI.gameObject.SetActive(false);
+        gameResultUI.gameObject.SetActive(false);
     }
-
-
 
     /// <summary>
     /// 컨트롤러들 타입을 넣어서 활성화
@@ -98,31 +137,56 @@ public class GameHUD : HUDUI
     /// <param name="controller"></param>
     public void ShowWindow<T>(T controller = null) where T : MonoBehaviour
     {
-        // 만약 오픈된 창이 있다면 이미 열린 창이 있다고 표시
-        if (openWindow != null)
+        if (typeof(T) != typeof(OptionController))
         {
-            Utils.Log("이미 열려있는 창이 있습니다");
-            return;
+            // 이미 창이 열려있다면 리턴
+            if (openWindow != null)
+            {
+                Utils.Log("이미 열려있는 창이 있습니다");
+                return;
+            }
+
+            // 기타 UI 숨기기
+            HUDGroup.SetActive(false);
+            BackgroundGroup.SetActive(false);
+            TopButtonGroup.SetActive(false);
+            EtcUIGroup.SetActive(false);
+            EvolutionSelectUI.SetActive(false);
+            PauseSelectUI.SetActive(false);
         }
 
         // 타입별로 분리
         if (typeof(T) == typeof(QueenEnhanceUI))
         {
             openWindow = queenEnhanceUI.gameObject;
+            BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(EvolutionTreeUI))
         {
             // 다른 타입 처리
             openWindow = evolutionTreeUI.gameObject;
+            EvolutionSelectUI.SetActive(true);
+            TopButtonGroup.SetActive(true);
+            EtcUIGroup.SetActive(true);
+            BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(PauseUI))
         {
             openWindow = pauseUI.gameObject;
             GameManager.Instance.cameraController.miniMapRect = pauseUI.cameraRect;
+            PauseSelectUI.SetActive(true);
+            TopButtonGroup.SetActive(true);
+            EtcUIGroup.SetActive(true);
+            BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(GameResultUI))
         {
             openWindow = gameResultUI.gameObject;
+        }
+        else if (typeof(T) == typeof(OptionController))
+        {
+            OptionUIGroup.SetActive(true);
+            return;
         }
         else
         {
@@ -140,8 +204,15 @@ public class GameHUD : HUDUI
     {
         if (openWindow == null) return;
 
+        HUDGroup.SetActive(true);
+        BackgroundGroup.SetActive(false);
+        TopButtonGroup.SetActive(false);
+        EtcUIGroup.SetActive(false);
+        OptionUIGroup.SetActive(false);
+
         openWindow.SetActive(false);
         openWindow = null;
+
         Time.timeScale = 1f; // 시간 흐름
         isPaused = false;
         GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
@@ -170,6 +241,11 @@ public class GameHUD : HUDUI
         goldText.text = Utils.GetThousandCommaText((int)gold);
     }
 
+    public void UpdateKullCntText(int kullCnt)
+    {
+        killCntText.text = Utils.GetThousandCommaText(kullCnt);
+    }
+
     public void UpdateTimerText(float time)
     {
         timerText.text = Utils.GetMMSSTime((int)time);
@@ -196,6 +272,18 @@ public class GameHUD : HUDUI
         }
     }
 
+    private void ShowEvolutionTreeUI()
+    {
+        HideWindow();
+        ShowWindow<EvolutionTreeUI>();
+    }
+
+    private void ShowPauseUI()
+    {
+        HideWindow();
+        ShowWindow<PauseUI>();
+    }
+
     public void OnPauseUI(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
@@ -209,21 +297,11 @@ public class GameHUD : HUDUI
 
     private void OnDestroy()
     {
-        if (curTime != null)
-        {
-            curTime.RemoveAction(UpdateTimerText);
-        }
+        curTime?.RemoveAction(UpdateTimerText);
+        condition.Level?.RemoveAction(UpdateLevelText);
+        condition.Gold?.RemoveAction(UpdateGoldText);
 
-        if (condition.Level != null)
-        {
-            condition.Level.RemoveAction(UpdateLevelText);
-        }
-
-        if (condition.Gold != null)
-        {
-            condition.Gold.RemoveAction(UpdateGoldText);
-        }
-
-        inputAction.started -= OnPauseUI;
+        if (inputAction != null)
+            inputAction.started -= OnPauseUI;
     }
 }

@@ -99,6 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167dbd33dd724e24da13af255d5595e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  magnetTarget: {fileID: 0}
+  magnetRadius: 1
+  magnetAcceleration: 100
   rewardAmount: 10
 --- !u!50 &5338293879918889491
 Rigidbody2D:
@@ -156,7 +159,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.0030317158, y: -0.0030338466}

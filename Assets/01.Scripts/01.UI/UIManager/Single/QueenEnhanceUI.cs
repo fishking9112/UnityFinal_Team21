@@ -1,19 +1,41 @@
-using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QueenEnhanceUI : SingleUI
 {
     [SerializeField] private QueenEnhanceStatusUI queenEnhanceStatusUI;
+    public QueenEnhanceStatusUI QueenEnhanceStatusUI => queenEnhanceStatusUI;
     [SerializeField] private SelectInhanceItem[] itemSlots;
+    [SerializeField] private QueenSkillSwapItem[] skillSwapSlots;
+    [SerializeField] private GameObject queenSkillSwapPopup;
+    [SerializeField] private Button SkillSwapPopupExitBtn;
 
     private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
     public IReadOnlyDictionary<int, int> AcquiredEnhanceLevels => acquiredEnhanceLevels;
 
+    private QueenEnhanceInfo tmpQueenEnhanceInfo;
+    [HideInInspector] public bool isOpen = false;
+
+    private void Awake()
+    {
+        SkillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
+    }
+
     private void OnEnable()
     {
+        SkillSwapPopupExitBtn.onClick.RemoveAllListeners();
+        SkillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
+
+        queenSkillSwapPopup.SetActive(false);
         var randomOptions = GetRandomInhanceOptions();
         ShowSelectUI(randomOptions);
+        isOpen = true;
+    }
+    private void OnDisable()
+    {
+        isOpen = false;
     }
 
     /// <summary>
@@ -43,10 +65,24 @@ public class QueenEnhanceUI : SingleUI
     }
 
     /// <summary>
+    /// 스킬 교체 팝업 UI 닫기
+    /// </summary>
+    private void CloseSkillSwapPopupUI()
+    {
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            itemSlots[i].ResetButton();
+        }
+        queenSkillSwapPopup.SetActive(false);
+    }
+
+    /// <summary>
     /// 강화 항목을 실제로 적용한다.
     /// </summary>
-    public void ApplyInhance(QueenEnhanceInfo info)
+    public bool ApplyInhance(QueenEnhanceInfo info)
     {
+        bool result = true;
+
         int id = info.ID;
 
         if (acquiredEnhanceLevels.ContainsKey(id))
@@ -62,6 +98,10 @@ public class QueenEnhanceUI : SingleUI
 
         switch (info.type)
         {
+            case QueenEnhanceType.AddSkill:
+                result = AcquireQueenSkill(info);
+                break;
+
             case QueenEnhanceType.QueenPassive:
                 ApplyQueenPassive(id, value);
                 break;
@@ -74,6 +114,8 @@ public class QueenEnhanceUI : SingleUI
                 GameManager.Instance.queen.condition.AdjustEvolutionPoint(1f);
                 break;
         }
+
+        return result;
     }
 
     /// <summary>
@@ -156,7 +198,8 @@ public class QueenEnhanceUI : SingleUI
     /// </summary>
     private List<QueenEnhanceInfo> GetRandomInhanceOptions()
     {
-        List<QueenEnhanceInfo> availableList = new List<QueenEnhanceInfo>();
+        List<QueenEnhanceInfo> addSkillList = new List<QueenEnhanceInfo>();
+        List<QueenEnhanceInfo> otherList = new List<QueenEnhanceInfo>();
 
         foreach (var pair in DataManager.Instance.queenEnhanceDic)
         {
@@ -166,16 +209,32 @@ public class QueenEnhanceUI : SingleUI
             acquiredEnhanceLevels.TryGetValue(id, out int currentLevel);
 
             if (currentLevel < info.maxLevel)
-                availableList.Add(info);
+            {
+                if (info.type == QueenEnhanceType.AddSkill)
+                {
+                    addSkillList.Add(info);
+                }
+                else
+                {
+                    otherList.Add(info);
+                }
+            }
         }
 
         List<QueenEnhanceInfo> result = new List<QueenEnhanceInfo>();
 
-        while (result.Count < 3 && availableList.Count > 0)
+        if (addSkillList.Count > 0)
         {
-            int index = Random.Range(0, availableList.Count);
-            result.Add(availableList[index]);
-            availableList.RemoveAt(index);
+            int index = UnityEngine.Random.Range(0, addSkillList.Count);
+            result.Add(addSkillList[index]);
+            otherList.RemoveAt(index);
+        }
+
+        while (result.Count < 3 && otherList.Count > 0)
+        {
+            int index = UnityEngine.Random.Range(0, otherList.Count);
+            result.Add(otherList[index]);
+            otherList.RemoveAt(index);
         }
 
         return result;
@@ -207,5 +266,62 @@ public class QueenEnhanceUI : SingleUI
     public int GetEnhanceLevel(int id)
     {
         return acquiredEnhanceLevels.TryGetValue(id, out var level) ? level : 0;
+    }
+
+    // 스킬 획득 함수명
+    private bool AcquireQueenSkill(QueenEnhanceInfo enhanceInfo)
+    {
+        tmpQueenEnhanceInfo = enhanceInfo;
+
+        if (QueenActiveSkillManager.Instance.HasAvailableSkillSlot()) // 신규 스킬 습득 가능함.
+        {
+            QueenActiveSkillManager.Instance.AddSkill(tmpQueenEnhanceInfo.skill_ID);
+
+            return true;
+        }
+        else // 스킬이 이미 가득참.
+        {
+            queenSkillSwapPopup.SetActive(true);
+
+            for (int i = 0; i < skillSwapSlots.Length; i++)
+            {
+                skillSwapSlots[i].SetSkillinfo(QueenActiveSkillManager.Instance.ReturnSkillIDbyIndex(skillSwapSlots[i].Index));
+            }
+
+            return false;
+        }
+    }
+
+    public void SwapClickEvent(int index, int skillID)
+    {
+        SetMiusAcquiredEnhanceLevels(skillID);
+
+        QueenActiveSkillManager.Instance.AddSkill(index, tmpQueenEnhanceInfo.skill_ID);
+
+        queenSkillSwapPopup.SetActive(false);
+
+        GameManager.Instance.queen.condition.EnhancePoint--;
+        CloseUI();
+    }
+
+    // 현재 강화 수치 레벨 다운(스킬 전용)
+    private void SetMiusAcquiredEnhanceLevels(int enhanceID)
+    {
+        int tmp = 0;
+
+        foreach (var item in DataManager.Instance.queenEnhanceDic)
+        {
+            if (item.Value.skill_ID == enhanceID)
+            {
+                tmp = item.Value.ID;
+            }
+        }
+
+        if (acquiredEnhanceLevels.ContainsKey(tmp))
+        {
+            acquiredEnhanceLevels[tmp]--;
+
+            return;
+        }
     }
 }

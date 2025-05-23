@@ -33,7 +33,7 @@ public class HeroAbilityAxe : HeroAbilitySystem
 
     protected override void ActionAbility()
     {
-        if (hero == null)
+        if (hero == null || token.IsCancellationRequested)
         {
             return;
         }
@@ -45,6 +45,9 @@ public class HeroAbilityAxe : HeroAbilitySystem
     private async UniTaskVoid ShootAxe(CancellationToken tk)
     {
         float angle;
+
+        if (tk.IsCancellationRequested)
+            return;
 
         if (target == null)
         {
@@ -59,7 +62,7 @@ public class HeroAbilityAxe : HeroAbilitySystem
         for (int i = 0; i < count; i++)
         {
             var bullet = objectPoolManager.GetObject<HeroBullet>("Axe", hero.transform.position);
-            bullet.SetBullet(duration, pierce, damage, speed, rotateSpeed);
+            bullet.SetBullet(duration, pierce, damage, speed, rotateSpeed,knockback);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
             await UniTask.Delay(TimeSpan.FromSeconds(delay),false,PlayerLoopTiming.Update,cancellationToken:tk);

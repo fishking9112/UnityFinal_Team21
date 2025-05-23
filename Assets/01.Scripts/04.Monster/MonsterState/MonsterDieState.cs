@@ -14,7 +14,7 @@ public class MonsterDieState : MonsterBaseState
         base.Enter();
         navMeshAgent.ResetPath();
         navMeshAgent.velocity = Vector2.zero;
-        // navMeshAgent.enabled = false;
+        navMeshAgent.enabled = false;
 
         collider.enabled = false;
 
@@ -28,7 +28,8 @@ public class MonsterDieState : MonsterBaseState
         DieProccess().Forget();
 
         // TODO : 죽을 때 크리스탈 반환?
-        RewardExp gainCristal = ObjectPoolManager.Instance.GetObject<RewardExp>("ExpReward", stateMachine.Controller.gameObject.transform.position);
+        RewardManager.Instance.SpawnReward("ExpReward", stateMachine.Controller.gameObject.transform.position, stateMachine.Controller.monsterInfo.reward);
+        //RewardExp gainCristal = ObjectPoolManager.Instance.GetObject<RewardExp>("ExpReward", stateMachine.Controller.gameObject.transform.position);
     }
 
     public override void Exit()

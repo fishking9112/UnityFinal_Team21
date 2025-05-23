@@ -5,7 +5,7 @@ using UnityEngine;
 public class ParticleObject : MonoBehaviour, IPoolable
 {
     private Action<Component> returnToPool;
-    private ParticleSystem particle;
+    public ParticleSystem particle;
     private Transform poolParent;
 
     private void Awake()
@@ -50,7 +50,7 @@ public class ParticleObject : MonoBehaviour, IPoolable
             await UniTask.WaitUntil(() =>
             {
                 return this != null && particle != null && !particle.IsAlive(true);
-            });
+            }, cancellationToken: this.GetCancellationTokenOnDestroy());
 
             if (this != null && particle != null)
             {

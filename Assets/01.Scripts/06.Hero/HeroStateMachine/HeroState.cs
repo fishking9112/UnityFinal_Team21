@@ -1,7 +1,3 @@
-using Cysharp.Threading.Tasks.Triggers;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Android.Types;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,6 +17,7 @@ public class HeroState : StateMachine
     public Vector2 dir { get; set; }
     public float moveSpeed { get; private set; }
 
+    public Animator animator { get; set; }
 
     // 강화 관련 추가
 

@@ -16,7 +16,7 @@ public class MonsterManager : MonoSingleton<MonsterManager>
 
     void Start()
     {
-        foreach (var monsterdata in DataManager.Instance.monsterDic.Values)
+        foreach (var monsterdata in DataManager.Instance.queenAbilityMonsterStatDic.Values)
         {
             monsterInfoList[monsterdata.ID] = new MonsterInfo(monsterdata);
             idByMonsters[monsterdata.ID] = new List<MonsterController>();
