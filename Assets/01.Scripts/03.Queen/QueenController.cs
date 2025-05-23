@@ -241,9 +241,10 @@ public class QueenController : MonoBehaviour
         {
             case QueenSlot.MONSTER:
                 if (context.ReadValue<Vector2>() != Vector2.zero
-                    && Time.time-lastSummon>=cooldown)
+                    && Time.time - lastSummon >= cooldown)
                 {
                     SummonMonster();
+                    SoundManager.Instance.PlaySFX("SFX_UI_Click_Designed_Liquid_Generic_Open_2");
                     lastSummon = Time.time;
                 }
                 break;
@@ -285,12 +286,12 @@ public class QueenController : MonoBehaviour
         if (condition.CurSummonGauge.Value < tempMonster.cost)
         {
             // 테이블 나오면 적용 필요
-            ToastMessage msg = Instantiate(toastMessage,gameHUD.HUDGroup.transform);
+            ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
             msg.SetText("<color=red>마나가 부족합니다.</color>");
 
             return;
         }
-       
+
 
         // 미니맵콜라이더 레이어를 제외한 레이어와 충돌 처리가 일어나면 몬스터 소환 불가
         ContactFilter2D layerFilter = new ContactFilter2D();
