@@ -1,6 +1,8 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [Serializable]
@@ -25,23 +27,18 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
     protected override void Awake()
     {
         base.Awake();
+        InitAsync().Forget();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private async UniTask InitAsync()
     {
-        if(heroObj == null)
-        {
-            return;
-        }
-        condition = GameManager.Instance.queen.condition;
-        list = AddressableManager.Instance.LoadDataAssets<GameObject>("Hero");
-        bossList = AddressableManager.Instance.LoadDataAssets<GameObject>("BossHero");
+        list = await AddressableManager.Instance.LoadDataAssetsAsync<GameObject>("Hero");
+        bossList = await AddressableManager.Instance.LoadDataAssetsAsync<GameObject>("BossHero");
         System.Random rand = new System.Random();
         list = list.OrderBy(x => rand.Next()).ToList();
         int min = Mathf.Min(list.Count, heroObj.poolSize);
 
-        for(int i=0; i<min; i++)
+        for (int i = 0; i < min; i++)
         {
             HeroController hObj = Instantiate(heroObj.obj, transform);
             GameObject hPrefab = Instantiate(list.ElementAt(i), Vector3.zero, Quaternion.identity, hObj.transform);
@@ -51,9 +48,19 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         }
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        if (heroObj == null)
+        {
+            return;
+        }
+        condition = GameManager.Instance.queen.condition;
+    }
+
     public HeroController GetBossObject(Vector2 pos)
     {
-        int rand=UnityEngine.Random.Range(0,bossList.Count);
+        int rand = UnityEngine.Random.Range(0, bossList.Count);
         HeroController hObj = Instantiate(bossObj, transform);
         GameObject hPrefab = Instantiate(bossList.ElementAt(rand), Vector3.zero, Quaternion.identity, hObj.transform);
         hObj.InitHero();

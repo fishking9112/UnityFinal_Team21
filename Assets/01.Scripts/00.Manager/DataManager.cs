@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.U2D;
@@ -54,57 +56,62 @@ public class DataManager : MonoSingleton<DataManager>
     protected override void Awake()
     {
         base.Awake();
+        InitAllData().Forget();
+    }
+
+    private async UniTaskVoid InitAllData()
+    {
         if (monsterData == null)
         {
-            monsterData = Addressables.LoadAssetAsync<MonsterData>("MonsterData").WaitForCompletion();
+            monsterData = await Addressables.LoadAssetAsync<MonsterData>("MonsterData");
         }
         if (queenAbilityData == null)
         {
-            queenAbilityData = Addressables.LoadAssetAsync<QueenAbilityData>("QueenAbilityData").WaitForCompletion();
+            queenAbilityData = await Addressables.LoadAssetAsync<QueenAbilityData>("QueenAbilityData");
         }
         if (heroAbilityData == null)
         {
-            heroAbilityData = Addressables.LoadAssetAsync<HeroAbilityData>("HeroAbilityData").WaitForCompletion();
+            heroAbilityData = await Addressables.LoadAssetAsync<HeroAbilityData>("HeroAbilityData");
         }
         if (heroAbilityLevelUpData == null)
         {
-            heroAbilityLevelUpData = Addressables.LoadAssetAsync<HeroAbilityLevelUpData>("HeroAbilityLevelUpData").WaitForCompletion();
+            heroAbilityLevelUpData = await Addressables.LoadAssetAsync<HeroAbilityLevelUpData>("HeroAbilityLevelUpData");
         }
         if (queenEnhanceData == null)
         {
-            queenEnhanceData = Addressables.LoadAssetAsync<QueenEnhanceData>("QueenEnhanceData").WaitForCompletion();
+            queenEnhanceData = await Addressables.LoadAssetAsync<QueenEnhanceData>("QueenEnhanceData");
         }
         if (heroStatusData == null)
         {
-            heroStatusData = Addressables.LoadAssetAsync<HeroStatusData>("HeroStatusData").WaitForCompletion();
+            heroStatusData = await Addressables.LoadAssetAsync<HeroStatusData>("HeroStatusData");
         }
         if (queenActiveSkillData == null)
         {
-            queenActiveSkillData = Addressables.LoadAssetAsync<QueenActiveSkillData>("QueenActiveSkillData").WaitForCompletion();
+            queenActiveSkillData = await Addressables.LoadAssetAsync<QueenActiveSkillData>("QueenActiveSkillData");
         }
         if (buffData == null)
         {
-            buffData = Addressables.LoadAssetAsync<BuffData>("BuffData").WaitForCompletion();
+            buffData = await Addressables.LoadAssetAsync<BuffData>("BuffData");
         }
         if (trophyData == null)
         {
-            trophyData = Addressables.LoadAssetAsync<TrophyData>("TrophyData").WaitForCompletion();
+            trophyData = await Addressables.LoadAssetAsync<TrophyData>("TrophyData");
         }
         if (eventData == null)
         {
-            eventData = Addressables.LoadAssetAsync<EventData>("EventData").WaitForCompletion();
+            eventData = await Addressables.LoadAssetAsync<EventData>("EventData");
         }
         if (queenStatusData == null)
         {
-            queenStatusData = Addressables.LoadAssetAsync<QueenStatusData>("QueenStatusData").WaitForCompletion();
+            queenStatusData = await Addressables.LoadAssetAsync<QueenStatusData>("QueenStatusData");
         }
         if (queenPassiveSkillData == null)
         {
-            queenPassiveSkillData = Addressables.LoadAssetAsync<QueenPassiveSkillData>("QueenPassiveSkillData").WaitForCompletion();
+            queenPassiveSkillData = await Addressables.LoadAssetAsync<QueenPassiveSkillData>("QueenPassiveSkillData");
         }
         if (toolTipData == null)
         {
-            toolTipData = Addressables.LoadAssetAsync<ToolTipData>("ToolTipData").WaitForCompletion();
+            toolTipData = await Addressables.LoadAssetAsync<ToolTipData>("ToolTipData");
         }
 
         Init<MonsterInfo>(monsterData.infoList, monsterDic);
