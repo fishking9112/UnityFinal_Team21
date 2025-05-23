@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -14,7 +16,7 @@ public class UIManager : MonoSingleton<UIManager>
     /// </summary>
     /// <typeparam name="T">BaseUI를 상속받는 UI 타입</typeparam>
     /// <returns>로드된 UI</returns>
-    public T ShowUI<T>() where T : BaseUI
+    public async Task<T> ShowUI<T>() where T : BaseUI
     {
         if (!AddressableManager.Instance.isInitDownload)
         {
@@ -33,7 +35,7 @@ public class UIManager : MonoSingleton<UIManager>
 
         // 프리팹 로드
         // GameObject uiPrefab = Resources.Load<GameObject>($"{UIPrefabPath}{uiName}");
-        GameObject uiPrefab = AddressableManager.Instance.LoadAsset<GameObject>($"{uiName}.prefab", ResourcePath.UI);
+        GameObject uiPrefab = await AddressableManager.Instance.LoadAssetAsync<GameObject>($"{uiName}.prefab", ResourcePath.UI);
 
         if (uiPrefab == null)
         {
@@ -82,9 +84,9 @@ public class UIManager : MonoSingleton<UIManager>
     /// <param name="message">팝업 메시지</param>
     /// <param name="onConfirmAction">확인 버튼 동작</param>
     /// <param name="onCancelAction">취소 버튼 동작</param>
-    public void ShowPopup(string title, string message, Action onConfirmAction, Action onCancelAction = null)
+    public async UniTaskVoid ShowPopup(string title, string message, Action onConfirmAction, Action onCancelAction = null)
     {
-        var popup = ShowUI<PopupUI>();
+        var popup = await ShowUI<PopupUI>();
         popup.Setup(title, message, onConfirmAction, onCancelAction);
     }
 
@@ -95,7 +97,7 @@ public class UIManager : MonoSingleton<UIManager>
     /// <param name="message">팝업 메시지</param>
     /// <param name="onConfirmAction">확인 버튼 동작</param>
     /// <param name="onCancelAction">취소 버튼 동작</param>
-    public void ShowTooltip(int id, bool forceRun = true, Action onFinishAction = null)
+    public async UniTask ShowTooltip(int id, bool forceRun = true, Action onFinishAction = null)
     {
         // 한번 실행했다면 작동 X
         if (PlayerPrefs.GetInt(id.ToString()) == 1 && !forceRun)
@@ -103,7 +105,7 @@ public class UIManager : MonoSingleton<UIManager>
 
         PlayerPrefs.SetInt(id.ToString(), 1); // 실행 기록 저장
         PlayerPrefs.Save(); // 저장 즉시 적용
-        var popup = ShowUI<ToolTipUI>();
+        var popup = await ShowUI<ToolTipUI>();
         popup.Setup(id, onFinishAction);
     }
 
