@@ -48,7 +48,7 @@ public class BGMController : MonoBehaviour
             }
 
             currentBGM = nextBGM;
-            SoundManager.Instance.PlayBGM(currentBGM);
+            SoundManager.Instance.ChangeBGM(currentBGM);
 
             try
             {
