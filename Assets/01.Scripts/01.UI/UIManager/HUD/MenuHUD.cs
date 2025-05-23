@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static GameLog;
 
 [Serializable]
 public class MainUIButtonPanel
@@ -20,7 +19,7 @@ public class MenuHUD : HUDUI
 {
     public List<MainUIButtonPanel> mainUISets;
     public Button startButton;
-    public Button backBtn;
+    public Button exitBtn;
     public TextMeshProUGUI goldText;
     public GameObject buttonMenu;
     public GameObject uiMenu;
@@ -65,11 +64,13 @@ public class MenuHUD : HUDUI
             mainUISet.panel.SetActive(false);
         }
 
-        backBtn.onClick.AddListener(() =>
+        exitBtn.onClick.AddListener(() =>
         {
-            // buttonMenu.SetActive(true);
-            //  uiMenu.SetActive(false);
-            activePanel.SetActive(false);
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
         });
 
         // 게임시작 버튼 누를 시 스타트 실행
