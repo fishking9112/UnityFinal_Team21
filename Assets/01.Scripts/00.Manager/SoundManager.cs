@@ -13,8 +13,8 @@ public class SoundManager : MonoSingleton<SoundManager>
     [SerializeField] private int poolSize = 10; // 최초 풀 크기
     private Queue<AudioSource> audioSourcePool; // 오브젝트 풀
 
-    private float bgmVolume = 1f;
-    private float sfxVolume = 1f;
+    private float bgmVolume = 0f;
+    private float sfxVolume = 0f;
     public float BGMVolume => bgmVolume;
     public float SFXVolume => sfxVolume;
 
