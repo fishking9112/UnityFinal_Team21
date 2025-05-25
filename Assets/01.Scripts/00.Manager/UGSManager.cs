@@ -81,6 +81,11 @@ public class UGSManager : MonoSingleton<UGSManager>
         await LoadPlayerDataAsync();
     }
 
+    public void UIDtextUneable()
+    {
+        UIDtext.transform.parent.gameObject.SetActive(false);
+    }
+
     public void CompleteNicknameRegistration()
     {
         nicknameRegisterTCS?.TrySetResult(true);
