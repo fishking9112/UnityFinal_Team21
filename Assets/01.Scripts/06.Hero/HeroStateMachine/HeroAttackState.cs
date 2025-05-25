@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 
@@ -29,8 +30,11 @@ public class HeroAttackState : HeroBaseState
         {
             while (enemy != null && enemy.activeSelf && state.hero != null)
             {
+                state.dir = GetEnemyDir();
+
                 if (state.navMeshAgent.remainingDistance < state.navMeshAgent.stoppingDistance)
                 {
+                    state.controller.SetMove(false);
                     state.navMeshAgent.ResetPath();
                     await UniTask.WaitUntil(() => { return enemy == null || !enemy.activeInHierarchy; }, PlayerLoopTiming.Update, tk);
 
@@ -39,6 +43,7 @@ public class HeroAttackState : HeroBaseState
                         return;
                     }
 
+                    state.controller.SetMove(true);
                     GetEnemyDir();
                     break;
                 }
@@ -65,18 +70,17 @@ public class HeroAttackState : HeroBaseState
 
     private Vector2 GetEnemyDir()
     {
-        Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, detectedRange, 1 << 7 | 1 << 13);
-        if (col == null)
+        enemy = state.hero.FindNearestTarget();
+
+        if(enemy==null)
         {
             state.ChangeState(state.moveState);
             return state.GetDir();
         }
         else
         {
-            enemy = col.gameObject;
-            state.dir = col.transform.position;
+            state.dir = enemy.transform.position;
             state.navMeshAgent.SetDestination(state.dir);
-
             return state.dir;
         }
 
