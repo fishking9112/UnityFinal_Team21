@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class UGSManager : MonoSingleton<UGSManager>
     public UGSSaveLoad SaveLoad { get; private set; }
     public UGSLeaderboard Leaderboard { get; private set; }
 
+    public TextMeshProUGUI UIDtext;
     public bool IsLoggedIn => AuthenticationService.Instance.IsSignedIn;
     public string PlayerId => AuthenticationService.Instance.PlayerId;
 
@@ -34,6 +36,7 @@ public class UGSManager : MonoSingleton<UGSManager>
     }
     public async UniTask InitAsync()
     {
+        UIDtext.text = "";
         await InitializeUGS();
         await StartGameFlowAsync();
     }
@@ -46,7 +49,10 @@ public class UGSManager : MonoSingleton<UGSManager>
     public async UniTask StartGameFlowAsync()
     {
         if (!IsLoggedIn)
+        {
             await Auth.SignInAnonymously();
+            UIDtext.text = PlayerId;
+        }
 
         bool hasNickname = await Auth.HasNicknameAsync();
 
