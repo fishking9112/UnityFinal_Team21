@@ -75,7 +75,7 @@ public class HeroAbilityBurst : HeroAbilitySystem
             }
 
             var bullet = objectPoolManager.GetObject<HeroBullet>("Bullet", hero.transform.position);
-            bullet.SetBullet(duration, pierce, damage, speed, 0, knockback);
+            bullet.SetBullet(duration, pierce, damage, speed, 0,size, knockback);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
             await UniTask.Delay(TimeSpan.FromSeconds(countDelay), false, PlayerLoopTiming.Update, cancellationToken: tk);
