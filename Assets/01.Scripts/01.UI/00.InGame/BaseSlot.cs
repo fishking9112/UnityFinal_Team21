@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,7 @@ public abstract class BaseSlot<T> : MonoBehaviour
 {
     [SerializeField] protected List<Image> slotIconList;
     public List<Button> slotButtonList;
+    [SerializeField] protected List<TextMeshProUGUI> slotCostTextList;
 
     protected Dictionary<int, T> slotDic = new Dictionary<int, T>();
 
@@ -26,6 +28,8 @@ public abstract class BaseSlot<T> : MonoBehaviour
             {
                 slotIconList[index].sprite = null;
                 slotIconList[index].enabled = false;
+
+                slotCostTextList[index].text = "";
             }
         }
     }
