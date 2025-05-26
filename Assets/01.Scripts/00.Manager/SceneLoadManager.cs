@@ -71,7 +71,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 await LoadSceneAsync("MenuScene"); // 메뉴 씬으로 이동
                 await StaticUIManager.Instance.LoadUI(LoadSceneEnum.MenuScene);
                 LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Lobby);
-                await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.MainMenu);
+                await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.MainMenu, false);
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
                 Time.timeScale = 1;
@@ -81,18 +81,11 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 await LoadSceneAsync("GameScene");
                 await StaticUIManager.Instance.LoadUI(LoadSceneEnum.GameScene);
 
-                // 시간 멈춤
-                Time.timeScale = 0f;
-                StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused = true;
-
                 // 만약 OpenWindow가 없다면 시간 흐르게 하기
-                await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.InGame, onFinishAction: () =>
+                await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.InGame, false, onFinishAction: () =>
                 {
-                    if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().openWindow == null)
-                    {
-                        Time.timeScale = 1f; // 시간 흐름
-                        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused = false;
-                    }
+                    // 여기서 뜬 Tooltip만 Funnel로 Tutorial보내기
+                    LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Tutorial);
                 });
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)

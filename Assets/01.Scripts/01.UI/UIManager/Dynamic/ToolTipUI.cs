@@ -24,7 +24,7 @@ public class ToolTipUI : BaseUI
     private int curPage = 0;
 
     /// <summary>
-    /// 팝업 초기화
+    /// 툴팁 초기화
     /// </summary>
     public override void Initialize()
     {
@@ -41,10 +41,17 @@ public class ToolTipUI : BaseUI
     }
 
     /// <summary>
-    /// 팝업 설정
+    /// 툴팁 설정
     /// </summary>
     public void Setup(int id, Action onFinishAction = null)
     {
+        var gameHUD = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>();
+        if (gameHUD != null && gameHUD.openWindow == null)
+        {
+            Time.timeScale = 0f; // 시간 멈춤
+            gameHUD.isPaused = true;
+        }
+
         this.onFinishAction = onFinishAction;
         InitPageHistory(id);
         UpdatePage(0);
@@ -109,7 +116,12 @@ public class ToolTipUI : BaseUI
     /// </summary>
     private void OnClickFinish()
     {
-        LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Tutorial);
+        var gameHUD = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>();
+        if (gameHUD != null && gameHUD.openWindow == null)
+        {
+            Time.timeScale = 1f; // 시간 흐름
+            StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused = false;
+        }
 
         onFinishAction?.Invoke();
         OnHide();
