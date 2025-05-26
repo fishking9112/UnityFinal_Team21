@@ -44,6 +44,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         Action<float>[] actions =
         {
             value => ApplyAttackPowerBuff(value),
+            value => ApplyHealthBuff(value),
             value => ApplyMoveSpeedBuff(value),
             value => GameManager.Instance.queen.condition.SetGoldGainMultiplierPercent(value),
             value => GameManager.Instance.queen.condition.SetExpGainMultiplierPercent(value),
@@ -163,39 +164,63 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
     public void ResetQueenAbilityMonsterValues()
     {
-        // 공격력 감소
+        // 공격력 복원
         if (upgradeLevels.TryGetValue((int)IDQueenAbility.MONSTER_ATTACK_DAMAGE_UP, out int atkLevel) && atkLevel > 0)
         {
             var atkAbility = GetAbilityById((int)IDQueenAbility.MONSTER_ATTACK_DAMAGE_UP);
             float atkValue = atkAbility.levelInfo[atkLevel - 1].eff;
-            ApplyAttackPowerBuff(-atkValue);
+            ApplyAttackPowerBuff(1 / (1 + atkValue), true); // 곱셈 기반 복원
         }
 
-        // 이동속도 감소
+        // 체력 복원
+        if (upgradeLevels.TryGetValue((int)IDQueenAbility.MONSTER_HP_UP, out int hpLevel) && hpLevel > 0)
+        {
+            var hpAbility = GetAbilityById((int)IDQueenAbility.MONSTER_HP_UP);
+            float hpValue = hpAbility.levelInfo[hpLevel - 1].eff;
+            ApplyHealthBuff(1 / (1 + hpValue), true); // 곱셈 기반 복원
+        }
+
+        // 이동속도 복원
         if (upgradeLevels.TryGetValue((int)IDQueenAbility.MONSTER_MOVE_SPEED_UP, out int speedLevel) && speedLevel > 0)
         {
             var speedAbility = GetAbilityById((int)IDQueenAbility.MONSTER_MOVE_SPEED_UP);
             float speedValue = speedAbility.levelInfo[speedLevel - 1].eff;
-            ApplyMoveSpeedBuff(-speedValue);    
+            ApplyMoveSpeedBuff(1 / (1 + speedValue), true); // 곱셈 기반 복원
         }
-
     }
 
-    private void ApplyAttackPowerBuff(float value)
+    private void ApplyAttackPowerBuff(float value, bool reset = false)
     {
         foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
         {
-            kvp.Value.attack += value;
+            if(reset)
+                kvp.Value.attack *= value;
+            else
+                kvp.Value.attack *= 1 + value;
         }
     }
 
-    private void ApplyMoveSpeedBuff(float value)
+    private void ApplyMoveSpeedBuff(float value, bool reset = false)
     {
         foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
         {
-            kvp.Value.moveSpeed += value;
+            if (reset)
+                kvp.Value.moveSpeed *= value;
+            else
+                kvp.Value.moveSpeed *= 1 + value;
         }
     }
+    private void ApplyHealthBuff(float value, bool reset = false)
+    {
+        foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
+        {
+            if (reset)
+                kvp.Value.health *= value;
+            else
+                kvp.Value.health *= 1 + value;
+        }
+    }
+
     #endregion
 
     #region 리셋
@@ -348,7 +373,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         return upgradeLevels.TryGetValue(id, out int level) ? level : 0;
     }
 
-    public int GetEffectValue(int id)
+    public float GetEffectValue(int id)
     {
         if (!upgradeLevels.TryGetValue(id, out int level) || level <= 0)
             return 0;
