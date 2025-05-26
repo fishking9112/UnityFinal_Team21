@@ -74,6 +74,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 await UIManager.Instance.ShowTooltip((int)IDToolTip.MainMenu);
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
+                Time.timeScale = 1;
                 break;
             case LoadSceneEnum.GameScene: // 게임 씬 일 경우
                 await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
