@@ -26,10 +26,10 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     [SerializeField] private OwnedEnhanceItem prefabsOwnedEnhanceItem;
 
     // 앞으로 추가될 퍼센트 타입들도 여기 넣으면 됨
-    public static readonly HashSet<ValueType> PercentValueTypes = new HashSet<ValueType>
-    {
-        ValueType.MoveSpeed,
-    };
+    //public static readonly HashSet<ValueType> PercentValueTypes = new HashSet<ValueType>
+    //{
+    //    ValueType.MoveSpeed,
+    //};
 
     /// <summary>
     /// 팝업 UI가 마우스를 따라다니도록 위치를 계속 갱신합니다.
@@ -79,7 +79,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         descriptionPopupUI.gameObject.SetActive(false);
 
         GenerateOwnedEnhanceItems();
-    } 
+    }
 
     private void GenerateOwnedEnhanceItems()
     {
@@ -91,7 +91,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         QueenEnhanceUI queenEnhanceUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI;
 
 
-        foreach(var items in queenEnhanceUI.AcquiredEnhanceLevels)
+        foreach (var items in queenEnhanceUI.AcquiredEnhanceLevels)
         {
             OwnedEnhanceItem ownedEnhanceItem = Instantiate(prefabsOwnedEnhanceItem, enhanceContent);
             ownedEnhanceItem.SetEnhanceItem(items.Key, false);
@@ -110,7 +110,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         // 마나 회복량 = 기본 회복량 + 강화 효과
         float manaRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].mana_Recorvery;
         float manaRegenEnhance = queenCondition.QueenActiveSkillGaugeRecoverySpeed - manaRegenBase;
-        builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / sec");
+        builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / s");
     }
 
     /// <summary>
@@ -130,7 +130,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     {
         float summonRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].summon_Recorvery;
         float summonRegenEnhance = queenCondition.SummonGaugeRecoverySpeed - summonRegenBase;
-        builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / sec");
+        builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / s");
     }
 
     /// <summary>
@@ -150,7 +150,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     {
         float castleHpRegenBase = GameManager.Instance.castle.condition.initCastleHealthRecoverySpeed;
         float castleHpRegenEnhance = GameManager.Instance.castle.condition.CastleHealthRecoverySpeed - castleHpRegenBase;
-        builder.AppendLine($"캐슬 회복량 : {FormatNumber(castleHpRegenBase)} + {FormatNumber(castleHpRegenEnhance)} / sec");
+        builder.AppendLine($"캐슬 회복량 : {FormatNumber(castleHpRegenBase)} + {FormatNumber(castleHpRegenEnhance)} / s");
     }
 
     /// <summary>
@@ -193,7 +193,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
                     value += info.state_Base + info.state_LevelUp * (i - 1);
                 }
 
-                string formattedValue = PercentValueTypes.Contains(info.valueType) ? $"+{value * 100:F0}%" : $"+{value}";
+                string formattedValue = $"+{value * 100:F0}%";
 
                 builder.AppendLine($"- {info.name} : Lv.{level} ({formattedValue})");
             }
@@ -227,9 +227,8 @@ public class QueenEnhanceStatusUI : MonoBehaviour
 
         float previewValue = (currentLevel / 2f) * (2 * info.state_Base + (currentLevel - 1) * info.state_LevelUp);
 
-        string formattedValue = PercentValueTypes.Contains(info.valueType)
-            ? $"{previewValue * 100:F0}%"
-            : $"{previewValue}";
+        string formattedValue = $"{previewValue * 100:F0}%";
+
 
         popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
 

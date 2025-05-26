@@ -73,18 +73,18 @@ public class GameResultUI : SingleUI
         InitMiddlePanel();
         InitUnitResult();
         ApplyStageGold();
-        int mvpID= SetMonsterMVP();
+        int mvpID = SetMonsterMVP();
 
         DescriptionPopupUI.SetActive(false);
         QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
 
         int queenid = GameManager.Instance.QueenCharaterID;
-        int time = (int)(GameManager.Instance.gameLimitTime-GameManager.Instance.curTime.Value);
+        int time = (int)(GameManager.Instance.gameLimitTime - GameManager.Instance.curTime.Value);
         int mostSummonID = resultDatas.OrderByDescending(x => x.Value.spawnCount).FirstOrDefault().Key;
-        int mostSummon = mostSummonID!=0?resultDatas[mostSummonID].spawnCount:0;
-        int leastSummonID= resultDatas.OrderBy(x => x.Value.spawnCount).FirstOrDefault().Key;
-        int leastSummon = leastSummonID!=0? resultDatas[leastSummonID].spawnCount:0;
-        int tryCnt= PlayerPrefs.GetInt("TryCount");
+        int mostSummon = mostSummonID != 0 ? resultDatas[mostSummonID].spawnCount : 0;
+        int leastSummonID = resultDatas.OrderBy(x => x.Value.spawnCount).FirstOrDefault().Key;
+        int leastSummon = leastSummonID != 0 ? resultDatas[leastSummonID].spawnCount : 0;
+        int tryCnt = PlayerPrefs.GetInt("TryCount");
         int isC = isClear ? 1 : 0;
 
         LogManager.Instance.PlayEndLog(queenid, time, isC, mostSummonID, mostSummon, leastSummonID, leastSummon, mvpID, tryCnt);
@@ -230,9 +230,7 @@ public class GameResultUI : SingleUI
 
         float previewValue = (currentLevel / 2f) * (2 * info.state_Base + (currentLevel - 1) * info.state_LevelUp);
 
-        string formattedValue = QueenEnhanceStatusUI.PercentValueTypes.Contains(info.valueType)
-            ? $"{previewValue * 100:F0}%"
-            : $"{previewValue}";
+        string formattedValue = $"{previewValue * 100:F0}%";
 
         popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
 
