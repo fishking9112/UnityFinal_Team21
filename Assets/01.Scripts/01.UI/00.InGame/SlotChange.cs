@@ -21,8 +21,10 @@ public class SlotChange : MonoBehaviour
     private bool isChange = false;
 
     private QueenController controller;
-
     private InputAction inputAction;
+
+    private int saveMonster = -1;
+    private QueenActiveSkillBase saveSkill = null;
 
     public void Init(QueenController queenController, InputAction slotChangeAction)
     {
@@ -112,10 +114,47 @@ public class SlotChange : MonoBehaviour
     // 슬롯 변경이 끝날 때 호출. 현재 슬롯의 상태를 바꿔줌
     private void CheangeEnd()
     {
+        // 슬롯 변경전 이전 값 저장
+        if (controller.curSlot == QueenSlot.MONSTER)
+        {
+            saveMonster = controller.selectedMonsterId;
+        }
+        else
+        {
+            saveSkill = controller.selectedQueenActiveSkill;
+        }
+
+        // 슬롯 변경
         controller.curSlot = controller.curSlot == QueenSlot.MONSTER ? QueenSlot.QueenActiveSkill : QueenSlot.MONSTER;
-        controller.selectedMonsterId = -1;
-        controller.selectedQueenActiveSkill = null;
-        controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = null;
+
+        // 이전 값 불러오기
+        if (controller.curSlot == QueenSlot.MONSTER)
+        {
+            controller.selectedMonsterId = saveMonster;
+
+            if (DataManager.Instance.monsterDic.TryGetValue(saveMonster, out var monsterdata))
+            {
+                var icon = DataManager.Instance.iconAtlas.GetSprite(monsterdata.icon);
+                if (icon != null)
+                {
+                    controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = icon;
+                }
+                else
+                {
+                    controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+            else
+            {
+                controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = null;
+            }
+        }
+        else if (controller.curSlot == QueenSlot.QueenActiveSkill)
+        {
+            controller.selectedQueenActiveSkill = saveSkill;
+            controller.cursorIcon.GetComponent<SpriteRenderer>().sprite = null;
+        }
+
         isChange = false;
     }
 

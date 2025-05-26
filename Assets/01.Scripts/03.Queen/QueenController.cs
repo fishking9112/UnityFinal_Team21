@@ -42,8 +42,8 @@ public class QueenController : MonoBehaviour
 
     private bool isDrag;
     public bool isMinimapDrag;
-    private float summonDistance;
-    private Vector3 lastSummonPosition;
+    //private float summonDistance;
+    //private Vector3 lastSummonPosition;
 
     public ToastMessage toastMessage;
 
@@ -57,8 +57,8 @@ public class QueenController : MonoBehaviour
         atlas = DataManager.Instance.iconAtlas;
         castlePos = GameManager.Instance.castle.transform.position;
 
-        summonDistance = 0.5f;
-        lastSummonPosition = Vector3.positiveInfinity;
+        //summonDistance = 0.5f;
+        //lastSummonPosition = Vector3.positiveInfinity;
 
         skillSizeSpriteRadius = skillSizeSprite.bounds.size.x;
         skillRangeSpriteRadius = skillRangeSprite.bounds.size.x;
