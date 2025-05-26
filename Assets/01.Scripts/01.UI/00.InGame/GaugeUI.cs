@@ -1,3 +1,6 @@
+using Cysharp.Threading.Tasks;
+using System;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +13,18 @@ public class GaugeUI : MonoBehaviour
     private ReactiveProperty<float> cur;
     private ReactiveProperty<float> max;
 
+    [Header("Gauge Image 점등")]
+    private bool isImgFlash = false;
+    [SerializeField] private Color flashColor = Color.white;// 깜빡거릴 색상 저장용
+    [SerializeField] private int flashImgTime = 5; // 몇 번
+    [SerializeField] private float duration = 1.0f; // 몇 초 동안
+    [SerializeField] public float magnitude = 10f; // 흔들림 세기 (픽셀 단위)
+    private Color originColor = new(); // 원본 색상 저장용
+    private Vector2 originalPos = new();
+    private Image flashImg;
+    private Action flashAction;
+    private CancellationTokenSource imgActionCts;
+
     private void Awake()
     {
         if (!TryGetComponent(out fillImage))
@@ -21,10 +36,20 @@ public class GaugeUI : MonoBehaviour
         {
             Utils.LogWarning("TextMeshProUGUI 컴포넌트를 찾을 수 없습니다.");
         }
+
+        if (!TryGetComponent(out flashImg))
+        {
+            Utils.LogWarning("Image 컴포넌트를 찾을 수 없습니다.");
+        }
+        else
+        {
+            originColor = flashImg.color;
+            originalPos = flashImg.transform.position;
+        }
     }
 
     // 반응형 프로퍼티로 현재 게이지와 최대 게이지를 바인딩
-    public void Bind(ReactiveProperty<float> curGauge, ReactiveProperty<float> maxGauge)
+    public void Bind(ReactiveProperty<float> curGauge, ReactiveProperty<float> maxGauge, bool isImgFlash = false, Action flashAction = null)
     {
         Unbind();
 
@@ -33,8 +58,9 @@ public class GaugeUI : MonoBehaviour
 
         cur.AddAction(UpdateFill);
         max.AddAction(UpdateFill);
-
-        UpdateFill(0);
+        this.isImgFlash = isImgFlash;
+        this.flashAction = flashAction;
+        // UpdateFill(0);
     }
 
     // 반응형 프로퍼티의 값이 변경되면 실행할 함수. 값에 따라 이미지의 fillAmount가 바뀜
@@ -43,6 +69,12 @@ public class GaugeUI : MonoBehaviour
         if (max == null || max.Value <= 0f)
         {
             return;
+        }
+
+        if (isImgFlash && fillImage.fillAmount > Mathf.Clamp01(cur.Value / max.Value) && useless != 0)
+        {
+            ActionImg();
+            flashAction?.Invoke();
         }
 
         fillImage.fillAmount = Mathf.Clamp01(cur.Value / max.Value);
@@ -60,7 +92,7 @@ public class GaugeUI : MonoBehaviour
         cur.AddAction(UpdateText);
         max.AddAction(UpdateText);
 
-        UpdateText(0);
+        // UpdateText(0);
     }
 
     // 반응형 프로퍼티의 값이 변경되면 실행할 함수. 값에 따라 이미지의 Text가 바뀜
@@ -93,5 +125,65 @@ public class GaugeUI : MonoBehaviour
     private void OnDestroy()
     {
         Unbind();
+
+        imgActionCts?.Cancel();
+        imgActionCts?.Dispose();
+        imgActionCts = null;
+    }
+
+    private void ActionImg()
+    {
+        imgActionCts?.Cancel();
+        imgActionCts?.Dispose();
+        // 새로운 CancellationTokenSource 만들기 (OnDisable용 토큰도 연동)
+        imgActionCts = new CancellationTokenSource();
+
+        ImgFlash();
+        ImgShake();
+    }
+
+    // UniTask 실행 함수
+    public void ImgFlash()
+    {
+        // Task 시작
+        ImgFlashTask(imgActionCts.Token).Forget();
+    }
+
+    // UniTask 본문
+    private async UniTaskVoid ImgFlashTask(CancellationToken token)
+    {
+        for (int i = 0; i < flashImgTime; i++)
+        {
+            flashImg.color = flashColor;
+            await UniTask.Delay(TimeSpan.FromSeconds((duration / flashImgTime) * 0.2f), true, PlayerLoopTiming.Update, cancellationToken: token);
+            flashImg.color = originColor;
+            await UniTask.Delay(TimeSpan.FromSeconds((duration / flashImgTime) * 0.8f), true, PlayerLoopTiming.Update, cancellationToken: token);
+        }
+    }
+
+    // UniTask 실행 함수
+    public void ImgShake()
+    {
+        // Task 시작
+        ImgShakeTask(imgActionCts.Token).Forget();
+    }
+
+    // UniTask 본문
+    private async UniTaskVoid ImgShakeTask(CancellationToken token)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float offsetX = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+            float offsetY = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+
+            flashImg.transform.position = originalPos + new Vector2(offsetX, offsetY);
+
+            elapsed += Time.deltaTime;
+            await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken: token, true);
+        }
+
+        flashImg.transform.position = originalPos;
     }
 }
