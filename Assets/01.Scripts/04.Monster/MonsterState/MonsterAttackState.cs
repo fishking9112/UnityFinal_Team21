@@ -133,7 +133,7 @@ public class MonsterAttackState : MonsterBaseState
             UniTask.Delay((int)(550 * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed))), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
             {
                 float minDist = float.MaxValue;
-                Vector2 origin = navMeshAgent.transform.position;
+                Vector2 origin = navMeshAgent.transform.position + ((target.transform.position - navMeshAgent.transform.position).normalized * stat.attackRange.Value / 2f);
                 Collider2D[] hits = Physics2D.OverlapCircleAll(origin, stat.attackRange.Value, stateMachine.Controller.attackLayer);
                 Utils.DrawOverlapCircle(origin, stat.attackRange.Value, Color.red, 0.1f);
                 Collider2D nearHit = null;
