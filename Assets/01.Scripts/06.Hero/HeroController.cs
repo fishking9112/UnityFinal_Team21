@@ -166,7 +166,7 @@ public class HeroController : BaseController
 
     public async UniTask GetAnimFinish()
     {
-        await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).IsName("DEATH"));
+        // await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).IsName("DEATH"));
         await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
         HeroPoolManager.Instance.ReturnObject(this);
         isDead = false;
