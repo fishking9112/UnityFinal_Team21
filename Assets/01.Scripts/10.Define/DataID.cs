@@ -157,6 +157,7 @@ public enum IDQueenPassiveSkill
 public enum IDQueenAbility
 {
     MONSTER_ATTACK_DAMAGE_UP = 30001,
+    MONSTER_HP_UP,
     MONSTER_MOVE_SPEED_UP,
     GOLD_GAIN_AMOUNT_UP,
     EXP_GAIN_AMOUNT_UP,
