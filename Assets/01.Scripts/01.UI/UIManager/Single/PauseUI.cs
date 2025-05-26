@@ -5,7 +5,8 @@ public class PauseUI : SingleUI
 {
     [Header("UIs")]
     [SerializeField] private QueenEnhanceStatusUI queenEnhanceStatusUI;
-    public Button exitButton;
+    [SerializeField] private Button exitButton;
+    [SerializeField] private Button continueButton;
 
 
     public RectTransform cameraRect;
@@ -13,6 +14,7 @@ public class PauseUI : SingleUI
     private void Awake()
     {
         exitButton.onClick.AddListener(OnClickGameResult);
+        continueButton.onClick.AddListener(OnClickContinue);
     }
 
     private void OnEnable()
@@ -21,6 +23,7 @@ public class PauseUI : SingleUI
     }
 
     /// <summary>
+    /// 
     /// 강화 상태 새로고침
     /// </summary>
     public void RefreshStatus()
@@ -29,12 +32,19 @@ public class PauseUI : SingleUI
     }
 
     /// <summary>
-    /// 게임 종료 버튼 눌렀을 때
+    /// 게임 종료
     /// </summary>
     private void OnClickGameResult()
     {
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().HideWindow();
         GameManager.Instance.GameOver();
-        // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
+    }
+
+    /// <summary>
+    /// 계속 하기 버튼 눌렀을 때
+    /// </summary>
+    private void OnClickContinue()
+    {
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().HideWindow();
     }
 }
