@@ -20,7 +20,6 @@ public class GameSceneStartFlow : MonoBehaviour
         yield return null;
 
         EquipDefaultUnitToQuickSlot();
-        QueenAbilityUpgradeManager.Instance.ApplyAllEffects();
     }
 
     private void EquipDefaultUnitToQuickSlot()
