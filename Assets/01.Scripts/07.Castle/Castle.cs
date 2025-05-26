@@ -20,6 +20,7 @@ public class Castle : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.castle = this;
+        QueenAbilityUpgradeManager.Instance.ApplyAllEffects();
 
         cur = condition.CurCastleHealth;
         max = condition.MaxCastleHealth;
