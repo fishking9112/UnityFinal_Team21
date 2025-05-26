@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,6 +19,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private QueenEnhanceInfo currentInfo;
     private Vector3 originalScale;
     private bool isSelected = false;
+    public bool isSelectable = false;
 
     /// <summary>
     /// UI 요소와 기본 크기를 설정.
@@ -54,13 +54,12 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
             ? info.state_Base
             : info.state_Base + (info.state_LevelUp * currentLevel);
 
-        string formattedValue = QueenEnhanceStatusUI.PercentValueTypes.Contains(info.valueType)
-            ? $"{previewValue * 100:F0}%"
-            : $"{previewValue}";
+        string formattedValue = $"{previewValue * 100:F0}%";
+
 
         enhanceDecText.text = info.description.Replace("n", formattedValue);
 
-        if(info.skill_ID != 0)
+        if (info.skill_ID != 0)
         {
             enhanceDecText.text += $"\n\n<color=#FFB600>* {DataManager.Instance.queenActiveSkillDic[info.skill_ID].name} : {DataManager.Instance.queenActiveSkillDic[info.skill_ID].description}</color>";
         }
@@ -108,7 +107,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (isSelected || !HasEnhancePoint()) return;
 
         targetTransform.DOScale(originalScale * hoverScale, scaleDuration).SetEase(Ease.OutBack).SetUpdate(true);
-       
+
     }
 
     /// <summary>
@@ -126,7 +125,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (isSelected || !HasEnhancePoint()) return;
+        if (isSelected || !HasEnhancePoint() || !isSelectable) return;
 
         isSelected = true;
 

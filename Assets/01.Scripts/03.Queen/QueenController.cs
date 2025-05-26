@@ -42,8 +42,8 @@ public class QueenController : MonoBehaviour
 
     private bool isDrag;
     public bool isMinimapDrag;
-    private float summonDistance;
-    private Vector3 lastSummonPosition;
+    //private float summonDistance;
+    //private Vector3 lastSummonPosition;
 
     public ToastMessage toastMessage;
 
@@ -57,8 +57,8 @@ public class QueenController : MonoBehaviour
         atlas = DataManager.Instance.iconAtlas;
         castlePos = GameManager.Instance.castle.transform.position;
 
-        summonDistance = 0.5f;
-        lastSummonPosition = Vector3.positiveInfinity;
+        //summonDistance = 0.5f;
+        //lastSummonPosition = Vector3.positiveInfinity;
 
         skillSizeSpriteRadius = skillSizeSprite.bounds.size.x;
         skillRangeSpriteRadius = skillRangeSprite.bounds.size.x;
@@ -318,6 +318,12 @@ public class QueenController : MonoBehaviour
         condition.AdjustCurSummonGauge(-tempMonster.cost);
         var monster = objectPoolManager.GetObject<MonsterController>(tempMonster.outfit, worldMousePos);
         monster.StatInit(tempMonster, MonsterManager.Instance.isHealthUI);
+
+        Vector3 targetScale = monster.transform.localScale;
+        Vector3 particlePos = monster.transform.position + new Vector3(0, targetScale.y * 0.25f, 0);
+        Vector3 particleScale = targetScale * 0.1f;
+
+        ParticleManager.Instance.SpawnParticle("Summon_Eff", particlePos, particleScale, parent: monster.transform);
 
         // 마지막 생성위치 갱신
         //lastSummonPosition = worldMousePos;

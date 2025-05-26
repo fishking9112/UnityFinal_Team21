@@ -1,3 +1,4 @@
+using Google.GData.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private Button slotButton;
 
     public int slotIndex;
-    public EvolutionNode slotMonsterData;
+    public MonsterInfo slotMonsterInfoData;
 
     private void OnEnable()
     {
@@ -21,6 +22,7 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnDrop(PointerEventData eventData)
     {
         var dragged = evolutionTree.EvolutionTreeUI.EvolutionDragIcon.GetComponent<EvolutionDragIcon>();
+        var evolutionTreeUI = evolutionTree.EvolutionTreeUI;
 
         if (dragged != null)
         {
@@ -28,9 +30,9 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
             if (node != null && node.isUnlock)
             {
-                evolutionTree.RemovePreSlotData(node);
+                evolutionTreeUI.RemovePreSlotData(node);
                 SetSlot(node);
-                evolutionTree.AddQueenSlot(node.monsterInfo, slotIndex);
+                evolutionTreeUI.AddQueenSlot(node.monsterInfo, slotIndex);
             }
         }
     }
@@ -43,8 +45,17 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             return;
         }
 
-        slotMonsterData = node;
+        slotMonsterInfoData = node.monsterInfo;
         slotIcon.sprite = node.image.sprite;
+        slotIcon.enabled = true;
+        slotIcon.preserveAspect = true;
+    }
+
+    // 초기 슬롯 세팅에 사용되는 함수
+    public void SetSlot(MonsterInfo info)
+    {
+        slotMonsterInfoData = info;
+        slotIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(info.icon);
         slotIcon.enabled = true;
         slotIcon.preserveAspect = true;
     }
@@ -52,7 +63,7 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     // 슬롯 초기화
     public void ClearSlot()
     {
-        slotMonsterData = null;
+        slotMonsterInfoData = null;
         slotIcon.enabled = false;
     }
 
@@ -76,12 +87,12 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if(eventData.button == PointerEventData.InputButton.Right)
         {
-            if(slotMonsterData != null)
+            if(slotMonsterInfoData != null)
             {
-                if (slotMonsterData != null)
+                if (slotMonsterInfoData != null)
                 {
                     ClearSlot();
-                    evolutionTree.RemoveQueenSlot(slotIndex);
+                    evolutionTree.EvolutionTreeUI.RemoveQueenSlot(slotIndex);
                 }
             }
         }

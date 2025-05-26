@@ -73,6 +73,9 @@ public class GameHUD : HUDUI
     [Header("Slot")]
     public SlotChange slot;
 
+    [Header("피격 당함 마크")]
+    public AttackMarkIcon attackMarkIconPrefab;
+
     public override async UniTask Initialize()
     {
         BindSlotButton();
@@ -94,7 +97,11 @@ public class GameHUD : HUDUI
 
         summonGaugeUI.Bind(condition.CurSummonGauge, condition.MaxSummonGauge);
         queenActiveSkillGaugeUI.Bind(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
-        castleGaugeUI.Bind(GameManager.Instance.castle.condition.CurCastleHealth, GameManager.Instance.castle.condition.MaxCastleHealth);
+        castleGaugeUI.Bind(GameManager.Instance.castle.condition.CurCastleHealth, GameManager.Instance.castle.condition.MaxCastleHealth,
+        isImgFlash: true, flashAction: () =>
+        {
+            Instantiate(attackMarkIconPrefab, Vector2.zero, Quaternion.identity);
+        });
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
 
         queenActiveSkillGaugeTextUI.BindText(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
