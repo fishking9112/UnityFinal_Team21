@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Castle : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer sprite;
-    [SerializeField] private Image fillImage;
+    [SerializeField] private Slider healthSlider;
     public CastleCondition condition;
 
     private ReactiveProperty<float> cur;
@@ -43,7 +43,8 @@ public class Castle : MonoBehaviour
             return;
         }
 
-        fillImage.fillAmount = Mathf.Clamp01(cur.Value / max.Value);
+        healthSlider.maxValue = max.Value;
+        healthSlider.value = cur.Value;
     }
 
     /// <summary>
@@ -91,15 +92,8 @@ public class Castle : MonoBehaviour
     // 메모리 누수 방지
     private void OnDestroy()
     {
-        if (cur != null)
-        {
-            cur.RemoveAction(UpdateFill);
-        }
-
-        if (max != null)
-        {
-            max.RemoveAction(UpdateFill);
-        }
+        if (cur != null) cur.RemoveAction(UpdateFill);
+        if (max != null) max.RemoveAction(UpdateFill);
 
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
