@@ -15,7 +15,7 @@ public class SlotChange : MonoBehaviour
     public GameObject queenActiveSkillGauge;
     public GameObject summonGauge;
 
-    public float duration;
+    private float duration = 0.2f;
     public float arcHeight;
 
     private bool isChange = false;
@@ -49,13 +49,13 @@ public class SlotChange : MonoBehaviour
     // Tab 키를 누르면 몬스터슬롯과 권능 슬롯이 변경됨
     public void OnChangeSlots(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started)
+        if (context.phase == InputActionPhase.Started)
         {
             if (isChange)
             {
                 return;
             }
-            if(StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused == true)
+            if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused == true)
             {
                 return;
             }
@@ -79,7 +79,7 @@ public class SlotChange : MonoBehaviour
 
             // 끝날 때
             seq.OnComplete(CheangeEnd);
-        } 
+        }
     }
 
     // 슬롯의 순서를 바꿈. 현재 선택된 슬롯이 아니면 반 투명해지면서 현재슬롯에 가려지도록 렌더링 순서 변경
