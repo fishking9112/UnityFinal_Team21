@@ -42,11 +42,13 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                     titleProgressText.ActiveUIGroup(true);
                     titleProgressText.SetAnimText("로그인 중");
                     titleProgressText.StartAnimating();
+                    await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
                     await UGSManager.Instance.InitAsync(); // UGS 초기화
                     titleProgressText.StopAnimating();
 
                     titleProgressText.SetAnimText("데이터 로딩 중");
                     titleProgressText.StartAnimating();
+                    await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
                     await AddressableManager.Instance.InitDownloadAsync(); // Addressable 다운로드
                     titleProgressText.StopAnimating();
                     titleProgressText.ActiveUIGroup(false);
@@ -57,6 +59,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 {
                     tapToStartUI.ActiveUIGroup(true);
                     await WaitForUserTapAsync();
+                    UGSManager.Instance.UIDtextUneable();
                     tapToStartUI.ActiveUIGroup(false);
                 }
 

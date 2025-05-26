@@ -24,6 +24,8 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
         slotIconList[index].enabled = true;
         slotIconList[index].preserveAspect = true;
 
+        slotCostTextList[index].text = skill.info.cost.ToString();
+
         if (index < coolTimeMask.Count)
         {
             coolTimeMask[index].fillAmount = 0f;

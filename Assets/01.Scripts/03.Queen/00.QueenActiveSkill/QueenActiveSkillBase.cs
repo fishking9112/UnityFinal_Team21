@@ -33,6 +33,7 @@ public abstract class QueenActiveSkillBase : MonoBehaviour
 
         condition.AdjustCurQueenActiveSkillGauge(-value);
         UseSkill();
+        controller.selectedQueenActiveSkill = null;
         await ApplyCooltimeSkill();
         return;
     }

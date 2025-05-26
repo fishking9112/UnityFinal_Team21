@@ -244,7 +244,6 @@ public class QueenController : MonoBehaviour
                     && Time.time - lastSummon >= cooldown)
                 {
                     SummonMonster();
-                    SoundManager.Instance.PlaySFX("SFX_UI_Click_Designed_Liquid_Generic_Open_2");
                     lastSummon = Time.time;
                 }
                 break;
@@ -272,6 +271,7 @@ public class QueenController : MonoBehaviour
         {
             return;
         }
+
         // 마지막 생성위치에서 일정 거리 이상 떨어져야 소환가능
         if (Vector3.Distance(worldMousePos, lastSummonPosition) < summonDistance)
         {
@@ -292,6 +292,7 @@ public class QueenController : MonoBehaviour
             return;
         }
 
+        SoundManager.Instance.PlaySFX("SFX_UI_Click_Designed_Liquid_Generic_Open_2");
 
         // 미니맵콜라이더 레이어를 제외한 레이어와 충돌 처리가 일어나면 몬스터 소환 불가
         ContactFilter2D layerFilter = new ContactFilter2D();
