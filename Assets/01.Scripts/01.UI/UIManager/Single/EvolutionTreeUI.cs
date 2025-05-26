@@ -46,6 +46,10 @@ public class EvolutionTreeUI : SingleUI
     [Header("QuickSlot")]
     [SerializeField] private List<EvolutionSlot> slotList;
 
+    [Header("EquipDefaultUnitNode")]
+    [SerializeField] private EvolutionNode[] arrayEvolutionNode;
+    public EvolutionNode[] ArrayEvolutionNode => arrayEvolutionNode;
+
     [Header("DragIcon")]
     [SerializeField] private EvolutionDragIcon evolutionDragIcon;
     public EvolutionDragIcon EvolutionDragIcon => evolutionDragIcon;
@@ -53,6 +57,7 @@ public class EvolutionTreeUI : SingleUI
 
     private int curIndex;
     private EvolutionTree currentTreePage;
+    private QueenController queenController;
 
     public List<EvolutionSlot> SlotList => slotList;
     public int PageCount => pageList.Count;
@@ -169,5 +174,36 @@ public class EvolutionTreeUI : SingleUI
     public void PassEvolutionNodeInfo(EvolutionNode node)
     {
         evolutionDragIcon.SetEvolutionNode(node);
+    }
+
+    public void SetQueenController()
+    {
+        queenController = GameManager.Instance.queen.controller;
+    }
+
+    // 이전에 등록된 슬롯 데이터 제거 (몬스터 A를 1번칸에 등록한 상태로 2번칸에 등록하려할 때 1번칸의 데이터를 없애주는 역할)
+    public void RemovePreSlotData(EvolutionNode node)
+    {
+        foreach (var slot in SlotList)
+        {
+            if (slot.slotMonsterInfoData == node.monsterInfo)
+            {
+                slot.ClearSlot();
+                RemoveQueenSlot(slot.slotIndex);
+                return;
+            }
+        }
+    }
+
+    // 진화 트리 슬롯에 등록한 몬스터를 퀸 슬롯에도 등록
+    public void AddQueenSlot(MonsterInfo monster, int index)
+    {
+        queenController.monsterSlot.AddSlot(index, monster);
+    }
+
+    // 진화 트리 슬롯에 제거한 몬스터를 퀸 슬롯에도 제거
+    public void RemoveQueenSlot(int index)
+    {
+        queenController.monsterSlot.RemoveSlot(index);
     }
 }
