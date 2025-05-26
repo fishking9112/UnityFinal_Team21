@@ -10,7 +10,8 @@ public class QueenEnhanceUI : SingleUI
     [SerializeField] private SelectInhanceItem[] itemSlots;
     [SerializeField] private QueenSkillSwapItem[] skillSwapSlots;
     [SerializeField] private GameObject queenSkillSwapPopup;
-    [SerializeField] private Button SkillSwapPopupExitBtn;
+    [SerializeField] private Button skillSwapPopupExitBtn;
+    [SerializeField] private Button enhanceRerollBtn;
 
     private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
     public IReadOnlyDictionary<int, int> AcquiredEnhanceLevels => acquiredEnhanceLevels;
@@ -18,15 +19,19 @@ public class QueenEnhanceUI : SingleUI
     private QueenEnhanceInfo tmpQueenEnhanceInfo;
     [HideInInspector] public bool isOpen = false;
 
+
+    private const int rerollCost = 1000;
+
     private void Awake()
     {
-        SkillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
+        skillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
+        enhanceRerollBtn.onClick.AddListener(OnClickEnhanceReroll);
     }
 
     private void OnEnable()
     {
-        SkillSwapPopupExitBtn.onClick.RemoveAllListeners();
-        SkillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
+        skillSwapPopupExitBtn.onClick.RemoveAllListeners();
+        skillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
 
         queenSkillSwapPopup.SetActive(false);
         var randomOptions = GetRandomInhanceOptions();
@@ -37,6 +42,26 @@ public class QueenEnhanceUI : SingleUI
     private void OnDisable()
     {
         isOpen = false;
+    }
+    /// <summary>
+    /// 리롤 버튼 클릭 시 호출
+    /// </summary>
+    private void OnClickEnhanceReroll()
+    {
+        if (GameManager.Instance.queen.condition.Gold.Value >= rerollCost)
+        {
+            // 골드 차감
+            GameManager.Instance.queen.condition.Gold.Value -= rerollCost;
+
+            // 새 옵션 가져오기 및 UI 갱신
+            var randomOptions = GetRandomInhanceOptions();
+            ShowSelectUI(randomOptions);
+            ClickDelay();
+        }
+        else
+        {
+            Utils.Log("골드가 부족하여 리롤할 수 없습니다.");
+        }
     }
 
     /// <summary>

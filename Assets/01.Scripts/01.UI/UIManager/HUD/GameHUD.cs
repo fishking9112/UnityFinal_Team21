@@ -164,6 +164,7 @@ public class GameHUD : HUDUI
         if (typeof(T) == typeof(QueenEnhanceUI))
         {
             openWindow = queenEnhanceUI.gameObject;
+            HUDGroup.SetActive(true);
             BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(EvolutionTreeUI))
