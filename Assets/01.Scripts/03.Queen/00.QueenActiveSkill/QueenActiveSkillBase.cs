@@ -28,6 +28,12 @@ public abstract class QueenActiveSkillBase : MonoBehaviour
     {
         if (onCoolTime)
         {
+            Utils.Log("대상이 존재하지 않습니다.");
+            return;
+        }
+        if (!RangeCheck())
+        {
+            Utils.Log("대상이 존재하지 않습니다.");
             return;
         }
 
@@ -39,4 +45,6 @@ public abstract class QueenActiveSkillBase : MonoBehaviour
     }
 
     public abstract void UseSkill();
+
+    protected abstract bool RangeCheck();
 }

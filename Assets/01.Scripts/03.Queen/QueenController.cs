@@ -287,7 +287,7 @@ public class QueenController : MonoBehaviour
         {
             // 테이블 나오면 적용 필요
             ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
-            msg.SetText("<color=red>마나가 부족합니다.</color>");
+            msg.SetText("<color=red>소환 게이지가 부족합니다.</color>");
 
             return;
         }

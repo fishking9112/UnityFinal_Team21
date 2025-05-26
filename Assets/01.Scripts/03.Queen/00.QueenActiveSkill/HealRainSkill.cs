@@ -22,4 +22,9 @@ public class HealRainSkill : QueenActiveSkillBase
             ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", particlePos, particleScale, Quaternion.identity, monster.Value.transform);
         }
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }
