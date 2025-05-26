@@ -62,7 +62,14 @@ public class QueenSelectUI : MonoBehaviour
         if (queenSelectToggleList.Count > 0)
             queenSelectToggleList[0].isOn = true;
 
-        InitQueen(DataManager.Instance.queenStatusDic.First().Key);
+        if(GameManager.Instance.QueenCharaterID == 0)
+        {
+            InitQueen(DataManager.Instance.queenStatusDic.First().Key);
+        }
+        else
+        {
+            InitQueen(GameManager.Instance.QueenCharaterID);
+        }
     }
 
     private void InitQueen(int queenID)
