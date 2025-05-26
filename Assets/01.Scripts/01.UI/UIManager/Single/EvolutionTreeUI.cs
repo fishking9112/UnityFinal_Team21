@@ -26,6 +26,8 @@ public class EvolutionTreeUI : SingleUI
     [Header("UI Components")]
     [SerializeField] private Button evolutionButton;
     [SerializeField] private List<MonsterCategoryGroup> monsterCategoryList;
+    [SerializeField] private GameObject evolutionButtonCover;
+    public GameObject EvolutionButtonCover => evolutionButtonCover;
 
     [Header("Pages")]
     [SerializeField] private List<Page> pageList;
@@ -38,6 +40,8 @@ public class EvolutionTreeUI : SingleUI
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private TextMeshProUGUI attackText;
     [SerializeField] private TextMeshProUGUI costText;
+    [SerializeField] private TextMeshProUGUI evolutionButtonText;
+    public TextMeshProUGUI EvolutionButtonText => evolutionButtonText;
 
     [Header("QuickSlot")]
     [SerializeField] private List<EvolutionSlot> slotList;
@@ -128,7 +132,8 @@ public class EvolutionTreeUI : SingleUI
 
     public void SetEvolutionButtonState(bool state)
     {
-        evolutionButton.gameObject.SetActive(state);
+        EvolutionButtonCover.SetActive(!state);
+        EvolutionButtonText.text = state ? "진화" : "진화 완료";
     }
 
     public void UpdateEvolutionPointText(float evolutionPoint)
