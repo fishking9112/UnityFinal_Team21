@@ -21,9 +21,9 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
     private List<GameObject> bossList;
 
     private List<HeroController> poolList = new List<HeroController>();
-    private List<GameObject> heroList=new List<GameObject>();
+    private List<GameObject> heroList = new List<GameObject>();
 
-    private Dictionary<HeroController,GameObject> heroDic=new Dictionary<HeroController, GameObject>();
+    private Dictionary<HeroController, GameObject> heroDic = new Dictionary<HeroController, GameObject>();
 
     private QueenCondition condition;
 
@@ -47,7 +47,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         heroParent = heroP.transform;
         heroParent.SetParent(transform);
 
-        for(int i=0;i< heroObj.poolSize;i++)
+        for (int i = 0; i < heroObj.poolSize; i++)
         {
             HeroController obj = Instantiate(heroObj.obj, transform);
             obj.InitHero();
@@ -57,7 +57,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
 
         for (int i = 0; i < list.Count; i++)
         {
-            GameObject obj= Instantiate(list[i],Vector3.zero,Quaternion.identity, heroParent);
+            GameObject obj = Instantiate(list[i], Vector3.zero, Quaternion.identity, heroParent);
             obj.SetActive(false);
             heroList.Add(obj);
         }
@@ -88,9 +88,10 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
 
     public HeroController GetObject(Vector2 pos)
     {
-        if(poolList.Count==HeroManager.Instance.hero.Count)
+        if (poolList.Count == HeroManager.Instance.hero.Count)
         {
             HeroController hObj = Instantiate(heroObj.obj, transform);
+            hObj.InitHero();
             poolList.Add(hObj);
             hObj.gameObject.SetActive(false);
         }
@@ -100,12 +101,12 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         {
             if (!obj.gameObject.activeSelf)
             {
-                int rand=UnityEngine.Random.Range(0, heroList.Count);
+                int rand = UnityEngine.Random.Range(0, heroList.Count);
                 GameObject hPrefab = heroList.ElementAt(rand);
 
-                if(hPrefab.activeSelf)
+                if (hPrefab.activeSelf)
                 {
-                    hPrefab = Instantiate(hPrefab,Vector3.zero,Quaternion.identity, obj.transform);
+                    hPrefab = Instantiate(hPrefab, Vector3.zero, Quaternion.identity, obj.transform);
                     hPrefab.transform.localPosition = Vector3.zero;
                     hPrefab.transform.localScale = Vector3.one;
                 }
