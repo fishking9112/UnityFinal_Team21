@@ -73,6 +73,11 @@ public class QueenController : MonoBehaviour
         ImageFollowCursor();
         RecoveryGauge();
         SkillRangeView();
+
+        if (isDrag)
+        {
+            SummonMonster();
+        }
     }
 
     private async UniTask GameHuDInit()
@@ -229,28 +234,26 @@ public class QueenController : MonoBehaviour
         }
     }
 
-    // 드래그 시 처리
-    public void OnDrag(InputAction.CallbackContext context)
-    {
-        if (!isDrag)
-        {
-            return;
-        }
+    //// 드래그 시 처리
+    //public void OnDrag(InputAction.CallbackContext context)
+    //{
+    //    if (!isDrag)
+    //    {
+    //        return;
+    //    }
 
-        switch (curSlot)
-        {
-            case QueenSlot.MONSTER:
-                if (context.ReadValue<Vector2>() != Vector2.zero
-                    && Time.time - lastSummon >= cooldown)
-                {
-                    SummonMonster();
-                    lastSummon = Time.time;
-                }
-                break;
-            case QueenSlot.QueenActiveSkill:
-                break;
-        }
-    }
+    //    switch (curSlot)
+    //    {
+    //        case QueenSlot.MONSTER:
+    //            if (context.ReadValue<Vector2>() != Vector2.zero)
+    //            {
+    //                SummonMonster();
+    //            }
+    //            break;
+    //        case QueenSlot.QueenActiveSkill:
+    //            break;
+    //    }
+    //}
 
     // 몬스터 소환
     private void SummonMonster()
@@ -272,11 +275,17 @@ public class QueenController : MonoBehaviour
             return;
         }
 
-        // 마지막 생성위치에서 일정 거리 이상 떨어져야 소환가능
-        if (Vector3.Distance(worldMousePos, lastSummonPosition) < summonDistance)
+        if (Time.time - lastSummon < cooldown)
         {
             return;
         }
+        lastSummon = Time.time;
+
+        //// 마지막 생성위치에서 일정 거리 이상 떨어져야 소환가능
+        //if (Vector3.Distance(worldMousePos, lastSummonPosition) < summonDistance)
+        //{
+        //    return;
+        //}
 
         if (!SpawnPointManager.Instance.MonsterPoint.IsAreaIn(worldMousePos))
         {
@@ -295,23 +304,23 @@ public class QueenController : MonoBehaviour
         SoundManager.Instance.PlaySFX("SFX_UI_Click_Designed_Liquid_Generic_Open_2");
 
         // 미니맵콜라이더 레이어를 제외한 레이어와 충돌 처리가 일어나면 몬스터 소환 불가
-        ContactFilter2D layerFilter = new ContactFilter2D();
-        layerFilter.SetLayerMask(~LayerMask.GetMask("MiniMapCollider"));
-        Collider2D[] results = new Collider2D[1];
+        //ContactFilter2D layerFilter = new ContactFilter2D();
+        //layerFilter.SetLayerMask(~LayerMask.GetMask("MiniMapCollider"));
+        //Collider2D[] results = new Collider2D[1];
 
-        int hitCount = Physics2D.OverlapCircle(worldMousePos, 0.5f, layerFilter, results);
+        //int hitCount = Physics2D.OverlapCircle(worldMousePos, 0.5f, layerFilter, results);
 
-        if (hitCount > 0)
-        {
-            return;
-        }
+        //if (hitCount > 0)
+        //{
+        //    return;
+        //}
 
         condition.AdjustCurSummonGauge(-tempMonster.cost);
         var monster = objectPoolManager.GetObject<MonsterController>(tempMonster.outfit, worldMousePos);
         monster.StatInit(tempMonster, MonsterManager.Instance.isHealthUI);
 
         // 마지막 생성위치 갱신
-        lastSummonPosition = worldMousePos;
+        //lastSummonPosition = worldMousePos;
     }
 
     // 퀸의 액티브 스킬 사용
