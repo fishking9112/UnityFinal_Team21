@@ -24,6 +24,8 @@ public class GameHUD : HUDUI
     [SerializeField] private GaugeUI summonGaugeUI;
     [SerializeField] private GaugeUI castleGaugeUI;
     [SerializeField] private GaugeUI expGaugeUI;
+    [SerializeField] private GaugeUI queenActiveSkillGaugeTextUI; // 스킬 마나 현재량 표기
+    [SerializeField] private GaugeUI summonGaugeTextUI; // 소환게이지 현재량 표기
 
     [Header("타이머")]
     // 곧 지워 질 것(?)
@@ -94,6 +96,9 @@ public class GameHUD : HUDUI
         queenActiveSkillGaugeUI.Bind(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
         castleGaugeUI.Bind(GameManager.Instance.castle.condition.CurCastleHealth, GameManager.Instance.castle.condition.MaxCastleHealth);
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
+
+        queenActiveSkillGaugeTextUI.BindText(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
+        summonGaugeTextUI.BindText(condition.CurSummonGauge, condition.MaxSummonGauge);
 
         GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
 

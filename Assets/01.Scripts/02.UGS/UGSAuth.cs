@@ -70,26 +70,6 @@ public class UGSAuth : MonoBehaviour
             }
         }
 
-        /*
-        if (UGSManager.Instance.IsLoggedIn)
-        {
-            Utils.Log("이미 로그인되어 있음");
-            return;
-        }
-
-        try
-        {
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            Utils.Log($"익명 로그인 성공 Player ID: {UGSManager.Instance.PlayerId}");
-        }
-        catch (AuthenticationException e)
-        {
-            Utils.Log($"로그인 실패 {e.Message}");
-        }
-        catch (RequestFailedException e)
-        {
-            Utils.Log($"로그인 요청 실패 {e.Message}");
-        }*/
     }
 
 

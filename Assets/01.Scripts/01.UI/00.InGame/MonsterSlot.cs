@@ -16,6 +16,8 @@ public class MonsterSlot : BaseSlot<MonsterInfo>
         slotIconList[index].enabled = true;
         slotIconList[index].preserveAspect = true;
 
+        slotCostTextList[index].text = monster.cost.ToString();
+
         // 해당 슬롯에 몬스터 설명을 위한 스킬 정보 넣기
         var trigger = slotIconList[index].GetComponent<MonsterDescriptionTrigger>();
         if (trigger != null)

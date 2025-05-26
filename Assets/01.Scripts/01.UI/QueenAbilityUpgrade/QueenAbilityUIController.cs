@@ -11,6 +11,7 @@ public class QueenAbilityUIController : MonoBehaviour
     [SerializeField] private GameObject UIPanel;
     [SerializeField] private Button resetButton;
     [SerializeField] private Button clostButton;
+    [SerializeField] private Button confirmButton;
     [SerializeField] private RectTransform descriptionPopupUI;
     [SerializeField] private TextMeshProUGUI popupUIAbilityName;
     [SerializeField] private TextMeshProUGUI popupUIAbilityDec;
@@ -65,6 +66,7 @@ public class QueenAbilityUIController : MonoBehaviour
         resetButton.onClick.RemoveAllListeners();
         resetButton.onClick.AddListener(OnClickResetButton);
         clostButton.onClick.AddListener(() => UIPanel.SetActive(false));
+        confirmButton.onClick.AddListener(() => UIPanel.SetActive(false));
         gameObject.SetActive(true);
         uiQueenAbilityPanelRoot.SetActive(true);
         descriptionPopupUI.gameObject.SetActive(false);
