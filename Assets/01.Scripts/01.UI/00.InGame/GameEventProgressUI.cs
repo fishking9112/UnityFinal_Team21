@@ -147,6 +147,7 @@ public class GameEventProgressUI : MonoBehaviour
 
         if (eventInstance != null)
         {
+            UIManager.Instance.ShowEventPop(eventTableInfo.name, eventTableInfo.icon);
             RegisterEvent(eventInstance);
         }
     }

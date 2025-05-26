@@ -133,6 +133,29 @@ public class UIManager : MonoSingleton<UIManager>
     }
 
     /// <summary>
+    /// 이벤트 팝업 호출
+    /// </summary>
+    /// <param name="title">팝업 제목</param>
+    /// <param name="message">팝업 메시지</param>
+    /// <param name="icon">아이콘</param>
+    public void ShowEventPop(string title, string icon)
+    {
+        ShowEventPopAsync(title, icon).Forget();
+    }
+
+    /// <summary>
+    /// 이벤트 팝업 호출
+    /// </summary>
+    /// <param name="title">팝업 제목</param>
+    /// <param name="message">팝업 메시지</param>
+    /// <param name="icon">아이콘</param>
+    public async UniTask ShowEventPopAsync(string title, string icon)
+    {
+        var popup = await ShowUI<EventPopUI>();
+        popup.Setup(title, icon);
+    }
+
+    /// <summary>
     /// 특정 UI 제거
     /// </summary>
     /// <typeparam name="T">BaseUI를 상속받는 UI 타입</typeparam>

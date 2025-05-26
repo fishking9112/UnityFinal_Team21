@@ -65,6 +65,7 @@ public class HeroController : BaseController
         navMeshAgent.speed = stat.moveSpeed;
 
         isDead = false;
+        stateMachine.animator.SetBool("isDeath", false);
         base.StatInit(stat, isHealthUI);
         this.statusInfo.Copy(stat);
 
@@ -160,10 +161,12 @@ public class HeroController : BaseController
     public void SetDead(bool isDead)
     {
         stateMachine.animator.SetBool("4_Death", isDead);
+        stateMachine.animator.SetBool("isDeath", isDead);
     }
 
     public async UniTask GetAnimFinish()
     {
+        await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).IsName("DEATH"));
         await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
         HeroPoolManager.Instance.ReturnObject(this);
         isDead = false;
