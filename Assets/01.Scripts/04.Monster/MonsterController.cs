@@ -180,6 +180,8 @@ public class MonsterController : BaseController, IPoolable
             }
         }
 
+        // 소환될 때 겹치지 않도록 살짝 움직여주는 코드
+        navMeshAgent.SetDestination(navMeshAgent.transform.position + navMeshAgent.transform.right * -10f);
 
         stateMachine.ChangeState(stateMachine.Tracking); // 할 일 찾기
 

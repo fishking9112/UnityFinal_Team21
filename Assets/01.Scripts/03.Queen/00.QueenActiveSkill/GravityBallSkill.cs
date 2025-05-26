@@ -51,4 +51,9 @@ public class GravityBallSkill : QueenActiveSkillBase
     {
         skillParticle.OnDespawn();
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }

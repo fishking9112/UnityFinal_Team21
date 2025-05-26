@@ -53,4 +53,9 @@ public class LightingStormSkill : QueenActiveSkillBase
     {
         skillParticle.OnDespawn();
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }

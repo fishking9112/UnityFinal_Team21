@@ -28,4 +28,9 @@ public class CastleInvincibleSkill : QueenActiveSkillBase
         GameManager.Instance.castle.condition.SetInvincible(false);
         skillParticle.OnDespawn();
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }

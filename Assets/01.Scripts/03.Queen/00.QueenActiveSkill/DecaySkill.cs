@@ -32,4 +32,9 @@ public class DecaySkill : QueenActiveSkillBase
         }
         await UniTask.WhenAll(tasks);
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }

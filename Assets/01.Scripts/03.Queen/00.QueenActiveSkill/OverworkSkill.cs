@@ -31,4 +31,9 @@ public class OverworkSkill : QueenActiveSkillBase
         skillParticle.OnDespawn();
         condition.AdjustSummonGaugeRecoverySpeed(returnToValue);
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }
