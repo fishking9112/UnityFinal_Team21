@@ -81,23 +81,46 @@ public class UIManager : MonoSingleton<UIManager>
     /// <summary>
     /// 팝업 호출
     /// </summary>
+    /// <param name="title">팝업 제목</param>
     /// <param name="message">팝업 메시지</param>
     /// <param name="onConfirmAction">확인 버튼 동작</param>
     /// <param name="onCancelAction">취소 버튼 동작</param>
-    public async UniTaskVoid ShowPopup(string title, string message, Action onConfirmAction, Action onCancelAction = null)
+    public void ShowPopup(string title, string message, Action onConfirmAction, Action onCancelAction = null)
+    {
+        ShowPopupAsync(title, message, onConfirmAction, onCancelAction).Forget();
+    }
+
+    /// <summary>
+    /// 팝업 호출
+    /// </summary>
+    /// <param name="title">팝업 제목</param>
+    /// <param name="message">팝업 메시지</param>
+    /// <param name="onConfirmAction">확인 버튼 동작</param>
+    /// <param name="onCancelAction">취소 버튼 동작</param>
+    public async UniTask ShowPopupAsync(string title, string message, Action onConfirmAction, Action onCancelAction = null)
     {
         var popup = await ShowUI<PopupUI>();
         popup.Setup(title, message, onConfirmAction, onCancelAction);
     }
 
+    /// <summary>
+    /// 툴팁 호출
+    /// </summary>
+    /// <param name="id">툴팁 id</param>
+    /// <param name="forceRun">한번 보는 거지만 두번째 작동 할 때</param>
+    /// <param name="onFinishAction">Finish 버튼 눌렸을 때</param>
+    public void ShowTooltip(int id, bool forceRun = true, Action onFinishAction = null)
+    {
+        ShowTooltipAsync(id, forceRun, onFinishAction).Forget();
+    }
 
     /// <summary>
-    /// 팝업 호출
+    /// 툴팁 호출
     /// </summary>
-    /// <param name="message">팝업 메시지</param>
-    /// <param name="onConfirmAction">확인 버튼 동작</param>
-    /// <param name="onCancelAction">취소 버튼 동작</param>
-    public async UniTask ShowTooltip(int id, bool forceRun = true, Action onFinishAction = null)
+    /// <param name="id">툴팁 id</param>
+    /// <param name="forceRun">한번 보는 거지만 두번째 작동 할 때</param>
+    /// <param name="onFinishAction">Finish 버튼 눌렸을 때</param>
+    public async UniTask ShowTooltipAsync(int id, bool forceRun = true, Action onFinishAction = null)
     {
         // 한번 실행했다면 작동 X
         if (PlayerPrefs.GetInt(id.ToString()) == 1 && !forceRun)
