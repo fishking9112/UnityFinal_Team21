@@ -47,8 +47,6 @@ public class HeroController : BaseController
         stateMachine = new HeroState(hero, this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         stateMachine.navMeshAgent = navMeshAgent;
-        pivot = transform.GetChild(2);
-        stateMachine.animator = GetComponentInChildren<Animator>();
 
 
         navMeshAgent.updateRotation = false;
@@ -60,6 +58,9 @@ public class HeroController : BaseController
 
     public void StatInit(HeroStatusInfo stat, bool isHealthUI, bool isEventMark = false)
     {
+        stateMachine.animator = GetComponentInChildren<Animator>();
+
+        pivot = transform.GetChild(2);
         hero.Init(stat.detectedRange);
         navMeshAgent.speed = stat.moveSpeed;
 
@@ -210,7 +211,7 @@ public class HeroController : BaseController
 
         await UniTask.Delay(TimeSpan.FromSeconds(takeDamagedRendererTimer), cancellationToken: token);
 
-        if (this == null) return;
+        if (gameObject == null) return;
 
         // 저장한 색상으로 복원
         for (int i = 0; i < renderers.Count; i++)
@@ -220,5 +221,13 @@ public class HeroController : BaseController
                 renderers[i].color = originalColors[i];
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        _takeDamagedRendererCts?.Cancel();
+        _takeDamagedRendererCts?.Dispose();
+        token?.Cancel();
+        token?.Dispose();
     }
 }

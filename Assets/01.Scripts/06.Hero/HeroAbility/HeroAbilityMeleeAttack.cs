@@ -49,6 +49,9 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     {
         float angle;
 
+        if (animator == null)
+            return;
+
         if (target == null)
         {
             animator.SetBool("1_Move", true);
