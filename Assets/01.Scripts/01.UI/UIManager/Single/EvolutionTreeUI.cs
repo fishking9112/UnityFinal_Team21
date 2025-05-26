@@ -133,7 +133,23 @@ public class EvolutionTreeUI : SingleUI
     public void SetEvolutionButtonState(bool state)
     {
         EvolutionButtonCover.SetActive(!state);
-        EvolutionButtonText.text = state ? "진화" : "진화 완료";
+
+        string text;
+
+        if (!state)
+        {
+            text = "진화 완료";
+        }
+        else if (GameManager.Instance.queen.condition.EvolutionPoint.Value <= 0)
+        {
+            text = "포인트 부족";
+        }
+        else
+        {
+            text = "진화";
+        }
+
+        EvolutionButtonText.text = text;
     }
 
     public void UpdateEvolutionPointText(float evolutionPoint)
