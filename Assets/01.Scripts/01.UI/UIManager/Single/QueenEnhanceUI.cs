@@ -144,32 +144,37 @@ public class QueenEnhanceUI : SingleUI
     {
         var queenCondition = GameManager.Instance.queen.condition;
         var castleCondition = GameManager.Instance.castle.condition;
+        float amount = 0;
 
         switch (id)
         {
             case (int)IDQueenEnhance.QUEEN_MANA_GAUGE_RECOVERY_SPEED_UP: // 마나 회복 속도 증가
-                queenCondition.AdjustQueenActiveSkillGaugeRecoverySpeed(value);
+                amount = queenCondition.QueenActiveSkillGaugeRecoverySpeed * value;
+                queenCondition.AdjustQueenActiveSkillGaugeRecoverySpeed(amount);
                 break;
 
             case (int)IDQueenEnhance.QUEEN_SUMMON_GAUGE_RECOVERY_SPEED_UP: // 소환 게이지 회복 속도 증가
-                queenCondition.AdjustSummonGaugeRecoverySpeed(value);
+                amount = queenCondition.SummonGaugeRecoverySpeed * value;
+                queenCondition.AdjustSummonGaugeRecoverySpeed(amount);
                 break;
 
             case (int)IDQueenEnhance.CASTLE_HEALTH_RECOVERY_SPEED_UP: // 성벽 체력 회복량 증가
-                castleCondition.AdjustCastleHealthRecoverySpeed(value);
+                amount = castleCondition.CastleHealthRecoverySpeed * value;
+                castleCondition.AdjustCastleHealthRecoverySpeed(amount);
                 break;
 
             case (int)IDQueenEnhance.CASTLE_MAX_HEALTH_UP: // 성벽 최대 체력 증가
-                castleCondition.AdjustMaxHealth(value);
+                amount = castleCondition.MaxCastleHealth.Value * value;
+                castleCondition.AdjustMaxHealth(amount);
                 break;
 
             case (int)IDQueenEnhance.QUEEN_MAX_MANA_GAUGE_UP: // 여왕 마나 최대량 증가 
-
-                queenCondition.AdjustMaxQueenActiveSkillGauge(value);
+                amount = queenCondition.MaxQueenActiveSkillGauge.Value * value;
+                queenCondition.AdjustMaxQueenActiveSkillGauge(amount);
                 break;
 
             case (int)IDQueenEnhance.QUEEN_MAX_SUMMON_GAUGE_UP: // 여왕 소환 게이지 최대량 증가
-
+                amount = queenCondition.MaxSummonGauge.Value * value;
                 queenCondition.AdjustMaxSummonGauge(value);
                 break;
         }
@@ -187,26 +192,38 @@ public class QueenEnhanceUI : SingleUI
 
             if (name.Contains("체력"))
             {
-                MonsterManager.Instance.monsterInfoList[monster.id].health += value;
+                float amount = MonsterManager.Instance.monsterInfoList[monster.id].health * value;
+                MonsterManager.Instance.monsterInfoList[monster.id].health += amount;
                 foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
                 {
-                    monsterController.UpgradeHealth(value);
+                    monsterController.UpgradeHealth(amount);
                 }
             }
             else if (name.Contains("공격력"))
             {
-                MonsterManager.Instance.monsterInfoList[monster.id].attack += value;
+                float amount = MonsterManager.Instance.monsterInfoList[monster.id].attack * value;
+                MonsterManager.Instance.monsterInfoList[monster.id].attack += amount;
                 foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
                 {
-                    monsterController.UpgradeAttack(value);
+                    monsterController.UpgradeAttack(amount);
                 }
             }
             else if (name.Contains("이동속도"))
             {
-                MonsterManager.Instance.monsterInfoList[monster.id].moveSpeed += value;
+                float amount = MonsterManager.Instance.monsterInfoList[monster.id].moveSpeed * value;
+                MonsterManager.Instance.monsterInfoList[monster.id].moveSpeed += amount;
                 foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
                 {
-                    monsterController.UpgradeMoveSpeed(value);
+                    monsterController.UpgradeMoveSpeed(amount);
+                }
+            }
+            else if (name.Contains("공격속도"))
+            {
+                float amount = MonsterManager.Instance.monsterInfoList[monster.id].attackSpeed * value;
+                MonsterManager.Instance.monsterInfoList[monster.id].attackSpeed += amount;
+                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
+                {
+                    monsterController.UpgradeAttackSpeed(amount);
                 }
             }
         }
