@@ -1,4 +1,4 @@
-using System;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +31,7 @@ public class QueenEnhanceUI : SingleUI
         queenSkillSwapPopup.SetActive(false);
         var randomOptions = GetRandomInhanceOptions();
         ShowSelectUI(randomOptions);
+        ClickDelay();
         isOpen = true;
     }
     private void OnDisable()
@@ -49,6 +50,24 @@ public class QueenEnhanceUI : SingleUI
         for (int i = 0; i < itemSlots.Length; i++)
         {
             itemSlots[i].SetInfo(list[i]);
+        }
+    }
+
+    /// <summary>
+    /// enhance 팝업창이 뜨자마자 선택되는 것을 방지
+    /// </summary>
+    public async void ClickDelay()
+    {
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            itemSlots[i].isSelectable = false;
+        }
+
+        await UniTask.Delay(1000, ignoreTimeScale: true, cancellationToken: this.GetCancellationTokenOnDestroy());
+
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            itemSlots[i].isSelectable = true;
         }
     }
 
