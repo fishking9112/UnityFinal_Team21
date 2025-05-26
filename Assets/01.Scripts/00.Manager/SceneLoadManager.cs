@@ -86,7 +86,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused = true;
 
                 // 만약 OpenWindow가 없다면 시간 흐르게 하기
-                await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.InGame, false, onFinishAction: () =>
+                await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.InGame, onFinishAction: () =>
                 {
                     if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().openWindow == null)
                     {

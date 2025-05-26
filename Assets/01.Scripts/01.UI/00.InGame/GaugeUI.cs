@@ -60,7 +60,11 @@ public class GaugeUI : MonoBehaviour
         max.AddAction(UpdateFill);
         this.isImgFlash = isImgFlash;
         this.flashAction = flashAction;
-        // UpdateFill(0);
+
+        if (!isImgFlash)
+        {
+            UpdateFill(0f);
+        }
     }
 
     // 반응형 프로퍼티의 값이 변경되면 실행할 함수. 값에 따라 이미지의 fillAmount가 바뀜
@@ -71,7 +75,7 @@ public class GaugeUI : MonoBehaviour
             return;
         }
 
-        if (isImgFlash && fillImage.fillAmount > Mathf.Clamp01(cur.Value / max.Value) && useless != 0)
+        if (isImgFlash && fillImage.fillAmount > Mathf.Clamp01(cur.Value / max.Value))
         {
             ActionImg();
             flashAction?.Invoke();
