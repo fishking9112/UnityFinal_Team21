@@ -157,12 +157,16 @@ public class QueenCondition : MonoBehaviour
     /// </summary>
     private void LevelUp()
     {
-        print(MaxExpGauge.Value);
         Level.Value++;
         EnhancePoint++;
         ExpIncrease();
+        if (Level.Value % 5 == 0)
+        {
+            AdjustEvolutionPoint(1);
+        }
         AdjustMaxQueenActiveSkillGauge(queenStatus.mana_LevelUp);
         AdjustMaxSummonGauge(queenStatus.summon_LevelUp);
+
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<QueenEnhanceUI>();
     }
 

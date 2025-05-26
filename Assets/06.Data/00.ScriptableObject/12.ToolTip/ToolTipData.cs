@@ -15,7 +15,7 @@ public class ToolTipInfo : IInfo
     public int ID => id;
     public string Name => name;
     public string Description => description;
-    public string Icon => String.Empty;
+    public string Icon => string.Empty;
 }
 
 [CreateAssetMenu(fileName = "ToolTipData", menuName = "Scriptable Object/New ToolTipData")]

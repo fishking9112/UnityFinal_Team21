@@ -19,4 +19,9 @@ public class ManaRecycleSkill : QueenActiveSkillBase
         condition.AdjustCurQueenActiveSkillGauge(-30f);
         condition.AdjustCurSummonGauge(50f);
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }

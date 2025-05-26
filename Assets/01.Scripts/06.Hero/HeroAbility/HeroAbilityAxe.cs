@@ -62,7 +62,7 @@ public class HeroAbilityAxe : HeroAbilitySystem
         for (int i = 0; i < count; i++)
         {
             var bullet = objectPoolManager.GetObject<HeroBullet>("Axe", hero.transform.position);
-            bullet.SetBullet(duration, pierce, damage, speed, rotateSpeed,knockback);
+            bullet.SetBullet(duration, pierce, damage, speed, rotateSpeed,size,knockback);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
             await UniTask.Delay(TimeSpan.FromSeconds(delay),false,PlayerLoopTiming.Update,cancellationToken:tk);

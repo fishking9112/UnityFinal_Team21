@@ -6,6 +6,6 @@ public class QueenAbilityEffectTrigger : MonoBehaviour
 {
     void Awake()
     {
-        QueenAbilityUpgradeManager.Instance.ApplyAllEffects();
+        //QueenAbilityUpgradeManager.Instance.ApplyAllEffects();
     }
 }

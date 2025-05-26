@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class LaserSkill : QueenActiveSkillBase
@@ -33,5 +32,12 @@ public class LaserSkill : QueenActiveSkillBase
             }
         }
         await UniTask.WhenAll(tasks);
+    }
+
+    protected override bool RangeCheck()
+    {
+        Vector3 mousePos = controller.worldMousePos;
+        Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
+        return hits.Length > 0;
     }
 }

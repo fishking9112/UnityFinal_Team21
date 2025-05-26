@@ -309,6 +309,8 @@ MonoBehaviour:
     weaponLevel: 
     detectedRange: 0
     custom: 0
+    heroType: 0
+  takeDamagedRendererTimer: 0.5
 --- !u!114 &-1669867321582281066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,7 +337,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 1.5
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -906,7 +908,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: c4cf1675268740245a095fcc6647deb9, type: 3}
-  m_Color: {r: 0.031396866, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

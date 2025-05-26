@@ -28,14 +28,23 @@ public abstract class QueenActiveSkillBase : MonoBehaviour
     {
         if (onCoolTime)
         {
+            Utils.Log("대상이 존재하지 않습니다.");
+            return;
+        }
+        if (!RangeCheck())
+        {
+            Utils.Log("대상이 존재하지 않습니다.");
             return;
         }
 
         condition.AdjustCurQueenActiveSkillGauge(-value);
         UseSkill();
+        controller.selectedQueenActiveSkill = null;
         await ApplyCooltimeSkill();
         return;
     }
 
     public abstract void UseSkill();
+
+    protected abstract bool RangeCheck();
 }

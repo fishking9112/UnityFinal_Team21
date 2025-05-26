@@ -101,17 +101,19 @@ public enum IDQueenEnhance
     CASTLE_HEALTH_RECOVERY_SPEED_UP,         // 성벽 체력 회복 속도
     CASTLE_MAX_HEALTH_UP,                    // 성벽 최대 체력
 
-    SLIME_MAXHEALTH_UP = 11001,
-    SLIME_ATTACKDAMAGE_UP,
-    SLIME_MOVESPEED_UP,
 
-    ORC_MAXHEALTH_UP = 12001,
+    ELF_MAXHEALTH_UP = 11001,
+    ELF_ATTACKDAMAGE_UP,
+    ELF_MOVESPEED_UP,
+    ORC_MAXHEALTH_UP,
     ORC_ATTACKDAMAGE_UP,
     ORC_MOVESPEED_UP,
-
-    SKELETON_MAXHEALTH_UP = 13001,
+    SKELETON_MAXHEALTH_UP,
     SKELETON_ATTACKDAMAGE_UP,
     SKELETON_MOVESPEED_UP,
+    DARKELF_MAXHEALTH_UP,
+    DARKELF_ATTACKDAMAGE_UP,
+    DARKELF_MOVESPEED_UP,
 }
 
 public enum IDQueenActiveSkill
@@ -198,7 +200,14 @@ public enum IDToolTip
 {
     // 업적 이름 추후 수정 필요
     MainMenu = 3000001,
-    InGame = 3000002,
+    InGame,
+}
+
+public enum IDUIToolTip
+{
+    PAUSE_BUTTON = 4000001,
+    EVOLUTIONTREE_BUTTON,
+    HEALTHBAR_BUTTON,
 }
 
 public class GameLog
@@ -224,7 +233,7 @@ public class GameLog
     public const string leastSummon_ID = "LeastSummonID";
     public const string leastSummonCnt = "LeastSummon";
     public const string MVP_ID = "MVPID";
-
+    public const string tryCount = "tryCount";
 
     public enum Contents
     {
@@ -261,6 +270,7 @@ public class GameLog
         Lobby,
         TouchPlay,
         EnterInGame,
+        Tutorial,
         Minite_1,
         Minite_2,
         Minite_3,

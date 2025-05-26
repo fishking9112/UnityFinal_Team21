@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -58,6 +59,8 @@ public class OptionController : MonoBehaviour
         tempBGMVolume = SoundManager.Instance.BGMVolume;
         tempSFXVolume = SoundManager.Instance.SFXVolume;
         OptionPanelUI.SetActive(false);
+
+        UGSManager.Instance.SaveLoad.SaveAsync().Forget();
     }
 
     /// <summary>

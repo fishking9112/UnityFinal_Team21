@@ -3,7 +3,7 @@ using UnityEngine;
 public class CastleCondition : MonoBehaviour
 {
     [Header("초기 설정")]
-    public float initCastleHealthRecoverySpeed = 10f;
+    public float initCastleHealthRecoverySpeed = 1f;
     public float initCurCastleHealth = 100f;
     public float initMaxCastleHealth = 100f;
 
@@ -18,6 +18,7 @@ public class CastleCondition : MonoBehaviour
         MaxCastleHealth.Value = initMaxCastleHealth;
         CastleHealthRecoverySpeed = initCastleHealthRecoverySpeed;
     }
+
 
     public void SetInvincible(bool value)
     {

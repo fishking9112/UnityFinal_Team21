@@ -53,7 +53,7 @@ public class GameManager : MonoSingleton<GameManager>
     private void Update()
     {
         ApplyCursorState();
-
+        /*
         if (Input.GetKeyDown(KeyCode.H))
         {
             castle.TakeDamaged(100f);
@@ -65,7 +65,7 @@ public class GameManager : MonoSingleton<GameManager>
         if (Input.GetKeyDown(KeyCode.S))
         {
             UGSManager.Instance.SaveLoad.SaveAsync().Forget();
-        }
+        }*/
 
         OnTimer(); // TODO : 임시로 달아둠 나중에 반드시 옮기기
     }
@@ -94,24 +94,26 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
+    /*
     private async void OnApplicationQuit()
     {
-        //await UGSManager.Instance.SaveLoad.SaveAsync();
+       // await UGSManager.Instance.SaveLoad.SaveAsync();
     }
-
+    
     private void OnApplicationPause(bool pause)
     {
-        // if (pause)
-        // {
-        //     // if (GameManager.Instance.IsPaused()) return;
-
-        //     if (pauseController != null)
-        //     {
-        //         pauseController.ForcePause();
-        //     }
-        //     //_ = UGSManager.Instance.SaveLoad.SaveAsync();
-        // }
-    }
+        
+        if (pause)
+        {
+            // if (GameManager.Instance.IsPaused()) return;
+            
+            if (pauseController != null)
+            {
+                pauseController.ForcePause();
+            }
+            //_ = UGSManager.Instance.SaveLoad.SaveAsync();
+        }
+    }*/
 
     // 씬로드에서 불러내기?
     public void GameStart()  // TODO : 임시로 달아둠 나중에 반드시 옮기기(?) 이건 미정
@@ -125,6 +127,7 @@ public class GameManager : MonoSingleton<GameManager>
         tryCount = PlayerPrefs.GetInt("TryCount");
         tryCount++;
         PlayerPrefs.SetInt("TryCount", tryCount);
+        LogManager.Instance.PlayStartLog(tryCount);
         funnelType = GameLog.FunnelType.Minite_1;
         MiniteCount(token.Token).Forget();
     }
@@ -136,7 +139,7 @@ public class GameManager : MonoSingleton<GameManager>
             stageLevel++;
 
             await UniTask.Delay(TimeSpan.FromMinutes(1), cancellationToken: token);
-            //LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)funnelType);
+            LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)funnelType);
             funnelType++;
         }
     }

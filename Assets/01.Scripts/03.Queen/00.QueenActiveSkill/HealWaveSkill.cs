@@ -12,7 +12,6 @@ public class HealWaveSkill : QueenActiveSkillBase
     public override void UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
-
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
         foreach (var hit in hits)
@@ -28,5 +27,12 @@ public class HealWaveSkill : QueenActiveSkillBase
                 ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", particlePos, particleScale, Quaternion.identity, monster.transform);
             }
         }
+    }
+
+    protected override bool RangeCheck()
+    {
+        Vector3 mousePos = controller.worldMousePos;
+        Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
+        return hits.Length > 0;
     }
 }

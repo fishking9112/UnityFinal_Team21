@@ -24,7 +24,7 @@ public class QueenPassiveSkillManager : MonoSingleton<QueenPassiveSkillManager>
         switch (id)
         {
             case (int)IDQueenPassiveSkill.CASTLE_HEALTH_UP:
-                GameManager.Instance.castle.condition.AdjustCastleHealthRecoverySpeed(value);
+                GameManager.Instance.castle.condition.AdjustMaxHealth(value);
                 break;
             case (int)IDQueenPassiveSkill.MAX_MANA_UP:
                 GameManager.Instance.queen.condition.AdjustMaxQueenActiveSkillGauge(value);

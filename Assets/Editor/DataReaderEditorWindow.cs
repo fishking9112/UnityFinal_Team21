@@ -47,6 +47,7 @@ public class DataReaderEditorWindow : EditorWindow
             new DataInfo("QueenStatus 데이터", "QueenStatusData"),
             new DataInfo("QueenPassiveSkill 데이터", "QueenPassiveSkillData"),
             new DataInfo("ToolTip 데이터", "ToolTipData"),
+            new DataInfo("UIToolTip 데이터", "UIToolTipData"),
         };
 
         foreach (var info in dataInfo)

@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using TMPro;
 using UnityEngine;
@@ -72,9 +73,22 @@ public class GameResultUI : SingleUI
         InitMiddlePanel();
         InitUnitResult();
         ApplyStageGold();
-        SetMonsterMVP();
+        int mvpID= SetMonsterMVP();
 
+        DescriptionPopupUI.SetActive(false);
         QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
+
+        int queenid = GameManager.Instance.QueenCharaterID;
+        int time = (int)(GameManager.Instance.gameLimitTime-GameManager.Instance.curTime.Value);
+        int mostSummonID = resultDatas.OrderByDescending(x => x.Value.spawnCount).FirstOrDefault().Key;
+        int mostSummon = mostSummonID!=0?resultDatas[mostSummonID].spawnCount:0;
+        int leastSummonID= resultDatas.OrderBy(x => x.Value.spawnCount).FirstOrDefault().Key;
+        int leastSummon = leastSummonID!=0? resultDatas[leastSummonID].spawnCount:0;
+        int tryCnt= PlayerPrefs.GetInt("TryCount");
+        int isC = isClear ? 1 : 0;
+
+        LogManager.Instance.PlayEndLog(queenid, time, isC, mostSummonID, mostSummon, leastSummonID, leastSummon, mvpID, tryCnt);
+        UGSManager.Instance.SaveLoad.SaveAsync().Forget();
     }
 
     /// <summary>
@@ -163,7 +177,7 @@ public class GameResultUI : SingleUI
         GameManager.Instance.AddGold(goldToAdd);
     }
 
-    private void SetMonsterMVP()
+    private int SetMonsterMVP()
     {
         int mvpId = int.MinValue;
         float mvpPerDamage = float.MinValue;
@@ -181,10 +195,12 @@ public class GameResultUI : SingleUI
         {
             string unitIcon = DataManager.Instance.monsterDic[mvpId].icon;
             mvpImg.sprite = DataManager.Instance.iconAtlas.GetSprite(unitIcon);
+            return mvpId;
         }
         else
         {
             mvpImg.gameObject.SetActive(false);
+            return 0;
         }
     }
 

@@ -57,20 +57,20 @@ public class LogManager : MonoSingleton<LogManager>
     }
 
 
-    public void PlayStartLog(int queenid)
+    public void PlayStartLog(int tryCount)
     {
         var playEvent = new CustomEvent(GameLog.InGame);
-        playEvent[GameLog.logType] = GameLog.LogType.GameStart;
-        playEvent[GameLog.eventID] = queenid;
+        playEvent[GameLog.logType] = (int)GameLog.LogType.GameStart;
+        playEvent[GameLog.eventID] = tryCount;
 
         AnalyticsService.Instance.RecordEvent(playEvent);
     }
 
     public void PlayEndLog(int queenid, int time, int clear, int mostSummon_ID, int mostSummonCnt,
-        int leastSummon_ID, int leastSummonCnt, int MVPid)
+        int leastSummon_ID, int leastSummonCnt, int MVPid,int tryCount)
     {
         var playEvent = new CustomEvent(GameLog.EndGame);
-        playEvent[GameLog.logType] = GameLog.LogType.GameEnd;
+        playEvent[GameLog.logType] = (int)GameLog.LogType.GameEnd;
         playEvent[GameLog.eventID] = queenid;
         playEvent[GameLog.time] = time;
         playEvent[GameLog.isClear] = clear;
@@ -79,6 +79,7 @@ public class LogManager : MonoSingleton<LogManager>
         playEvent[GameLog.leastSummon_ID] = leastSummon_ID;
         playEvent[GameLog.leastSummonCnt] = leastSummonCnt;
         playEvent[GameLog.MVP_ID] = MVPid;
+        playEvent[GameLog.tryCount] = tryCount;
 
         AnalyticsService.Instance.RecordEvent(playEvent);
     }

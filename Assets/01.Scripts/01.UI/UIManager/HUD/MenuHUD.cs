@@ -19,7 +19,7 @@ public class MenuHUD : HUDUI
 {
     public List<MainUIButtonPanel> mainUISets;
     public Button startButton;
-    public Button backBtn;
+    public Button exitBtn;
     public TextMeshProUGUI goldText;
     public GameObject buttonMenu;
     public GameObject uiMenu;
@@ -64,11 +64,13 @@ public class MenuHUD : HUDUI
             mainUISet.panel.SetActive(false);
         }
 
-        backBtn.onClick.AddListener(() =>
+        exitBtn.onClick.AddListener(() =>
         {
-            // buttonMenu.SetActive(true);
-            //  uiMenu.SetActive(false);
-            activePanel.SetActive(false);
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
         });
 
         // 게임시작 버튼 누를 시 스타트 실행
@@ -96,6 +98,8 @@ public class MenuHUD : HUDUI
 
     public void OnClickGameStart()
     {
+        LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.TouchPlay);
+
         // TODO : 바뀐 스텟으로 시작(?)
         SceneLoadManager.Instance.LoadScene(LoadSceneEnum.GameScene).Forget();
     }
