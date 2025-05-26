@@ -86,7 +86,7 @@ public class MonsterAttackState : MonsterBaseState
             return;
         }
 
-        targetDistance = (target.position - navMeshAgent.transform.position).magnitude - (0.45f * target.transform.localScale.z);
+        targetDistance = (target.position - navMeshAgent.transform.position).magnitude - (0.35f * target.transform.localScale.z);
 
         // 타겟과의 거리가 적절해졌다면
         if (stat.attackRange.Value >= targetDistance)
