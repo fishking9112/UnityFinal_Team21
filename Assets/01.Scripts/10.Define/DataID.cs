@@ -200,7 +200,14 @@ public enum IDToolTip
 {
     // 업적 이름 추후 수정 필요
     MainMenu = 3000001,
-    InGame = 3000002,
+    InGame,
+}
+
+public enum IDUIToolTip
+{
+    PAUSE_BUTTON = 4000001,
+    EVOLUTIONTREE_BUTTON,
+    HEALTHBAR_BUTTON,
 }
 
 public class GameLog

@@ -31,6 +31,7 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private QueenStatusData queenStatusData;
     [SerializeField] private QueenPassiveSkillData queenPassiveSkillData;
     [SerializeField] private ToolTipData toolTipData;
+    [SerializeField] private UIToolTipData uiToolTipData;
 
     // iconData는 id값으로 초기화 하지 않으므로, iconData 안에 Dictionary 존재
     public SpriteAtlas iconAtlas;
@@ -50,6 +51,7 @@ public class DataManager : MonoSingleton<DataManager>
     public Dictionary<int, QueenStatusInfo> queenStatusDic = new Dictionary<int, QueenStatusInfo>();
     public Dictionary<int, QueenPassiveSkillInfo> queenPassiveSkillDic = new Dictionary<int, QueenPassiveSkillInfo>();
     public Dictionary<int, ToolTipInfo> toolTipDic = new Dictionary<int, ToolTipInfo>();
+    public Dictionary<int, UIToolTipInfo> uiToolTipDic = new Dictionary<int, UIToolTipInfo>();
 
     public Dictionary<int, MonsterInfo> queenAbilityMonsterStatDic = new Dictionary<int, MonsterInfo>();
 
@@ -113,6 +115,10 @@ public class DataManager : MonoSingleton<DataManager>
         {
             toolTipData = await Addressables.LoadAssetAsync<ToolTipData>("ToolTipData");
         }
+        if (uiToolTipData == null)
+        {
+            toolTipData = Addressables.LoadAssetAsync<ToolTipData>("UIToolTipData").WaitForCompletion();
+        }
 
         Init<MonsterInfo>(monsterData.infoList, monsterDic);
         Init<QueenAbilityInfo>(queenAbilityData.infoList, queenAbilityDic);
@@ -127,6 +133,7 @@ public class DataManager : MonoSingleton<DataManager>
         Init<QueenStatusInfo>(queenStatusData.infoList, queenStatusDic);
         Init<QueenPassiveSkillInfo>(queenPassiveSkillData.infoList, queenPassiveSkillDic);
         Init<ToolTipInfo>(toolTipData.infoList, toolTipDic);
+        Init<UIToolTipInfo>(uiToolTipData.infoList, uiToolTipDic);
 
         foreach (var monsterData in monsterDic.Values)
         {
