@@ -202,6 +202,7 @@ public enum IDToolTip
     // 업적 이름 추후 수정 필요
     MainMenu = 3000001,
     InGame,
+    Evolution,
 }
 
 public enum IDUIToolTip

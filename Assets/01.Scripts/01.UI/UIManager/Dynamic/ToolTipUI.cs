@@ -43,7 +43,7 @@ public class ToolTipUI : BaseUI
     /// <summary>
     /// 툴팁 설정
     /// </summary>
-    public void Setup(int id, Action onFinishAction = null)
+    public void Setup(int id, Action onFinishAction = null, bool isOnlyPage = false)
     {
         var gameHUD = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>();
         if (gameHUD != null && gameHUD.openWindow == null)
@@ -53,14 +53,21 @@ public class ToolTipUI : BaseUI
         }
 
         this.onFinishAction = onFinishAction;
-        InitPageHistory(id);
+        InitPageHistory(id, isOnlyPage);
         UpdatePage(0);
     }
 
-    public void InitPageHistory(int id)
+    public void InitPageHistory(int id, bool isOnlyPage = false)
     {
         historyList.Clear();
         int nextId = id;
+
+        if (isOnlyPage)
+        {
+            historyList.Add(DataManager.Instance.toolTipDic[nextId].id);
+            return;
+        }
+
         while (nextId != -1)
         {
             historyList.Add(DataManager.Instance.toolTipDic[nextId].id);

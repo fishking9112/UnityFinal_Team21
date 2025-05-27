@@ -60,7 +60,7 @@ public class QueenEnhanceUI : SingleUI
         }
         else
         {
-            Utils.Log("골드가 부족하여 리롤할 수 없습니다.");
+            UIManager.Instance.ShowPopup("알림", "골드가 부족합니다.", () => { Utils.Log("확인."); });
         }
     }
 
