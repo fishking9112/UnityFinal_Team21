@@ -39,6 +39,7 @@ public class QueenCondition : MonoBehaviour
 
     private int levelUpCount = 0;
     private bool isLevelUpDoing = false;
+    public bool InitComplete = false;
 
     private void Awake()
     {
@@ -54,7 +55,8 @@ public class QueenCondition : MonoBehaviour
     {
         await InitQueenStatus();
         await InitSkill();
-        QueenAbilityUpgradeManager.Instance.ApplyAllEffects();
+
+        InitComplete = true;
     }
 
     private async UniTask InitQueenStatus()
