@@ -116,6 +116,10 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
             {
                 GameManager.Instance.castle.TakeDamaged(damage);
             }
+            else if (GameManager.Instance.miniCastles.TryGetValue(c.gameObject, out var miniCastle))
+            {
+                miniCastle.TakeDamaged(damage);
+            }
         }
     }
 

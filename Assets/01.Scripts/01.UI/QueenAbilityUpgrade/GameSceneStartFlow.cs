@@ -18,6 +18,7 @@ public class GameSceneStartFlow : MonoBehaviour
         await UniTask.DelayFrame(4);
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().canPause = true;
         EquipDefaultUnitToQuickSlot();
+        RewardManager.Instance.initBatSummon();
     }
 
     /// <summary>

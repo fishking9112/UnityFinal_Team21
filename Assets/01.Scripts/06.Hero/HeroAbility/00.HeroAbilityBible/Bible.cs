@@ -22,7 +22,7 @@ public class Bible : MonoBehaviour, IPoolable
 
     private void Update()
     {
-        if(target == null)
+        if (target == null)
         {
             return;
         }
@@ -60,6 +60,10 @@ public class Bible : MonoBehaviour, IPoolable
             else if (GameManager.Instance.castle.gameObject == collision.gameObject)
             {
                 GameManager.Instance.castle.TakeDamaged(damage);
+            }
+            else if (GameManager.Instance.miniCastles.TryGetValue(collision.gameObject, out var miniCastle))
+            {
+                miniCastle.TakeDamaged(damage);
             }
         }
 
