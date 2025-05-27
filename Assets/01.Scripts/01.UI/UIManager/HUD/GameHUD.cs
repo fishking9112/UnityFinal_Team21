@@ -59,19 +59,23 @@ public class GameHUD : HUDUI
     public Button PauseBtn;
     public Button HudEvolutionBtn;
     public Button HudPauseBtn;
+    public Button HealthUITestButton;
+    public Button InGameToolTipButton;
+    public Button EvolutionToolTipButton;
 
     [Header("현재 상태")]
     public bool isPaused = false;
+    public bool canPause = false;
     [NonSerialized] public GameObject openWindow = null;
 
     [Header("레벨업 테스트 버튼")]
     public Button LevelUPTestButton;
 
-    [Header("체력 UI 테스트 버튼")]
-    public Button HealthUITestButton;
-
     [Header("Slot")]
     public SlotChange slot;
+
+    [Header("피격 당함 마크")]
+    public AttackMarkIcon attackMarkIconPrefab;
 
     public override async UniTask Initialize()
     {
@@ -94,7 +98,11 @@ public class GameHUD : HUDUI
 
         summonGaugeUI.Bind(condition.CurSummonGauge, condition.MaxSummonGauge);
         queenActiveSkillGaugeUI.Bind(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
-        castleGaugeUI.Bind(GameManager.Instance.castle.condition.CurCastleHealth, GameManager.Instance.castle.condition.MaxCastleHealth);
+        castleGaugeUI.Bind(GameManager.Instance.castle.condition.CurCastleHealth, GameManager.Instance.castle.condition.MaxCastleHealth,
+        isImgFlash: true, flashAction: () =>
+        {
+            Instantiate(attackMarkIconPrefab, Vector2.zero, Quaternion.identity);
+        });
         expGaugeUI.Bind(condition.CurExpGauge, condition.MaxExpGauge);
 
         queenActiveSkillGaugeTextUI.BindText(condition.CurQueenActiveSkillGauge, condition.MaxQueenActiveSkillGauge);
@@ -110,6 +118,8 @@ public class GameHUD : HUDUI
             HeroManager.Instance.OnClickHealthUITest();
         });
 
+        InGameToolTipButton.onClick.AddListener(() => UIManager.Instance.ShowTooltip((int)IDToolTip.InGame));
+        EvolutionToolTipButton.onClick.AddListener(() => UIManager.Instance.ShowTooltip((int)IDToolTip.Evolution, isOnlyPage: true));
         // 옵션창 버튼 이벤트 연결
         OptionBtn.onClick.AddListener(() => ShowWindow<OptionController>());
 
@@ -151,6 +161,13 @@ public class GameHUD : HUDUI
                 return;
             }
 
+            // 이미 창이 열려있다면 리턴
+            if (UIManager.Instance.IsOpenUI("ToolTipUI"))
+            {
+                Utils.Log("이미 열려있는 툴팁이 있습니다");
+                return;
+            }
+
             // 기타 UI 숨기기
             HUDGroup.SetActive(false);
             BackgroundGroup.SetActive(false);
@@ -164,6 +181,7 @@ public class GameHUD : HUDUI
         if (typeof(T) == typeof(QueenEnhanceUI))
         {
             openWindow = queenEnhanceUI.gameObject;
+            HUDGroup.SetActive(true);
             BackgroundGroup.SetActive(true);
         }
         else if (typeof(T) == typeof(EvolutionTreeUI))
@@ -208,6 +226,13 @@ public class GameHUD : HUDUI
     public void HideWindow()
     {
         if (openWindow == null) return;
+
+        // 이미 창이 열려있다면 리턴
+        if (UIManager.Instance.IsOpenUI("ToolTipUI"))
+        {
+            Utils.Log("이미 열려있는 툴팁이 있습니다");
+            return;
+        }
 
         HUDGroup.SetActive(true);
         BackgroundGroup.SetActive(false);
@@ -291,6 +316,8 @@ public class GameHUD : HUDUI
 
     public void OnPauseUI(InputAction.CallbackContext context)
     {
+        if (!canPause) return;
+
         if (context.phase == InputActionPhase.Started)
         {
             if (!ReferenceEquals(openWindow, pauseUI.gameObject))

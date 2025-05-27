@@ -157,6 +157,7 @@ public enum IDQueenPassiveSkill
 public enum IDQueenAbility
 {
     MONSTER_ATTACK_DAMAGE_UP = 30001,
+    MONSTER_HP_UP,
     MONSTER_MOVE_SPEED_UP,
     GOLD_GAIN_AMOUNT_UP,
     EXP_GAIN_AMOUNT_UP,
@@ -201,6 +202,7 @@ public enum IDToolTip
     // 업적 이름 추후 수정 필요
     MainMenu = 3000001,
     InGame,
+    Evolution,
 }
 
 public enum IDUIToolTip
@@ -208,6 +210,7 @@ public enum IDUIToolTip
     PAUSE_BUTTON = 4000001,
     EVOLUTIONTREE_BUTTON,
     HEALTHBAR_BUTTON,
+    INGAMETOOLTIP_BUTTON,
 }
 
 public class GameLog

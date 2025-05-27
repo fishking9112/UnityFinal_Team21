@@ -44,6 +44,7 @@ public class GameEventProgressUI : MonoBehaviour
 
     private void Start()
     {
+        CreateEvent(rank: 1, fillPosition: 180 / 1800f); // 3분에 퀘스트 출현
         CreateEvent(rank: 1, fillPosition: 1 / 4f);
         CreateEvent(rank: 2, fillPosition: 2 / 4f);
         CreateEvent(rank: 3, fillPosition: 3 / 4f);
@@ -146,6 +147,7 @@ public class GameEventProgressUI : MonoBehaviour
 
         if (eventInstance != null)
         {
+            UIManager.Instance.ShowEventPop(eventTableInfo.name, eventTableInfo.icon);
             RegisterEvent(eventInstance);
         }
     }
@@ -158,6 +160,29 @@ public class GameEventProgressUI : MonoBehaviour
     public void CreateEvent(int rank, float fillPosition)
     {
         var candidates = DataManager.Instance.eventDic.Values.Where(x => x.rank == rank).ToList();
+        if (candidates.Count == 0) return;
+
+        var selected = candidates[Random.Range(0, candidates.Count)];
+
+        Image icon = Instantiate(eventIconPrefab, background);
+        if (selected.icon != null && selected.icon != "")
+        {
+            icon.sprite = DataManager.Instance.iconAtlas.GetSprite(selected.icon);
+        }
+        Vector2 spawnPos = GetIconSpawnPosition(fillPosition);
+        icon.GetComponent<RectTransform>().anchoredPosition = spawnPos;
+
+        scheduledEvents.Enqueue(new ScheduledEvent(selected, fillPosition, icon));
+    }
+
+    /// <summary>
+    /// 이벤트 생성
+    /// </summary>
+    /// <param name="rank"></param>
+    /// <param name="fillPosition"></param>
+    public void CreateEventId(int eventId, float fillPosition)
+    {
+        var candidates = DataManager.Instance.eventDic.Values.Where(x => x.id == eventId).ToList();
         if (candidates.Count == 0) return;
 
         var selected = candidates[Random.Range(0, candidates.Count)];

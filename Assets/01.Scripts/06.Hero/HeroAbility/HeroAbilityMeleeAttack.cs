@@ -49,6 +49,9 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     {
         float angle;
 
+        if (animator == null)
+            return;
+
         if (target == null)
         {
             animator.SetBool("1_Move", true);
@@ -118,6 +121,8 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     public override void DespawnAbility()
     {
+        if (animator == null) return;
+
         animator.SetBool("1_Move", false);
         animator.SetBool("2_Attack", false);
 
