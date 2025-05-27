@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class MiniBarrack : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer sprite;
-    [SerializeField] private Image fillImage;
+    [SerializeField] private Slider slider; // Image → Slider로 변경
     public TextMeshProUGUI spawnDurationText;
     public CastleCondition condition;
 
@@ -30,6 +30,8 @@ public class MiniBarrack : MonoBehaviour
         cur.AddAction(UpdateFill);
         max.AddAction(UpdateFill);
 
+        slider.minValue = 0f;
+        slider.maxValue = max.Value;
         UpdateFill(0);
     }
 
@@ -46,7 +48,8 @@ public class MiniBarrack : MonoBehaviour
             return;
         }
 
-        fillImage.fillAmount = Mathf.Clamp01(cur.Value / max.Value);
+        slider.maxValue = max.Value; // max가 바뀔 수도 있으므로 재설정
+        slider.value = cur.Value;
     }
 
     /// <summary>
