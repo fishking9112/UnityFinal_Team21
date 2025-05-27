@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,17 @@ public class MonsterManager : MonoSingleton<MonsterManager>
     public Dictionary<int, List<MonsterController>> idByMonsters = new(); // 몬스터가 나오면 자동으로 이곳에 저장(종류별)
 
     public bool isHealthUI = false;
+    public bool InitComplete = false;
 
-    void Start()
+    private async void Start()
     {
+        await WaitUntilInitCompleteAndSetup();
+    }
+
+    private async UniTask WaitUntilInitCompleteAndSetup()
+    {
+        await UniTask.WaitUntil(() => InitComplete);
+
         foreach (var monsterdata in DataManager.Instance.queenAbilityMonsterStatDic.Values)
         {
             monsterInfoList[monsterdata.ID] = new MonsterInfo(monsterdata);

@@ -78,6 +78,12 @@ public class QueenController : MonoBehaviour
         {
             SummonMonster();
         }
+
+        // 테스트 코드
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            RewardManager.Instance.SpawnRewardBat(5f);
+        }
     }
 
     private async UniTask GameHuDInit()
@@ -370,7 +376,9 @@ public class QueenController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            // 참조값을 비교해서 성능상 빠름
+            if (gameHUD == null)
+                return;
+
             if (!ReferenceEquals(gameHUD.openWindow, gameHUD.evolutionTreeUI.gameObject))
             {
                 gameHUD.ShowWindow<EvolutionTreeUI>();
@@ -386,6 +394,9 @@ public class QueenController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
+            if (gameHUD == null)
+                return;
+
             if (ReferenceEquals(gameHUD.openWindow, gameHUD.evolutionTreeUI.gameObject))
             {
                 gameHUD.HideWindow();

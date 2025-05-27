@@ -210,6 +210,7 @@ public enum IDUIToolTip
     PAUSE_BUTTON = 4000001,
     EVOLUTIONTREE_BUTTON,
     HEALTHBAR_BUTTON,
+    INGAMETOOLTIP_BUTTON,
 }
 
 public class GameLog
