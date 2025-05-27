@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 1084063505513460701}
   m_Layer: 6
   m_Name: H_Boss
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -317,6 +317,8 @@ MonoBehaviour:
     weaponLevel: 01000000
     detectedRange: 3
     custom: 1
+    heroType: 0
+  takeDamagedRendererTimer: 0.5
 --- !u!114 &-1669867321582281066
 MonoBehaviour:
   m_ObjectHideFlags: 0
