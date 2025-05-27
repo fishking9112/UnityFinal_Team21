@@ -134,12 +134,20 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
     {
         HeroManager.Instance.hero.Remove(obj.gameObject);
         obj.gameObject.SetActive(false);
-        if (heroList.Contains(heroDic[obj]))
+
+        // 보스일경우
+        if(!heroDic.ContainsKey(obj))
+        {
+            Destroy(obj.gameObject);
+        }
+        // 보스가 아닌 히어로일경우
+        else if (heroList.Contains(heroDic[obj]))
         {
             heroDic[obj].transform.SetParent(heroParent);
             heroDic[obj].SetActive(false);
             heroDic.Remove(obj);
         }
+        // 풀링으로 생성된 히어로일경우
         else
         {
             Destroy(heroDic[obj]);
