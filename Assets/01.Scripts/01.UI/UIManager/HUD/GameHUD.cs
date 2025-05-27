@@ -59,6 +59,9 @@ public class GameHUD : HUDUI
     public Button PauseBtn;
     public Button HudEvolutionBtn;
     public Button HudPauseBtn;
+    public Button HealthUITestButton;
+    public Button InGameToolTipButton;
+    public Button EvolutionToolTipButton;
 
     [Header("현재 상태")]
     public bool isPaused = false;
@@ -66,9 +69,6 @@ public class GameHUD : HUDUI
 
     [Header("레벨업 테스트 버튼")]
     public Button LevelUPTestButton;
-
-    [Header("체력 UI 테스트 버튼")]
-    public Button HealthUITestButton;
 
     [Header("Slot")]
     public SlotChange slot;
@@ -117,6 +117,8 @@ public class GameHUD : HUDUI
             HeroManager.Instance.OnClickHealthUITest();
         });
 
+        InGameToolTipButton.onClick.AddListener(() => UIManager.Instance.ShowTooltip((int)IDToolTip.InGame));
+        EvolutionToolTipButton.onClick.AddListener(() => UIManager.Instance.ShowTooltip((int)IDToolTip.Evolution, isOnlyPage: true));
         // 옵션창 버튼 이벤트 연결
         OptionBtn.onClick.AddListener(() => ShowWindow<OptionController>());
 
@@ -155,6 +157,13 @@ public class GameHUD : HUDUI
             if (openWindow != null)
             {
                 Utils.Log("이미 열려있는 창이 있습니다");
+                return;
+            }
+
+            // 이미 창이 열려있다면 리턴
+            if (UIManager.Instance.IsOpenUI("ToolTipUI"))
+            {
+                Utils.Log("이미 열려있는 툴팁이 있습니다");
                 return;
             }
 
@@ -216,6 +225,13 @@ public class GameHUD : HUDUI
     public void HideWindow()
     {
         if (openWindow == null) return;
+
+        // 이미 창이 열려있다면 리턴
+        if (UIManager.Instance.IsOpenUI("ToolTipUI"))
+        {
+            Utils.Log("이미 열려있는 툴팁이 있습니다");
+            return;
+        }
 
         HUDGroup.SetActive(true);
         BackgroundGroup.SetActive(false);
