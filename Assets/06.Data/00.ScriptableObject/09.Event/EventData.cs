@@ -22,7 +22,7 @@ public class EventInfo : IInfo
     public EventTableType type;
     public int rank;
     public int count;
-    public float reward;
+    public int reward;
     public float createHp;
     public float timer;
     public float spawnDuration;
@@ -70,7 +70,7 @@ public class EventData : SheetDataReaderBase
                     eventInfo.count = Utils.StringToInt(cell.value);
                     break;
                 case "reward":
-                    eventInfo.reward = Utils.StringToFloat(cell.value);
+                    eventInfo.reward = Utils.StringToInt(cell.value);
                     break;
                 case "createHp":
                     eventInfo.createHp = Utils.StringToFloat(cell.value);

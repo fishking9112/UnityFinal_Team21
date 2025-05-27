@@ -152,10 +152,24 @@ public class QueenCondition : MonoBehaviour
         while (temp >= MaxExpGauge.Value)
         {
             levelUpCount++;
+            ExpIncrease();
             temp -= MaxExpGauge.Value;
         }
 
         CurExpGauge.Value = temp;
+        StartCoroutine(CoroutineLevelUp());
+    }
+
+    /// <summary>
+    /// 레벨업 처리 및 강화 트리거 호출
+    /// </summary>
+    public void QuestLevelUp(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            levelUpCount++;
+            ExpIncrease();
+        }
         StartCoroutine(CoroutineLevelUp());
     }
 
