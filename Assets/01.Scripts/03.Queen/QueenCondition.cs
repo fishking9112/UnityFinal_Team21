@@ -34,8 +34,8 @@ public class QueenCondition : MonoBehaviour
     public ReactiveProperty<int> KillCnt { get; private set; } = new ReactiveProperty<int>();
     public int EnhancePoint;
 
-    private float ExpGainMultiplier => 1f + (expGainMultiplierPercent * 0.01f);
-    private float GoldGainMultiplier => 1f + (goldGainMultiplierPercent * 0.01f);
+    private float ExpGainMultiplier => 1f + expGainMultiplierPercent;
+    private float GoldGainMultiplier => 1f + goldGainMultiplierPercent;
 
     private int levelUpCount = 0;
     private bool isLevelUpDoing = false;
