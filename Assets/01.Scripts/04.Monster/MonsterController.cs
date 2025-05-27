@@ -160,7 +160,7 @@ public class MonsterController : BaseController, IPoolable
         if (renderers == null)
         {
             renderers = new();
-            renderers = gameObject.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow").ToList();
+            renderers = gameObject.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow" && r.gameObject.name != "MiniMapIcon").ToList();
 
             // 각 renderer의 현재 색상 저장
             foreach (var renderer in renderers)
