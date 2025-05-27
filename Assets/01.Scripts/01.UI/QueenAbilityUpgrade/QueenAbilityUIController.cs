@@ -97,19 +97,26 @@ public class QueenAbilityUIController : MonoBehaviour
     public void SetPopupQueenAbilityInfo(QueenAbilityInfo info, int currentLevel)
     {
         popupUIAbilityName.text = info.name;
-
-        string formattedValue = info.type == StatModifierType.Percent
-            ? $"{info.levelInfo[currentLevel].eff * 100:F0}%"
-            : $"{info.levelInfo[currentLevel].eff}";
+        string formattedValue = "";
+        if (currentLevel <= 0)
+        {
+            formattedValue = info.type == StatModifierType.Percent ? "0%" : "0";
+        }
+        else
+        {
+            float value = info.levelInfo[currentLevel - 1].eff;
+            formattedValue = info.type == StatModifierType.Percent
+                ? $"{value * 100:F0}%"
+                : $"{value}";
+        }
 
         popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
-        popupUIAbilityCost.text = currentLevel >= info.maxLevel ? "―" : info.levelInfo[currentLevel].cost.ToString();
+        popupUIAbilityCost.text = currentLevel >= info.maxLevel ? "MAX" : info.levelInfo[currentLevel].cost.ToString();
         popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
 
+        // 팝업 위치 및 마우스 추적 활성화
         descriptionPopupUI.gameObject.SetActive(true);
         descriptionPopupUI.position = Input.mousePosition;
-
-        // 마우스 따라다니기 시작
         isFollowingMouse = true;
     }
 
