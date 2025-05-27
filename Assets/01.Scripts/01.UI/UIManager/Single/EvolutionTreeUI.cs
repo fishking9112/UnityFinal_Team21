@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 [Serializable]
 public class Page
@@ -34,7 +35,7 @@ public class EvolutionTreeUI : SingleUI
 
     [Header("DescriptionUI")]
     [SerializeField] private TextMeshProUGUI evolutionPointText;
-    [SerializeField] private Image descriptionImage;
+    [SerializeField] private UnityEngine.UI.Image descriptionImage;
     [SerializeField] private TextMeshProUGUI monsterName;
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private TextMeshProUGUI healthText;
@@ -132,6 +133,11 @@ public class EvolutionTreeUI : SingleUI
 
     public void OnClickEvolutionButton()
     {
+        if (GameManager.Instance.queen.condition.EvolutionPoint.Value <= 0)
+        {
+            UIManager.Instance.ShowPopup("알림", "진화포인트<sprite=1>가 부족합니다.", () => { Utils.Log("확인."); });
+            return;
+        }
         currentTreePage?.OnClickEvolutionButton();
     }
 
@@ -144,10 +150,6 @@ public class EvolutionTreeUI : SingleUI
         if (!state)
         {
             text = "진화 완료";
-        }
-        else if (GameManager.Instance.queen.condition.EvolutionPoint.Value <= 0)
-        {
-            text = "포인트 부족";
         }
         else
         {
