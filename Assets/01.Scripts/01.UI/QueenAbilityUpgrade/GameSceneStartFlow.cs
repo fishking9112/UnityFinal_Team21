@@ -16,6 +16,7 @@ public class GameSceneStartFlow : MonoBehaviour
 
         // 약간의 프레임 딜레이 후 기본 유닛 장착
         await UniTask.DelayFrame(4);
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().canPause = true;
         EquipDefaultUnitToQuickSlot();
     }
 
