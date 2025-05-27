@@ -25,7 +25,7 @@ public class HeroController : BaseController
 
     private bool isDead;
 
-    private CancellationTokenSource token = new CancellationTokenSource();
+    private CancellationTokenSource token = null;
 
     [SerializeField] public HeroStatusInfo statusInfo;
 
@@ -34,7 +34,7 @@ public class HeroController : BaseController
     [NonSerialized] public List<SpriteRenderer> renderers = new();
     private List<Color> originalColors = new(); // 원본 색상 저장용
     private CancellationTokenSource _takeDamagedRendererCts;
-    [SerializeField] private float takeDamagedRendererTimer = 0.5f;
+    [NonSerialized] private float takeDamagedRendererTimer = 0.5f;
     private void Update()
     {
         if (transform.position != lastPos)
@@ -52,7 +52,7 @@ public class HeroController : BaseController
 
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
-        CheckFlip(token.Token).Forget();
+
     }
 
 
@@ -93,7 +93,11 @@ public class HeroController : BaseController
         }
 
         stateMachine.ChangeState(stateMachine.moveState);
+
+        token?.Cancel();
+        token?.Dispose();
         token = new CancellationTokenSource();
+        CheckFlip(token.Token).Forget();
 
         // IF문 탈출
         renderers.Clear();
@@ -122,6 +126,7 @@ public class HeroController : BaseController
     {
         lastDir = 0;
         float x;
+
         while (!tk.IsCancellationRequested)
         {
             if (navMeshAgent == null)
@@ -137,7 +142,7 @@ public class HeroController : BaseController
             {
                 currentDir = lastDir;
             }
-            else if (currentDir != lastDir)
+            else
             {
                 pivot.localScale = new Vector3(-currentDir, 1, 1);
                 lastDir = currentDir;
@@ -166,10 +171,15 @@ public class HeroController : BaseController
     {
 
         // await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).IsName("DEATH"));
-        await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
+        await UniTask.Delay(TimeSpan.FromSeconds(1f), false, PlayerLoopTiming.Update);
+        // await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f);
+        _takeDamagedRendererCts?.Cancel();
+        _takeDamagedRendererCts?.Dispose();
+        _takeDamagedRendererCts = null;
+        token?.Cancel();
+        token?.Dispose();
+        token = null;
         HeroPoolManager.Instance.ReturnObject(this);
-        isDead = false;
-
     }
 
     public override void Die()
@@ -181,10 +191,6 @@ public class HeroController : BaseController
 
         navMeshAgent.enabled = false;
         _collider.enabled = false;
-        _takeDamagedRendererCts?.Cancel();
-        _takeDamagedRendererCts?.Dispose();
-        _takeDamagedRendererCts = null;
-        SetOriginColor();
 
         stateMachine.ChangeState(stateMachine.deadState);
         ResetObj();
@@ -203,7 +209,6 @@ public class HeroController : BaseController
     {
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
-        // 새로운 CancellationTokenSource 만들기 (OnDisable용 토큰도 연동)
         _takeDamagedRendererCts = new CancellationTokenSource();
 
         // Task 시작
@@ -213,16 +218,22 @@ public class HeroController : BaseController
     // UniTask 본문
     private async UniTaskVoid TakeDamagedRendererTask(CancellationToken token)
     {
-        foreach (var renderer in renderers)
+        try
         {
-            renderer.color = Color.red;
+            foreach (var renderer in renderers)
+            {
+                renderer.color = Color.red;
+            }
+            await UniTask.Delay(TimeSpan.FromSeconds(takeDamagedRendererTimer), cancellationToken: token);
+            SetOriginColor();
         }
-
-        await UniTask.Delay(TimeSpan.FromSeconds(takeDamagedRendererTimer), cancellationToken: token);
-
-        if (gameObject == null) return;
-
-        SetOriginColor();
+        finally
+        {
+            if (isDead)
+            {
+                SetOriginColor();
+            }
+        }
     }
 
     private void SetOriginColor()
@@ -244,5 +255,6 @@ public class HeroController : BaseController
         _takeDamagedRendererCts = null;
         token?.Cancel();
         token?.Dispose();
+        token = null;
     }
 }

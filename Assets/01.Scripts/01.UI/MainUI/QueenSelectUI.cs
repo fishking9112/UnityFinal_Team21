@@ -62,7 +62,7 @@ public class QueenSelectUI : MonoBehaviour
         if (queenSelectToggleList.Count > 0)
             queenSelectToggleList[0].isOn = true;
 
-        if(GameManager.Instance.QueenCharaterID == 0)
+        if (GameManager.Instance.QueenCharaterID == 0)
         {
             InitQueen(DataManager.Instance.queenStatusDic.First().Key);
         }
@@ -166,7 +166,7 @@ public class QueenSelectUI : MonoBehaviour
     {
         ui.SkillIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(skill.Icon);
         ui.SkillName.text = skill.Name;
-        ui.SkillDescription.text = skill.Description.Replace("n", skill.value.ToString());
+        ui.SkillDescription.text = skill.Description.Replace("n", (skill.value * 100f).ToString());
     }
 
 }
