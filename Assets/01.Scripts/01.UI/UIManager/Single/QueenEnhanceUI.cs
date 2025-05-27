@@ -216,32 +216,36 @@ public class QueenEnhanceUI : SingleUI
                 continue;
 
             float amount = 0f;
-
+            
             switch (type)
             {
                 case ValueType.Hp:
-                    amount = monster.health * value;
+                    float originHealth= DataManager.Instance.monsterDic[monster.id].health;
+                    amount = originHealth * value;
                     monster.health += amount;
                     foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
                         controller.UpgradeHealth(amount);
                     break;
 
                 case ValueType.Attack:
-                    amount = monster.attack * value;
+                    float originAtt = DataManager.Instance.monsterDic[monster.id].attack;
+                    amount = originAtt * value;
                     monster.attack += amount;
                     foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
                         controller.UpgradeAttack(amount);
                     break;
 
                 case ValueType.MoveSpeed: // 수정: AttackSpeed가 아니라 MoveSpeed
-                    amount = monster.moveSpeed * value;
+                    float originSpeed = DataManager.Instance.monsterDic[monster.id].moveSpeed;
+                    amount = originSpeed * value;
                     monster.moveSpeed += amount;
                     foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
                         controller.UpgradeMoveSpeed(amount);
                     break;
 
                 case ValueType.AttackSpeed:
-                    amount = monster.attackSpeed * value;
+                    float originAttspd = DataManager.Instance.monsterDic[monster.id].attackSpeed;
+                    amount = originAttspd * value;
                     monster.attackSpeed += amount;
                     foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
                         controller.UpgradeAttackSpeed(amount);
