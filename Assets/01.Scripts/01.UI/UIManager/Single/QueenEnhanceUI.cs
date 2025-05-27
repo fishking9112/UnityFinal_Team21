@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class QueenEnhanceUI : SingleUI
     [SerializeField] private GameObject queenSkillSwapPopup;
     [SerializeField] private Button skillSwapPopupExitBtn;
     [SerializeField] private Button enhanceRerollBtn;
+    [SerializeField] private TextMeshProUGUI rerollCostText;
 
     private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
     public IReadOnlyDictionary<int, int> AcquiredEnhanceLevels => acquiredEnhanceLevels;
@@ -19,8 +21,8 @@ public class QueenEnhanceUI : SingleUI
     private QueenEnhanceInfo tmpQueenEnhanceInfo;
     [HideInInspector] public bool isOpen = false;
 
-
     private const int rerollCost = 1000;
+    private int useRerollCount = 1;
 
     private void Awake()
     {
@@ -36,6 +38,7 @@ public class QueenEnhanceUI : SingleUI
         queenSkillSwapPopup.SetActive(false);
         var randomOptions = GetRandomInhanceOptions();
         ShowSelectUI(randomOptions);
+        UpdateRerollCostText();
         ClickDelay();
         isOpen = true;
     }
@@ -48,20 +51,30 @@ public class QueenEnhanceUI : SingleUI
     /// </summary>
     private void OnClickEnhanceReroll()
     {
-        if (GameManager.Instance.queen.condition.Gold.Value >= rerollCost)
+        if (GameManager.Instance.queen.condition.Gold.Value >= (rerollCost * useRerollCount))
         {
             // 골드 차감
-            GameManager.Instance.queen.condition.Gold.Value -= rerollCost;
+            GameManager.Instance.queen.condition.Gold.Value -= (rerollCost * useRerollCount);
+            useRerollCount++;
 
             // 새 옵션 가져오기 및 UI 갱신
             var randomOptions = GetRandomInhanceOptions();
             ShowSelectUI(randomOptions);
+            UpdateRerollCostText();
             ClickDelay();
         }
         else
         {
             UIManager.Instance.ShowPopup("알림", "골드가 부족합니다.", () => { Utils.Log("확인."); });
         }
+    }
+
+    /// <summary>
+    /// 리롤시 리롤 버튼 텍스트 변경
+    /// </summary>
+    private void UpdateRerollCostText()
+    {
+        rerollCostText.text = (rerollCost * useRerollCount).ToString();
     }
 
     /// <summary>
