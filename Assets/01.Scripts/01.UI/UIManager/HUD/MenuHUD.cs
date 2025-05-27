@@ -19,7 +19,7 @@ public class MenuHUD : HUDUI
 {
     public List<MainUIButtonPanel> mainUISets;
     public Button startButton;
-    public Button exitBtn;
+    public Button quitGameBtn;
     public TextMeshProUGUI goldText;
     public GameObject buttonMenu;
     public GameObject uiMenu;
@@ -64,12 +64,12 @@ public class MenuHUD : HUDUI
             mainUISet.panel.SetActive(false);
         }
 
-        exitBtn.onClick.AddListener(() =>
+        quitGameBtn.onClick.AddListener(() =>
         {
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+        UIManager.Instance.ShowPopup("제목", "미시지", () => { UnityEditor.EditorApplication.isPlaying = false; }, () => { Utils.Log("취소."); });
 #else
-    Application.Quit();
+        UIManager.Instance.ShowPopup("제목", "미시지", () => Application.Quit() , () => { Utils.Log("취소."); });
 #endif
         });
 
