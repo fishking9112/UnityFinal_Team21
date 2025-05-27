@@ -59,7 +59,8 @@ public class DefendAreaEvent : GameEventBase
     protected override void GiveReward()
     {
         Utils.Log("성을 성공적으로 방어했습니다! 보상 지급!");
-        GameManager.Instance.queen.condition.AdjustCurExpGauge(tableInfo.reward);
+        // GameManager.Instance.queen.condition.AdjustCurExpGauge(tableInfo.reward);
+        GameManager.Instance.queen.condition.QuestLevelUp(tableInfo.reward);
         GameObject.Destroy(castleInstance.gameObject);
         GameObject.Destroy(contextUI.gameObject);
         // 보상 지급 로직 추가 가능
