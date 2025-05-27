@@ -15,7 +15,7 @@ MonoBehaviour:
   sheetURL: 1Of0EBz6S6NjUCNtNGPNnWgAcb5RdXT_xJnsCn-1LZ4w
   sheetName: QueenAbility
   startRowIndex: 2
-  endRowIndex: 12
+  endRowIndex: 13
   infoList:
   - id: 30001
     name: "\uACF5\uACA9\uB825"
@@ -120,7 +120,7 @@ MonoBehaviour:
       eff: 2000
     - cost: 8000
       eff: 2500
-    type: 0
+    type: 1
   - id: 30007
     name: "\uC131\uCC44 \uCCB4\uB825 \uD68C\uBCF5\uB7C9"
     description: "\uC131\uCC44 \uCCB4\uB825 \uD68C\uBCF5 \uC18D\uB3C4\uAC00 <color=#FFB600>n</color>
@@ -199,3 +199,17 @@ MonoBehaviour:
     - cost: 10000
       eff: 1.5
     type: 0
+  - id: 30012
+    name: "\uC2DC\uC791 \uC9C4\uD654 \uD3EC\uC778\uD2B8"
+    description: "\uC2DC\uC791 \uC2DC, \uC9C4\uD654 \uD3EC\uC778\uD2B8\uB97C <color=#FFB600>n</color>
+      \uD68D\uB4DD\uD569\uB2C8\uB2E4."
+    icon: gameicon_tilemap-Sheet_66
+    maxLevel: 3
+    levelInfo:
+    - cost: 5000
+      eff: 1
+    - cost: 10000
+      eff: 2
+    - cost: 15000
+      eff: 3
+    type: 1

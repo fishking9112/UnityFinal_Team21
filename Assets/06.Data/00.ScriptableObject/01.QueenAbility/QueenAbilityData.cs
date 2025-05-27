@@ -91,7 +91,7 @@ public class QueenAbilityData : SheetDataReaderBase
                         queenAbilityInfo.levelInfo[levelIndex].eff = Utils.StringToFloat(cell.value);
                     }
                     break;
-                case "type":
+                case "Type":
                     queenAbilityInfo.type = Utils.StringToEnum<StatModifierType>(cell.value, StatModifierType.Percent);
                     break;
             }
