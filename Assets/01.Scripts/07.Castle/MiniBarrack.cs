@@ -33,6 +33,11 @@ public class MiniBarrack : MonoBehaviour
         UpdateFill(0);
     }
 
+    public void Init(float maxHP)
+    {
+        condition.AdjustMaxHealth(maxHP);
+    }
+
     // 체력 바 UI 갱신
     private void UpdateFill(float useless)
     {
@@ -50,15 +55,15 @@ public class MiniBarrack : MonoBehaviour
     /// <param name="amount"> 입힐 데미지 양 </param>
     public virtual void TakeDamaged(float amount)
     {
-        // Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
-        // Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
-        // if (condition.IsInvincible)
-        // {
-        //     StaticUIManager.Instance.damageLayer.ShowDamage(0, worldPos + Vector3.up * 0.5f, fontSize: 1f);
-        //     return;
-        // }
-        // StaticUIManager.Instance.damageLayer.ShowDamage(amount, worldPos + Vector3.up * 0.5f, fontSize: 1f);
-        // TakeDamagedRenderer();
+        Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
+        Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
+        if (condition.IsInvincible)
+        {
+            StaticUIManager.Instance.damageLayer.ShowDamage(0, worldPos + Vector3.up * 0.5f, fontSize: 0.5f);
+            return;
+        }
+        StaticUIManager.Instance.damageLayer.ShowDamage(amount, worldPos + Vector3.up * 0.5f, fontSize: 0.5f);
+        TakeDamagedRenderer();
 
 
         condition.AdjustCurHealth(-amount);
