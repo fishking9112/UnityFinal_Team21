@@ -61,7 +61,6 @@ public class QueenCondition : MonoBehaviour
     {
         await UniTask.WaitUntil(() => DataManager.Instance.queenStatusDic.ContainsKey(GameManager.Instance.QueenCharaterID));
 
-        Debug.Log("sfefes");
         queenStatus = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID];
 
         SummonGaugeRecoverySpeed = queenStatus.summon_Recorvery;
@@ -235,7 +234,6 @@ public class QueenCondition : MonoBehaviour
     // Ability 적용 함수
     public void AbilitySummonGaugeRecoverySpeed(float percent)
     {
-        Debug.Log("sfefes2222");
         AbilityUpgrade_SummonGaugeRecoverySpeed = AdjustValueByPercent(queenStatus.summon_Recorvery, percent, float.MaxValue);
         SummonGaugeRecoverySpeed += AbilityUpgrade_SummonGaugeRecoverySpeed;
     }
