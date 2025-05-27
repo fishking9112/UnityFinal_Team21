@@ -42,8 +42,8 @@ public class QueenController : MonoBehaviour
 
     private bool isDrag;
     public bool isMinimapDrag;
-    private float summonDistance;
-    private Vector3 lastSummonPosition;
+    //private float summonDistance;
+    //private Vector3 lastSummonPosition;
 
     public ToastMessage toastMessage;
 
@@ -57,8 +57,8 @@ public class QueenController : MonoBehaviour
         atlas = DataManager.Instance.iconAtlas;
         castlePos = GameManager.Instance.castle.transform.position;
 
-        summonDistance = 0.5f;
-        lastSummonPosition = Vector3.positiveInfinity;
+        //summonDistance = 0.5f;
+        //lastSummonPosition = Vector3.positiveInfinity;
 
         skillSizeSpriteRadius = skillSizeSprite.bounds.size.x;
         skillRangeSpriteRadius = skillRangeSprite.bounds.size.x;
@@ -77,6 +77,12 @@ public class QueenController : MonoBehaviour
         if (isDrag)
         {
             SummonMonster();
+        }
+
+        // 테스트 코드
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            RewardManager.Instance.SpawnRewardBat(5f);
         }
     }
 
@@ -319,6 +325,12 @@ public class QueenController : MonoBehaviour
         var monster = objectPoolManager.GetObject<MonsterController>(tempMonster.outfit, worldMousePos);
         monster.StatInit(tempMonster, MonsterManager.Instance.isHealthUI);
 
+        Vector3 targetScale = monster.transform.localScale;
+        Vector3 particlePos = monster.transform.position + new Vector3(0, targetScale.y * 0.25f, 0);
+        Vector3 particleScale = targetScale * 0.1f;
+
+        ParticleManager.Instance.SpawnParticle("Summon_Eff", particlePos, particleScale, parent: monster.transform);
+
         // 마지막 생성위치 갱신
         //lastSummonPosition = worldMousePos;
     }
@@ -364,7 +376,9 @@ public class QueenController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            // 참조값을 비교해서 성능상 빠름
+            if (gameHUD == null)
+                return;
+
             if (!ReferenceEquals(gameHUD.openWindow, gameHUD.evolutionTreeUI.gameObject))
             {
                 gameHUD.ShowWindow<EvolutionTreeUI>();
@@ -380,6 +394,9 @@ public class QueenController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
+            if (gameHUD == null)
+                return;
+
             if (ReferenceEquals(gameHUD.openWindow, gameHUD.evolutionTreeUI.gameObject))
             {
                 gameHUD.HideWindow();

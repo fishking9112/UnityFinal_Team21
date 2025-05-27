@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class ThunderEffect : MonoBehaviour,IPoolable
+public class ThunderEffect : MonoBehaviour, IPoolable
 {
     private Action<Component> returnToPool;
 
@@ -15,14 +15,14 @@ public class ThunderEffect : MonoBehaviour,IPoolable
     private float damageRange;
     private ParticleSystem particle;
 
-    public void SetData(float dmg, float kback, float size,float dmgRange)
+    public void SetData(float dmg, float kback, float size, float dmgRange)
     {
         damage = dmg;
         knockback = kback;
         this.size = size;
-        damageRange= dmgRange*size;
+        damageRange = dmgRange * size;
 
-        transform.localScale= Vector3.one*size;
+        transform.localScale = Vector3.one * size;
 
         Overlap().Forget();
 
@@ -50,9 +50,9 @@ public class ThunderEffect : MonoBehaviour,IPoolable
 
     private async UniTask Overlap()
     {
-        await UniTask.WaitForSeconds(0.25f,false,PlayerLoopTiming.Update,this.destroyCancellationToken);
+        await UniTask.WaitForSeconds(0.25f, false, PlayerLoopTiming.Update, this.destroyCancellationToken);
 
-        Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, damageRange, 1<<7|1<<13);
+        Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, damageRange, 1 << 7 | 1 << 13);
 
         foreach (Collider2D c in col)
         {
@@ -64,6 +64,10 @@ public class ThunderEffect : MonoBehaviour,IPoolable
             else if (GameManager.Instance.castle.gameObject == c.gameObject)
             {
                 GameManager.Instance.castle.TakeDamaged(damage);
+            }
+            else if (GameManager.Instance.miniCastles.TryGetValue(c.gameObject, out var miniCastle))
+            {
+                miniCastle.TakeDamaged(damage);
             }
         }
     }

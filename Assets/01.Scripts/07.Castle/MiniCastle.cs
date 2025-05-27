@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class MiniCastle : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer sprite;
-    [SerializeField] private Image fillImage;
+    [SerializeField] private Slider healthSlider;
     public TextMeshProUGUI timerText;
     public CastleCondition condition;
 
@@ -27,21 +27,27 @@ public class MiniCastle : MonoBehaviour
         cur = condition.CurCastleHealth;
         max = condition.MaxCastleHealth;
 
-        cur.AddAction(UpdateFill);
-        max.AddAction(UpdateFill);
+        cur.AddAction(UpdateHealthSlider);
+        max.AddAction(UpdateHealthSlider);
 
-        UpdateFill(0);
+        UpdateHealthSlider(0);
+    }
+
+    public void Init(float maxHP)
+    {
+        condition.AdjustMaxHealth(maxHP);
     }
 
     // 체력 바 UI 갱신
-    private void UpdateFill(float useless)
+    private void UpdateHealthSlider(float useless)
     {
         if (max == null || max.Value <= 0f)
         {
             return;
         }
 
-        fillImage.fillAmount = Mathf.Clamp01(cur.Value / max.Value);
+        healthSlider.maxValue = max.Value;
+        healthSlider.value = cur.Value;
     }
 
     /// <summary>
@@ -54,10 +60,10 @@ public class MiniCastle : MonoBehaviour
         Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
         if (condition.IsInvincible)
         {
-            StaticUIManager.Instance.damageLayer.ShowDamage(0, worldPos + Vector3.up * 0.5f, fontSize: 1f);
+            StaticUIManager.Instance.damageLayer.ShowDamage(0, worldPos + Vector3.up * 0.5f, fontSize: 0.5f);
             return;
         }
-        StaticUIManager.Instance.damageLayer.ShowDamage(amount, worldPos + Vector3.up * 0.5f, fontSize: 1f);
+        StaticUIManager.Instance.damageLayer.ShowDamage(amount, worldPos + Vector3.up * 0.5f, fontSize: 0.5f);
         TakeDamagedRenderer();
 
 
@@ -81,12 +87,12 @@ public class MiniCastle : MonoBehaviour
     {
         if (cur != null)
         {
-            cur.RemoveAction(UpdateFill);
+            cur.RemoveAction(UpdateHealthSlider);
         }
 
         if (max != null)
         {
-            max.RemoveAction(UpdateFill);
+            max.RemoveAction(UpdateHealthSlider);
         }
 
         _takeDamagedRendererCts?.Cancel();

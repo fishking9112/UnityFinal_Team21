@@ -15,7 +15,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     {
         base.Initialize(id);
 
-        circle= Instantiate(magicCircle, this.transform);
+        circle = Instantiate(magicCircle, this.transform);
 
         circle.transform.localScale = size;
     }
@@ -45,6 +45,10 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
             else if (GameManager.Instance.castle.gameObject == c.gameObject)
             {
                 GameManager.Instance.castle.TakeDamaged(damage);
+            }
+            else if (GameManager.Instance.miniCastles.TryGetValue(c.gameObject, out var miniCastle))
+            {
+                miniCastle.TakeDamaged(damage);
             }
         }
     }

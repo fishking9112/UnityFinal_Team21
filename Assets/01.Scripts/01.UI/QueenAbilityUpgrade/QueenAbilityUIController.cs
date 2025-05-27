@@ -5,20 +5,26 @@ using UnityEngine.UI;
 
 public class QueenAbilityUIController : MonoBehaviour
 {
+    [Header("UI References")]
+    [SerializeField] private GameObject UIPanel;
+    [SerializeField] private GameObject uiQueenAbilityPanelRoot;
     [SerializeField] private Transform contentTransform;
     public Transform ContentTransform => contentTransform;
 
-    [SerializeField] private GameObject UIPanel;
+    [Header("Buttons")]
     [SerializeField] private Button resetButton;
     [SerializeField] private Button clostButton;
     [SerializeField] private Button confirmButton;
+
+
+    [Header("Description Popup")]
     [SerializeField] private RectTransform descriptionPopupUI;
     [SerializeField] private TextMeshProUGUI popupUIAbilityName;
     [SerializeField] private TextMeshProUGUI popupUIAbilityDec;
     [SerializeField] private TextMeshProUGUI popupUIAbilityCost;
     [SerializeField] private Image popupUIAbilityImage;
 
-    [SerializeField] private GameObject uiQueenAbilityPanelRoot;
+
     private bool isFollowingMouse = false;
 
 
@@ -63,10 +69,13 @@ public class QueenAbilityUIController : MonoBehaviour
     {
         await UniTask.WaitUntil(() => QueenAbilityUpgradeManager.Instance != null);
         QueenAbilityUpgradeManager.Instance.SetQueenAbilityUIController(this);
+
         resetButton.onClick.RemoveAllListeners();
         resetButton.onClick.AddListener(OnClickResetButton);
+
         clostButton.onClick.AddListener(() => UIPanel.SetActive(false));
         confirmButton.onClick.AddListener(() => UIPanel.SetActive(false));
+
         gameObject.SetActive(true);
         uiQueenAbilityPanelRoot.SetActive(true);
         descriptionPopupUI.gameObject.SetActive(false);
@@ -88,15 +97,26 @@ public class QueenAbilityUIController : MonoBehaviour
     public void SetPopupQueenAbilityInfo(QueenAbilityInfo info, int currentLevel)
     {
         popupUIAbilityName.text = info.name;
-        popupUIAbilityDec.text = info.description;
-        popupUIAbilityCost.text = currentLevel >= info.maxLevel ? "―" : info.levelInfo[currentLevel].cost.ToString();
+        string formattedValue = "";
+        if (currentLevel <= 0)
+        {
+            formattedValue = info.type == StatModifierType.Percent ? "0%" : "0";
+        }
+        else
+        {
+            float value = info.levelInfo[currentLevel - 1].eff;
+            formattedValue = info.type == StatModifierType.Percent
+                ? $"{value * 100:F0}%"
+                : $"{value}";
+        }
 
+        popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
+        popupUIAbilityCost.text = currentLevel >= info.maxLevel ? "MAX" : info.levelInfo[currentLevel].cost.ToString();
         popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
 
+        // 팝업 위치 및 마우스 추적 활성화
         descriptionPopupUI.gameObject.SetActive(true);
         descriptionPopupUI.position = Input.mousePosition;
-
-        // 마우스 따라다니기 시작
         isFollowingMouse = true;
     }
 
@@ -114,6 +134,6 @@ public class QueenAbilityUIController : MonoBehaviour
     /// </summary>
     private void OnClickResetButton()
     {
-        QueenAbilityUpgradeManager.Instance.ResetAllAbilities();
+        UIManager.Instance.ShowPopup("알림", "모든 업그레이드 사항을 초기화 시키겠습니까?", () => QueenAbilityUpgradeManager.Instance.ResetAllAbilities(), () => { Utils.Log("취소."); });
     }
 }

@@ -1,5 +1,6 @@
-using System;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,9 @@ public class QueenEnhanceUI : SingleUI
     [SerializeField] private SelectInhanceItem[] itemSlots;
     [SerializeField] private QueenSkillSwapItem[] skillSwapSlots;
     [SerializeField] private GameObject queenSkillSwapPopup;
-    [SerializeField] private Button SkillSwapPopupExitBtn;
+    [SerializeField] private Button skillSwapPopupExitBtn;
+    [SerializeField] private Button enhanceRerollBtn;
+    [SerializeField] private TextMeshProUGUI rerollCostText;
 
     private Dictionary<int, int> acquiredEnhanceLevels = new Dictionary<int, int>();
     public IReadOnlyDictionary<int, int> AcquiredEnhanceLevels => acquiredEnhanceLevels;
@@ -18,24 +21,60 @@ public class QueenEnhanceUI : SingleUI
     private QueenEnhanceInfo tmpQueenEnhanceInfo;
     [HideInInspector] public bool isOpen = false;
 
+    private const int rerollCost = 1000;
+    private int useRerollCount = 1;
+
     private void Awake()
     {
-        SkillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
+        skillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
+        enhanceRerollBtn.onClick.AddListener(OnClickEnhanceReroll);
     }
 
     private void OnEnable()
     {
-        SkillSwapPopupExitBtn.onClick.RemoveAllListeners();
-        SkillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
+        skillSwapPopupExitBtn.onClick.RemoveAllListeners();
+        skillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
 
         queenSkillSwapPopup.SetActive(false);
         var randomOptions = GetRandomInhanceOptions();
         ShowSelectUI(randomOptions);
+        UpdateRerollCostText();
+        ClickDelay();
         isOpen = true;
     }
     private void OnDisable()
     {
         isOpen = false;
+    }
+    /// <summary>
+    /// 리롤 버튼 클릭 시 호출
+    /// </summary>
+    private void OnClickEnhanceReroll()
+    {
+        if (GameManager.Instance.queen.condition.Gold.Value >= (rerollCost * useRerollCount))
+        {
+            // 골드 차감
+            GameManager.Instance.queen.condition.Gold.Value -= (rerollCost * useRerollCount);
+            useRerollCount++;
+
+            // 새 옵션 가져오기 및 UI 갱신
+            var randomOptions = GetRandomInhanceOptions();
+            ShowSelectUI(randomOptions);
+            UpdateRerollCostText();
+            ClickDelay();
+        }
+        else
+        {
+            UIManager.Instance.ShowPopup("알림", "골드가 부족합니다.", () => { Utils.Log("확인."); });
+        }
+    }
+
+    /// <summary>
+    /// 리롤시 리롤 버튼 텍스트 변경
+    /// </summary>
+    private void UpdateRerollCostText()
+    {
+        rerollCostText.text = (rerollCost * useRerollCount).ToString();
     }
 
     /// <summary>
@@ -49,6 +88,24 @@ public class QueenEnhanceUI : SingleUI
         for (int i = 0; i < itemSlots.Length; i++)
         {
             itemSlots[i].SetInfo(list[i]);
+        }
+    }
+
+    /// <summary>
+    /// enhance 팝업창이 뜨자마자 선택되는 것을 방지
+    /// </summary>
+    public async void ClickDelay()
+    {
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            itemSlots[i].isSelectable = false;
+        }
+
+        await UniTask.Delay(1000, ignoreTimeScale: true, cancellationToken: this.GetCancellationTokenOnDestroy());
+
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            itemSlots[i].isSelectable = true;
         }
     }
 
@@ -107,7 +164,7 @@ public class QueenEnhanceUI : SingleUI
                 break;
 
             case QueenEnhanceType.MonsterPassive:
-                ApplyMonsterPassive(info.brood, info.name, value);
+                ApplyMonsterPassive(info.brood, info.name, value, info.valueType);
                 break;
 
             case QueenEnhanceType.Point:
@@ -125,32 +182,37 @@ public class QueenEnhanceUI : SingleUI
     {
         var queenCondition = GameManager.Instance.queen.condition;
         var castleCondition = GameManager.Instance.castle.condition;
+        float amount = 0;
 
         switch (id)
         {
             case (int)IDQueenEnhance.QUEEN_MANA_GAUGE_RECOVERY_SPEED_UP: // 마나 회복 속도 증가
-                queenCondition.AdjustQueenActiveSkillGaugeRecoverySpeed(value);
+                amount = queenCondition.QueenActiveSkillGaugeRecoverySpeed * value;
+                queenCondition.AdjustQueenActiveSkillGaugeRecoverySpeed(amount);
                 break;
 
             case (int)IDQueenEnhance.QUEEN_SUMMON_GAUGE_RECOVERY_SPEED_UP: // 소환 게이지 회복 속도 증가
-                queenCondition.AdjustSummonGaugeRecoverySpeed(value);
+                amount = queenCondition.SummonGaugeRecoverySpeed * value;
+                queenCondition.AdjustSummonGaugeRecoverySpeed(amount);
                 break;
 
             case (int)IDQueenEnhance.CASTLE_HEALTH_RECOVERY_SPEED_UP: // 성벽 체력 회복량 증가
-                castleCondition.AdjustCastleHealthRecoverySpeed(value);
+                amount = castleCondition.CastleHealthRecoverySpeed * value;
+                castleCondition.AdjustCastleHealthRecoverySpeed(amount);
                 break;
 
             case (int)IDQueenEnhance.CASTLE_MAX_HEALTH_UP: // 성벽 최대 체력 증가
-                castleCondition.AdjustMaxHealth(value);
+                amount = castleCondition.MaxCastleHealth.Value * value;
+                castleCondition.AdjustMaxHealth(amount);
                 break;
 
             case (int)IDQueenEnhance.QUEEN_MAX_MANA_GAUGE_UP: // 여왕 마나 최대량 증가 
-
-                queenCondition.AdjustMaxQueenActiveSkillGauge(value);
+                amount = queenCondition.MaxQueenActiveSkillGauge.Value * value;
+                queenCondition.AdjustMaxQueenActiveSkillGauge(amount);
                 break;
 
             case (int)IDQueenEnhance.QUEEN_MAX_SUMMON_GAUGE_UP: // 여왕 소환 게이지 최대량 증가
-
+                amount = queenCondition.MaxSummonGauge.Value * value;
                 queenCondition.AdjustMaxSummonGauge(value);
                 break;
         }
@@ -159,36 +221,48 @@ public class QueenEnhanceUI : SingleUI
     /// <summary>
     /// 몬스터 강화 패시브 적용
     /// </summary>
-    private void ApplyMonsterPassive(MonsterBrood brood, string name, float value)
+    private void ApplyMonsterPassive(MonsterBrood brood, string name, float value, ValueType type)
     {
         foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
         {
             if (monster.monsterBrood != brood)
                 continue;
 
-            if (name.Contains("체력"))
+            float amount = 0f;
+            
+            switch (type)
             {
-                MonsterManager.Instance.monsterInfoList[monster.id].health += value;
-                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
-                {
-                    monsterController.UpgradeHealth(value);
-                }
-            }
-            else if (name.Contains("공격력"))
-            {
-                MonsterManager.Instance.monsterInfoList[monster.id].attack += value;
-                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
-                {
-                    monsterController.UpgradeAttack(value);
-                }
-            }
-            else if (name.Contains("이동속도"))
-            {
-                MonsterManager.Instance.monsterInfoList[monster.id].moveSpeed += value;
-                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
-                {
-                    monsterController.UpgradeMoveSpeed(value);
-                }
+                case ValueType.Hp:
+                    float originHealth= DataManager.Instance.monsterDic[monster.id].health;
+                    amount = originHealth * value;
+                    monster.health += amount;
+                    foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
+                        controller.UpgradeHealth(amount);
+                    break;
+
+                case ValueType.Attack:
+                    float originAtt = DataManager.Instance.monsterDic[monster.id].attack;
+                    amount = originAtt * value;
+                    monster.attack += amount;
+                    foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
+                        controller.UpgradeAttack(amount);
+                    break;
+
+                case ValueType.MoveSpeed: // 수정: AttackSpeed가 아니라 MoveSpeed
+                    float originSpeed = DataManager.Instance.monsterDic[monster.id].moveSpeed;
+                    amount = originSpeed * value;
+                    monster.moveSpeed += amount;
+                    foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
+                        controller.UpgradeMoveSpeed(amount);
+                    break;
+
+                case ValueType.AttackSpeed:
+                    float originAttspd = DataManager.Instance.monsterDic[monster.id].attackSpeed;
+                    amount = originAttspd * value;
+                    monster.attackSpeed += amount;
+                    foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
+                        controller.UpgradeAttackSpeed(amount);
+                    break;
             }
         }
     }

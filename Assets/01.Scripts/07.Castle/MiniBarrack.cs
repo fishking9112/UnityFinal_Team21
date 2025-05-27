@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class MiniBarrack : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer sprite;
-    [SerializeField] private Image fillImage;
+    [SerializeField] private Slider slider; // Image → Slider로 변경
     public TextMeshProUGUI spawnDurationText;
     public CastleCondition condition;
 
@@ -30,7 +30,14 @@ public class MiniBarrack : MonoBehaviour
         cur.AddAction(UpdateFill);
         max.AddAction(UpdateFill);
 
+        slider.minValue = 0f;
+        slider.maxValue = max.Value;
         UpdateFill(0);
+    }
+
+    public void Init(float maxHP)
+    {
+        condition.AdjustMaxHealth(maxHP);
     }
 
     // 체력 바 UI 갱신
@@ -41,7 +48,8 @@ public class MiniBarrack : MonoBehaviour
             return;
         }
 
-        fillImage.fillAmount = Mathf.Clamp01(cur.Value / max.Value);
+        slider.maxValue = max.Value; // max가 바뀔 수도 있으므로 재설정
+        slider.value = cur.Value;
     }
 
     /// <summary>
@@ -50,15 +58,15 @@ public class MiniBarrack : MonoBehaviour
     /// <param name="amount"> 입힐 데미지 양 </param>
     public virtual void TakeDamaged(float amount)
     {
-        // Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
-        // Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
-        // if (condition.IsInvincible)
-        // {
-        //     StaticUIManager.Instance.damageLayer.ShowDamage(0, worldPos + Vector3.up * 0.5f, fontSize: 1f);
-        //     return;
-        // }
-        // StaticUIManager.Instance.damageLayer.ShowDamage(amount, worldPos + Vector3.up * 0.5f, fontSize: 1f);
-        // TakeDamagedRenderer();
+        Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
+        Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
+        if (condition.IsInvincible)
+        {
+            StaticUIManager.Instance.damageLayer.ShowDamage(0, worldPos + Vector3.up * 0.5f, fontSize: 0.5f);
+            return;
+        }
+        StaticUIManager.Instance.damageLayer.ShowDamage(amount, worldPos + Vector3.up * 0.5f, fontSize: 0.5f);
+        TakeDamagedRenderer();
 
 
         condition.AdjustCurHealth(-amount);

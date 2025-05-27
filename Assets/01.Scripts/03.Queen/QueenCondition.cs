@@ -18,6 +18,10 @@ public class QueenCondition : MonoBehaviour
 
     public float SummonGaugeRecoverySpeed { get; private set; }
     public float QueenActiveSkillGaugeRecoverySpeed { get; private set; }
+    public float AbilityUpgrade_SummonGaugeRecoverySpeed { get; private set; }
+    public float AbilityUpgrade_MaxSummonGauge { get; private set; }
+    public float AbilityUpgrade_QueenActiveSkillGaugeRecoverySpeed { get; private set; }
+    public float AbilityUpgrade_MaxQueenActiveSkillGauge { get; private set; }
     public ReactiveProperty<float> CurQueenActiveSkillGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> MaxQueenActiveSkillGauge { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> CurSummonGauge { get; private set; } = new ReactiveProperty<float>();
@@ -30,11 +34,12 @@ public class QueenCondition : MonoBehaviour
     public ReactiveProperty<int> KillCnt { get; private set; } = new ReactiveProperty<int>();
     public int EnhancePoint;
 
-    private float ExpGainMultiplier => 1f + (expGainMultiplierPercent * 0.01f);
-    private float GoldGainMultiplier => 1f + (goldGainMultiplierPercent * 0.01f);
+    private float ExpGainMultiplier => 1f + expGainMultiplierPercent;
+    private float GoldGainMultiplier => 1f + goldGainMultiplierPercent;
 
     private int levelUpCount = 0;
     private bool isLevelUpDoing = false;
+    public bool InitComplete = false;
 
     private void Awake()
     {
@@ -50,6 +55,8 @@ public class QueenCondition : MonoBehaviour
     {
         await InitQueenStatus();
         await InitSkill();
+
+        InitComplete = true;
     }
 
     private async UniTask InitQueenStatus()
@@ -145,10 +152,24 @@ public class QueenCondition : MonoBehaviour
         while (temp >= MaxExpGauge.Value)
         {
             levelUpCount++;
+            ExpIncrease();
             temp -= MaxExpGauge.Value;
         }
 
         CurExpGauge.Value = temp;
+        StartCoroutine(CoroutineLevelUp());
+    }
+
+    /// <summary>
+    /// 레벨업 처리 및 강화 트리거 호출
+    /// </summary>
+    public void QuestLevelUp(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            levelUpCount++;
+            ExpIncrease();
+        }
         StartCoroutine(CoroutineLevelUp());
     }
 
@@ -226,10 +247,38 @@ public class QueenCondition : MonoBehaviour
         goldGainMultiplierPercent = Mathf.Max(0f, percent);
     }
 
+    // Ability 적용 함수
+    public void AbilitySummonGaugeRecoverySpeed(float percent)
+    {
+        AbilityUpgrade_SummonGaugeRecoverySpeed = AdjustValueByPercent(queenStatus.summon_Recorvery, percent, float.MaxValue);
+        SummonGaugeRecoverySpeed += AbilityUpgrade_SummonGaugeRecoverySpeed;
+    }
+    public void AbilityMaxSummonGauge(float percent)
+    {
+        AbilityUpgrade_MaxSummonGauge = AdjustValueByPercent(queenStatus.summon_Base, percent, float.MaxValue);
+        MaxSummonGauge.Value += AbilityUpgrade_MaxSummonGauge;
+        CurSummonGauge.Value += AbilityUpgrade_MaxSummonGauge;
+    }
+    public void AbilityQueenActiveSkillGaugeRecoverySpeed(float percent)
+    {
+        AbilityUpgrade_QueenActiveSkillGaugeRecoverySpeed = AdjustValueByPercent(queenStatus.mana_Recorvery, percent, float.MaxValue);
+        QueenActiveSkillGaugeRecoverySpeed += AbilityUpgrade_QueenActiveSkillGaugeRecoverySpeed;
+    }
+    public void AbilityMaxQueenActiveSkillGauge(float percent)
+    {
+        AbilityUpgrade_MaxQueenActiveSkillGauge = AdjustValueByPercent(queenStatus.mana_Base, percent, float.MaxValue);
+        MaxQueenActiveSkillGauge.Value += AbilityUpgrade_MaxQueenActiveSkillGauge;
+        CurQueenActiveSkillGauge.Value += AbilityUpgrade_MaxQueenActiveSkillGauge;
+    }
 
     // 값 조정
     private float AdjustValue(float cur, float amount, float max)
     {
         return Mathf.Clamp(cur + amount, 0f, max);
+    }
+
+    private float AdjustValueByPercent(float cur, float percent, float max)
+    {
+        return Mathf.Clamp(cur * percent, 0f, max);
     }
 }
