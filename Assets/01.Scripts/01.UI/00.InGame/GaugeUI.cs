@@ -160,9 +160,9 @@ public class GaugeUI : MonoBehaviour
         for (int i = 0; i < flashImgTime; i++)
         {
             flashImg.color = flashColor;
-            await UniTask.Delay(TimeSpan.FromSeconds((duration / flashImgTime) * 0.2f), true, PlayerLoopTiming.Update, cancellationToken: token);
-            flashImg.color = originColor;
             await UniTask.Delay(TimeSpan.FromSeconds((duration / flashImgTime) * 0.8f), true, PlayerLoopTiming.Update, cancellationToken: token);
+            flashImg.color = originColor;
+            await UniTask.Delay(TimeSpan.FromSeconds((duration / flashImgTime) * 0.2f), true, PlayerLoopTiming.Update, cancellationToken: token);
         }
     }
 
