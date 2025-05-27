@@ -103,15 +103,18 @@ public class UIManager : MonoSingleton<UIManager>
         popup.Setup(title, message, onConfirmAction, onCancelAction);
     }
 
+
     /// <summary>
-    /// 툴팁 호출
+    /// 열려 있는지 확인
     /// </summary>
-    /// <param name="id">툴팁 id</param>
-    /// <param name="forceRun">한번 보는 거지만 두번째 작동 할 때</param>
-    /// <param name="onFinishAction">Finish 버튼 눌렸을 때</param>
-    public void ShowTooltip(int id, bool forceRun = true, Action onFinishAction = null)
+    public bool IsOpenUI(string uiName)
     {
-        ShowTooltipAsync(id, forceRun, onFinishAction).Forget();
+        // 이미 활성화된 UI가 있다면 반환
+        if (activeUIs.ContainsKey(uiName))
+        {
+            return activeUIs[uiName].gameObject.activeSelf;
+        }
+        return false;
     }
 
     /// <summary>
@@ -120,7 +123,18 @@ public class UIManager : MonoSingleton<UIManager>
     /// <param name="id">툴팁 id</param>
     /// <param name="forceRun">한번 보는 거지만 두번째 작동 할 때</param>
     /// <param name="onFinishAction">Finish 버튼 눌렸을 때</param>
-    public async UniTask ShowTooltipAsync(int id, bool forceRun = true, Action onFinishAction = null)
+    public void ShowTooltip(int id, bool forceRun = true, Action onFinishAction = null, bool isOnlyPage = false)
+    {
+        ShowTooltipAsync(id, forceRun, onFinishAction, isOnlyPage).Forget();
+    }
+
+    /// <summary>
+    /// 툴팁 호출
+    /// </summary>
+    /// <param name="id">툴팁 id</param>
+    /// <param name="forceRun">한번 보는 거지만 두번째 작동 할 때</param>
+    /// <param name="onFinishAction">Finish 버튼 눌렸을 때</param>
+    public async UniTask ShowTooltipAsync(int id, bool forceRun = true, Action onFinishAction = null, bool isOnlyPage = false)
     {
         // 한번 실행했다면 작동 X
         if (PlayerPrefs.GetInt(id.ToString()) == 1 && !forceRun)
@@ -129,7 +143,7 @@ public class UIManager : MonoSingleton<UIManager>
         PlayerPrefs.SetInt(id.ToString(), 1); // 실행 기록 저장
         PlayerPrefs.Save(); // 저장 즉시 적용
         var popup = await ShowUI<ToolTipUI>();
-        popup.Setup(id, onFinishAction);
+        popup.Setup(id, onFinishAction, isOnlyPage);
     }
 
     /// <summary>
