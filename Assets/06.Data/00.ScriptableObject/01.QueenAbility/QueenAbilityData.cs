@@ -3,11 +3,17 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum StatModifierType
+{
+    Percent,
+    Value,
+}
+
 [Serializable]
 public class LevelInfo
 {
     public int cost;
-    public int eff;
+    public float eff;
 }
 
 [Serializable]
@@ -19,6 +25,8 @@ public class QueenAbilityInfo : IInfo
     public string icon;
     public int maxLevel;
     public LevelInfo[] levelInfo;
+    public StatModifierType type;
+
 
     public int ID => id;
     public string Name => name;
@@ -80,8 +88,11 @@ public class QueenAbilityData : SheetDataReaderBase
                     levelIndex = Utils.StringToInt(cell.columnId.Split('_')[1]) - 1;
                     if (levelIndex < queenAbilityInfo.maxLevel)
                     {
-                        queenAbilityInfo.levelInfo[levelIndex].eff = Utils.StringToInt(cell.value);
+                        queenAbilityInfo.levelInfo[levelIndex].eff = Utils.StringToFloat(cell.value);
                     }
+                    break;
+                case "Type":
+                    queenAbilityInfo.type = Utils.StringToEnum<StatModifierType>(cell.value, StatModifierType.Percent);
                     break;
             }
         }

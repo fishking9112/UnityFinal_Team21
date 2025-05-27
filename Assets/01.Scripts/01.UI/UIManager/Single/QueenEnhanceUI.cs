@@ -151,7 +151,7 @@ public class QueenEnhanceUI : SingleUI
                 break;
 
             case QueenEnhanceType.MonsterPassive:
-                ApplyMonsterPassive(info.brood, info.name, value);
+                ApplyMonsterPassive(info.brood, info.name, value, info.valueType);
                 break;
 
             case QueenEnhanceType.Point:
@@ -208,48 +208,44 @@ public class QueenEnhanceUI : SingleUI
     /// <summary>
     /// 몬스터 강화 패시브 적용
     /// </summary>
-    private void ApplyMonsterPassive(MonsterBrood brood, string name, float value)
+    private void ApplyMonsterPassive(MonsterBrood brood, string name, float value, ValueType type)
     {
         foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
         {
             if (monster.monsterBrood != brood)
                 continue;
 
-            if (name.Contains("체력"))
+            float amount = 0f;
+
+            switch (type)
             {
-                float amount = MonsterManager.Instance.monsterInfoList[monster.id].health * value;
-                MonsterManager.Instance.monsterInfoList[monster.id].health += amount;
-                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
-                {
-                    monsterController.UpgradeHealth(amount);
-                }
-            }
-            else if (name.Contains("공격력"))
-            {
-                float amount = MonsterManager.Instance.monsterInfoList[monster.id].attack * value;
-                MonsterManager.Instance.monsterInfoList[monster.id].attack += amount;
-                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
-                {
-                    monsterController.UpgradeAttack(amount);
-                }
-            }
-            else if (name.Contains("이동속도"))
-            {
-                float amount = MonsterManager.Instance.monsterInfoList[monster.id].moveSpeed * value;
-                MonsterManager.Instance.monsterInfoList[monster.id].moveSpeed += amount;
-                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
-                {
-                    monsterController.UpgradeMoveSpeed(amount);
-                }
-            }
-            else if (name.Contains("공격속도"))
-            {
-                float amount = MonsterManager.Instance.monsterInfoList[monster.id].attackSpeed * value;
-                MonsterManager.Instance.monsterInfoList[monster.id].attackSpeed += amount;
-                foreach (var monsterController in MonsterManager.Instance.idByMonsters[monster.id])
-                {
-                    monsterController.UpgradeAttackSpeed(amount);
-                }
+                case ValueType.Hp:
+                    amount = monster.health * value;
+                    monster.health += amount;
+                    foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
+                        controller.UpgradeHealth(amount);
+                    break;
+
+                case ValueType.Attack:
+                    amount = monster.attack * value;
+                    monster.attack += amount;
+                    foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
+                        controller.UpgradeAttack(amount);
+                    break;
+
+                case ValueType.MoveSpeed: // 수정: AttackSpeed가 아니라 MoveSpeed
+                    amount = monster.moveSpeed * value;
+                    monster.moveSpeed += amount;
+                    foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
+                        controller.UpgradeMoveSpeed(amount);
+                    break;
+
+                case ValueType.AttackSpeed:
+                    amount = monster.attackSpeed * value;
+                    monster.attackSpeed += amount;
+                    foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])
+                        controller.UpgradeAttackSpeed(amount);
+                    break;
             }
         }
     }
