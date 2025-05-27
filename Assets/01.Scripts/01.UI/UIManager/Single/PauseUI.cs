@@ -36,21 +36,15 @@ public class PauseUI : SingleUI
     /// </summary>
     private void OnClickGameResult()
     {
-        UIManager.Instance.ShowPopup(
-            title: "알림",
-            message: "정말로 로비로 돌아가시겠습니까?",
-            () =>
-            {
-                // 게임 HUD 비활성화
-                StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().HideWindow();
+        UIManager.Instance.ShowPopup("알림", "정말로 로비로 돌아가시겠습니까?", 
+                                    () =>
+                                    {
+                                        // 게임 HUD 비활성화
+                                        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().HideWindow();
 
-                // 게임 종료 처리
-                GameManager.Instance.GameOver();
-            },
-            () =>
-            {
-                Utils.Log("게임 종료 취소됨.");
-            });
+                                        // 게임 종료 처리
+                                        GameManager.Instance.GameOver();
+                                    }, () => { Utils.Log("취소."); });
     }
 
     /// <summary>

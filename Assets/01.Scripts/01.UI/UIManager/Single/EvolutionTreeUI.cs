@@ -135,7 +135,7 @@ public class EvolutionTreeUI : SingleUI
     {
         if (GameManager.Instance.queen.condition.EvolutionPoint.Value <= 0)
         {
-            UIManager.Instance.ShowPopup("알림", "진화포인트<sprite=1>가 부족합니다.", () => { Utils.Log("확인."); });
+            UIManager.Instance.ShowPopup("알림", "진화포인트<sprite=0>가 부족합니다.", () => { Utils.Log("확인."); });
             return;
         }
         currentTreePage?.OnClickEvolutionButton();
