@@ -80,7 +80,7 @@ public class HeroController : BaseController
 
         if (!navMeshAgent.isOnNavMesh)
         {
-            Debug.LogError($"{gameObject.name}은 NavMesh 위에 있지 않습니다!");
+            Utils.LogError($"{gameObject.name}은 NavMesh 위에 있지 않습니다!");
         }
 
         stateMachine.ChangeState(stateMachine.moveState);
