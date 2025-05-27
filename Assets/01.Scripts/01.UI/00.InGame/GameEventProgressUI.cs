@@ -44,7 +44,7 @@ public class GameEventProgressUI : MonoBehaviour
 
     private void Start()
     {
-        CreateEventId(2000005, fillPosition: 1 / 1800f); // 3분에 퀘스트 출현
+        CreateEvent(rank: 0, fillPosition: 180 / 1800f); // 3분에 퀘스트 출현
         CreateEvent(rank: 1, fillPosition: 1 / 4f);
         CreateEvent(rank: 2, fillPosition: 2 / 4f);
         CreateEvent(rank: 3, fillPosition: 3 / 4f);
