@@ -17,7 +17,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     private QueenAbilityUIController queenAbilityUIController;
     public QueenAbilityUIController QueenAbilityUIController => queenAbilityUIController;
     private Dictionary<int, int> upgradeLevels = new();
-    
+
 
     private readonly Dictionary<int, QueenAbilityUpgradeItem> abilityItemDict = new();
 
@@ -54,7 +54,9 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             value => GameManager.Instance.queen.condition.AbilityMaxSummonGauge(value),
             value => GameManager.Instance.queen.condition.AbilityQueenActiveSkillGaugeRecoverySpeed(value),
             value => GameManager.Instance.queen.condition.AbilityMaxQueenActiveSkillGauge(value),
-            value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value)
+            value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value),
+            value => RewardManager.Instance.initBatCount += (int)value,
+            value => RewardManager.Instance.initBatMoveSpeed +=  RewardManager.Instance.initBatMoveSpeed * value,
         };
 
         int index = 0;
@@ -193,7 +195,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     {
         foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
         {
-            if(reset)
+            if (reset)
                 kvp.Value.attack *= value;
             else
                 kvp.Value.attack *= 1 + value;

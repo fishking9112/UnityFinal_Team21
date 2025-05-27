@@ -15,7 +15,7 @@ MonoBehaviour:
   sheetURL: 1Of0EBz6S6NjUCNtNGPNnWgAcb5RdXT_xJnsCn-1LZ4w
   sheetName: QueenAbility
   startRowIndex: 2
-  endRowIndex: 13
+  endRowIndex: 15
   infoList:
   - id: 30001
     name: "\uACF5\uACA9\uB825"
@@ -26,31 +26,31 @@ MonoBehaviour:
     levelInfo:
     - cost: 1000
       eff: 0.5
-    - cost: 2000
+    - cost: 3000
       eff: 1
-    - cost: 4000
+    - cost: 9000
       eff: 1.5
-    - cost: 8000
-      eff: 2
     - cost: 15000
+      eff: 2
+    - cost: 30000
       eff: 2.5
     type: 0
   - id: 30002
     name: "\uCCB4\uB825"
     description: "\uBAA8\uB4E0 \uC720\uB2DB\uC758 \uCCB4\uB825\uC774 <color=#FFB600>n</color>
       \uC99D\uAC00\uD569\uB2C8\uB2E4."
-    icon: 
+    icon: gameicon_tilemap-Sheet_1148
     maxLevel: 5
     levelInfo:
     - cost: 1000
       eff: 0.5
-    - cost: 2000
+    - cost: 3000
       eff: 1
-    - cost: 4000
+    - cost: 9000
       eff: 1.5
-    - cost: 8000
-      eff: 2
     - cost: 15000
+      eff: 2
+    - cost: 30000
       eff: 2.5
     type: 0
   - id: 30003
@@ -61,11 +61,11 @@ MonoBehaviour:
     maxLevel: 3
     levelInfo:
     - cost: 1000
-      eff: 0.5
+      eff: 0.2
     - cost: 2000
-      eff: 1
+      eff: 0.4
     - cost: 4000
-      eff: 1.5
+      eff: 0.6
     type: 0
   - id: 30004
     name: "\uACE8\uB4DC \uD68D\uB4DD"
@@ -213,3 +213,35 @@ MonoBehaviour:
     - cost: 15000
       eff: 3
     type: 1
+  - id: 30013
+    name: "\uBC15\uC950 \uB9C8\uB9BF\uC218 \uC99D\uAC00"
+    description: "\uBC15\uC950 \uB9C8\uB9BF\uC218\uAC00 <color=#FFB600>n</color>
+      \uC99D\uAC00\uD569\uB2C8\uB2E4."
+    icon: Bat_CountUp
+    maxLevel: 5
+    levelInfo:
+    - cost: 3000
+      eff: 2
+    - cost: 6000
+      eff: 4
+    - cost: 9000
+      eff: 6
+    - cost: 12000
+      eff: 8
+    - cost: 15000
+      eff: 10
+    type: 1
+  - id: 30014
+    name: "\uBC15\uC950 \uC774\uB3D9\uC18D\uB3C4 \uC99D\uAC00"
+    description: "\uBC15\uC950\uC758 \uC774\uB3D9\uC18D\uB3C4\uAC00 <color=#FFB600>n</color>
+      \uC99D\uAC00\uD569\uB2C8\uB2E4."
+    icon: Bat_MoveSpeedUp
+    maxLevel: 3
+    levelInfo:
+    - cost: 1000
+      eff: 0.2
+    - cost: 2000
+      eff: 0.4
+    - cost: 4000
+      eff: 0.6
+    type: 0

@@ -9,16 +9,16 @@ public class RewardManager : MonoSingleton<RewardManager>
     public Transform goldTarget;
     public Transform expTarget;
 
-    public int initBatCount = 3;
-    public float initbatMoveSpeed = 5f;
+    [NonSerialized] public int initBatCount = 5;
+    [NonSerialized] public float initBatMoveSpeed = 5f;
     [NonSerialized] public float idleRange = 3f;
     public List<RewardBat> batList = new List<RewardBat>();
 
-    private void Start()
+    public void initBatSummon()
     {
         for (int i = 0; i < initBatCount; i++)
         {
-            RewardBat bat = SpawnRewardBat(initbatMoveSpeed);
+            RewardBat bat = SpawnRewardBat(initBatMoveSpeed);
             batList.Add(bat);
         }
     }
