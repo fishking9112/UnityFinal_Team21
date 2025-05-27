@@ -65,6 +65,7 @@ public class GameHUD : HUDUI
 
     [Header("현재 상태")]
     public bool isPaused = false;
+    public bool canPause = false;
     [NonSerialized] public GameObject openWindow = null;
 
     [Header("레벨업 테스트 버튼")]
@@ -315,6 +316,8 @@ public class GameHUD : HUDUI
 
     public void OnPauseUI(InputAction.CallbackContext context)
     {
+        if (!canPause) return;
+
         if (context.phase == InputActionPhase.Started)
         {
             if (!ReferenceEquals(openWindow, pauseUI.gameObject))
