@@ -13,7 +13,6 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     [SerializeField] private Transform descriptionPopupUI;
     public GameObject DescriptionPopupUI => descriptionPopupUI.gameObject;
     [SerializeField] private TextMeshProUGUI statusText;
-    [SerializeField] private TextMeshProUGUI enhanceText;
 
     [Header("DescriptionPopupUI")]
     [SerializeField] private Image popupUIAbilityImage;
@@ -60,7 +59,6 @@ public class QueenEnhanceStatusUI : MonoBehaviour
             SetQueenCondition(GameManager.Instance.queen.condition);
 
         var statusBuilder = new StringBuilder();
-        var enhanceBuilder = new StringBuilder();
 
         // 마나, 게이지, 체력 상태
         AppendManaStatus(statusBuilder);
@@ -69,12 +67,8 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         AppendCastleHpStatus(statusBuilder);
         AppendCastleHpRegenStatus(statusBuilder);
 
-        // 종족 강화 효과는 별도 builder 사용
-        AppendBroodEnhanceStatus(enhanceBuilder);
-
         // 텍스트 UI에 각각 설정
         statusText.text = statusBuilder.ToString();
-        enhanceText.text = enhanceBuilder.ToString();
 
         descriptionPopupUI.gameObject.SetActive(false);
 
@@ -108,7 +102,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         builder.AppendLine($"마나 : {(int)curMana} / {(int)maxMana}");
 
         // 마나 회복량 = 기본 회복량 + 강화 효과
-        float manaRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].mana_Recorvery;
+        float manaRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].mana_Recorvery + GameManager.Instance.queen.condition.AbilityUpgrade_QueenActiveSkillGaugeRecoverySpeed;
         float manaRegenEnhance = queenCondition.QueenActiveSkillGaugeRecoverySpeed - manaRegenBase;
         builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / s");
     }
@@ -128,7 +122,7 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendSummonRegenStatus(StringBuilder builder)
     {
-        float summonRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].summon_Recorvery;
+        float summonRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].summon_Recorvery + GameManager.Instance.queen.condition.AbilityUpgrade_SummonGaugeRecoverySpeed;
         float summonRegenEnhance = queenCondition.SummonGaugeRecoverySpeed - summonRegenBase;
         builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / s");
     }
@@ -148,60 +142,9 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// </summary>
     private void AppendCastleHpRegenStatus(StringBuilder builder)
     {
-        float castleHpRegenBase = GameManager.Instance.castle.condition.initCastleHealthRecoverySpeed;
+        float castleHpRegenBase = GameManager.Instance.castle.condition.initCastleHealthRecoverySpeed + GameManager.Instance.castle.condition.AbilityUpgrade_CastleHealthRecoverySpeed;
         float castleHpRegenEnhance = GameManager.Instance.castle.condition.CastleHealthRecoverySpeed - castleHpRegenBase;
         builder.AppendLine($"캐슬 회복량 : {FormatNumber(castleHpRegenBase)} + {FormatNumber(castleHpRegenEnhance)} / s");
-    }
-
-    /// <summary>
-    /// 종족별 강화 효과(특히 MonsterPassive)를 문자열로 추가합니다.
-    /// </summary>
-    private void AppendBroodEnhanceStatus(StringBuilder builder)
-    {
-        var acquiredEnhances = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.AcquiredEnhanceLevels;
-        var orderedBroods = new List<string>();
-
-        // 종족별 강화 항목을 추출
-        foreach (var enhanceID in acquiredEnhances.Keys)
-        {
-            if (acquiredEnhances[enhanceID] <= 0) continue;
-
-            var info = DataManager.Instance.queenEnhanceDic[enhanceID];
-            if (info.type != QueenEnhanceType.MonsterPassive) continue;
-
-            if (!orderedBroods.Contains(info.brood.ToString()))
-            {
-                orderedBroods.Add(info.brood.ToString());
-            }
-        }
-
-        // 각 종족별 강화 효과 출력
-        foreach (var brood in orderedBroods)
-        {
-            builder.AppendLine($"{brood}");
-
-            foreach (var info in DataManager.Instance.queenEnhanceDic.Values)
-            {
-                if (info.brood.ToString() != brood || info.type != QueenEnhanceType.MonsterPassive) continue;
-
-                int level = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
-                if (level <= 0) continue;
-
-                float value = 0;
-                for (int i = 1; i <= level; i++)
-                {
-                    value += info.state_Base + info.state_LevelUp * (i - 1);
-                }
-
-                string formattedValue = $"+{value * 100:F0}%";
-
-                builder.AppendLine($"- {info.name} : Lv.{level} ({formattedValue})");
-            }
-
-            builder.AppendLine();
-            builder.AppendLine("─────────────────");
-            builder.AppendLine();
-        }
     }
 
     /// <summary>
