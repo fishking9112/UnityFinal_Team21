@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1175158903946714192}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -100,9 +100,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   magnetTarget: {fileID: 0}
-  magnetRadius: 1
+  magnetRadius: 2
   magnetAcceleration: 100
   rewardAmount: 10
+  isMagnet: 0
+  isBatTarget: 0
+  type: 0
 --- !u!50 &5338293879918889491
 Rigidbody2D:
   serializedVersion: 4
