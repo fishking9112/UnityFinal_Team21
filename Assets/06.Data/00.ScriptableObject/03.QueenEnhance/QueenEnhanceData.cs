@@ -18,6 +18,7 @@ public enum ValueType
     Hp,
     Attack,
     MoveSpeed,
+    AttackSpeed,
     Default
 }
 
