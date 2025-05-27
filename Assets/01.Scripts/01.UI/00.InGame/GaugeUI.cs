@@ -19,6 +19,7 @@ public class GaugeUI : MonoBehaviour
     [SerializeField] private int flashImgTime = 5; // 몇 번
     [SerializeField] private float duration = 1.0f; // 몇 초 동안
     [SerializeField] public float magnitude = 10f; // 흔들림 세기 (픽셀 단위)
+    [SerializeField] public float current = 0f; // 흔들림 세기 (픽셀 단위)
     private Color originColor = new(); // 원본 색상 저장용
     private Vector2 originalPos = new();
     private Image flashImg;
@@ -61,7 +62,8 @@ public class GaugeUI : MonoBehaviour
         this.isImgFlash = isImgFlash;
         this.flashAction = flashAction;
 
-        fillImage.fillAmount = 0f;
+        current = cur.Value;
+        UpdateFill(0);
     }
 
     // 반응형 프로퍼티의 값이 변경되면 실행할 함수. 값에 따라 이미지의 fillAmount가 바뀜
@@ -72,11 +74,13 @@ public class GaugeUI : MonoBehaviour
             return;
         }
 
-        if (isImgFlash && fillImage.fillAmount > Mathf.Clamp01(cur.Value / max.Value))
+        if (isImgFlash && current > cur.Value)
         {
             ActionImg();
             flashAction?.Invoke();
         }
+
+        current = cur.Value;
 
         fillImage.fillAmount = Mathf.Clamp01(cur.Value / max.Value);
     }
@@ -93,7 +97,7 @@ public class GaugeUI : MonoBehaviour
         cur.AddAction(UpdateText);
         max.AddAction(UpdateText);
 
-        // UpdateText(0);
+        UpdateText(0);
     }
 
     // 반응형 프로퍼티의 값이 변경되면 실행할 함수. 값에 따라 이미지의 Text가 바뀜

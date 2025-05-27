@@ -86,27 +86,14 @@ public class HeroController : BaseController
         stateMachine.ChangeState(stateMachine.moveState);
         token = new CancellationTokenSource();
 
-        if (renderers == null)
-        {
-            renderers = new();
-            renderers = pivot.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow").ToList();
+        // IF문 탈출
+        renderers = new();
+        renderers = pivot.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow").ToList();
 
-            // 각 renderer의 현재 색상 저장
-            foreach (var renderer in renderers)
-            {
-                originalColors.Add(renderer.color);
-            }
-        }
-        else
+        // 각 renderer의 현재 색상 저장
+        foreach (var renderer in renderers)
         {
-            // 저장한 색상으로 복원
-            for (int i = 0; i < renderers.Count; i++)
-            {
-                if (i < originalColors.Count)
-                {
-                    renderers[i].color = originalColors[i];
-                }
-            }
+            originalColors.Add(renderer.color);
         }
     }
 
@@ -166,7 +153,7 @@ public class HeroController : BaseController
 
     public async UniTask GetAnimFinish()
     {
-        await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).IsName("DEATH"));
+        // await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).IsName("DEATH"));
         await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
         HeroPoolManager.Instance.ReturnObject(this);
         isDead = false;
