@@ -1,6 +1,12 @@
 using System;
 using UnityEngine;
 
+public enum RewardType
+{
+    GOLD,
+    EXP,
+}
+
 public abstract class RewardBase : MonoBehaviour, IPoolable
 {
     #region IPoolable
@@ -14,14 +20,20 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
     public void OnSpawn()
     {
         isMagnet = false;
+        isBatTarget = false;
+        RewardManager.Instance.rewards.Add(this.gameObject, this);
     }
 
     public void OnDespawn()
     {
         isMagnet = false;
+        isBatTarget = false;
+        RewardManager.Instance.rewards.Remove(this.gameObject);
         returnToPool?.Invoke(this);
     }
-    #endregion 
+    #endregion
+
+    protected QueenCondition condition;
 
     [Header("자석 효과")]
     [SerializeField] private Transform magnetTarget;
@@ -29,11 +41,10 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
     [SerializeField] private float magnetAcceleration = 10f;
 
     private float curMagnetSpeed = 0f;
-
-    protected QueenCondition condition;
     public float rewardAmount;
-
-    private bool isMagnet;
+    public bool isMagnet;
+    public bool isBatTarget;
+    public RewardType type;
 
     private void Start()
     {
@@ -54,8 +65,8 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float distance = Vector2.Distance(transform.position, mousePos);
-       
-        if(!isMagnet && distance < magnetRadius)
+
+        if (!isMagnet && distance < magnetRadius)
         {
             isMagnet = true;
             curMagnetSpeed = 0f;
@@ -76,12 +87,16 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
 
     protected abstract void GainReward();
 
+
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("RewardGain"))
         {
-            GainReward();
-            OnDespawn();
+            if (isMagnet)
+            {
+                GainReward();
+                OnDespawn();
+            }
         }
     }
 }

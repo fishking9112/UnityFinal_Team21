@@ -78,6 +78,12 @@ public class QueenController : MonoBehaviour
         {
             SummonMonster();
         }
+
+        // 테스트 코드
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            RewardManager.Instance.SpawnRewardBat(5f);
+        }
     }
 
     private async UniTask GameHuDInit()
