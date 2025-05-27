@@ -49,11 +49,11 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             value => GameManager.Instance.queen.condition.SetGoldGainMultiplierPercent(value),
             value => GameManager.Instance.queen.condition.SetExpGainMultiplierPercent(value),
             value => GameManager.Instance.castle.condition.AdjustMaxHealth(value),
-            value => GameManager.Instance.castle.condition.AdjustCastleHealthRecoverySpeed(value),
-            value => GameManager.Instance.queen.condition.AdjustSummonGaugeRecoverySpeed(value),
-            value => GameManager.Instance.queen.condition.AdjustMaxSummonGauge(value),
-            value => GameManager.Instance.queen.condition.AdjustQueenActiveSkillGaugeRecoverySpeed(value),
-            value => GameManager.Instance.queen.condition.AdjustMaxQueenActiveSkillGauge(value),
+            value => GameManager.Instance.castle.condition.AbilityCastleHealthRecoverySpeed(value),
+            value => GameManager.Instance.queen.condition.AbilitySummonGaugeRecoverySpeed(value),
+            value => GameManager.Instance.queen.condition.AbilityMaxSummonGauge(value),
+            value => GameManager.Instance.queen.condition.AbilityQueenActiveSkillGaugeRecoverySpeed(value),
+            value => GameManager.Instance.queen.condition.AbilityMaxQueenActiveSkillGauge(value),
             value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value)
         };
 
