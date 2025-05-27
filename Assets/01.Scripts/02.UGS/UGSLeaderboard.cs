@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class UGSLeaderboard : MonoBehaviour
 {
-    private const string LeaderboardId = "TestBoard"; // Dashboard에서 설정한 ID
+    private const string LeaderboardId = "KillCount"; // Dashboard에서 설정한 ID
 
 
     /// <summary>
