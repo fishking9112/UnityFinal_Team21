@@ -52,6 +52,7 @@ public class QueenActiveSkillManager : MonoSingleton<QueenActiveSkillManager>
     public void AddSkill(int index, int id)
     {
         skillSlot.AddSlot(index, queenActiveSkillDic[id]);
+        GameManager.Instance.queen.controller.selectedQueenActiveSkill = null;
     }
 
     public void RemoveSkill(int index)
