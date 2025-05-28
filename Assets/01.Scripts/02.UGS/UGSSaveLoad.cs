@@ -222,8 +222,8 @@ public class UGSSaveLoad : MonoBehaviour
             },
             settings = new SettingsData
             {
-                bgmVolume = 1f,
-                sfxVolume = 1f,
+                bgmVolume = 0.1f,
+                sfxVolume = 0.1f,
                 // 언어 부분 추가
                 extraSettingsFields = new Dictionary<string, JToken>()
             },
