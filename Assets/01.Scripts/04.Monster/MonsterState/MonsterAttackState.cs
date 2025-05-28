@@ -134,7 +134,8 @@ public class MonsterAttackState : MonsterBaseState
     {
         try
         {
-            await UniTask.Delay((int)(550 * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed))), cancellationToken: token);
+            float waitTime = 550f * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed));
+            await UniTask.Delay((int)waitTime, false, PlayerLoopTiming.Update, cancellationToken: token);
 
             float minDist = float.MaxValue;
             Vector2 origin = navMeshAgent.transform.position + ((target.transform.position - navMeshAgent.transform.position).normalized * stat.attackRange.Value / 2f);
@@ -188,7 +189,10 @@ public class MonsterAttackState : MonsterBaseState
     {
         try
         {
-            await UniTask.Delay((int)(600 * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed))), cancellationToken: token);
+            float waitTime = 600f * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed));
+            await UniTask.Delay((int)waitTime, false, PlayerLoopTiming.Update, cancellationToken: token);
+            if (navMeshAgent == null)
+                return;
 
             var projectileObject = ObjectPoolManager.Instance.GetObject<MonsterProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
             projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);
