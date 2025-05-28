@@ -20,7 +20,6 @@ public class RankPanel : MonoBehaviour
         if (rankInfo.Score == 0)
         {
             rankText.text = "-";
-            nickNameText.text = rankInfo.Nickname;
             scoreText.text = "-";
             queenIconImage.enabled = false;
         }

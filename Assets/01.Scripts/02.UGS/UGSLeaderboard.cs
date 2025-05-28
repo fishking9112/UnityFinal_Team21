@@ -89,11 +89,12 @@ public class UGSLeaderboard : MonoBehaviour
 
             // nickname과 여왕ID 둘 다 받아오기
             var (nickname, queenID) = await UGSManager.Instance.SaveLoad.LoadPublicDataWithQueenId(entry.PlayerId);
-
             myRankerInfo = new RankInfo(entry.Rank, nickname, queenID, (int)entry.Score);
         }
         catch (Exception e)
         {
+            string nickname = await UGSManager.Instance.Auth.LoadPublicDataByPlayerId(UGSManager.Instance.PlayerId);
+            myRankerInfo = new RankInfo(-1, nickname, 0, 0);
             Utils.Log("랭킹 없음 또는 오류: " + e.Message);
         }
     }
