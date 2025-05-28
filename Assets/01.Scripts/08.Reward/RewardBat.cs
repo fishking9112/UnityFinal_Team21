@@ -97,7 +97,7 @@ public class RewardBat : MonoBehaviour, IPoolable
                     }
                 }
 
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                await UniTask.Delay(100, cancellationToken: token);
             }
         }
         catch (OperationCanceledException)
@@ -138,7 +138,7 @@ public class RewardBat : MonoBehaviour, IPoolable
                 continue;
             }
 
-            float distance = Vector3.Distance(reward.transform.position, batPos);
+            float distance = (reward.transform.position - batPos).sqrMagnitude;
 
             if (distance < minDistance)
             {
@@ -179,9 +179,9 @@ public class RewardBat : MonoBehaviour, IPoolable
     {
         if (haveReward)
         {
-            float getDistance = Vector3.Distance(transform.position, castlePos);
+            float distance = (transform.position - castlePos).sqrMagnitude;
 
-            if (getDistance < 0.1f)
+            if (distance < 0.1f)
             {
                 goldRewardImage.SetActive(false);
                 expRewardImage.SetActive(false);
@@ -216,9 +216,9 @@ public class RewardBat : MonoBehaviour, IPoolable
             return;
         }
 
-        float dist = Vector3.Distance(transform.position, curTarget.transform.position);
+        float distance = (transform.position - curTarget.transform.position).sqrMagnitude;
 
-        if (dist < 0.1f)
+        if (distance < 0.01f)
         {
             haveReward = true;
 
