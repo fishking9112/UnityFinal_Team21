@@ -9,8 +9,7 @@ public class MonsterTrackingState : MonsterBaseState
     Vector2 boxSize = Vector2.zero;
     private CancellationTokenSource ctsMoveTarget;
     private CancellationTokenSource ctsAllSearch;
-    private float searchArea = 40f;
-    private float searchTimer = 0f;
+    private float searchArea = 30f;
 
     public override void Enter()
     {
@@ -30,7 +29,6 @@ public class MonsterTrackingState : MonsterBaseState
     public override void Exit()
     {
         base.Exit();
-        searchTimer = 0f;
         ctsMoveTarget?.Cancel();
         ctsMoveTarget?.Dispose(); // 메모리 누수 방지
         ctsMoveTarget = null;
@@ -48,7 +46,6 @@ public class MonsterTrackingState : MonsterBaseState
             {
                 return;
             }
-            token.ThrowIfCancellationRequested(); // 취소되면 예외 발생
 
             TargetAllSearch();
 
@@ -67,8 +64,7 @@ public class MonsterTrackingState : MonsterBaseState
     {
         while (stateMachine.Controller != null)
         {
-            token.ThrowIfCancellationRequested(); // 취소되면 예외 발생
-            await UniTask.Delay(100, cancellationToken: token); // 100ms 대기
+            await UniTask.Delay(500, cancellationToken: token); // 100ms 대기
             MoveTarget();
         }
     }
