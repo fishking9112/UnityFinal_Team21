@@ -21,7 +21,7 @@ public class MenuButtonsSetSiblingIndex : MonoBehaviour, IPointerEnterHandler, I
     private void Awake()
     {
         imageBtn.material = outlineGray;
-        imageBtn.alphaHitTestMinimumThreshold = 0.2f;
+        // imageBtn.alphaHitTestMinimumThreshold = 0.2f;
         rectPanel = panel.GetComponent<RectTransform>();
         panelOriginalSize = rectPanel.sizeDelta;
         rectPanel.sizeDelta = new Vector2(0f, panelOriginalSize.y);
@@ -34,7 +34,7 @@ public class MenuButtonsSetSiblingIndex : MonoBehaviour, IPointerEnterHandler, I
     }
     private void HandleButtonClick()
     {
-        OnPointerExit(null); 
+        OnPointerExit(null);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
