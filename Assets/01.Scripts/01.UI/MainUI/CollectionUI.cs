@@ -1,10 +1,8 @@
-using Cysharp.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
+using System.Linq;
 
 public class CollectionUI : MonoBehaviour
 {
@@ -35,7 +33,7 @@ public class CollectionUI : MonoBehaviour
     public List<Dictionary<int, CollectionIcon>> iconList = new();
 
 
-    public void Start()
+    public void Awake()
     {
         // 게임 시작 버튼 초기화
         for (int i = 0; i < toggleList.Count; i++)
@@ -49,13 +47,6 @@ public class CollectionUI : MonoBehaviour
                 }
             });
         }
-
-        // 첫번째 무조건 선택
-        toggleList[0].isOn = true;
-
-        // 도감 설명 초기화
-        title.text = "";
-        desc.text = "";
 
         // 아이콘 초기화
         CreateIcons(DataManager.Instance.monsterDic, monsterIcons, contentTransform);
@@ -74,6 +65,22 @@ public class CollectionUI : MonoBehaviour
         iconList.Add(heroAbilityIcons);
 
         closeButton.onClick.AddListener(() => gameObject.SetActive(false));
+
+        //toggleList[0].isOn = true;
+        //SelectToggle(0);
+
+        //var firstIcon = DataManager.Instance.monsterDic[(int)IDMonster.ORC_NORMAL];
+        //OnClickDetail(DataManager.Instance.iconAtlas.GetSprite(firstIcon.icon), firstIcon.name, firstIcon.description, true);
+    }
+
+    private void OnEnable()
+    {
+        for (int i = 0; i < toggleList.Count; i++)
+        {
+            toggleList[i].isOn = false;
+        }
+
+        toggleList[0].isOn = true;
     }
 
     /// <summary>
@@ -83,8 +90,11 @@ public class CollectionUI : MonoBehaviour
     public void SelectToggle(int index)
     {
         toggleIndex = index;
-        ClearDetail();
+        //ClearDetail();
+        HideIcons();
         ShowDetail(toggleIndex);
+
+        iconList[index].First().Value.OnClickIcon();
     }
 
     /// <summary>
@@ -133,10 +143,8 @@ public class CollectionUI : MonoBehaviour
         title.text = "";
         desc.text = "";
         lockImg.gameObject.SetActive(false);
-        foreach (var icon in allIcons)
-        {
-            icon.Value.gameObject.SetActive(false);
-        }
+
+        HideIcons();
     }
 
     /// <summary>
@@ -148,6 +156,14 @@ public class CollectionUI : MonoBehaviour
         foreach (var icon in iconList[index])
         {
             icon.Value.gameObject.SetActive(true);
+        }
+    }
+
+    public void HideIcons()
+    {
+        foreach (var icon in allIcons)
+        {
+            icon.Value.gameObject.SetActive(false);
         }
     }
 }

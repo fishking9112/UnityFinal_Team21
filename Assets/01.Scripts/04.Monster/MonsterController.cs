@@ -27,6 +27,12 @@ public class MonsterController : BaseController, IPoolable
 
     public virtual void OnDespawn() // 실행하면 자동으로 반환
     {
+        if (this == null)
+            return;
+
+        if (gameObject == null)
+            return;
+
         transform.localScale = originScale;
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
@@ -181,7 +187,7 @@ public class MonsterController : BaseController, IPoolable
         }
 
         // 소환될 때 겹치지 않도록 살짝 움직여주는 코드
-        navMeshAgent.SetDestination(navMeshAgent.transform.position + navMeshAgent.transform.right * -10f);
+        navMeshAgent.SetDestination(navMeshAgent.transform.position + new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)));
 
         stateMachine.ChangeState(stateMachine.Tracking); // 할 일 찾기
 
