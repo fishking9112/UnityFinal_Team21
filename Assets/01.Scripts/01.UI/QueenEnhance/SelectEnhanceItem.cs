@@ -63,6 +63,11 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             enhanceDecText.text += $"\n\n<color=#FFB600>* {DataManager.Instance.queenActiveSkillDic[info.skill_ID].name} : {DataManager.Instance.queenActiveSkillDic[info.skill_ID].description}</color>";
         }
+
+        if (GameManager.Instance.queen.condition.Level.Value % 5 == 0)
+        {
+            enhanceDecText.text += "\n\n<color=#FFFF00>진화포인트<sprite=0> +1";
+        }
     }
 
     /// <summary>
