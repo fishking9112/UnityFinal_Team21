@@ -27,6 +27,12 @@ public class MonsterController : BaseController, IPoolable
 
     public virtual void OnDespawn() // 실행하면 자동으로 반환
     {
+        if (this == null)
+            return;
+
+        if (gameObject == null)
+            return;
+
         transform.localScale = originScale;
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
