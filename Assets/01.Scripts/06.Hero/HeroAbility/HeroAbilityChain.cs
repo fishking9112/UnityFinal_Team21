@@ -32,6 +32,8 @@ public class HeroAbilityChain : HeroAbilitySystem
     private void OnEnable()
     {
         Initialize((int)IDHeroAbility.CHAIN);
+        tk = new CancellationTokenSource();
+
     }
 
     protected override void ActionAbility()
