@@ -89,6 +89,8 @@ public class GameResultUI : SingleUI
 
         LogManager.Instance.PlayEndLog(queenid, time, isC, mostSummonID, mostSummon, leastSummonID, leastSummon, mvpID, tryCnt);
         UGSManager.Instance.SaveLoad.SaveAsync().Forget();
+        UGSManager.Instance.Leaderboard.UploadScoreAsync(GameManager.Instance.queen.condition.KillCnt.Value).Forget();
+        UGSManager.Instance.SaveLoad.UploadRankDataAsync(queenid).Forget();
     }
 
     /// <summary>

@@ -1,13 +1,34 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Services.Leaderboards;
 using UnityEngine;
+using static UnityEditor.Profiling.FrameDataView;
+
+// 플레이어들의 랭크 정보를 담을 구조체
+public struct RankInfo
+{
+    public int Rank;
+    public string Nickname;
+    public int QueenID;
+    public int Score;
+
+    public RankInfo(int rank, string nickname, int queenId, int score)
+    {
+        Rank = rank;
+        Nickname = nickname;
+        QueenID = queenId;
+        Score = score;
+    }
+}
 
 public class UGSLeaderboard : MonoBehaviour
 {
-    private const string LeaderboardId = "TestBoard"; // Dashboard에서 설정한 ID
+    private const string LeaderboardId = "KillCount"; // Dashboard에서 설정한 ID
 
+    public List<RankInfo> rankerInfo { get; private set; }
+    public RankInfo myRankerInfo { get; private set; }
 
     /// <summary>
     /// 플레이어 점수 업로드
@@ -31,6 +52,8 @@ public class UGSLeaderboard : MonoBehaviour
     /// </summary>
     public async UniTask GetTop10ScoresAsync()
     {
+        var rankList = new List<RankInfo>();
+
         try
         {
             var scores = await LeaderboardsService.Instance.GetScoresAsync(LeaderboardId, new GetScoresOptions
@@ -40,15 +63,20 @@ public class UGSLeaderboard : MonoBehaviour
 
             foreach (var entry in scores.Results)
             {
-                string nickname = await UGSManager.Instance.Auth.LoadPublicDataByPlayerId(entry.PlayerId);
-                Utils.Log($"{entry.Rank}. {nickname} : {entry.Score}");
+                // nickname과 여왕ID 둘 다 받아오기
+                var (nickname, queenID) = await UGSManager.Instance.SaveLoad.LoadPublicDataWithQueenId(entry.PlayerId);
+
+                rankList.Add(new RankInfo(entry.Rank, nickname, queenID, (int)entry.Score));
             }
         }
         catch (Exception e)
         {
             Utils.Log($"리더보드 불러오기 실패: {e.Message}");
         }
+
+        rankerInfo = rankList;
     }
+
 
     /// <summary>
     /// 플레이어 점수 가져오기
@@ -58,9 +86,11 @@ public class UGSLeaderboard : MonoBehaviour
         try
         {
             var entry = await LeaderboardsService.Instance.GetPlayerScoreAsync(LeaderboardId);
-            string nickname = await UGSManager.Instance.Auth.LoadPublicDataByPlayerId(entry.PlayerId);
 
-            Utils.Log($"내 순위: {entry.Rank}, 점수: {entry.Score}, 닉네임: {nickname}");
+            // nickname과 여왕ID 둘 다 받아오기
+            var (nickname, queenID) = await UGSManager.Instance.SaveLoad.LoadPublicDataWithQueenId(entry.PlayerId);
+
+            myRankerInfo = new RankInfo(entry.Rank, nickname, queenID, (int)entry.Score);
         }
         catch (Exception e)
         {
