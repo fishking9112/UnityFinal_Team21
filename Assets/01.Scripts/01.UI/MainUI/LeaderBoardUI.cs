@@ -42,7 +42,6 @@ public class LeaderBoardUI : MonoBehaviour
         {
             cooldownTimer -= Time.deltaTime;
             refreshCoolTiemImage.fillAmount = cooldownTimer / refreshCooldown;
-            Debug.Log("sfe");
             if (cooldownTimer <= 0)
             {
                 StopCooldown();
