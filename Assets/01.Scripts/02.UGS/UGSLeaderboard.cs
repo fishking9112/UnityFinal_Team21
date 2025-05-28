@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Services.Leaderboards;
 using UnityEngine;
-using static UnityEditor.Profiling.FrameDataView;
 
 // 플레이어들의 랭크 정보를 담을 구조체
 public struct RankInfo
