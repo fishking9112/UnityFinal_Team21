@@ -7,8 +7,6 @@ public class MenuButtonsSetSiblingIndex : MonoBehaviour, IPointerEnterHandler, I
 {
     [SerializeField] private MenuHUD menuHUD;
     [SerializeField] private Transform panel;
-    [SerializeField] private Material outlineWhite;
-    [SerializeField] private Material outlineGray;
     [SerializeField] private Image imageBtn;
     [SerializeField] private Image panelBtn;
     [SerializeField] private Transform tfButton;
@@ -20,8 +18,6 @@ public class MenuButtonsSetSiblingIndex : MonoBehaviour, IPointerEnterHandler, I
 
     private void Awake()
     {
-        imageBtn.material = outlineGray;
-        // imageBtn.alphaHitTestMinimumThreshold = 0.2f;
         rectPanel = panel.GetComponent<RectTransform>();
         panelOriginalSize = rectPanel.sizeDelta;
         rectPanel.sizeDelta = new Vector2(0f, panelOriginalSize.y);
@@ -39,7 +35,6 @@ public class MenuButtonsSetSiblingIndex : MonoBehaviour, IPointerEnterHandler, I
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        imageBtn.material = outlineWhite;
         menuHUD.BlackBackground.SetAsLastSibling();
         menuHUD.BlackBackground.gameObject.SetActive(true);
         tfButton.transform.SetAsLastSibling();
@@ -53,8 +48,6 @@ public class MenuButtonsSetSiblingIndex : MonoBehaviour, IPointerEnterHandler, I
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        imageBtn.material = outlineGray;
-
         rectPanel.DOKill();
         rectPanel.sizeDelta = new Vector2(0f, panelOriginalSize.y);
 
