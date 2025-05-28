@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Services.CloudSave;
 using Unity.Services.CloudSave.Models.Data.Player;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class UGSSaveLoad : MonoBehaviour
     private const int CurrentVersion = 3; // 최신 데이터 버전
 
     private const string SaveKey = "PlayerSaveData";
-
+    private const string RankDataKey = "PlayerRankDataKey";
 
     #region 저장
 
@@ -39,6 +40,35 @@ public class UGSSaveLoad : MonoBehaviour
         catch (Exception e)
         {
             Utils.Log($"저장 실패: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 게임 정보(랭크)를 업로드
+    /// </summary>
+    /// <param name="rankInfo"></param>
+    /// <returns></returns>
+    public async UniTask UploadRankDataAsync(int QueenID)
+    {
+        try
+        {
+            var leaderBoardData = new LeaderBoardData
+            {
+                queenID = QueenID
+            };
+
+            var saveJson = JsonConvert.SerializeObject(leaderBoardData);
+            var saveDict = new Dictionary<string, object> { { RankDataKey, saveJson } };
+
+            await CloudSaveService.Instance.Data.Player.SaveAsync(
+                saveDict,
+                new Unity.Services.CloudSave.Models.Data.Player.SaveOptions(new PublicWriteAccessClassOptions())
+            );
+            Utils.Log("랭크 데이터 업로드 완료");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"랭크 데이터 업로드 실패: {e.Message}");
         }
     }
 
@@ -82,6 +112,7 @@ public class UGSSaveLoad : MonoBehaviour
         data.extraQueenUpgradeFields = new Dictionary<string, JToken>();
         return data;
     }
+
 
     /// <summary>
     /// 저장 데이터 유효성 검사
@@ -274,5 +305,63 @@ public class UGSSaveLoad : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// playerId에 해당하는 공개 데이터를 읽어 nickname과 queenID를 반환합니다.
+    /// </summary>
+    public async Task<(string nickname, int queenID)> LoadPublicDataWithQueenId(string playerId)
+    {
+        try
+        {
+            var rankData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { RankDataKey }, new LoadOptions(new PublicReadAccessClassOptions(playerId)));
+
+            string nickname = await UGSManager.Instance.Auth.LoadPublicDataByPlayerId(playerId);
+
+            if (rankData.TryGetValue(RankDataKey, out var savedValue))
+            {
+                var json = savedValue.Value.GetAsString();
+
+                LeaderBoardData leaderBoardData;
+                try
+                {
+                    leaderBoardData = JsonConvert.DeserializeObject<LeaderBoardData>(json);
+                }
+                catch (Exception ex)
+                {
+                    Utils.Log($"역직렬화 실패: {ex.Message}");
+                    leaderBoardData = CreateDefaultLeaderBoardData();
+                }
+
+                // 데이터 마이그레이션 (필요하면 추가하기)
+                // leaderBoardData = MigrateData(leaderBoardData);
+
+                Utils.Log("랭크 데이터 반환 완료");
+                return (nickname, leaderBoardData.queenID);
+            }
+            else
+            {
+                Utils.Log("저장된 랭크 데이터가 없음.");
+                return (nickname, -1);
+            }
+
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"랭크 데이터 로드 실패: {e.Message}");
+            return ("Unknown", -1);
+        }
+    }
+
+    /// <summary>
+    /// 기본 LeaderBoardData 생성
+    /// </summary>
+    private LeaderBoardData CreateDefaultLeaderBoardData()
+    {
+        return new LeaderBoardData
+        {
+            queenID = -1,
+            extraLeaderboardResultFields = new Dictionary<string, JToken>()
+        };
+    }
     #endregion
 }

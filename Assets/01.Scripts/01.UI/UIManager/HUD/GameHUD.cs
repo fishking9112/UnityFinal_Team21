@@ -150,7 +150,7 @@ public class GameHUD : HUDUI
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="controller"></param>
-    public void ShowWindow<T>(T controller = null) where T : MonoBehaviour
+    public void ShowWindow<T>(T controller = null, bool isTimeOverOpen = false) where T : MonoBehaviour
     {
         if (typeof(T) != typeof(OptionController))
         {
@@ -165,6 +165,13 @@ public class GameHUD : HUDUI
             if (UIManager.Instance.IsOpenUI("ToolTipUI"))
             {
                 Utils.Log("이미 열려있는 툴팁이 있습니다");
+                return;
+            }
+
+            // 이미 창이 열려있다면 리턴
+            if (GameManager.Instance.isTimeOver && !isTimeOverOpen)
+            {
+                Utils.Log("게임이 종료되어 기다리는 중입니다");
                 return;
             }
 

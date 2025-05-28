@@ -107,11 +107,11 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     {
         try
         {
-            while (!tk.IsCancellationRequested && this != null)
+            while (!tk.IsCancellationRequested && this.enabled)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, cancellationToken: tk);
 
-                if (tk.IsCancellationRequested || this == null)
+                if (tk.IsCancellationRequested || !this.enabled)
                 {
                     break;
                 }
