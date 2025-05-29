@@ -55,16 +55,17 @@ public class GameManager : MonoSingleton<GameManager>
     {
         ApplyCursorState();
         // 게임 패배 승리 테스트용 코드
-        /*
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            castle.TakeDamaged(1000f);
-        }
+        
         if (Input.GetKeyDown(KeyCode.G))
         {
-            curTime.Value -= 1800f;
+            GameManager.Instance.queen.condition.EvolutionPoint.Value = 20f;
         }
-        */
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            AddGold(10000);
+
+        }
+
 
         /*
         if (Input.GetKeyDown(KeyCode.H))
@@ -87,7 +88,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (isTimeOver) return;
 
-        curTime.Value -= Time.deltaTime;
+        //curTime.Value -= Time.deltaTime;
 
         if (curTime.Value <= 0f)
         {
