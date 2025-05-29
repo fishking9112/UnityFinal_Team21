@@ -88,7 +88,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (isTimeOver) return;
 
-        //curTime.Value -= Time.deltaTime;
+        curTime.Value -= Time.deltaTime;
 
         if (curTime.Value <= 0f)
         {

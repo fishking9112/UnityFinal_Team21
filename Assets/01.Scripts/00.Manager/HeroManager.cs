@@ -24,7 +24,7 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private void Start()
     {
-        time = 60;
+        time = 5;
         heroCnt = 1;
         token = new CancellationTokenSource();
         token2 = new CancellationTokenSource();
