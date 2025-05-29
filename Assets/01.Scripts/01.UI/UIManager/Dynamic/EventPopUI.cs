@@ -52,11 +52,11 @@ public class EventPopUI : BaseUI
     /// <summary>
     /// 비동기 FadeIn → 대기 → FadeOut 시퀀스
     /// </summary>
-    public async UniTask ShowSequenceAsync(float fadeDuration = 0.5f, float holdDuration = 1.5f)
+    public async UniTask ShowSequenceAsync(float fadeDuration = 0.5f, float holdDuration = 2f)
     {
         await FadeInAsync(fadeDuration, fadeCts.Token);
         await UniTask.Delay(TimeSpan.FromSeconds(holdDuration), cancellationToken: fadeCts.Token, ignoreTimeScale: true);
-        await FadeOutAsync(fadeDuration, fadeCts.Token);
+        await FadeOutAsync(1.5f, fadeCts.Token);
 
         OnHide();
     }
