@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 public class CollectionUI : MonoBehaviour
 {
@@ -123,7 +124,18 @@ public class CollectionUI : MonoBehaviour
     {
         descIcon.sprite = sprite;
         title.text = _name;
+
+        if (_description.Contains(">n<"))
+        {
+            _description = Regex.Replace(
+                _description,
+                @"([가-힣]+[이가]) <color=.*?>n</color> ([가-힣]+합니다\.)",
+                "$1 $2"
+            );
+        }
+
         desc.text = _description;
+
         if (_isActive)
         {
             lockImg.gameObject.SetActive(false);
