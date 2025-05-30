@@ -5,8 +5,7 @@ using UnityEngine;
 
 public enum HeroAbilityType
 {
-    NULL,
-    MELEE,
+    MELEE=101,
     RANGED,
     REVOLUTION,
     AREA,
@@ -94,7 +93,7 @@ public class HeroAbilityData : SheetDataReaderBase
                     heroAbilityInfo.size_Base = Utils.StringToVector3(cell.value);
                     break;
                 case "type":
-                    heroAbilityInfo.type = Utils.StringToEnum<HeroAbilityType>(cell.value, HeroAbilityType.NULL);
+                    heroAbilityInfo.type = Utils.StringToEnum<HeroAbilityType>(cell.value, HeroAbilityType.MELEE);
                     break;
                 case "speed_Base":
                     heroAbilityInfo.speed_Base = Utils.StringToFloat(cell.value);
