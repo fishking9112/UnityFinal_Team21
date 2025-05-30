@@ -13,14 +13,16 @@ public class SoundManager : MonoSingleton<SoundManager>
     [SerializeField] private int poolSize = 10; // 최초 풀 크기
     private Queue<AudioSource> audioSourcePool; // 오브젝트 풀
 
-    private float bgmVolume = 0f;
-    private float sfxVolume = 0f;
+    private float bgmVolume = 0.1f;
+    private float sfxVolume = 0.1f;
     public float BGMVolume => bgmVolume;
     public float SFXVolume => sfxVolume;
 
     private Dictionary<string, AudioClip> soundDict; // SFX와 BGM 저장용 Dictionary
     private AudioSource bgmPlayer; // BGM 재생용 AudioSource
     private Coroutine bgmFadeCoroutine;
+
+    public BGMController bgmController;
 
     protected override void Awake()
     {
