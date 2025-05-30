@@ -14,10 +14,11 @@ public class GameHUD : HUDUI
 
     private QueenCondition condition => GameManager.Instance.queen.condition;
 
-    [Header("레벨 / 골드")]
+    [Header("레벨 / 골드 / 킬카운트 / 인구수")]
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private TextMeshProUGUI killCntText;
+    [SerializeField] private TextMeshProUGUI populationText;
 
     [Header("게이지")]
     [SerializeField] private GaugeUI queenActiveSkillGaugeUI;
@@ -76,6 +77,14 @@ public class GameHUD : HUDUI
 
     [Header("피격 당함 마크")]
     public AttackMarkIcon attackMarkIconPrefab;
+
+
+    // 인구수용 변수
+    private readonly string colorPrefixNormal = "<color=#FFFFFF>";
+    private readonly string colorPrefixFull = "<color=#FF0000>";
+    private readonly string colorSuffix = "</color>";
+
+    private System.Text.StringBuilder sb = new System.Text.StringBuilder(32);
 
     public override async UniTask Initialize()
     {
@@ -281,6 +290,28 @@ public class GameHUD : HUDUI
     public void UpdateKullCntText(int kullCnt)
     {
         killCntText.text = Utils.GetThousandCommaText(kullCnt);
+    }
+
+    public void UpdatePopulationText(int curPop, float maxPop)
+    {
+        int maxPopInt = Mathf.FloorToInt(maxPop);
+
+        sb.Clear();
+        if (curPop < maxPopInt)
+        {
+            sb.Append(colorPrefixNormal);
+        }
+        else
+        {
+            sb.Append(colorPrefixFull);
+        }
+
+        sb.Append(curPop);
+        sb.Append(" / ");
+        sb.Append(maxPopInt);
+        sb.Append(colorSuffix);
+
+        populationText.text = sb.ToString();
     }
 
     public void UpdateTimerText(float time)
