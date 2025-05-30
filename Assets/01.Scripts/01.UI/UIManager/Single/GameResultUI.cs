@@ -76,7 +76,6 @@ public class GameResultUI : SingleUI
         int mvpID = SetMonsterMVP();
 
         DescriptionPopupUI.SetActive(false);
-        QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
 
         int queenid = GameManager.Instance.QueenCharaterID;
         int time = (int)(GameManager.Instance.gameLimitTime - GameManager.Instance.curTime.Value);

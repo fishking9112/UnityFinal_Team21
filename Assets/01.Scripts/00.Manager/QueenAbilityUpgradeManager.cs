@@ -24,6 +24,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     private Dictionary<int, Action<float>> applyEffectActions;
 
     public ToastMessage toastMessage;
+    public bool ShouldRestoreAbilityMonsterValues { get; private set; }
 
     protected override void Awake()
     {
@@ -162,6 +163,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             float value = ability.levelInfo[level - 1].eff;
             applyEffectActions[id].Invoke(value);
         }
+
+        ShouldRestoreAbilityMonsterValues = true;
     }
 
     public void ResetQueenAbilityMonsterValues()
@@ -189,6 +192,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             float speedValue = speedAbility.levelInfo[speedLevel - 1].eff;
             ApplyMoveSpeedBuff(1 / (1 + speedValue), true); // 곱셈 기반 복원
         }
+
+        ShouldRestoreAbilityMonsterValues = false;
     }
 
     private void ApplyAttackPowerBuff(float value, bool reset = false)
