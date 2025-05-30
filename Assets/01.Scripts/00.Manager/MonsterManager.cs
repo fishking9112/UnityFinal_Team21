@@ -41,6 +41,11 @@ public class MonsterManager : MonoSingleton<MonsterManager>
         }
     }
 
+    public int GetMonsterCount()
+    {
+        return monsters.Count;
+    }
+
     // 테스트 코드 주석처리
     // void Update()
     // {
