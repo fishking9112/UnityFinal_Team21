@@ -206,8 +206,8 @@ public class QueenCondition : MonoBehaviour
 
     private void ExpIncrease()
     {
-        float stepBonus = 50 * (Level.Value / 10);
-        MaxExpGauge.Value = initMaxExpGauge * Mathf.Pow(Level.Value, 1.5f) + stepBonus;
+        float stepBonus = 30 * (Level.Value / 5);
+        MaxExpGauge.Value = initMaxExpGauge * Mathf.Pow(Level.Value, 1.3f) + stepBonus;
     }
 
     public IEnumerator CoroutineLevelUp()
