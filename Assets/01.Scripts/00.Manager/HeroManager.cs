@@ -20,12 +20,15 @@ public class HeroManager : MonoSingleton<HeroManager>
     private float time;
     private int level;
 
+    private int heroCnt;
+
     private List<GameObject> heroList = new();
 
     private void Start()
     {
         time = 10;
         level = 1;
+        heroCnt = 10;
         token = new CancellationTokenSource();
         token2 = new CancellationTokenSource();
         SetWave(token.Token).Forget();
@@ -58,8 +61,8 @@ public class HeroManager : MonoSingleton<HeroManager>
         {
             await UniTask.Delay(TimeSpan.FromSeconds(time), cancellationToken: this.GetCancellationTokenOnDestroy()); //매 10초마다
 
-
-            for (int i = 0; i < level; i++)
+            int cnt = heroCnt + level;
+            for (int i = 0; i < cnt; i++)
             {
                 SetNextHero();
                 SummonHero();
