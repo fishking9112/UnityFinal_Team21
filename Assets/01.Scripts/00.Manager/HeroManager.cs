@@ -28,7 +28,7 @@ public class HeroManager : MonoSingleton<HeroManager>
     {
         time = 10;
         level = 1;
-        heroCnt = 10;
+        heroCnt = 4;
         token = new CancellationTokenSource();
         token2 = new CancellationTokenSource();
         SetWave(token.Token).Forget();
