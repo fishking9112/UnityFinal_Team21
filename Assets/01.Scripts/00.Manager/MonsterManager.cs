@@ -16,6 +16,9 @@ public class MonsterManager : MonoSingleton<MonsterManager>
     public bool isHealthUI = false;
     public bool InitComplete = false;
 
+    private GameHUD gameHUD;
+    private QueenCondition queenCondition;
+
     private async void Start()
     {
         await WaitUntilInitCompleteAndSetup();
@@ -30,6 +33,17 @@ public class MonsterManager : MonoSingleton<MonsterManager>
             monsterInfoList[monsterdata.ID] = new MonsterInfo(monsterdata);
             idByMonsters[monsterdata.ID] = new List<MonsterController>();
         }
+
+        gameHUD = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>();
+        queenCondition = GameManager.Instance.queen.condition;
+    }
+
+    private void Update()
+    {
+        if (gameHUD == null)
+            return;
+
+        gameHUD.UpdatePopulationText(monsters.Count, queenCondition.MaxPopulation.Value);
     }
 
     public void OnClickHealthUITest()

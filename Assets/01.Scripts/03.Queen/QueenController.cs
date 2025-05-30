@@ -317,9 +317,6 @@ public class QueenController : MonoBehaviour
             return;
         }
 
-        print(MonsterManager.Instance.monsters.Count);
-        print(condition.MaxPopulation.Value);
-
         SoundManager.Instance.PlaySFX("SFX_UI_Click_Designed_Liquid_Generic_Open_2");
 
         // 미니맵콜라이더 레이어를 제외한 레이어와 충돌 처리가 일어나면 몬스터 소환 불가
