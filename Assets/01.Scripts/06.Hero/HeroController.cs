@@ -93,6 +93,11 @@ public class HeroController : BaseController
 
             if (weaponDic.ContainsKey(weaponNum))
             {
+                if (weaponDic[weaponNum]>=8)
+                {
+                    i--;
+                    continue;
+                }
                 weaponDic[weaponNum]++;
             }
             else
