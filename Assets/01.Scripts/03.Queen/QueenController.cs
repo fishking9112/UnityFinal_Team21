@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -298,6 +299,7 @@ public class QueenController : MonoBehaviour
             SpawnPointManager.Instance.MonsterPoint.ShowAndHideAreas();
             return;
         }
+
         if (condition.CurSummonGauge.Value < tempMonster.cost)
         {
             // 테이블 나오면 적용 필요
@@ -306,6 +308,17 @@ public class QueenController : MonoBehaviour
 
             return;
         }
+
+        if (MonsterManager.Instance.GetMonsterCount() >= condition.MaxPopulation.Value)
+        {
+            ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
+            msg.SetText("<color=red>인구수가 가득 찼습니다.</color>");
+
+            return;
+        }
+
+        print(MonsterManager.Instance.monsters.Count);
+        print(condition.MaxPopulation.Value);
 
         SoundManager.Instance.PlaySFX("SFX_UI_Click_Designed_Liquid_Generic_Open_2");
 
