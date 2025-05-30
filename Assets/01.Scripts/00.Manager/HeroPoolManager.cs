@@ -28,6 +28,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
     private QueenCondition condition;
 
     private Transform heroParent;
+    private Transform heroDeleteParent;
 
     protected override void Awake()
     {
@@ -46,6 +47,9 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         GameObject heroP = new GameObject();
         heroParent = heroP.transform;
         heroParent.SetParent(transform);
+        GameObject heroDP = new GameObject();
+        heroDeleteParent = heroDP.transform;
+        heroDeleteParent.SetParent(transform);
 
         for (int i = 0; i < heroObj.poolSize; i++)
         {
@@ -133,10 +137,9 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
     public void ReturnObject(HeroController obj)
     {
         HeroManager.Instance.hero.Remove(obj.gameObject);
-        obj.gameObject.SetActive(false);
 
         // 보스일경우
-        if(!heroDic.ContainsKey(obj))
+        if (!heroDic.ContainsKey(obj))
         {
             Destroy(obj.gameObject);
         }
@@ -150,10 +153,12 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         // 풀링으로 생성된 히어로일경우
         else
         {
+            heroDic[obj].transform.SetParent(heroDeleteParent); // 1프레임 안기다리고 바로 이동
             Destroy(heroDic[obj]);
             heroDic.Remove(obj);
         }
 
         condition.KillCnt.Value++;
+        obj.gameObject.SetActive(false);
     }
 }
