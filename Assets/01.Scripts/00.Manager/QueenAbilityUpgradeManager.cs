@@ -58,6 +58,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value),
             value => RewardManager.Instance.initBatCount += (int)value,
             value => RewardManager.Instance.initBatMoveSpeed +=  RewardManager.Instance.initBatMoveSpeed * value,
+            value => GameManager.Instance.queen.condition.AdjustMaxPopulation(value),
         };
 
         int index = 0;
