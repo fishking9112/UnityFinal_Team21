@@ -411,7 +411,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07f4fbe9071bee446bfd4b480011a671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skipUI: {fileID: 0}
+  skipUI: {fileID: 980604648}
+  fadeInImage: {fileID: 961305923}
   fadeInDuration: 1
 --- !u!1 &462458657
 GameObject:
@@ -688,6 +689,7 @@ GameObject:
   - component: {fileID: 961305920}
   - component: {fileID: 961305922}
   - component: {fileID: 961305921}
+  - component: {fileID: 961305923}
   m_Layer: 5
   m_Name: FadeInImage
   m_TagString: Untagged
@@ -752,6 +754,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 961305919}
   m_CullTransparentMesh: 1
+--- !u!225 &961305923
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961305919}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &980604648
 GameObject:
   m_ObjectHideFlags: 0
@@ -1643,7 +1657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2020691388
 RectTransform:
   m_ObjectHideFlags: 0
