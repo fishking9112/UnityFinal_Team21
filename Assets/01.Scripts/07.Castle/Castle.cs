@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 public class Castle : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer sprite;
-    [SerializeField] private Image fillImage;
+    [SerializeField] private Slider healthSlider;
     public CastleCondition condition;
 
     private ReactiveProperty<float> cur;
@@ -20,7 +21,6 @@ public class Castle : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.castle = this;
-        QueenAbilityUpgradeManager.Instance.ApplyAllEffects();
 
         cur = condition.CurCastleHealth;
         max = condition.MaxCastleHealth;
@@ -44,7 +44,8 @@ public class Castle : MonoBehaviour
             return;
         }
 
-        fillImage.fillAmount = Mathf.Clamp01(cur.Value / max.Value);
+        healthSlider.maxValue = max.Value;
+        healthSlider.value = cur.Value;
     }
 
     /// <summary>
@@ -53,6 +54,8 @@ public class Castle : MonoBehaviour
     /// <param name="amount"> 입힐 데미지 양 </param>
     public virtual void TakeDamaged(float amount)
     {
+        if (GameManager.Instance.isTimeOver) return;
+
         Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
         Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
         if (condition.IsInvincible)
@@ -92,15 +95,8 @@ public class Castle : MonoBehaviour
     // 메모리 누수 방지
     private void OnDestroy()
     {
-        if (cur != null)
-        {
-            cur.RemoveAction(UpdateFill);
-        }
-
-        if (max != null)
-        {
-            max.RemoveAction(UpdateFill);
-        }
+        if (cur != null) cur.RemoveAction(UpdateFill);
+        if (max != null) max.RemoveAction(UpdateFill);
 
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();

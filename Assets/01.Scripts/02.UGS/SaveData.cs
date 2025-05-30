@@ -58,4 +58,15 @@ public struct QueenAbilityUpgradeData
     public Dictionary<string, JToken> extraQueenUpgradeFields;
 }
 
+
+[Serializable]
+public struct LeaderBoardData
+{
+    [JsonProperty("leaderboardQueenID")]
+    public int queenID;
+
+    [JsonExtensionData]
+    public Dictionary<string, JToken> extraLeaderboardResultFields;
+}
+
 // 이후 필요한 데이터 구조체로 추가

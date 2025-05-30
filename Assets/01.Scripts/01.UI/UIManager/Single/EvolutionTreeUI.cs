@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 [Serializable]
 public class Page
@@ -26,21 +27,29 @@ public class EvolutionTreeUI : SingleUI
     [Header("UI Components")]
     [SerializeField] private Button evolutionButton;
     [SerializeField] private List<MonsterCategoryGroup> monsterCategoryList;
+    [SerializeField] private GameObject evolutionButtonCover;
+    public GameObject EvolutionButtonCover => evolutionButtonCover;
 
     [Header("Pages")]
     [SerializeField] private List<Page> pageList;
 
     [Header("DescriptionUI")]
     [SerializeField] private TextMeshProUGUI evolutionPointText;
-    [SerializeField] private Image descriptionImage;
+    [SerializeField] private UnityEngine.UI.Image descriptionImage;
     [SerializeField] private TextMeshProUGUI monsterName;
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private TextMeshProUGUI attackText;
     [SerializeField] private TextMeshProUGUI costText;
+    [SerializeField] private TextMeshProUGUI evolutionButtonText;
+    public TextMeshProUGUI EvolutionButtonText => evolutionButtonText;
 
     [Header("QuickSlot")]
     [SerializeField] private List<EvolutionSlot> slotList;
+
+    [Header("EquipDefaultUnitNode")]
+    [SerializeField] private EvolutionNode[] arrayEvolutionNode;
+    public EvolutionNode[] ArrayEvolutionNode => arrayEvolutionNode;
 
     [Header("DragIcon")]
     [SerializeField] private EvolutionDragIcon evolutionDragIcon;
@@ -49,6 +58,7 @@ public class EvolutionTreeUI : SingleUI
 
     private int curIndex;
     private EvolutionTree currentTreePage;
+    private QueenController queenController;
 
     public List<EvolutionSlot> SlotList => slotList;
     public int PageCount => pageList.Count;
@@ -123,12 +133,30 @@ public class EvolutionTreeUI : SingleUI
 
     public void OnClickEvolutionButton()
     {
+        if (GameManager.Instance.queen.condition.EvolutionPoint.Value <= 0)
+        {
+            UIManager.Instance.ShowPopup("알림", "진화포인트<sprite=0>가 부족합니다.", () => { Utils.Log("확인."); });
+            return;
+        }
         currentTreePage?.OnClickEvolutionButton();
     }
 
     public void SetEvolutionButtonState(bool state)
     {
-        evolutionButton.gameObject.SetActive(state);
+        EvolutionButtonCover.SetActive(!state);
+
+        string text;
+
+        if (!state)
+        {
+            text = "진화 완료";
+        }
+        else
+        {
+            text = "진화";
+        }
+
+        EvolutionButtonText.text = text;
     }
 
     public void UpdateEvolutionPointText(float evolutionPoint)
@@ -148,5 +176,36 @@ public class EvolutionTreeUI : SingleUI
     public void PassEvolutionNodeInfo(EvolutionNode node)
     {
         evolutionDragIcon.SetEvolutionNode(node);
+    }
+
+    public void SetQueenController()
+    {
+        queenController = GameManager.Instance.queen.controller;
+    }
+
+    // 이전에 등록된 슬롯 데이터 제거 (몬스터 A를 1번칸에 등록한 상태로 2번칸에 등록하려할 때 1번칸의 데이터를 없애주는 역할)
+    public void RemovePreSlotData(EvolutionNode node)
+    {
+        foreach (var slot in SlotList)
+        {
+            if (slot.slotMonsterInfoData == node.monsterInfo)
+            {
+                slot.ClearSlot();
+                RemoveQueenSlot(slot.slotIndex);
+                return;
+            }
+        }
+    }
+
+    // 진화 트리 슬롯에 등록한 몬스터를 퀸 슬롯에도 등록
+    public void AddQueenSlot(MonsterInfo monster, int index)
+    {
+        queenController.monsterSlot.AddSlot(index, monster);
+    }
+
+    // 진화 트리 슬롯에 제거한 몬스터를 퀸 슬롯에도 제거
+    public void RemoveQueenSlot(int index)
+    {
+        queenController.monsterSlot.RemoveSlot(index);
     }
 }

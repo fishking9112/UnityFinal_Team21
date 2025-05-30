@@ -23,4 +23,9 @@ public class SkeletonLegionSkill : QueenActiveSkillBase
             summonMonster.StatInit(monsterInfo, MonsterManager.Instance.isHealthUI);
         }
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }

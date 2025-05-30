@@ -104,6 +104,10 @@ public class HeroTargetBullet : MonoBehaviour, IPoolable
             {
                 GameManager.Instance.castle.TakeDamaged(damage);
             }
+            else if (GameManager.Instance.miniCastles.TryGetValue(c.gameObject, out var miniCastle))
+            {
+                miniCastle.TakeDamaged(damage);
+            }
         }
     }
 }

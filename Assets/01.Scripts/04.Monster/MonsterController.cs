@@ -27,6 +27,12 @@ public class MonsterController : BaseController, IPoolable
 
     public virtual void OnDespawn() // 실행하면 자동으로 반환
     {
+        if (this == null)
+            return;
+
+        if (gameObject == null)
+            return;
+
         transform.localScale = originScale;
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
@@ -160,7 +166,7 @@ public class MonsterController : BaseController, IPoolable
         if (renderers == null)
         {
             renderers = new();
-            renderers = gameObject.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow").ToList();
+            renderers = gameObject.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow" && r.gameObject.name != "MiniMapIcon").ToList();
 
             // 각 renderer의 현재 색상 저장
             foreach (var renderer in renderers)
@@ -180,6 +186,8 @@ public class MonsterController : BaseController, IPoolable
             }
         }
 
+        // 소환될 때 겹치지 않도록 살짝 움직여주는 코드
+        navMeshAgent.SetDestination(navMeshAgent.transform.position + new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)));
 
         stateMachine.ChangeState(stateMachine.Tracking); // 할 일 찾기
 

@@ -11,6 +11,7 @@ public class HeroController : BaseController
 {
     [SerializeField] private HeroState stateMachine;
 
+    public Collider2D _collider;
     public NavMeshAgent navMeshAgent;
     [SerializeField] private Hero hero;
     [SerializeField] private GameObject eventMark;
@@ -24,16 +25,16 @@ public class HeroController : BaseController
 
     private bool isDead;
 
-    private CancellationTokenSource token = new CancellationTokenSource();
+    private CancellationTokenSource token = null;
 
     [SerializeField] public HeroStatusInfo statusInfo;
 
 
     [Header("빨간색 점등 관련 데이터")]
-    [NonSerialized] public List<SpriteRenderer> renderers;
+    [NonSerialized] public List<SpriteRenderer> renderers = new();
     private List<Color> originalColors = new(); // 원본 색상 저장용
     private CancellationTokenSource _takeDamagedRendererCts;
-    [SerializeField] private float takeDamagedRendererTimer = 0.5f;
+    [NonSerialized] private float takeDamagedRendererTimer = 0.5f;
     private void Update()
     {
         if (transform.position != lastPos)
@@ -47,23 +48,33 @@ public class HeroController : BaseController
         stateMachine = new HeroState(hero, this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         stateMachine.navMeshAgent = navMeshAgent;
-        pivot = transform.GetChild(2);
-        stateMachine.animator = GetComponentInChildren<Animator>();
 
 
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
-        CheckFlip(token.Token).Forget();
+
     }
 
 
 
     public void StatInit(HeroStatusInfo stat, bool isHealthUI, bool isEventMark = false)
     {
+        stateMachine.animator = GetComponentInChildren<Animator>();
+
+        pivot = transform.GetChild(2);
         hero.Init(stat.detectedRange);
+
+        if (_collider == null)
+        {
+            _collider = GetComponent<Collider2D>();
+        }
+        _collider.enabled = true;
+
+        navMeshAgent.enabled = true;
         navMeshAgent.speed = stat.moveSpeed;
 
         isDead = false;
+        stateMachine.animator.SetBool("isDeath", false);
         base.StatInit(stat, isHealthUI);
         this.statusInfo.Copy(stat);
 
@@ -78,33 +89,25 @@ public class HeroController : BaseController
 
         if (!navMeshAgent.isOnNavMesh)
         {
-            Debug.LogError($"{gameObject.name}은 NavMesh 위에 있지 않습니다!");
+            Utils.LogError($"{gameObject.name}은 NavMesh 위에 있지 않습니다!");
         }
 
         stateMachine.ChangeState(stateMachine.moveState);
+
+        token?.Cancel();
+        token?.Dispose();
         token = new CancellationTokenSource();
+        CheckFlip(token.Token).Forget();
 
-        if (renderers == null)
-        {
-            renderers = new();
-            renderers = pivot.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow").ToList();
+        // IF문 탈출
+        renderers.Clear();
+        renderers = pivot.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow").ToList();
+        originalColors.Clear();
 
-            // 각 renderer의 현재 색상 저장
-            foreach (var renderer in renderers)
-            {
-                originalColors.Add(renderer.color);
-            }
-        }
-        else
+        // 각 renderer의 현재 색상 저장
+        foreach (var renderer in renderers)
         {
-            // 저장한 색상으로 복원
-            for (int i = 0; i < renderers.Count; i++)
-            {
-                if (i < originalColors.Count)
-                {
-                    renderers[i].color = originalColors[i];
-                }
-            }
+            originalColors.Add(renderer.color);
         }
     }
 
@@ -114,14 +117,16 @@ public class HeroController : BaseController
         Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f));
         Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y + 0.6f, 0f);
         StaticUIManager.Instance.damageLayer.ShowDamage(damage, worldPos + Vector3.up * 0.5f);
-        base.TakeDamaged(damage);
         TakeDamagedRenderer();
+
+        base.TakeDamaged(damage);
     }
 
     private async UniTaskVoid CheckFlip(CancellationToken tk)
     {
         lastDir = 0;
         float x;
+
         while (!tk.IsCancellationRequested)
         {
             if (navMeshAgent == null)
@@ -137,7 +142,7 @@ public class HeroController : BaseController
             {
                 currentDir = lastDir;
             }
-            else if (currentDir != lastDir)
+            else
             {
                 pivot.localScale = new Vector3(-currentDir, 1, 1);
                 lastDir = currentDir;
@@ -159,14 +164,22 @@ public class HeroController : BaseController
     public void SetDead(bool isDead)
     {
         stateMachine.animator.SetBool("4_Death", isDead);
+        stateMachine.animator.SetBool("isDeath", isDead);
     }
 
     public async UniTask GetAnimFinish()
     {
-        await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
-        HeroPoolManager.Instance.ReturnObject(this);
-        isDead = false;
 
+        // await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).IsName("DEATH"));
+        await UniTask.Delay(TimeSpan.FromSeconds(1f), false, PlayerLoopTiming.Update);
+        // await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f);
+        _takeDamagedRendererCts?.Cancel();
+        _takeDamagedRendererCts?.Dispose();
+        _takeDamagedRendererCts = null;
+        token?.Cancel();
+        token?.Dispose();
+        token = null;
+        HeroPoolManager.Instance.ReturnObject(this);
     }
 
     public override void Die()
@@ -175,6 +188,9 @@ public class HeroController : BaseController
         isDead = true;
 
         base.Die();
+
+        navMeshAgent.enabled = false;
+        _collider.enabled = false;
 
         stateMachine.ChangeState(stateMachine.deadState);
         ResetObj();
@@ -193,7 +209,6 @@ public class HeroController : BaseController
     {
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
-        // 새로운 CancellationTokenSource 만들기 (OnDisable용 토큰도 연동)
         _takeDamagedRendererCts = new CancellationTokenSource();
 
         // Task 시작
@@ -203,15 +218,26 @@ public class HeroController : BaseController
     // UniTask 본문
     private async UniTaskVoid TakeDamagedRendererTask(CancellationToken token)
     {
-        foreach (var renderer in renderers)
+        try
         {
-            renderer.color = Color.red;
+            foreach (var renderer in renderers)
+            {
+                renderer.color = Color.red;
+            }
+            await UniTask.Delay(TimeSpan.FromSeconds(takeDamagedRendererTimer), cancellationToken: token);
+            SetOriginColor();
         }
+        finally
+        {
+            if (isDead)
+            {
+                SetOriginColor();
+            }
+        }
+    }
 
-        await UniTask.Delay(TimeSpan.FromSeconds(takeDamagedRendererTimer), cancellationToken: token);
-
-        if (this == null) return;
-
+    private void SetOriginColor()
+    {
         // 저장한 색상으로 복원
         for (int i = 0; i < renderers.Count; i++)
         {
@@ -220,5 +246,15 @@ public class HeroController : BaseController
                 renderers[i].color = originalColors[i];
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        _takeDamagedRendererCts?.Cancel();
+        _takeDamagedRendererCts?.Dispose();
+        _takeDamagedRendererCts = null;
+        token?.Cancel();
+        token?.Dispose();
+        token = null;
     }
 }

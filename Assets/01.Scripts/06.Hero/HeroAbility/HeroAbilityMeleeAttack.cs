@@ -49,6 +49,9 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
     {
         float angle;
 
+        if (animator == null)
+            return;
+
         if (target == null)
         {
             animator.SetBool("1_Move", true);
@@ -113,11 +116,17 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
             {
                 GameManager.Instance.castle.TakeDamaged(damage);
             }
+            else if (GameManager.Instance.miniCastles.TryGetValue(c.gameObject, out var miniCastle))
+            {
+                miniCastle.TakeDamaged(damage);
+            }
         }
     }
 
     public override void DespawnAbility()
     {
+        if (animator == null) return;
+
         animator.SetBool("1_Move", false);
         animator.SetBool("2_Attack", false);
 

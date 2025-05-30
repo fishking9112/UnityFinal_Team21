@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -14,7 +16,7 @@ public class UIManager : MonoSingleton<UIManager>
     /// </summary>
     /// <typeparam name="T">BaseUI를 상속받는 UI 타입</typeparam>
     /// <returns>로드된 UI</returns>
-    public T ShowUI<T>() where T : BaseUI
+    public async Task<T> ShowUI<T>() where T : BaseUI
     {
         if (!AddressableManager.Instance.isInitDownload)
         {
@@ -33,7 +35,7 @@ public class UIManager : MonoSingleton<UIManager>
 
         // 프리팹 로드
         // GameObject uiPrefab = Resources.Load<GameObject>($"{UIPrefabPath}{uiName}");
-        GameObject uiPrefab = AddressableManager.Instance.LoadAsset<GameObject>($"{uiName}.prefab", ResourcePath.UI);
+        GameObject uiPrefab = await AddressableManager.Instance.LoadAssetAsync<GameObject>($"{uiName}.prefab", ResourcePath.UI);
 
         if (uiPrefab == null)
         {
@@ -79,32 +81,92 @@ public class UIManager : MonoSingleton<UIManager>
     /// <summary>
     /// 팝업 호출
     /// </summary>
+    /// <param name="title">팝업 제목</param>
     /// <param name="message">팝업 메시지</param>
     /// <param name="onConfirmAction">확인 버튼 동작</param>
     /// <param name="onCancelAction">취소 버튼 동작</param>
     public void ShowPopup(string title, string message, Action onConfirmAction, Action onCancelAction = null)
     {
-        var popup = ShowUI<PopupUI>();
+        ShowPopupAsync(title, message, onConfirmAction, onCancelAction).Forget();
+    }
+
+    /// <summary>
+    /// 팝업 호출
+    /// </summary>
+    /// <param name="title">팝업 제목</param>
+    /// <param name="message">팝업 메시지</param>
+    /// <param name="onConfirmAction">확인 버튼 동작</param>
+    /// <param name="onCancelAction">취소 버튼 동작</param>
+    public async UniTask ShowPopupAsync(string title, string message, Action onConfirmAction, Action onCancelAction = null)
+    {
+        var popup = await ShowUI<PopupUI>();
         popup.Setup(title, message, onConfirmAction, onCancelAction);
     }
 
 
     /// <summary>
-    /// 팝업 호출
+    /// 열려 있는지 확인
     /// </summary>
-    /// <param name="message">팝업 메시지</param>
-    /// <param name="onConfirmAction">확인 버튼 동작</param>
-    /// <param name="onCancelAction">취소 버튼 동작</param>
-    public void ShowTooltip(int id, bool forceRun = true, Action onFinishAction = null)
+    public bool IsOpenUI(string uiName)
+    {
+        // 이미 활성화된 UI가 있다면 반환
+        if (activeUIs.ContainsKey(uiName))
+        {
+            return activeUIs[uiName].gameObject.activeSelf;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 툴팁 호출
+    /// </summary>
+    /// <param name="id">툴팁 id</param>
+    /// <param name="forceRun">한번 보는 거지만 두번째 작동 할 때</param>
+    /// <param name="onFinishAction">Finish 버튼 눌렸을 때</param>
+    public void ShowTooltip(int id, bool forceRun = true, Action onFinishAction = null, bool isOnlyPage = false)
+    {
+        ShowTooltipAsync(id, forceRun, onFinishAction, isOnlyPage).Forget();
+    }
+
+    /// <summary>
+    /// 툴팁 호출
+    /// </summary>
+    /// <param name="id">툴팁 id</param>
+    /// <param name="forceRun">한번 보는 거지만 두번째 작동 할 때</param>
+    /// <param name="onFinishAction">Finish 버튼 눌렸을 때</param>
+    public async UniTask ShowTooltipAsync(int id, bool forceRun = true, Action onFinishAction = null, bool isOnlyPage = false)
     {
         // 한번 실행했다면 작동 X
-        if (PlayerPrefs.GetInt(id.ToString()) == 1 && !forceRun)
+        if (PlayerPrefs.GetInt(id.ToString() + "v1.0.7") == 1 && !forceRun)
             return;
 
-        PlayerPrefs.SetInt(id.ToString(), 1); // 실행 기록 저장
+        PlayerPrefs.SetInt(id.ToString() + "v1.0.7", 1); // 실행 기록 저장
         PlayerPrefs.Save(); // 저장 즉시 적용
-        var popup = ShowUI<ToolTipUI>();
-        popup.Setup(id, onFinishAction);
+        var popup = await ShowUI<ToolTipUI>();
+        popup.Setup(id, onFinishAction, isOnlyPage);
+    }
+
+    /// <summary>
+    /// 이벤트 팝업 호출
+    /// </summary>
+    /// <param name="title">팝업 제목</param>
+    /// <param name="message">팝업 메시지</param>
+    /// <param name="icon">아이콘</param>
+    public void ShowEventPop(string title, string icon)
+    {
+        ShowEventPopAsync(title, icon).Forget();
+    }
+
+    /// <summary>
+    /// 이벤트 팝업 호출
+    /// </summary>
+    /// <param name="title">팝업 제목</param>
+    /// <param name="message">팝업 메시지</param>
+    /// <param name="icon">아이콘</param>
+    public async UniTask ShowEventPopAsync(string title, string icon)
+    {
+        var popup = await ShowUI<EventPopUI>();
+        popup.Setup(title, icon);
     }
 
     /// <summary>

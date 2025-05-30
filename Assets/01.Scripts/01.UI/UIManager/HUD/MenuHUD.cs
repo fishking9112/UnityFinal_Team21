@@ -19,7 +19,8 @@ public class MenuHUD : HUDUI
 {
     public List<MainUIButtonPanel> mainUISets;
     public Button startButton;
-    public Button exitBtn;
+    public Button quitGameBtn;
+    public Button qustionGameBtn;
     public TextMeshProUGUI goldText;
     public GameObject buttonMenu;
     public GameObject uiMenu;
@@ -64,15 +65,16 @@ public class MenuHUD : HUDUI
             mainUISet.panel.SetActive(false);
         }
 
-        exitBtn.onClick.AddListener(() =>
+        quitGameBtn.onClick.AddListener(() =>
         {
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+            UIManager.Instance.ShowPopup("게임 종료", "정말로 게임을 종료하시겠습니까?", () => { UnityEditor.EditorApplication.isPlaying = false; }, () => { Utils.Log("취소."); });
 #else
-    Application.Quit();
+        UIManager.Instance.ShowPopup("게임 종료", "정말로 게임을 종료하시겠습니까?", () => Application.Quit() , () => { Utils.Log("취소."); });
 #endif
         });
 
+        qustionGameBtn.onClick.AddListener(() => { UIManager.Instance.ShowTooltip((int)IDToolTip.MainMenu, true); });
         // 게임시작 버튼 누를 시 스타트 실행
         startButton.onClick.AddListener(OnClickGameStart);
 

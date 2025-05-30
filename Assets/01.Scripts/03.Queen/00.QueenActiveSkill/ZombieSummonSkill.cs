@@ -17,4 +17,9 @@ public class ZombieSummonSkill : QueenActiveSkillBase
         var zombie = ObjectPoolManager.Instance.GetObject<MonsterController>(randZombie, mousePos);
         zombie.StatInit(MonsterManager.Instance.monsterInfoList[(int)IDMonster.SKELETON_NORMAL], MonsterManager.Instance.isHealthUI);
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }

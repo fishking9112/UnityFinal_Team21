@@ -38,4 +38,11 @@ public class RecallSkill : QueenActiveSkillBase
         await UniTask.Delay((int)(delaySeconds * 1000), false, PlayerLoopTiming.Update);
         monster.transform.position = targetPosition;
     }
+
+    protected override bool RangeCheck()
+    {
+        Vector3 mousePos = controller.worldMousePos;
+        Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
+        return hits.Length > 0;
+    }
 }

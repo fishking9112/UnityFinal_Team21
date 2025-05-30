@@ -58,4 +58,9 @@ public class ObstacleSummonSkill : QueenActiveSkillBase
             
         }
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }

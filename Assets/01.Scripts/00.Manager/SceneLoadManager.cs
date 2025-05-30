@@ -42,11 +42,13 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                     titleProgressText.ActiveUIGroup(true);
                     titleProgressText.SetAnimText("로그인 중");
                     titleProgressText.StartAnimating();
+                    await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
                     await UGSManager.Instance.InitAsync(); // UGS 초기화
                     titleProgressText.StopAnimating();
 
                     titleProgressText.SetAnimText("데이터 로딩 중");
                     titleProgressText.StartAnimating();
+                    await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
                     await AddressableManager.Instance.InitDownloadAsync(); // Addressable 다운로드
                     titleProgressText.StopAnimating();
                     titleProgressText.ActiveUIGroup(false);
@@ -57,6 +59,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 {
                     tapToStartUI.ActiveUIGroup(true);
                     await WaitForUserTapAsync();
+                    UGSManager.Instance.UIDtextUneable();
                     tapToStartUI.ActiveUIGroup(false);
                 }
 
@@ -68,27 +71,23 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 await LoadSceneAsync("MenuScene"); // 메뉴 씬으로 이동
                 await StaticUIManager.Instance.LoadUI(LoadSceneEnum.MenuScene);
                 LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Lobby);
-                UIManager.Instance.ShowTooltip((int)IDToolTip.MainMenu);
+                await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.MainMenu, false);
+                await UGSManager.Instance.LoadLeaderboardTop10Async();
+                await UGSManager.Instance.LoadMyRankAsync();
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
+                Time.timeScale = 1;
                 break;
             case LoadSceneEnum.GameScene: // 게임 씬 일 경우
                 await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
                 await LoadSceneAsync("GameScene");
                 await StaticUIManager.Instance.LoadUI(LoadSceneEnum.GameScene);
 
-                // 시간 멈춤
-                Time.timeScale = 0f;
-                StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused = true;
-
                 // 만약 OpenWindow가 없다면 시간 흐르게 하기
-                UIManager.Instance.ShowTooltip((int)IDToolTip.InGame, onFinishAction: () =>
+                await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.InGame, false, onFinishAction: () =>
                 {
-                    if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().openWindow == null)
-                    {
-                        Time.timeScale = 1f; // 시간 흐름
-                        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused = false;
-                    }
+                    // 여기서 뜬 Tooltip만 Funnel로 Tutorial보내기
+                    LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Tutorial);
                 });
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)

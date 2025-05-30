@@ -1,7 +1,3 @@
-using Cysharp.Threading.Tasks;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
@@ -63,8 +59,8 @@ public class HeroAbilitySpear : HeroAbilitySystem
                 target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
         }
 
-        var bullet = objectPoolManager.GetObject<HeroBullet>("Bullet", hero.transform.position);
-        bullet.SetBullet(duration, pierce, damage, speed, 0, knockback);
+        var bullet = objectPoolManager.GetObject<HeroBullet>("Spear", hero.transform.position);
+        bullet.SetBullet(duration, pierce, damage, speed, 0, size, knockback);
         bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
 

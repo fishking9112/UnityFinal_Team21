@@ -18,32 +18,55 @@ public class SacrificeSkill : QueenActiveSkillBase
             return;
         }
 
-        GameObject targetMonster = hits[0].gameObject;
-        float minDistance = Vector2.Distance(mousePos, hits[0].transform.position);
+        GameObject targetMonster = null;
+        float minDistance = float.MaxValue;
 
-        for (int i = 1; i < hits.Length; i++)
+        foreach (var hit in hits)
         {
-            float distance = Vector2.Distance(mousePos, hits[i].transform.position);
+            if (hit == null || hit.gameObject == null)
+            {
+                continue;
+            }
 
-            if (distance < minDistance)
+            float distance = Vector2.Distance(mousePos, hit.transform.position);
+
+            if(distance < minDistance)
             {
                 minDistance = distance;
-                targetMonster = hits[i].gameObject;
+                targetMonster = hit.gameObject;
             }
         }
 
-
-        if (MonsterManager.Instance.monsters.TryGetValue(targetMonster, out var monster))
+        if(targetMonster == null)
         {
-            Vector3 targetScale = monster.transform.localScale;
-            Vector3 particlePos = monster.transform.position + new Vector3(0, targetScale.y * 0.5f, 0);
-            Vector3 particleScale = targetScale * 0.2f;
-
-            ParticleObject skillParticle = ParticleManager.Instance.SpawnParticle("Sacrifice", particlePos, particleScale);
-
-            monster.Die();
+            return;
         }
 
+        if(!MonsterManager.Instance.monsters.TryGetValue(targetMonster,out var monster) || monster == null)
+        {
+            return;
+        }
+
+        if (monster.healthHandler.IsDie())
+        {
+            return;
+        }
+
+
+        Vector3 targetScale = monster.transform.localScale;
+        Vector3 particlePos = monster.transform.position + new Vector3(0, targetScale.y * 0.5f, 0);
+        Vector3 particleScale = targetScale * 0.2f;
+
+        ParticleManager.Instance.SpawnParticle("Sacrifice", particlePos, particleScale);
+        monster.Die();
+
         condition.AdjustCurSummonGauge(info.value);
+    }
+
+    protected override bool RangeCheck()
+    {
+        Vector3 mousePos = controller.worldMousePos;
+        Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
+        return hits.Length > 0;
     }
 }

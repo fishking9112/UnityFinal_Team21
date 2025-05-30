@@ -20,6 +20,7 @@ public class HeroBullet : MonoBehaviour, IPoolable
     float limitTime;
     float pierce;
     float rotateSpeed;
+    Vector3 size;
     float knockback;
     private Action<Component> returnToPool;
     CancellationTokenSource cancel = new CancellationTokenSource();
@@ -27,16 +28,18 @@ public class HeroBullet : MonoBehaviour, IPoolable
 
     private Transform bulletTransform;
 
-    public void SetBullet(float time, float pierceCnt, float dmg, float spd, float rSpeed,float knockback=1)
+    public void SetBullet(float time, float pierceCnt, float dmg, float spd, float rSpeed, Vector3 scale, float knockback = 1)
     {
         limitTime = time;
         pierce = pierceCnt;
         damage = dmg;
         speed = spd;
         rotateSpeed = rSpeed;
-        this.knockback= knockback;
+        size = scale;
+        this.knockback = knockback;
         cancel = new CancellationTokenSource();
         isDispose = false;
+        transform.localScale = size;
         Move(cancel.Token).Forget();
     }
 
@@ -73,7 +76,7 @@ public class HeroBullet : MonoBehaviour, IPoolable
     {
         while (time < limitTime)
         {
-            if(bulletTransform == null)
+            if (bulletTransform == null)
             {
                 return;
             }
@@ -106,6 +109,10 @@ public class HeroBullet : MonoBehaviour, IPoolable
             else if (GameManager.Instance.castle.gameObject == collision.gameObject)
             {
                 GameManager.Instance.castle.TakeDamaged(damage);
+            }
+            else if (GameManager.Instance.miniCastles.TryGetValue(collision.gameObject, out var miniCastle))
+            {
+                miniCastle.TakeDamaged(damage);
             }
 
             pierce--;

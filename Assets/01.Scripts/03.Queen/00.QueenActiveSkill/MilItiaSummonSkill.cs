@@ -31,4 +31,9 @@ public class MilitiaSummonSkill : QueenActiveSkillBase
             }
         }
     }
+
+    protected override bool RangeCheck()
+    {
+        return true;
+    }
 }

@@ -63,7 +63,8 @@ public class KillEnemiesEvent : GameEventBase
     {
         Utils.Log("모든 몬스터 처치 완료! 보상 지급!");
         GameObject.Destroy(contextUI.gameObject);
-        GameManager.Instance.queen.condition.AdjustCurExpGauge(tableInfo.reward);
+        // GameManager.Instance.queen.condition.AdjustCurExpGauge(tableInfo.reward);
+        GameManager.Instance.queen.condition.QuestLevelUp(tableInfo.reward);
     }
 
     protected override void OnFail()

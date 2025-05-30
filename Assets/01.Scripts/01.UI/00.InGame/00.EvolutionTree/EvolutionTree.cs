@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class EvolutionTree : MonoBehaviour
@@ -8,7 +9,6 @@ public class EvolutionTree : MonoBehaviour
     public EvolutionTreeUI EvolutionTreeUI => evolutionTreeUI;
 
     private QueenCondition queenCondition;
-    private QueenController queenController;
 
     [SerializeField] private List<EvolutionNode> evolutionNodeList;
     private Dictionary<int, EvolutionNode> evolutionNodeDic;
@@ -21,7 +21,6 @@ public class EvolutionTree : MonoBehaviour
         evolutionTreeUI = treeUI;
 
         queenCondition = GameManager.Instance.queen.condition;
-        queenController = GameManager.Instance.queen.controller;
         evolutionNodeDic = new Dictionary<int, EvolutionNode>();
 
         queenCondition.EvolutionPoint.AddAction(evolutionTreeUI.UpdateEvolutionPointText);
@@ -54,7 +53,7 @@ public class EvolutionTree : MonoBehaviour
 
         if (queenCondition.EvolutionPoint.Value <= 0)
         {
-            // 진화 포인트가 부족하다는 팝업창 있으면 좋을 것 같음
+            // 진화 포인트가 부족하다는 팝업창 있으면 좋을 것 같음 <= 부족시 진화 버튼 텍스트 변경
             return;
         }
 
@@ -112,20 +111,6 @@ public class EvolutionTree : MonoBehaviour
         return false;
     }
 
-    // 이전에 등록된 슬롯 데이터 제거 (몬스터 A를 1번칸에 등록한 상태로 2번칸에 등록하려할 때 1번칸의 데이터를 없애주는 역할)
-    public void RemovePreSlotData(EvolutionNode node)
-    {
-        foreach (var slot in evolutionTreeUI.SlotList)
-        {
-            if (slot.slotMonsterData == node)
-            {
-                slot.ClearSlot();
-                RemoveQueenSlot(slot.slotIndex);
-                return;
-            }
-        }
-    }
-
     public void SelectFirstNode()
     {
         if (evolutionNodeList == null || evolutionNodeList.Count == 0)
@@ -136,18 +121,5 @@ public class EvolutionTree : MonoBehaviour
         selectedNode = evolutionNodeList[0];
         evolutionTreeUI.UpdateDescriptionWindow(selectedNode);
         evolutionTreeUI.SetEvolutionButtonState(!selectedNode.isUnlock);
-    }
-
-
-    // 진화 트리 슬롯에 등록한 몬스터를 퀸 슬롯에도 등록
-    public void AddQueenSlot(MonsterInfo monster, int index)
-    {
-        queenController.monsterSlot.AddSlot(index, monster);
-    }
-
-    // 진화 트리 슬롯에 제거한 몬스터를 퀸 슬롯에도 제거
-    public void RemoveQueenSlot(int index)
-    {
-        queenController.monsterSlot.RemoveSlot(index);
     }
 }

@@ -32,6 +32,17 @@ public class HeroManager : MonoSingleton<HeroManager>
         IncreaseCnt(token2.Token).Forget();
     }
 
+    private void Update()
+    {
+        foreach(var h in hero)
+        {
+            if(h.Value.healthHandler.IsDie())
+            {
+                h.Value.Die();
+            }
+        }
+    }
+
     private async UniTask IncreaseCnt(CancellationToken tk)
     {
         while (!tk.IsCancellationRequested)
