@@ -15,20 +15,18 @@ public enum HeroType
 public class HeroStatusInfo : BaseStatData, IInfo
 {
     public int startLevel;
-    public int[] weapon;
-    public int[] weaponLevel;
     public float detectedRange;
     public int custom;
     public HeroType heroType;
+    public int weaponCount;
     public HeroStatusInfo() { }
     public HeroStatusInfo(HeroStatusInfo other) : base(other)
     {
         startLevel = other.startLevel;
-        weapon = other.weapon;
-        weaponLevel = other.weaponLevel;
         detectedRange = other.detectedRange;
         custom = other.custom;
         heroType = other.heroType;
+        weaponCount = other.weaponCount;
     }
     public void Copy(HeroStatusInfo other)
     {
@@ -40,10 +38,9 @@ public class HeroStatusInfo : BaseStatData, IInfo
         reward = other.reward;
 
         startLevel = other.startLevel;
-        weapon = other.weapon;
-        weaponLevel = other.weaponLevel;
         detectedRange = other.detectedRange;
         custom = other.custom;
+        weaponCount = other.weaponCount;
     }
 
     public int ID => id;
@@ -79,12 +76,7 @@ public class HeroStatusData : SheetDataReaderBase
                 case "startLevel":
                     heroStatusInfo.startLevel = Utils.StringToInt(cell.value);
                     break;
-                case "weapon":
-                    heroStatusInfo.weapon = Utils.StringToIntArr(cell.value);
-                    break;
-                case "weaponLevel":
-                    heroStatusInfo.weaponLevel = Utils.StringToIntArr(cell.value);
-                    break;
+                
                 case "hp":
                     heroStatusInfo.health = Utils.StringToFloat(cell.value);
                     break;
@@ -101,8 +93,10 @@ public class HeroStatusData : SheetDataReaderBase
                     heroStatusInfo.custom = Utils.StringToInt(cell.value);
                     break;
                 case "heroType":
-                    Debug.Log(cell.value);
                     heroStatusInfo.heroType = Utils.StringToEnum<HeroType>(cell.value, HeroType.NULL);
+                    break;
+                case "weaponCount":
+                    heroStatusInfo.weaponCount = Utils.StringToInt(cell.value);
                     break;
             }
         }
