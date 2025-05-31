@@ -153,7 +153,7 @@ public class QueenEnhanceUI : SingleUI
 
         Utils.Log($"{info.name} 강화 적용, 현재 레벨: {level}");
 
-        float value = info.state_Base + info.state_LevelUp * (level - 1);
+        float value = info.state_Base + (info.state_LevelUp * (level - 1));
 
         switch (info.type)
         {
