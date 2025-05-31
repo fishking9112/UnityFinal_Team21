@@ -4,11 +4,13 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class GaugeUI : MonoBehaviour
 {
     private Image fillImage;
     private TextMeshProUGUI gaugeText;
+    [SerializeField] private BarUIText hpBarUI;
 
     private ReactiveProperty<float> cur;
     private ReactiveProperty<float> max;
@@ -83,6 +85,11 @@ public class GaugeUI : MonoBehaviour
 
         current = cur.Value;
         fillImage.fillAmount = Mathf.Clamp01(cur.Value / max.Value);
+
+        if (hpBarUI != null)
+        {
+            hpBarUI.UpdateHPBar(cur.Value, max.Value);
+        }
     }
 
 
@@ -170,7 +177,7 @@ public class GaugeUI : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-            Debug.Log("이미지 흔들리기 취소");
+            Utils.Log("이미지 흔들리기 취소");
         }
         finally
         {
