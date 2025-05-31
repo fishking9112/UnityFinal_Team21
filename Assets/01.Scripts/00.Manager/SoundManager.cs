@@ -284,10 +284,8 @@ public class SoundManager : MonoSingleton<SoundManager>
     /// <param name="volume">설정할 볼륨 값 0~1</param>
     public void SetBGMVolume(float volume)
     {
-        Debug.Log("sffse  " + volume);
         bgmVolume = Mathf.Clamp01(volume);
         float dB = Mathf.Lerp(-80f, 0f, bgmVolume); // -80dB ~ 0dB 범위로 변환
-        Debug.Log("sffse2222  " + dB);
         audioMixer.SetFloat(bgmVolumeParam, dB);
     }
 
