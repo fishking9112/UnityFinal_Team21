@@ -84,7 +84,7 @@ public class HeroController : BaseController
         eventMark.SetActive(isEventMark);
 
         weaponDic.Clear();
-         var a = Enum.GetValues(typeof(HeroAbilityType));
+         var a = Enum.GetValues(typeof(IDHeroAbility));
 
         for(int i=0;i<stat.startLevel;i++)
         {
