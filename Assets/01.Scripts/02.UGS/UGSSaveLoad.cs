@@ -35,6 +35,11 @@ public class UGSSaveLoad : MonoBehaviour
                 saveDict,
                 new Unity.Services.CloudSave.Models.Data.Player.SaveOptions(new PublicWriteAccessClassOptions())
             );
+
+            PlayerPrefs.SetFloat("BGM_VOLUME", SoundManager.Instance.BGMVolume);
+            PlayerPrefs.SetFloat("SFX_VOLUME", SoundManager.Instance.SFXVolume);
+            PlayerPrefs.Save();
+
             Utils.Log("저장 완료");
         }
         catch (Exception e)
