@@ -52,11 +52,11 @@ public class EventPopUI : BaseUI
     /// <summary>
     /// 비동기 FadeIn → 대기 → FadeOut 시퀀스
     /// </summary>
-    public async UniTask ShowSequenceAsync(float fadeDuration = 0.5f, float holdDuration = 1.5f)
+    public async UniTask ShowSequenceAsync(float fadeDuration = 0.5f, float holdDuration = 2f)
     {
         await FadeInAsync(fadeDuration, fadeCts.Token);
-        await UniTask.Delay(TimeSpan.FromSeconds(holdDuration), cancellationToken: fadeCts.Token);
-        await FadeOutAsync(fadeDuration, fadeCts.Token);
+        await UniTask.Delay(TimeSpan.FromSeconds(holdDuration), cancellationToken: fadeCts.Token, ignoreTimeScale: true);
+        await FadeOutAsync(1.5f, fadeCts.Token);
 
         OnHide();
     }
@@ -67,9 +67,9 @@ public class EventPopUI : BaseUI
         float time = 0f;
         while (time < duration)
         {
-            time += Time.deltaTime;
+            time += Time.unscaledDeltaTime;
             canvasGroup.alpha = Mathf.Clamp01(time / duration);
-            await UniTask.Yield(PlayerLoopTiming.Update, token); // 한 프레임 대기
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
         canvasGroup.alpha = 1f;
     }
@@ -80,7 +80,7 @@ public class EventPopUI : BaseUI
         float time = 0f;
         while (time < duration)
         {
-            time += Time.deltaTime;
+            time += Time.unscaledDeltaTime;
             canvasGroup.alpha = Mathf.Clamp01(1f - (time / duration));
             await UniTask.Yield(PlayerLoopTiming.Update, token);
         }

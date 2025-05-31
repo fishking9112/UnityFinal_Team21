@@ -14,10 +14,11 @@ public class GameHUD : HUDUI
 
     private QueenCondition condition => GameManager.Instance.queen.condition;
 
-    [Header("레벨 / 골드")]
+    [Header("레벨 / 골드 / 킬카운트 / 인구수")]
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private TextMeshProUGUI killCntText;
+    [SerializeField] private TextMeshProUGUI populationText;
 
     [Header("게이지")]
     [SerializeField] private GaugeUI queenActiveSkillGaugeUI;
@@ -44,6 +45,7 @@ public class GameHUD : HUDUI
     public GameResultUI gameResultUI;
 
     [Header("기타 UI 오브젝트")]
+    public GameObject RemainingEvolutionPointGroup;
     public GameObject HUDGroup;
     public GameObject BackgroundGroup;
     public GameObject TopButtonGroup;
@@ -76,6 +78,14 @@ public class GameHUD : HUDUI
 
     [Header("피격 당함 마크")]
     public AttackMarkIcon attackMarkIconPrefab;
+
+
+    // 인구수용 변수
+    private readonly string colorPrefixNormal = "<color=#FFFFFF>";
+    private readonly string colorPrefixFull = "<color=#FF0000>";
+    private readonly string colorSuffix = "</color>";
+
+    private System.Text.StringBuilder sb = new System.Text.StringBuilder(32);
 
     public override async UniTask Initialize()
     {
@@ -137,8 +147,12 @@ public class GameHUD : HUDUI
         inputAction = GameManager.Instance.queen.input.actions["PauseUI"];
         inputAction.started += OnPauseUI;
 
+        // 여분 진화포인트 표기UI 연결
+        condition.EvolutionPoint.AddAction(ShowRemainingEvolutionPoint);
+
         slot.Init(GameManager.Instance.queen.controller, GameManager.Instance.queen.input.actions["SlotChange"]);
 
+        RemainingEvolutionPointGroup.SetActive(false);
         queenEnhanceUI.gameObject.SetActive(false);
         evolutionTreeUI.gameObject.SetActive(false);
         pauseUI.gameObject.SetActive(false);
@@ -150,7 +164,7 @@ public class GameHUD : HUDUI
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="controller"></param>
-    public void ShowWindow<T>(T controller = null) where T : MonoBehaviour
+    public void ShowWindow<T>(T controller = null, bool isTimeOverOpen = false) where T : MonoBehaviour
     {
         if (typeof(T) != typeof(OptionController))
         {
@@ -165,6 +179,13 @@ public class GameHUD : HUDUI
             if (UIManager.Instance.IsOpenUI("ToolTipUI"))
             {
                 Utils.Log("이미 열려있는 툴팁이 있습니다");
+                return;
+            }
+
+            // 이미 창이 열려있다면 리턴
+            if (GameManager.Instance.isTimeOver && !isTimeOverOpen)
+            {
+                Utils.Log("게임이 종료되어 기다리는 중입니다");
                 return;
             }
 
@@ -276,6 +297,28 @@ public class GameHUD : HUDUI
         killCntText.text = Utils.GetThousandCommaText(kullCnt);
     }
 
+    public void UpdatePopulationText(int curPop, float maxPop)
+    {
+        int maxPopInt = Mathf.FloorToInt(maxPop);
+
+        sb.Clear();
+        if (curPop < maxPopInt)
+        {
+            sb.Append(colorPrefixNormal);
+        }
+        else
+        {
+            sb.Append(colorPrefixFull);
+        }
+
+        sb.Append(curPop);
+        sb.Append(" / ");
+        sb.Append(maxPopInt);
+        sb.Append(colorSuffix);
+
+        populationText.text = sb.ToString();
+    }
+
     public void UpdateTimerText(float time)
     {
         timerText.text = Utils.GetMMSSTime((int)time);
@@ -300,6 +343,16 @@ public class GameHUD : HUDUI
                 GameManager.Instance.queen.controller.OnClickSlotButton(index, QueenSlot.QueenActiveSkill);
             });
         }
+    }
+
+    private void ShowRemainingEvolutionPoint(float value)
+    {
+        if(value > 0)
+        {
+            RemainingEvolutionPointGroup.SetActive(true);
+            return;
+        }
+        RemainingEvolutionPointGroup.SetActive(false);
     }
 
     private void ShowEvolutionTreeUI()

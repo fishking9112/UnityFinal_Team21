@@ -3,85 +3,151 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.Threading;
 using System;
+using UnityEngine.SceneManagement;
+
+[Serializable]
+public class SceneBGMInfo
+{
+    public List<string> sceneNames;
+    public List<AudioClip> bgmClips;
+}
 
 public class BGMController : MonoBehaviour
 {
-    [SerializeField] private AudioClip[] audioClips; // 인스펙터에서 직접 넣을 BGM 클립들
-    private List<string> bgmNames = new List<string>();
-    private string currentBGM;
-    private bool isLooping = true;
+    [SerializeField] private List<SceneBGMInfo> sceneBGM;
+
+    private string curScene;
+    private string curBGM;
+    private bool isLooping;
+
     private CancellationTokenSource cts;
+    private CancellationTokenSource oneShotCts;
 
-    private void Awake()
+    private void OnEnable()
     {
-        // 클립 이름들을 자동으로 추출
-        foreach (var clip in audioClips)
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        var nextScene = scene.name;
+
+        var currentGroup = sceneBGM.Find(g => g.sceneNames.Contains(curScene));
+        var nextGroup = sceneBGM.Find(g => g.sceneNames.Contains(nextScene));
+
+        bool sameGroup;
+
+        if (currentGroup != null && nextGroup != null && currentGroup == nextGroup)
         {
-            if (clip != null)
-                bgmNames.Add(clip.name);
+            sameGroup = true;
         }
+        else
+        {
+            sameGroup = false;
+        }
+
+        if (!sameGroup)
+        {
+            isLooping = false;
+            cts?.Cancel();
+            cts?.Dispose();
+
+            if (nextGroup != null && nextGroup.bgmClips.Count > 0)
+            {
+                currentGroup = nextGroup;
+                PlaySceneBGMLoop(currentGroup).Forget();
+            }
+        }
+
+        curScene = nextScene;
     }
 
-    private void Start()
+    private async UniTaskVoid PlaySceneBGMLoop(SceneBGMInfo bgmInfo)
     {
-        PlayRandomBGMLoop(GetRandomBGMName()).Forget();
-    }
-
-    private async UniTaskVoid PlayRandomBGMLoop(string nextBGM)
-    {
+        isLooping = true;
         cts = new CancellationTokenSource();
 
-        bool isFirst = true;
-        isLooping = true;
+        if (bgmInfo == null || bgmInfo.bgmClips.Count == 0)
+        {
+            return;
+        }
 
         while (isLooping)
         {
-            if (!isFirst)
-                nextBGM = GetRandomBGMName();
-            else
-                isFirst = false;
+            var nextClip = GetRandomClip(bgmInfo.bgmClips);
 
-            if (!SoundManager.Instance.TryGetClip(nextBGM, out var clip))
+            if (!SoundManager.Instance.TryGetClip(nextClip.name, out var resolvedClip))
             {
-                Debug.LogWarning($"SoundManager에 '{nextBGM}'이 로드되어 있지 않습니다.");
                 break;
             }
 
-            currentBGM = nextBGM;
-            SoundManager.Instance.ChangeBGM(currentBGM);
+            curBGM = nextClip.name;
+
+            SoundManager.Instance.ChangeBGM(curBGM);
 
             try
             {
-                await UniTask.Delay((int)(clip.length * 1000), cancellationToken: cts.Token);
+                await UniTask.Delay((int)(resolvedClip.length * 1000), cancellationToken: cts.Token);
             }
             catch (OperationCanceledException)
             {
-                continue;
+                break;
             }
         }
     }
 
-    public void ChangeTo(string newBGM)
+    private AudioClip GetRandomClip(List<AudioClip> clips)
     {
-        if (!bgmNames.Contains(newBGM)) return;
+        var temp = clips.FindAll(c => c.name != curBGM);
 
-        cts?.Cancel();
-        cts?.Dispose();
-        isLooping = false;
+        if (temp.Count == 0)
+        {
+            return clips[0];
+        }
 
-        PlayRandomBGMLoop(newBGM).Forget();
+        return temp[UnityEngine.Random.Range(0, temp.Count)];
     }
 
-    private string GetRandomBGMName()
+    public async UniTask PlayOneShotBGM(string clipName)
     {
-        if (bgmNames.Count == 0) return null;
+        isLooping = false;
+        cts?.Cancel();
+        cts?.Dispose();
 
-        string newBGM;
-        do
+        oneShotCts?.Cancel();
+        oneShotCts = new CancellationTokenSource();
+
+        if (!SoundManager.Instance.TryGetClip(clipName, out var clip))
         {
-            newBGM = bgmNames[UnityEngine.Random.Range(0, bgmNames.Count)];
-        } while (newBGM == currentBGM && bgmNames.Count > 1);
+            return;
+        }
 
-        return newBGM;
+        SoundManager.Instance.ChangeBGM(clip.name);
+
+        try
+        {
+            await UniTask.Delay((int)(clip.length * 1000), cancellationToken: oneShotCts.Token);
+        }
+        catch (OperationCanceledException)
+        {
+
+        }
+
+        var group = sceneBGM.Find(g => g.sceneNames.Contains(curScene));
+
+        if (group != null)
+        {
+            PlaySceneBGMLoop(group).Forget();
+        }
+    }
+
+    public void StopOneShotBGM()
+    {
+        oneShotCts?.Cancel();
     }
 }

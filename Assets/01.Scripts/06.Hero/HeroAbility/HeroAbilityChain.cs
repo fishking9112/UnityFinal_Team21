@@ -10,7 +10,7 @@ public class HeroAbilityChain : HeroAbilitySystem
 {
     private Hero hero;
 
-    private List<GameObject> hitList=new List<GameObject>();
+    private List<GameObject> hitList = new List<GameObject>();
 
     private float range;
 
@@ -32,6 +32,8 @@ public class HeroAbilityChain : HeroAbilitySystem
     private void OnEnable()
     {
         Initialize((int)IDHeroAbility.CHAIN);
+        tk = new CancellationTokenSource();
+
     }
 
     protected override void ActionAbility()
@@ -50,9 +52,9 @@ public class HeroAbilityChain : HeroAbilitySystem
         hitList.Clear();
         preObj = this.gameObject;
 
-        for (int i=0;i<pierce;i++)
+        for (int i = 0; i < pierce; i++)
         {
-            target= FindNextTarget();
+            target = FindNextTarget();
             if (target == null)
             {
                 break;
@@ -74,7 +76,7 @@ public class HeroAbilityChain : HeroAbilitySystem
 
         foreach (Collider2D c in col)
         {
-            if(hitList.Contains(c.gameObject))
+            if (hitList.Contains(c.gameObject))
             {
                 continue;
             }
@@ -96,6 +98,10 @@ public class HeroAbilityChain : HeroAbilitySystem
         else if (GameManager.Instance.castle.gameObject == target)
         {
             GameManager.Instance.castle.TakeDamaged(damage);
+        }
+        else if (GameManager.Instance.miniCastles.TryGetValue(target, out var miniCastle))
+        {
+            miniCastle.TakeDamaged(damage);
         }
     }
 

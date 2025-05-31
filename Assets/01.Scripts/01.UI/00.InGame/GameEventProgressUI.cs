@@ -44,7 +44,7 @@ public class GameEventProgressUI : MonoBehaviour
 
     private void Start()
     {
-        CreateEvent(rank: 1, fillPosition: 180 / 1800f); // 3분에 퀘스트 출현
+        CreateEvent(rank: 0, fillPosition: 180 / 1800f); // 3분에 퀘스트 출현
         CreateEvent(rank: 1, fillPosition: 1 / 4f);
         CreateEvent(rank: 2, fillPosition: 2 / 4f);
         CreateEvent(rank: 3, fillPosition: 3 / 4f);
@@ -97,9 +97,10 @@ public class GameEventProgressUI : MonoBehaviour
     /// 이벤트 실행
     /// </summary>
     /// <param name="eventTableInfo"></param>
-    private void RunEvent(EventInfo eventTableInfo)
+    private async void RunEvent(EventInfo eventTableInfo)
     {
         Utils.Log($"{eventTableInfo.ID} 이벤트 실행!");
+        _ = SoundManager.Instance.bgmController.PlayOneShotBGM("xDeviruchi - 06 Minigame");
 
         GameEventBase eventInstance = null;
 
@@ -128,6 +129,7 @@ public class GameEventProgressUI : MonoBehaviour
             case EventTableType.Type_3: // 성 방어 이벤트
                 spawnPos = SpawnPointManager.Instance.MiniCastlePoint.GetRandomPosition(true); // 원하는 위치
                 MiniCastle castlePrefab = Instantiate(miniCastlePrefab);
+                castlePrefab.Init(eventTableInfo.createHp);
                 castlePrefab.transform.position = spawnPos;
 
                 eventInstance = new DefendAreaEvent(castlePrefab, spawnPos, eventTableInfo.timer, eventTableInfo, contextUI);
@@ -136,6 +138,7 @@ public class GameEventProgressUI : MonoBehaviour
             case EventTableType.Type_4: // 배럭 공격 이벤트
                 spawnPos = SpawnPointManager.Instance.BarrackPoint.GetRandomPosition(true); // 원하는 위치
                 MiniBarrack barrackPrefab = Instantiate(miniBarrackPrefab);
+                barrackPrefab.Init(eventTableInfo.createHp);
                 barrackPrefab.transform.position = spawnPos;
 
                 eventInstance = new AttackAreaEvent(barrackPrefab, spawnPos, eventTableInfo.spawnDuration, eventTableInfo, contextUI);

@@ -66,6 +66,7 @@ MonoBehaviour:
   queenSkillSwapPopup: {fileID: 7762297542932306528}
   skillSwapPopupExitBtn: {fileID: 3713263461046830850}
   enhanceRerollBtn: {fileID: 6384710857022378277}
+  rerollCostText: {fileID: 4174727087585632521}
   isOpen: 0
 --- !u!1 &155790266420144815
 GameObject:
@@ -3066,7 +3067,7 @@ GameObject:
   - component: {fileID: 2639518922363350611}
   - component: {fileID: 4174727087585632521}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: RerollCostText (TMP) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3088,8 +3089,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -17.5, y: 2.5}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -14.4, y: 2.5}
+  m_SizeDelta: {x: 80.2, y: 50}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &2639518922363350611
 CanvasRenderer:
@@ -3149,9 +3150,9 @@ MonoBehaviour:
   m_fontSize: 20
   m_fontSizeBase: 20
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 15
+  m_fontSizeMax: 20
   m_fontStyle: 0
   m_HorizontalAlignment: 4
   m_VerticalAlignment: 512

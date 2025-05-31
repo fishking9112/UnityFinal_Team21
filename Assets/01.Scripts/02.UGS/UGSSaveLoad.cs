@@ -3,16 +3,17 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Services.CloudSave;
 using Unity.Services.CloudSave.Models.Data.Player;
 using UnityEngine;
 
 public class UGSSaveLoad : MonoBehaviour
 {
-    private const int CurrentVersion = 3; // 최신 데이터 버전
+    private const int CurrentVersion = 4; // 최신 데이터 버전
 
     private const string SaveKey = "PlayerSaveData";
-
+    private const string RankDataKey = "PlayerRankDataKey";
 
     #region 저장
 
@@ -34,11 +35,45 @@ public class UGSSaveLoad : MonoBehaviour
                 saveDict,
                 new Unity.Services.CloudSave.Models.Data.Player.SaveOptions(new PublicWriteAccessClassOptions())
             );
+
+            PlayerPrefs.SetFloat("BGM_VOLUME", SoundManager.Instance.BGMVolume);
+            PlayerPrefs.SetFloat("SFX_VOLUME", SoundManager.Instance.SFXVolume);
+            PlayerPrefs.Save();
+
             Utils.Log("저장 완료");
         }
         catch (Exception e)
         {
             Utils.Log($"저장 실패: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 게임 정보(랭크)를 업로드
+    /// </summary>
+    /// <param name="rankInfo"></param>
+    /// <returns></returns>
+    public async UniTask UploadRankDataAsync(int QueenID)
+    {
+        try
+        {
+            var leaderBoardData = new LeaderBoardData
+            {
+                queenID = QueenID
+            };
+
+            var saveJson = JsonConvert.SerializeObject(leaderBoardData);
+            var saveDict = new Dictionary<string, object> { { RankDataKey, saveJson } };
+
+            await CloudSaveService.Instance.Data.Player.SaveAsync(
+                saveDict,
+                new Unity.Services.CloudSave.Models.Data.Player.SaveOptions(new PublicWriteAccessClassOptions())
+            );
+            Utils.Log("랭크 데이터 업로드 완료");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"랭크 데이터 업로드 실패: {e.Message}");
         }
     }
 
@@ -70,8 +105,8 @@ public class UGSSaveLoad : MonoBehaviour
     {
         return new SettingsData
         {
-            bgmVolume = Mathf.Clamp(SoundManager.Instance.BGMVolume, 0f, 1f),
-            sfxVolume = Mathf.Clamp(SoundManager.Instance.SFXVolume, 0f, 1f),
+            // bgmVolume = Mathf.Clamp(SoundManager.Instance.BGMVolume, 0f, 1f),
+            // sfxVolume = Mathf.Clamp(SoundManager.Instance.SFXVolume, 0f, 1f),
             //  language = SettingsManager.Instance.CurrentLanguage
             extraSettingsFields = new Dictionary<string, JToken>()
         };
@@ -83,6 +118,7 @@ public class UGSSaveLoad : MonoBehaviour
         return data;
     }
 
+
     /// <summary>
     /// 저장 데이터 유효성 검사
     /// </summary>
@@ -93,8 +129,8 @@ public class UGSSaveLoad : MonoBehaviour
             data.player.gold = 0;
 
         // 볼륨 범위 제한
-        data.settings.bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f);
-        data.settings.sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f);
+        // data.settings.bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f);
+        // data.settings.sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f);
 
         // 언어 null 체크
         // if (string.IsNullOrEmpty(data.settings.language))
@@ -169,8 +205,8 @@ public class UGSSaveLoad : MonoBehaviour
 
             data.settings = new SettingsData
             {
-                bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f),
-                sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f),
+                // bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f),
+                // sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f),
                 extraSettingsFields = new Dictionary<string, JToken>()
             };
             data.queenUpgrades = data.queenUpgrades.upgrades != null
@@ -184,8 +220,8 @@ public class UGSSaveLoad : MonoBehaviour
         {
             data.settings = new SettingsData
             {
-                bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f),
-                sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f),
+                // bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f),
+                // sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f),
                 // 언어 부분 추가
                 extraSettingsFields = data.settings.extraSettingsFields ?? new Dictionary<string, JToken>()
             };
@@ -201,6 +237,18 @@ public class UGSSaveLoad : MonoBehaviour
                 extraPlayerFields = new Dictionary<string, JToken>()
             };
             data.version = 3;
+        }
+
+        // 버전 3 -> 버전 4 ( bgmVolume/sfxVolume 제거)
+        if (data.version == 3)
+        {
+            if(data.settings.extraSettingsFields != null)
+            {
+                data.settings.extraSettingsFields.Remove("bgmVolume");
+                data.settings.extraSettingsFields.Remove("sfxVolume");
+            }
+
+            data.version = 4;
         }
 
         // 추가 버전 마이그레이션은 여기에 구현
@@ -222,8 +270,8 @@ public class UGSSaveLoad : MonoBehaviour
             },
             settings = new SettingsData
             {
-                bgmVolume = 1f,
-                sfxVolume = 1f,
+                // bgmVolume = 0.1f,
+                // sfxVolume = 0.1f,
                 // 언어 부분 추가
                 extraSettingsFields = new Dictionary<string, JToken>()
             },
@@ -241,6 +289,7 @@ public class UGSSaveLoad : MonoBehaviour
     /// </summary>
     private void OnLoadComplete(SaveData saveData)
     {
+        // 플레이어 정보
         try
         {
             GameManager.Instance.SetGold(saveData.player.gold);
@@ -251,10 +300,11 @@ public class UGSSaveLoad : MonoBehaviour
             Utils.Log($"Gold 적용 실패: {e.Message}");
         }
 
+        // 설정
         try
         {
-            SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
-            SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
+            // SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
+            // SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
             // 언어 부분 추가
             Utils.Log("사운드 및 언어 설정 적용 완료");
         }
@@ -263,6 +313,7 @@ public class UGSSaveLoad : MonoBehaviour
             Utils.Log($"사운드/언어 설정 적용 실패: {e.Message}");
         }
 
+        // 어빌리티
         try
         {
             QueenAbilityUpgradeManager.Instance.ApplyUpgradeData(saveData.queenUpgrades);
@@ -274,5 +325,63 @@ public class UGSSaveLoad : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// playerId에 해당하는 공개 데이터를 읽어 nickname과 queenID를 반환합니다.
+    /// </summary>
+    public async Task<(string nickname, int queenID)> LoadPublicDataWithQueenId(string playerId)
+    {
+        try
+        {
+            var rankData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { RankDataKey }, new LoadOptions(new PublicReadAccessClassOptions(playerId)));
+
+            string nickname = await UGSManager.Instance.Auth.LoadPublicDataByPlayerId(playerId);
+
+            if (rankData.TryGetValue(RankDataKey, out var savedValue))
+            {
+                var json = savedValue.Value.GetAsString();
+
+                LeaderBoardData leaderBoardData;
+                try
+                {
+                    leaderBoardData = JsonConvert.DeserializeObject<LeaderBoardData>(json);
+                }
+                catch (Exception ex)
+                {
+                    Utils.Log($"역직렬화 실패: {ex.Message}");
+                    leaderBoardData = CreateDefaultLeaderBoardData();
+                }
+
+                // 데이터 마이그레이션 (필요하면 추가하기)
+                // leaderBoardData = MigrateData(leaderBoardData);
+
+                Utils.Log("랭크 데이터 반환 완료");
+                return (nickname, leaderBoardData.queenID);
+            }
+            else
+            {
+                Utils.Log("저장된 랭크 데이터가 없음.");
+                return (nickname, -1);
+            }
+
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"랭크 데이터 로드 실패: {e.Message}");
+            return ("Unknown", -1);
+        }
+    }
+
+    /// <summary>
+    /// 기본 LeaderBoardData 생성
+    /// </summary>
+    private LeaderBoardData CreateDefaultLeaderBoardData()
+    {
+        return new LeaderBoardData
+        {
+            queenID = -1,
+            extraLeaderboardResultFields = new Dictionary<string, JToken>()
+        };
+    }
     #endregion
 }

@@ -43,6 +43,8 @@ public abstract class HeroAbilitySystem : MonoBehaviour
 
     protected CancellationTokenSource token;
 
+    
+
     public virtual void Initialize(int id)
     {
         heroAbilityInfo = DataManager.Instance.heroAbilityDic[id];
@@ -87,9 +89,14 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     /// </summary>
     protected virtual void AddAbility()
     {
-        token = new CancellationTokenSource();
 
-        AutoAction(token.Token).Forget();
+        var destroyToken = this.GetCancellationTokenOnDestroy();
+
+        token = new CancellationTokenSource();
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(destroyToken, token.Token);
+
+        var linkedToken= linked.Token;
+        AutoAction(linkedToken).Forget();
     }
 
     /// <summary>
@@ -100,11 +107,11 @@ public abstract class HeroAbilitySystem : MonoBehaviour
     {
         try
         {
-            while (!tk.IsCancellationRequested && this != null)
+            while (!tk.IsCancellationRequested && this.enabled)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, cancellationToken: tk);
 
-                if (tk.IsCancellationRequested || this == null)
+                if (tk.IsCancellationRequested || !this.enabled)
                 {
                     break;
                 }

@@ -15,7 +15,7 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     {
         base.Initialize(id);
 
-        circle= Instantiate(magicCircle, this.transform);
+        circle = Instantiate(magicCircle, this.transform);
 
         circle.transform.localScale = size;
     }
@@ -32,8 +32,8 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
     }
     protected override void ActionAbility()
     {
-        Collider2D[] rangedTarget = Physics2D.OverlapCircleAll(hero.transform.position, size.x, layer);
-        Utils.DrawOverlapCircle(hero.transform.position, size.x, Color.red);
+        Collider2D[] rangedTarget = Physics2D.OverlapCircleAll(hero.transform.position, size.x * hero.transform.localScale.x, layer);
+        Utils.DrawOverlapCircle(hero.transform.position, size.x * hero.transform.localScale.x, Color.red);
 
         foreach (Collider2D c in rangedTarget)
         {
@@ -45,6 +45,10 @@ public class HeroAbilityRangeAttack : HeroAbilitySystem
             else if (GameManager.Instance.castle.gameObject == c.gameObject)
             {
                 GameManager.Instance.castle.TakeDamaged(damage);
+            }
+            else if (GameManager.Instance.miniCastles.TryGetValue(c.gameObject, out var miniCastle))
+            {
+                miniCastle.TakeDamaged(damage);
             }
         }
     }

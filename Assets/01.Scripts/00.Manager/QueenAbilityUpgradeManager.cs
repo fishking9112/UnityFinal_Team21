@@ -17,13 +17,14 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     private QueenAbilityUIController queenAbilityUIController;
     public QueenAbilityUIController QueenAbilityUIController => queenAbilityUIController;
     private Dictionary<int, int> upgradeLevels = new();
-    
+
 
     private readonly Dictionary<int, QueenAbilityUpgradeItem> abilityItemDict = new();
 
     private Dictionary<int, Action<float>> applyEffectActions;
 
     public ToastMessage toastMessage;
+    public bool ShouldRestoreAbilityMonsterValues { get; private set; }
 
     protected override void Awake()
     {
@@ -54,7 +55,10 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             value => GameManager.Instance.queen.condition.AbilityMaxSummonGauge(value),
             value => GameManager.Instance.queen.condition.AbilityQueenActiveSkillGaugeRecoverySpeed(value),
             value => GameManager.Instance.queen.condition.AbilityMaxQueenActiveSkillGauge(value),
-            value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value)
+            value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value),
+            value => RewardManager.Instance.initBatCount += (int)value,
+            value => RewardManager.Instance.initBatMoveSpeed +=  RewardManager.Instance.initBatMoveSpeed * value,
+            value => GameManager.Instance.queen.condition.AdjustMaxPopulation(value),
         };
 
         int index = 0;
@@ -160,6 +164,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             float value = ability.levelInfo[level - 1].eff;
             applyEffectActions[id].Invoke(value);
         }
+
+        ShouldRestoreAbilityMonsterValues = true;
     }
 
     public void ResetQueenAbilityMonsterValues()
@@ -187,13 +193,15 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             float speedValue = speedAbility.levelInfo[speedLevel - 1].eff;
             ApplyMoveSpeedBuff(1 / (1 + speedValue), true); // 곱셈 기반 복원
         }
+
+        ShouldRestoreAbilityMonsterValues = false;
     }
 
     private void ApplyAttackPowerBuff(float value, bool reset = false)
     {
         foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
         {
-            if(reset)
+            if (reset)
                 kvp.Value.attack *= value;
             else
                 kvp.Value.attack *= 1 + value;

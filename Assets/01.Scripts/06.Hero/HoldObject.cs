@@ -20,7 +20,7 @@ public class HoldObject : MonoBehaviour, IPoolable
 
     private CancellationTokenSource token;
 
-    public void SetData(float dur,float dmg, float kback, float size, float dmgRange,float dmgDelay)
+    public void SetData(float dur, float dmg, float kback, float size, float dmgRange, float dmgDelay)
     {
         duration = dur;
         damage = dmg;
@@ -78,6 +78,10 @@ public class HoldObject : MonoBehaviour, IPoolable
                 else if (GameManager.Instance.castle.gameObject == c.gameObject)
                 {
                     GameManager.Instance.castle.TakeDamaged(damage);
+                }
+                else if (GameManager.Instance.miniCastles.TryGetValue(c.gameObject, out var miniCastle))
+                {
+                    miniCastle.TakeDamaged(damage);
                 }
             }
         }

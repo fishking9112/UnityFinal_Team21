@@ -266,7 +266,7 @@ public class CameraController : MonoBehaviour
 
         cameraTransform.position = targetPosition; // 정확한 위치로 고정
 
-        isCutScene = false;
+        // isCutScene = false;
     }
 
     // 카메라 제한 범위 기즈모를 그려줌

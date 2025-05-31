@@ -54,6 +54,8 @@ public class Castle : MonoBehaviour
     /// <param name="amount"> 입힐 데미지 양 </param>
     public virtual void TakeDamaged(float amount)
     {
+        if (GameManager.Instance.isTimeOver) return;
+
         Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
         Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
         if (condition.IsInvincible)

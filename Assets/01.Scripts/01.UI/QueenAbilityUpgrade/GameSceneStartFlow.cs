@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class GameSceneStartFlow : MonoBehaviour
@@ -16,8 +15,11 @@ public class GameSceneStartFlow : MonoBehaviour
 
         // 약간의 프레임 딜레이 후 기본 유닛 장착
         await UniTask.DelayFrame(4);
-        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().canPause = true;
         EquipDefaultUnitToQuickSlot();
+        RewardManager.Instance.initBatSummon();
+
+        await UniTask.Delay(1500);
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().canPause = true;
     }
 
     /// <summary>

@@ -36,11 +36,11 @@ public struct PlayerData
 [Serializable]
 public struct SettingsData
 {
-    [JsonProperty("bgmVolume")]
-    public float bgmVolume;
-
-    [JsonProperty("sfxVolume")]
-    public float sfxVolume;
+    // [JsonProperty("bgmVolume")]
+    // public float bgmVolume;
+    // 
+    // [JsonProperty("sfxVolume")]
+    // public float sfxVolume;
     // public string language;
 
 
@@ -56,6 +56,17 @@ public struct QueenAbilityUpgradeData
 
     [JsonExtensionData]
     public Dictionary<string, JToken> extraQueenUpgradeFields;
+}
+
+
+[Serializable]
+public struct LeaderBoardData
+{
+    [JsonProperty("leaderboardQueenID")]
+    public int queenID;
+
+    [JsonExtensionData]
+    public Dictionary<string, JToken> extraLeaderboardResultFields;
 }
 
 // 이후 필요한 데이터 구조체로 추가

@@ -18,18 +18,31 @@ public class HeroManager : MonoSingleton<HeroManager>
     private CancellationTokenSource token2;
 
     private float time;
-    private int heroCnt;
+    private int level;
+
+    [SerializeField]private int heroCnt;
 
     private List<GameObject> heroList = new();
 
     private void Start()
     {
         time = 10;
-        heroCnt = 1;
+        level = 1;
         token = new CancellationTokenSource();
         token2 = new CancellationTokenSource();
         SetWave(token.Token).Forget();
         IncreaseCnt(token2.Token).Forget();
+    }
+
+    private void Update()
+    {
+        foreach(var h in hero)
+        {
+            if(h.Value.healthHandler.IsDie())
+            {
+                h.Value.Die();
+            }
+        }
     }
 
     private async UniTask IncreaseCnt(CancellationToken tk)
@@ -37,7 +50,7 @@ public class HeroManager : MonoSingleton<HeroManager>
         while (!tk.IsCancellationRequested)
         {
             await UniTask.Delay(TimeSpan.FromMinutes(1), cancellationToken: this.GetCancellationTokenOnDestroy());
-            heroCnt++;
+            level++;
         }
     }
 
@@ -47,8 +60,8 @@ public class HeroManager : MonoSingleton<HeroManager>
         {
             await UniTask.Delay(TimeSpan.FromSeconds(time), cancellationToken: this.GetCancellationTokenOnDestroy()); //매 10초마다
 
-
-            for (int i = 0; i < heroCnt; i++)
+            int cnt = heroCnt + level;
+            for (int i = 0; i < cnt; i++)
             {
                 SetNextHero();
                 SummonHero();
@@ -58,11 +71,10 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private void SetNextHero()
     {
-        var list = DataManager.Instance.heroStatusDic.Where(x => x.Value.heroType == HeroType.NORMAL).Select(x=>x.Value).ToList();
+        var value = DataManager.Instance.heroStatusDic.Where(x => x.Value.heroType == HeroType.NORMAL).Select(x=>x.Value)
+            .Where(x=>x.startLevel==level).First();
 
-        var val = list[UnityEngine.Random.Range(0, list.Count)];
-
-        statusInfo = val;
+        statusInfo = value;
 
     }
 

@@ -72,6 +72,9 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 await StaticUIManager.Instance.LoadUI(LoadSceneEnum.MenuScene);
                 LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Lobby);
                 await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.MainMenu, false);
+                if (QueenAbilityUpgradeManager.Instance.ShouldRestoreAbilityMonsterValues) { QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues(); }
+                await UGSManager.Instance.LoadLeaderboardTop10Async();
+                await UGSManager.Instance.LoadMyRankAsync();
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
                 Time.timeScale = 1;
