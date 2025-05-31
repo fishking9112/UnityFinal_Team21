@@ -10,7 +10,7 @@ public class GaugeUI : MonoBehaviour
 {
     private Image fillImage;
     private TextMeshProUGUI gaugeText;
-    [SerializeField] private HPBarUI hpBarUI;
+    [SerializeField] private BarUIText hpBarUI;
 
     private ReactiveProperty<float> cur;
     private ReactiveProperty<float> max;
