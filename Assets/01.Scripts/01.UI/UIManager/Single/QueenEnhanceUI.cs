@@ -52,7 +52,6 @@ public class QueenEnhanceUI : SingleUI
     /// </summary>
     private void OnClickEnhanceReroll()
     {
-        GameManager.Instance.queen.condition.Gold.Value += 5000;
         if (GameManager.Instance.queen.condition.Gold.Value >= initRerollCost + (increaseRerollCost * useRerollCount))
         {
             // 골드 차감
@@ -215,7 +214,7 @@ public class QueenEnhanceUI : SingleUI
 
             case (int)IDQueenEnhance.QUEEN_MAX_SUMMON_GAUGE_UP: // 여왕 소환 게이지 최대량 증가
                 amount = queenCondition.MaxSummonGauge.Value * value;
-                queenCondition.AdjustMaxSummonGauge(value);
+                queenCondition.AdjustMaxSummonGauge(amount);
                 break;
         }
     }
