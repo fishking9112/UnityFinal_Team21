@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class UGSSaveLoad : MonoBehaviour
 {
-    private const int CurrentVersion = 3; // 최신 데이터 버전
+    private const int CurrentVersion = 4; // 최신 데이터 버전
 
     private const string SaveKey = "PlayerSaveData";
     private const string RankDataKey = "PlayerRankDataKey";
@@ -105,8 +105,8 @@ public class UGSSaveLoad : MonoBehaviour
     {
         return new SettingsData
         {
-            bgmVolume = Mathf.Clamp(SoundManager.Instance.BGMVolume, 0f, 1f),
-            sfxVolume = Mathf.Clamp(SoundManager.Instance.SFXVolume, 0f, 1f),
+            // bgmVolume = Mathf.Clamp(SoundManager.Instance.BGMVolume, 0f, 1f),
+            // sfxVolume = Mathf.Clamp(SoundManager.Instance.SFXVolume, 0f, 1f),
             //  language = SettingsManager.Instance.CurrentLanguage
             extraSettingsFields = new Dictionary<string, JToken>()
         };
@@ -129,8 +129,8 @@ public class UGSSaveLoad : MonoBehaviour
             data.player.gold = 0;
 
         // 볼륨 범위 제한
-        data.settings.bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f);
-        data.settings.sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f);
+        // data.settings.bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f);
+        // data.settings.sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f);
 
         // 언어 null 체크
         // if (string.IsNullOrEmpty(data.settings.language))
@@ -205,8 +205,8 @@ public class UGSSaveLoad : MonoBehaviour
 
             data.settings = new SettingsData
             {
-                bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f),
-                sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f),
+                // bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f),
+                // sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f),
                 extraSettingsFields = new Dictionary<string, JToken>()
             };
             data.queenUpgrades = data.queenUpgrades.upgrades != null
@@ -220,8 +220,8 @@ public class UGSSaveLoad : MonoBehaviour
         {
             data.settings = new SettingsData
             {
-                bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f),
-                sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f),
+                // bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f),
+                // sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f),
                 // 언어 부분 추가
                 extraSettingsFields = data.settings.extraSettingsFields ?? new Dictionary<string, JToken>()
             };
@@ -237,6 +237,18 @@ public class UGSSaveLoad : MonoBehaviour
                 extraPlayerFields = new Dictionary<string, JToken>()
             };
             data.version = 3;
+        }
+
+        // 버전 3 -> 버전 4 ( bgmVolume/sfxVolume 제거)
+        if (data.version == 3)
+        {
+            if(data.settings.extraSettingsFields != null)
+            {
+                data.settings.extraSettingsFields.Remove("bgmVolume");
+                data.settings.extraSettingsFields.Remove("sfxVolume");
+            }
+
+            data.version = 4;
         }
 
         // 추가 버전 마이그레이션은 여기에 구현
@@ -258,8 +270,8 @@ public class UGSSaveLoad : MonoBehaviour
             },
             settings = new SettingsData
             {
-                bgmVolume = 0.1f,
-                sfxVolume = 0.1f,
+                // bgmVolume = 0.1f,
+                // sfxVolume = 0.1f,
                 // 언어 부분 추가
                 extraSettingsFields = new Dictionary<string, JToken>()
             },
@@ -277,6 +289,7 @@ public class UGSSaveLoad : MonoBehaviour
     /// </summary>
     private void OnLoadComplete(SaveData saveData)
     {
+        // 플레이어 정보
         try
         {
             GameManager.Instance.SetGold(saveData.player.gold);
@@ -287,10 +300,11 @@ public class UGSSaveLoad : MonoBehaviour
             Utils.Log($"Gold 적용 실패: {e.Message}");
         }
 
+        // 설정
         try
         {
-            SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
-            SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
+            // SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
+            // SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
             // 언어 부분 추가
             Utils.Log("사운드 및 언어 설정 적용 완료");
         }
@@ -299,6 +313,7 @@ public class UGSSaveLoad : MonoBehaviour
             Utils.Log($"사운드/언어 설정 적용 실패: {e.Message}");
         }
 
+        // 어빌리티
         try
         {
             QueenAbilityUpgradeManager.Instance.ApplyUpgradeData(saveData.queenUpgrades);
