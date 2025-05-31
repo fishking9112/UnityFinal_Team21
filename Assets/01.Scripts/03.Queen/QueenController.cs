@@ -295,6 +295,8 @@ public class QueenController : MonoBehaviour
 
         if (!SpawnPointManager.Instance.MonsterPoint.IsAreaIn(worldMousePos))
         {
+            ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
+            msg.SetText("<color=red>소환 가능 범위를 벗어났습니다.</color>");
             SpawnPointManager.Instance.MonsterPoint.ShowAndHideAreas();
             return;
         }
