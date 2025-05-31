@@ -112,8 +112,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         if (!GameManager.Instance.TrySpendGold(cost))
         {
             // 테이블 나오면 적용 필요
-            ToastMessage msg = Instantiate(toastMessage, queenAbilityUIController.transform);
-            msg.SetText("<color=red>골드가 부족합니다.</color>");
+
+            UIManager.Instance.ShowPopup("알림", "골드가 부족합니다.", () => { Utils.Log("확인."); });
             Utils.Log("골드 부족으로 업그레이드 실패");
             return;
         }
