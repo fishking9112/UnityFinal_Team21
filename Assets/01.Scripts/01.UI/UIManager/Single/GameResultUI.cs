@@ -19,6 +19,8 @@ public class GameResultUI : SingleUI
     [Header("UI Components")]
     public GameObject resultWindow;
     public GameObject dpsPopupUI;
+    public GameObject leaderboardUI;
+    public GameObject bestUI;
     public Transform unitListParent;
     public GameUnitResultUI gameUnitResultUIPrefab;
     public Image titleImg;
@@ -46,6 +48,7 @@ public class GameResultUI : SingleUI
     public TextMeshProUGUI resourceText;
 
     [Header("Button Components")]
+    public Button leaderboardBtn;
     public Button titleMenuBtn;
     public Button dpsPopupBtn;
     public Button closePopupBtn;
@@ -59,6 +62,7 @@ public class GameResultUI : SingleUI
 
     private void Start()
     {
+        leaderboardBtn.onClick.AddListener(() => leaderboardUI.SetActive(true));
         titleMenuBtn.onClick.AddListener(ReturnToTitle);
         dpsPopupBtn.onClick.AddListener(() => DpsPopup(true));
         closePopupBtn.onClick.AddListener(() => DpsPopup(false));
@@ -76,6 +80,7 @@ public class GameResultUI : SingleUI
         int mvpID = SetMonsterMVP();
 
         DescriptionPopupUI.SetActive(false);
+        leaderboardUI.SetActive(false);
 
         int queenid = GameManager.Instance.QueenCharaterID;
         int time = (int)(GameManager.Instance.gameLimitTime - GameManager.Instance.curTime.Value);
@@ -88,13 +93,6 @@ public class GameResultUI : SingleUI
 
         LogManager.Instance.PlayEndLog(queenid, time, isC, mostSummonID, mostSummon, leastSummonID, leastSummon, mvpID, tryCnt);
         UGSManager.Instance.SaveLoad.SaveAsync().Forget();
-
-
-        if (GameManager.Instance.queen.condition.KillCnt.Value > UGSManager.Instance.Leaderboard.myRankerInfo.Score)
-        {
-            UGSManager.Instance.UploadScoreAsync(GameManager.Instance.queen.condition.KillCnt.Value).Forget();
-            UGSManager.Instance.SaveLoad.UploadRankDataAsync(queenid).Forget();
-        }
     }
 
     /// <summary>

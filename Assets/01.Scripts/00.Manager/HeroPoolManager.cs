@@ -158,7 +158,8 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
             heroDic.Remove(obj);
         }
 
-        condition.KillCnt.Value++;
+        if (!GameManager.Instance.gameResultController.gameEnd) { condition.KillCnt.Value++; }
+        
         obj.gameObject.SetActive(false);
     }
 }
