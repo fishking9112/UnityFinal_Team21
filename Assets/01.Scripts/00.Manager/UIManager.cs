@@ -137,10 +137,10 @@ public class UIManager : MonoSingleton<UIManager>
     public async UniTask ShowTooltipAsync(int id, bool forceRun = true, Action onFinishAction = null, bool isOnlyPage = false)
     {
         // 한번 실행했다면 작동 X
-        if (PlayerPrefs.GetInt(id.ToString() + "v1.0.7") == 1 && !forceRun)
+        if (PlayerPrefs.GetInt(id.ToString() + "v" + Application.version) == 1 && !forceRun)
             return;
 
-        PlayerPrefs.SetInt(id.ToString() + "v1.0.7", 1); // 실행 기록 저장
+        PlayerPrefs.SetInt(id.ToString() + "v" + Application.version, 1); // 실행 기록 저장
         PlayerPrefs.Save(); // 저장 즉시 적용
         var popup = await ShowUI<ToolTipUI>();
         popup.Setup(id, onFinishAction, isOnlyPage);
