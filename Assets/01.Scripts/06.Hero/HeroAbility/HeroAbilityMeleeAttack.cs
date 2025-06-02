@@ -70,12 +70,12 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
             SpawnSwingSwordParticle(angle);
         }
 
-        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f, cancellationToken: tk);
+        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5f, cancellationToken: this.GetCancellationTokenOnDestroy());
 
         // 충돌처리
         OverlapCheck(angle);
 
-        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f, cancellationToken: tk);
+        await UniTask.WaitUntil(() => animator != null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f, cancellationToken: this.GetCancellationTokenOnDestroy());
 
     }
 

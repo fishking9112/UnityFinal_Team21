@@ -24,6 +24,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
     private Dictionary<int, Action<float>> applyEffectActions;
 
     public ToastMessage toastMessage;
+    public bool ShouldRestoreAbilityMonsterValues { get; private set; }
 
     protected override void Awake()
     {
@@ -57,6 +58,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value),
             value => RewardManager.Instance.initBatCount += (int)value,
             value => RewardManager.Instance.initBatMoveSpeed +=  RewardManager.Instance.initBatMoveSpeed * value,
+            value => GameManager.Instance.queen.condition.AdjustMaxPopulation(value),
         };
 
         int index = 0;
@@ -110,8 +112,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
         if (!GameManager.Instance.TrySpendGold(cost))
         {
             // 테이블 나오면 적용 필요
-            ToastMessage msg = Instantiate(toastMessage, queenAbilityUIController.transform);
-            msg.SetText("<color=red>골드가 부족합니다.</color>");
+
+            UIManager.Instance.ShowPopup("알림", "골드가 부족합니다.", () => { Utils.Log("확인."); });
             Utils.Log("골드 부족으로 업그레이드 실패");
             return;
         }
@@ -162,6 +164,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             float value = ability.levelInfo[level - 1].eff;
             applyEffectActions[id].Invoke(value);
         }
+
+        ShouldRestoreAbilityMonsterValues = true;
     }
 
     public void ResetQueenAbilityMonsterValues()
@@ -189,6 +193,8 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             float speedValue = speedAbility.levelInfo[speedLevel - 1].eff;
             ApplyMoveSpeedBuff(1 / (1 + speedValue), true); // 곱셈 기반 복원
         }
+
+        ShouldRestoreAbilityMonsterValues = false;
     }
 
     private void ApplyAttackPowerBuff(float value, bool reset = false)

@@ -4,11 +4,13 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class GaugeUI : MonoBehaviour
 {
     private Image fillImage;
     private TextMeshProUGUI gaugeText;
+    [SerializeField] private BarUIText hpBarUI;
 
     private ReactiveProperty<float> cur;
     private ReactiveProperty<float> max;
@@ -20,8 +22,8 @@ public class GaugeUI : MonoBehaviour
     [SerializeField] private float duration = 1.0f; // 몇 초 동안
     [SerializeField] public float magnitude = 10f; // 흔들림 세기 (픽셀 단위)
     [SerializeField] public float current = 0f; // 흔들림 세기 (픽셀 단위)
-    private Color originColor = new(); // 원본 색상 저장용
-    private Vector2 originalPos = new();
+    private Color originColor = Color.white; // 원본 색상 저장용
+    private Vector2 originalPos = Vector2.zero;
     private Image flashImg;
     private Action flashAction;
     private CancellationTokenSource imgActionCts;
@@ -45,6 +47,7 @@ public class GaugeUI : MonoBehaviour
         else
         {
             originColor = flashImg.color;
+            originColor.a = 1f; // 반드시 불투명하게 설정
             originalPos = flashImg.transform.position;
         }
     }
@@ -81,8 +84,12 @@ public class GaugeUI : MonoBehaviour
         }
 
         current = cur.Value;
-
         fillImage.fillAmount = Mathf.Clamp01(cur.Value / max.Value);
+
+        if (hpBarUI != null)
+        {
+            hpBarUI.UpdateHPBar(cur.Value, max.Value);
+        }
     }
 
 
@@ -157,12 +164,24 @@ public class GaugeUI : MonoBehaviour
     // UniTask 본문
     private async UniTaskVoid ImgFlashTask(CancellationToken token)
     {
-        for (int i = 0; i < flashImgTime; i++)
+        try
         {
-            flashImg.color = flashColor;
-            await UniTask.Delay(TimeSpan.FromSeconds((duration / flashImgTime) * 0.8f), true, PlayerLoopTiming.Update, cancellationToken: token);
-            flashImg.color = originColor;
-            await UniTask.Delay(TimeSpan.FromSeconds((duration / flashImgTime) * 0.2f), true, PlayerLoopTiming.Update, cancellationToken: token);
+            for (int i = 0; i < flashImgTime; i++)
+            {
+                flashImg.color = flashColor;
+                await UniTask.Delay(TimeSpan.FromSeconds((duration / flashImgTime) * 0.8f), true, PlayerLoopTiming.Update, token);
+
+                flashImg.color = originColor;
+                await UniTask.Delay(TimeSpan.FromSeconds((duration / flashImgTime) * 0.2f), true, PlayerLoopTiming.Update, token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            Utils.Log("이미지 흔들리기 취소");
+        }
+        finally
+        {
+            flashImg.color = originColor; // 무조건 복원
         }
     }
 
@@ -184,8 +203,8 @@ public class GaugeUI : MonoBehaviour
             float offsetY = UnityEngine.Random.Range(-1f, 1f) * magnitude;
 
             flashImg.transform.position = originalPos + new Vector2(offsetX, offsetY);
-
             elapsed += Time.deltaTime;
+
             await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken: token, true);
         }
 

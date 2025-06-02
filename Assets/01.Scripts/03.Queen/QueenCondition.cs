@@ -11,6 +11,7 @@ public class QueenCondition : MonoBehaviour
     private float initEvolutionPoint = 0f;
     private float initLevel = 1f;
     private float initGold = 0f;
+    private int initPopulation = 100;
     private int initEnhnacePoint = 0;
 
     private float expGainMultiplierPercent = 0f;
@@ -32,6 +33,8 @@ public class QueenCondition : MonoBehaviour
     public ReactiveProperty<float> Level { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<float> Gold { get; private set; } = new ReactiveProperty<float>();
     public ReactiveProperty<int> KillCnt { get; private set; } = new ReactiveProperty<int>();
+    public ReactiveProperty<float> MaxPopulation { get; private set; } = new ReactiveProperty<float>();
+
     public int EnhancePoint;
 
     private float ExpGainMultiplier => 1f + expGainMultiplierPercent;
@@ -48,6 +51,7 @@ public class QueenCondition : MonoBehaviour
         MaxExpGauge.Value = initMaxExpGauge;
         EvolutionPoint.Value = initEvolutionPoint;
         Gold.Value = initGold;
+        MaxPopulation.Value = initPopulation;
         EnhancePoint = initEnhnacePoint;
     }
 
@@ -82,6 +86,15 @@ public class QueenCondition : MonoBehaviour
         QueenPassiveSkillManager.Instance.AddSkill(queenStatus.basePassiveSkill_1);
         QueenPassiveSkillManager.Instance.AddSkill(queenStatus.basePassiveSkill_2);
         QueenPassiveSkillManager.Instance.AddSkill(queenStatus.basePassiveSkill_3);
+    }
+
+    /// <summary>
+    /// 최대 인구수 조정
+    /// </summary>
+    /// <param name="amount"> 조정할 수치 </param>
+    public void AdjustMaxPopulation(float amount)
+    {
+        MaxPopulation.Value = AdjustValue(MaxPopulation.Value, amount, float.MaxValue);
     }
 
     /// <summary>
@@ -193,8 +206,8 @@ public class QueenCondition : MonoBehaviour
 
     private void ExpIncrease()
     {
-        float stepBonus = 50 * (Level.Value / 10);
-        MaxExpGauge.Value = initMaxExpGauge * Mathf.Pow(Level.Value, 1.5f) + stepBonus;
+        float stepBonus = 30 * (Level.Value / 5);
+        MaxExpGauge.Value = initMaxExpGauge * Mathf.Pow(Level.Value, 1.3f) + stepBonus;
     }
 
     public IEnumerator CoroutineLevelUp()

@@ -21,6 +21,11 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private bool isSelected = false;
     public bool isSelectable = false;
 
+    [SerializeField] private float scaleSpeed = 8f;
+    [SerializeField] private GameObject selectedLineUI;
+
+    private Vector3 targetScale;
+
     /// <summary>
     /// UI 요소와 기본 크기를 설정.
     /// </summary>
@@ -30,6 +35,19 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
             targetTransform = transform;
 
         originalScale = targetTransform.localScale;
+        targetScale = originalScale;
+
+        selectedLineUI.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        OnPointerExit(null); 
+    }
+
+    private void Update()
+    {
+        targetTransform.localScale = Vector3.Lerp(targetTransform.localScale, targetScale, Time.unscaledDeltaTime * scaleSpeed);
     }
 
     /// <summary>
@@ -94,6 +112,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         isSelected = false;
         targetTransform.localScale = originalScale;
+        targetScale = originalScale;
     }
 
     /// <summary>
@@ -110,8 +129,8 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (isSelected || !HasEnhancePoint()) return;
-
-        targetTransform.DOScale(originalScale * hoverScale, scaleDuration).SetEase(Ease.OutBack).SetUpdate(true);
+        selectedLineUI.SetActive(true);
+        targetScale = originalScale * hoverScale;
 
     }
 
@@ -121,8 +140,8 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public void OnPointerExit(PointerEventData eventData)
     {
         if (isSelected || !HasEnhancePoint()) return;
-
-        targetTransform.DOScale(originalScale, scaleDuration).SetEase(Ease.InOutSine).SetUpdate(true);
+        selectedLineUI.SetActive(false);
+        targetScale = originalScale;
     }
 
     /// <summary>

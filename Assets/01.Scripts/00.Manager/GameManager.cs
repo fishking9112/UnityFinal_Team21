@@ -159,6 +159,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void GameClear()
     {
+        SoundManager.Instance.ChangeBGM("xDeviruchi - 05 Take some rest and eat some food!");
         // curTime.Value = 0f;
         isTimeOver = true;
         gameResultController.GameClear();
@@ -171,6 +172,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void GameOver()
     {
+        SoundManager.Instance.ChangeBGM("1 are you gonna buy something... or... WAV");
         // curTime.Value = 0f;
         isTimeOver = true;
         gameResultController.GameOver();
