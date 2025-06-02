@@ -36,11 +36,11 @@ public struct PlayerData
 [Serializable]
 public struct SettingsData
 {
-    [JsonProperty("bgmVolume")]
-    public float bgmVolume;
-
-    [JsonProperty("sfxVolume")]
-    public float sfxVolume;
+    // [JsonProperty("bgmVolume")]
+    // public float bgmVolume;
+    // 
+    // [JsonProperty("sfxVolume")]
+    // public float sfxVolume;
     // public string language;
 
 

@@ -3,9 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Audio;
+using static Unity.VisualScripting.Member;
 
 public class SoundManager : MonoSingleton<SoundManager>
 {
+    [Header("AudioMixer 설정")]
+    [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private string bgmVolumeParam = "BGMVolume";
+    [SerializeField] private string sfxVolumeParam = "SFXVolume"; 
+    [SerializeField] private AudioMixerGroup bgmGroup;
+    [SerializeField] private AudioMixerGroup sfxGroup;
+
+
     [Header("사용할 모든 오디오 클립")]
     [SerializeField] private AudioClip[] audioClips; // 오디오 클립 배열
 
@@ -13,14 +23,19 @@ public class SoundManager : MonoSingleton<SoundManager>
     [SerializeField] private int poolSize = 10; // 최초 풀 크기
     private Queue<AudioSource> audioSourcePool; // 오브젝트 풀
 
-    private float bgmVolume = 0f;
-    private float sfxVolume = 0f;
+    private float bgmVolume = 0.1f;
+    private float sfxVolume = 0.1f;
     public float BGMVolume => bgmVolume;
     public float SFXVolume => sfxVolume;
 
     private Dictionary<string, AudioClip> soundDict; // SFX와 BGM 저장용 Dictionary
     private AudioSource bgmPlayer; // BGM 재생용 AudioSource
     private Coroutine bgmFadeCoroutine;
+
+    private const string BGM_VOLUME_KEY = "BGM_VOLUME";
+    private const string SFX_VOLUME_KEY = "SFX_VOLUME";
+
+    public BGMController bgmController;
 
     protected override void Awake()
     {
@@ -34,6 +49,11 @@ public class SoundManager : MonoSingleton<SoundManager>
     private void InitSoundManager()
     {
         // Addressables 사용으로 임시 주석 처리
+
+        // 볼륨 불러오기
+        bgmVolume = PlayerPrefs.GetFloat(BGM_VOLUME_KEY, 0.5f);
+        sfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME_KEY, 0.5f);
+
         // Dictionary 초기화
         soundDict = new Dictionary<string, AudioClip>();
         foreach (var clip in audioClips)
@@ -44,10 +64,18 @@ public class SoundManager : MonoSingleton<SoundManager>
         // BGM 플레이어 초기화
         bgmPlayer = gameObject.AddComponent<AudioSource>();
         bgmPlayer.loop = true;
-        bgmPlayer.volume = bgmVolume;
+        bgmPlayer.outputAudioMixerGroup = bgmGroup;
 
         // 오브젝트 풀 초기화
         InitPool();
+
+    }
+
+    private void Start()
+    {
+        // 오디오 믹서 초기화 속도가 느려 이 부분만 Init에서 분리
+        SetBGMVolume(bgmVolume);
+        SetSFXVolume(sfxVolume);
     }
 
     /// <summary>
@@ -79,6 +107,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         {
             AudioSource source = gameObject.AddComponent<AudioSource>();
             source.playOnAwake = false;
+            source.outputAudioMixerGroup = sfxGroup;
             source.enabled = false;
             audioSourcePool.Enqueue(source);
         }
@@ -122,6 +151,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         {
             AudioSource newSource = gameObject.AddComponent<AudioSource>();
             newSource.playOnAwake = false;
+            newSource.outputAudioMixerGroup = sfxGroup;
             audioSourcePool.Enqueue(newSource);
             return newSource;
         }
@@ -255,7 +285,8 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void SetBGMVolume(float volume)
     {
         bgmVolume = Mathf.Clamp01(volume);
-        bgmPlayer.volume = bgmVolume;
+        float dB = Mathf.Lerp(-80f, 0f, bgmVolume); // -80dB ~ 0dB 범위로 변환
+        audioMixer.SetFloat(bgmVolumeParam, dB);
     }
 
     /// <summary>
@@ -265,6 +296,8 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void SetSFXVolume(float volume)
     {
         sfxVolume = Mathf.Clamp01(volume);
+        float dB = Mathf.Lerp(-80f, 0f, sfxVolume);
+        audioMixer.SetFloat(sfxVolumeParam, dB);
     }
 
     public bool TryGetClip(string name, out AudioClip clip)

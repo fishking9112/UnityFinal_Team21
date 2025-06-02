@@ -21,8 +21,9 @@ public class QueenEnhanceUI : SingleUI
     private QueenEnhanceInfo tmpQueenEnhanceInfo;
     [HideInInspector] public bool isOpen = false;
 
-    private const int rerollCost = 1000;
-    private int useRerollCount = 1;
+    private const int initRerollCost = 1000;
+    private const int increaseRerollCost = 100;
+    private int useRerollCount = 0;
 
     private void Awake()
     {
@@ -51,10 +52,10 @@ public class QueenEnhanceUI : SingleUI
     /// </summary>
     private void OnClickEnhanceReroll()
     {
-        if (GameManager.Instance.queen.condition.Gold.Value >= (rerollCost * useRerollCount))
+        if (GameManager.Instance.queen.condition.Gold.Value >= initRerollCost + (increaseRerollCost * useRerollCount))
         {
             // 골드 차감
-            GameManager.Instance.queen.condition.Gold.Value -= (rerollCost * useRerollCount);
+            GameManager.Instance.queen.condition.Gold.Value -= initRerollCost + (increaseRerollCost * useRerollCount);
             useRerollCount++;
 
             // 새 옵션 가져오기 및 UI 갱신
@@ -74,7 +75,7 @@ public class QueenEnhanceUI : SingleUI
     /// </summary>
     private void UpdateRerollCostText()
     {
-        rerollCostText.text = (rerollCost * useRerollCount).ToString();
+        rerollCostText.text = (initRerollCost + (increaseRerollCost * useRerollCount)).ToString();
     }
 
     /// <summary>
@@ -151,7 +152,7 @@ public class QueenEnhanceUI : SingleUI
 
         Utils.Log($"{info.name} 강화 적용, 현재 레벨: {level}");
 
-        float value = info.state_Base + info.state_LevelUp * (level - 1);
+        float value = info.state_Base + (info.state_LevelUp * (level - 1));
 
         switch (info.type)
         {
@@ -213,7 +214,7 @@ public class QueenEnhanceUI : SingleUI
 
             case (int)IDQueenEnhance.QUEEN_MAX_SUMMON_GAUGE_UP: // 여왕 소환 게이지 최대량 증가
                 amount = queenCondition.MaxSummonGauge.Value * value;
-                queenCondition.AdjustMaxSummonGauge(value);
+                queenCondition.AdjustMaxSummonGauge(amount);
                 break;
         }
     }

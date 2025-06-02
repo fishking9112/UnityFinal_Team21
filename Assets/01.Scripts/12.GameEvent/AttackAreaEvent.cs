@@ -63,6 +63,7 @@ public class AttackAreaEvent : GameEventBase
     {
         Utils.Log("배럭을 성공적으로 부셨습니다! 보상 지급!");
         // GameManager.Instance.queen.condition.AdjustCurExpGauge(tableInfo.reward);
+        SoundManager.Instance.bgmController.StopOneShotBGM();
         GameManager.Instance.queen.condition.QuestLevelUp(tableInfo.reward);
         GameObject.Destroy(contextUI.gameObject);
         // 보상 지급 로직 추가 가능

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class GameResultController : MonoBehaviour
     private WaitForSeconds waitHalf = new WaitForSeconds(0.25f);
     private WaitForSeconds waitHalfHalf = new WaitForSeconds(0.1f);
 
+    public bool gameEnd { get; private set; }
     public Animator goVictory;
     public Animator goDefeat;
 
@@ -17,10 +19,14 @@ public class GameResultController : MonoBehaviour
         GameManager.Instance.gameResultController = this;
         goVictory.gameObject.SetActive(false);
         goDefeat.gameObject.SetActive(false);
+        gameEnd = false;
     }
 
     public void GameClear()
     {
+        gameEnd = true;
+        if (GameManager.Instance.queen.condition.KillCnt.Value > UGSManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
+
         StartCoroutine(GameClearProcess());
     }
 
@@ -42,6 +48,9 @@ public class GameResultController : MonoBehaviour
 
     public void GameOver()
     {
+        gameEnd = true;
+        if (GameManager.Instance.queen.condition.KillCnt.Value > UGSManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
+
         StartCoroutine(GameOverProcess());
     }
 
@@ -92,6 +101,22 @@ public class GameResultController : MonoBehaviour
 
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>(isTimeOverOpen: true);
+    }
+
+    private async UniTask UpdateLeaderBoard()
+    {
+        try
+        {
+            StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.bestUI.SetActive(true);
+            await UGSManager.Instance.UploadScoreAsync(GameManager.Instance.queen.condition.KillCnt.Value);
+            await UGSManager.Instance.SaveLoad.UploadRankDataAsync(GameManager.Instance.QueenCharaterID);
+            await UGSManager.Instance.LoadLeaderboardTop10Async();
+            await UGSManager.Instance.LoadMyRankAsync();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Leaderboard Update Failed: {e}");
+        }
     }
 
     private Vector3 GetNonOverlappingPosition(List<Vector3> existingPositions, float min, float max, float minDistance, int maxTries = 30)

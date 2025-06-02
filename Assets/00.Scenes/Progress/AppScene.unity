@@ -3156,6 +3156,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDontDestroy: 1
+  audioMixer: {fileID: 0}
+  bgmVolumeParam: BGMVolume
+  sfxVolumeParam: SFXVolume
+  bgmGroup: {fileID: 0}
+  sfxGroup: {fileID: 0}
   audioClips:
   - {fileID: 8300000, guid: 157b2c87faff24a4fa143a854dbe4c65, type: 3}
   - {fileID: 8300000, guid: f888df44ae1bfc948b75cdad54dc0d8d, type: 3}
@@ -3163,7 +3168,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ad98ccdcb54bdd74992336395f11f77f, type: 3}
   - {fileID: 8300000, guid: 5aa948679296f2649802b2f562804537, type: 3}
   - {fileID: 8300000, guid: 397f887ca5a702240b4c9338fe65fb9c, type: 3}
+  - {fileID: 8300000, guid: 8cdf831e16bd02f4b802b3760ae254d9, type: 3}
   poolSize: 10
+  bgmController: {fileID: 2054310046}
 --- !u!4 &2054310045
 Transform:
   m_ObjectHideFlags: 0
@@ -3191,11 +3198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6ee15c23b18da442a638052faaf80da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClips:
-  - {fileID: 8300000, guid: 157b2c87faff24a4fa143a854dbe4c65, type: 3}
-  - {fileID: 8300000, guid: f888df44ae1bfc948b75cdad54dc0d8d, type: 3}
-  - {fileID: 8300000, guid: 87c571dd6bc725f4a94631d4663b95d0, type: 3}
-  - {fileID: 8300000, guid: ad98ccdcb54bdd74992336395f11f77f, type: 3}
+  sceneBGM: []
 --- !u!1 &2081961595
 GameObject:
   m_ObjectHideFlags: 0

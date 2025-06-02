@@ -29,6 +29,7 @@ public class HeroController : BaseController
 
     [SerializeField] public HeroStatusInfo statusInfo;
 
+    private Dictionary<int, int> weaponDic = new Dictionary<int, int>();
 
     [Header("빨간색 점등 관련 데이터")]
     [NonSerialized] public List<SpriteRenderer> renderers = new();
@@ -82,15 +83,34 @@ public class HeroController : BaseController
 
         eventMark.SetActive(isEventMark);
 
-        for (int i = 0; i < stat.weapon.Length; i++)
+        weaponDic.Clear();
+         var a = Enum.GetValues(typeof(IDHeroAbility));
+
+        for(int i=0;i<stat.startLevel;i++)
         {
-            hero.SetAbilityLevel(stat.weapon[i], stat.weaponLevel[i]);
+            int weapon= UnityEngine.Random.Range(0, a.Length);
+            int weaponNum = (int)a.GetValue(weapon);
+
+            if (weaponDic.ContainsKey(weaponNum))
+            {
+                if (weaponDic[weaponNum]>=8)
+                {
+                    i--;
+                    continue;
+                }
+                weaponDic[weaponNum]++;
+            }
+            else
+            {
+                weaponDic[weaponNum] = 1;
+            }
         }
 
-        if (!navMeshAgent.isOnNavMesh)
+        foreach(var data in weaponDic)
         {
-            Utils.LogError($"{gameObject.name}은 NavMesh 위에 있지 않습니다!");
+            hero.SetAbilityLevel(data.Key, data.Value);
         }
+
 
         stateMachine.ChangeState(stateMachine.moveState);
 
