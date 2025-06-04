@@ -1,4 +1,4 @@
-# 👨‍🔧 Team_SpartaTextRPG ( 더닝 크루거 )
+# 👨‍🔧 오늘도 용사가 와서 성벽을 박살냈습니다 ( 더닝 크루거 )
 ### [Team21] 더닝 크루거 ( 21조 )
 
 ![image](/README/team21.png)  
