@@ -82,6 +82,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
             case LoadSceneEnum.GameScene: // 게임 씬 일 경우
                 await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
                 await LoadSceneAsync("GameScene");
+                //await ObjectPoolManager.Instance.InitPoolsFromAddressables();
                 await StaticUIManager.Instance.LoadUI(LoadSceneEnum.GameScene);
 
                 // 만약 OpenWindow가 없다면 시간 흐르게 하기
