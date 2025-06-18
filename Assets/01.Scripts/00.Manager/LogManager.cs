@@ -52,7 +52,7 @@ public class LogManager : MonoSingleton<LogManager>
         }
         else
         {
-            Debug.LogError("없는 Type 사용");
+            Utils.LogError("없는 Type 사용");
         }
     }
 
