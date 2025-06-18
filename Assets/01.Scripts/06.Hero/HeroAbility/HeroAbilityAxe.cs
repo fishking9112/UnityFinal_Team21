@@ -61,7 +61,7 @@ public class HeroAbilityAxe : HeroAbilitySystem
 
         for (int i = 0; i < count; i++)
         {
-            var bullet = objectPoolManager.GetObject<HeroBullet>("Axe", hero.transform.position);
+            var bullet = objectPoolManager.GetObject<HeroBullet>("axe", hero.transform.position);
             bullet.SetBullet(duration, pierce, damage, speed, rotateSpeed,size,knockback);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 

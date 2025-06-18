@@ -74,7 +74,7 @@ public class HeroAbilityBurst : HeroAbilitySystem
                 return;
             }
 
-            var bullet = objectPoolManager.GetObject<HeroBullet>("Bullet", hero.transform.position);
+            var bullet = objectPoolManager.GetObject<HeroBullet>("bullet", hero.transform.position);
             bullet.SetBullet(duration, pierce, damage, speed, 0,size, knockback);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
