@@ -4,6 +4,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Components;
 
 
@@ -13,10 +14,7 @@ public class StringManager : MonoSingleton<StringManager>
     // Start is called before the first frame update
     void Start()
     {
-        LocalizeStringEvent a=new LocalizeStringEvent();
-        
-        a.StringReference.Arguments = new[] {"10"};
-        a.SetEntry("9902303");
+        SetLocalLanguage();
     }
 
     public void SetString(string key, LocalizeStringEvent comp)
@@ -38,4 +36,36 @@ public class StringManager : MonoSingleton<StringManager>
         comp.SetEntry(key);
     }
 
+
+
+    public void SetLocalLanguage()
+    {
+        int selectLang;
+        if(PlayerPrefs.HasKey("language"))
+        {
+            selectLang = PlayerPrefs.GetInt("language");
+        }
+        else
+        {
+            selectLang = (int)Application.systemLanguage;
+        }
+
+        string code = selectLang == (int)SystemLanguage.Korean ? "ko" : "en";
+
+        Locale lang = GetLocaleCode(code);
+        LocalizationSettings.SelectedLocale = lang;
+        Utils.LogError(lang.LocaleName);
+    }
+
+    private Locale GetLocaleCode(string code)
+    {
+        foreach (var locale in LocalizationSettings.AvailableLocales.Locales)
+        {
+            if(locale.Identifier.Code==code)
+            {
+                return locale;
+            }
+        }
+        return null;
+    }
 }
