@@ -23,6 +23,7 @@ public class ResourcePath
 /// </summary>
 public class AddressableManager : MonoSingleton<AddressableManager>
 {
+    private Dictionary<string, AsyncOperationHandle> handleDictionary = new();
     private DownloadUI downloadUI => StaticUIManager.Instance.downloadUI;
     [HideInInspector] public bool isInitDownload = false;
     private float allDownloadSize = 0;
@@ -44,7 +45,6 @@ public class AddressableManager : MonoSingleton<AddressableManager>
     {
         var path = $"{type}/{key}";
         AsyncOperationHandle<T> handle = default;
-
         try
         {
             if (typeof(T).IsSubclassOf(typeof(MonoBehaviour)))
@@ -68,7 +68,8 @@ public class AddressableManager : MonoSingleton<AddressableManager>
         finally
         {
             if (handle.IsValid())
-                Addressables.Release(handle);
+                handleDictionary[key] = handle;
+            // Addressables.Release(handle);
         }
     }
 
@@ -89,11 +90,12 @@ public class AddressableManager : MonoSingleton<AddressableManager>
             Utils.Log($"로드 중 오류 발생: {label}, {e.Message}");
             return default;
         }
-        // finally
-        // {
-        //     if (handle.IsValid())
-        //         Addressables.Release(handle);
-        // }
+        finally
+        {
+            if (handle.IsValid())
+                handleDictionary[label] = handle;
+            // Addressables.Release(handle);
+        }
     }
     /// <summary>
     /// 에셋 비동기 로드
@@ -102,12 +104,13 @@ public class AddressableManager : MonoSingleton<AddressableManager>
     {
         var path = $"{type}/{key}";
         AsyncOperationHandle<T> handle = default;
+        AsyncOperationHandle<GameObject> goHandle = default;
 
         try
         {
             if (typeof(T).IsSubclassOf(typeof(MonoBehaviour)))
             {
-                var goHandle = Addressables.LoadAssetAsync<GameObject>(path);
+                goHandle = Addressables.LoadAssetAsync<GameObject>(path);
                 var gameObject = await goHandle.ToUniTask();
                 return gameObject.GetComponent<T>();
             }
@@ -126,7 +129,11 @@ public class AddressableManager : MonoSingleton<AddressableManager>
         finally
         {
             if (handle.IsValid())
-                Addressables.Release(handle);
+                handleDictionary[key] = handle;
+            // Addressables.Release(handle);
+            if (goHandle.IsValid())
+                handleDictionary[key] = goHandle;
+            // Addressables.Release(goHandle);
         }
     }
 
@@ -147,11 +154,27 @@ public class AddressableManager : MonoSingleton<AddressableManager>
             Utils.Log($"로드 중 오류 발생: {label}, {e.Message}");
             return null;
         }
-        // finally
-        // {
-        //     if (handle.IsValid())
-        //         Addressables.Release(handle);
-        // }
+        finally
+        {
+            if (handle.IsValid())
+                handleDictionary[label] = handle;
+            // Addressables.Release(handle);
+        }
+    }
+
+    // 에셋 할당 해제
+    public void ReleaseAsset(string key)
+    {
+        if (handleDictionary.TryGetValue(key, out var handle))
+        {
+            Addressables.Release(handle); // 해제
+            handleDictionary.Remove(key); // 딕셔너리에서 제거
+            Utils.Log($"에셋 해제: {key}");
+        }
+        else
+        {
+            Utils.Log($"에셋 없음: {key}");
+        }
     }
 
     /// <summary>
@@ -165,9 +188,10 @@ public class AddressableManager : MonoSingleton<AddressableManager>
             return;
         }
 
+        AsyncOperationHandle<long> sizeHandle = default;
         try
         {
-            var sizeHandle = Addressables.GetDownloadSizeAsync(label);
+            sizeHandle = Addressables.GetDownloadSizeAsync(label);
             await sizeHandle.ToUniTask();
 
             if (sizeHandle.Status == AsyncOperationStatus.Succeeded)
@@ -191,6 +215,8 @@ public class AddressableManager : MonoSingleton<AddressableManager>
         }
         finally
         {
+            if (sizeHandle.IsValid())
+                Addressables.Release(sizeHandle);
             downloadUI.gameObject.SetActive(false);
         }
     }
