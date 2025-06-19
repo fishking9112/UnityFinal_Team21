@@ -14,7 +14,7 @@ public class StringManager : MonoSingleton<StringManager>
     // Start is called before the first frame update
     void Start()
     {
-        SetLocalLanguage();
+        SetBasicLocalLanguage();
     }
 
     public void SetString(string key, LocalizeStringEvent comp)
@@ -38,7 +38,7 @@ public class StringManager : MonoSingleton<StringManager>
 
 
 
-    public void SetLocalLanguage()
+    public void SetBasicLocalLanguage()
     {
         int selectLang;
         if(PlayerPrefs.HasKey("language"))
@@ -54,7 +54,7 @@ public class StringManager : MonoSingleton<StringManager>
 
         Locale lang = GetLocaleCode(code);
         LocalizationSettings.SelectedLocale = lang;
-        Utils.LogError(lang.LocaleName);
+        //Utils.LogError(lang.LocaleName);
     }
 
     private Locale GetLocaleCode(string code)
