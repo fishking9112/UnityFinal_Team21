@@ -1,63 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
 
-
-enum Localization
-{
-    Ko=1,
-    En
-}
 
 public class StringManager : MonoSingleton<StringManager>
 {
-    private Dictionary<long, CLocalStringData> StringDicLangs;
-
-    private Localization local;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        LocalizeStringEvent a=new LocalizeStringEvent();
+        
+        a.StringReference.Arguments = new[] {"10"};
+        a.SetEntry("9902303");
     }
 
-    public void SetStringTable()
+    public void SetString(string key, LocalizeStringEvent comp)
     {
-
+        comp.SetEntry(key);
     }
 
-
-    public string GetString(int key)
+    public void SetString(string key, LocalizeStringEvent comp, string arg)
     {
-
-        if(StringDicLangs.Count==0)
-        {
-            return string.Empty;
-        }
-
-        if(!StringDicLangs.TryGetValue(key, out CLocalStringData val))
-        {
-            return string.Empty;
-        }
-
-        switch(local)
-        {
-            case Localization.Ko:
-                return val.ko;
-            case Localization.En:
-                return val.en;
-        }
-
-
-
+        comp.StringReference.Arguments.Clear();
+        comp.StringReference.Arguments.Add(arg);
+        comp.SetEntry(key);
     }
-}
-
-public class CLocalStringData
-{
-    public int Key { get; set; }
-
-    public string ko { get; set; }
-    public string en { get; set; }
+    public void SetString(string key, LocalizeStringEvent comp, string arg,string arg2)
+    {
+        comp.StringReference.Arguments.Clear();
+        comp.StringReference.Arguments.Add(arg);
+        comp.StringReference.Arguments.Add(arg2);
+        comp.SetEntry(key);
+    }
 
 }
