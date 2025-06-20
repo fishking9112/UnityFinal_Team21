@@ -68,4 +68,9 @@ public class StringManager : MonoSingleton<StringManager>
         }
         return null;
     }
+
+    public void ChangeLocale(int index)
+    {
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+    }
 }
