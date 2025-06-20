@@ -68,9 +68,9 @@ public class MenuHUD : HUDUI
         quitGameBtn.onClick.AddListener(() =>
         {
 #if UNITY_EDITOR
-            UIManager.Instance.ShowPopup("게임 종료", "정말로 게임을 종료하시겠습니까?", () => { UnityEditor.EditorApplication.isPlaying = false; }, () => { Utils.Log("취소."); });
+            UIManager.Instance.ShowPopup("9900035", "9900036", () => { UnityEditor.EditorApplication.isPlaying = false; }, () => { Utils.Log("취소."); });
 #else
-        UIManager.Instance.ShowPopup("게임 종료", "정말로 게임을 종료하시겠습니까?", () => Application.Quit() , () => { Utils.Log("취소."); });
+        UIManager.Instance.ShowPopup("9900035", "9900036", () => Application.Quit() , () => { Utils.Log("취소."); });
 #endif
         });
 

@@ -66,7 +66,7 @@ public class QueenEnhanceUI : SingleUI
         }
         else
         {
-            UIManager.Instance.ShowPopup("알림", "골드가 부족합니다.", () => { Utils.Log("확인."); });
+            UIManager.Instance.ShowPopup("9900048", "9900049", () => { Utils.Log("확인."); });
         }
     }
 
@@ -230,11 +230,11 @@ public class QueenEnhanceUI : SingleUI
                 continue;
 
             float amount = 0f;
-            
+
             switch (type)
             {
                 case ValueType.Hp:
-                    float originHealth= DataManager.Instance.monsterDic[monster.id].health;
+                    float originHealth = DataManager.Instance.monsterDic[monster.id].health;
                     amount = originHealth * value;
                     monster.health += amount;
                     foreach (var controller in MonsterManager.Instance.idByMonsters[monster.id])

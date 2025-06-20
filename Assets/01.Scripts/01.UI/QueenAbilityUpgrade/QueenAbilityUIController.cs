@@ -134,6 +134,6 @@ public class QueenAbilityUIController : MonoBehaviour
     /// </summary>
     private void OnClickResetButton()
     {
-        UIManager.Instance.ShowPopup("알림", "모든 업그레이드 사항을 초기화 시키겠습니까?", () => QueenAbilityUpgradeManager.Instance.ResetAllAbilities(), () => { Utils.Log("취소."); });
+        UIManager.Instance.ShowPopup("9900048", "9900051", () => QueenAbilityUpgradeManager.Instance.ResetAllAbilities(), () => { Utils.Log("취소."); });
     }
 }
