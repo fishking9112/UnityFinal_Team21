@@ -78,6 +78,14 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         condition = GameManager.Instance.queen.condition;
     }
 
+    protected override void OnDestroy()
+    {
+        AddressableManager.Instance.ReleaseAsset("Hero");
+        AddressableManager.Instance.ReleaseAsset("BossHero");
+
+        base.OnDestroy();
+    }
+
     public HeroController GetBossObject(Vector2 pos)
     {
         int rand = UnityEngine.Random.Range(0, bossList.Count);
@@ -159,7 +167,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         }
 
         if (!GameManager.Instance.gameResultController.gameEnd) { condition.KillCnt.Value++; }
-        
+
         obj.gameObject.SetActive(false);
     }
 }

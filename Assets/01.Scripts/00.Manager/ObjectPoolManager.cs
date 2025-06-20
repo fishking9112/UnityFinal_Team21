@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 /// <summary>
 /// 오브젝트 풀을 사용할 클래스에 상속받아서 사용
@@ -46,18 +47,22 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
 
     public async UniTask InitPoolsFromAddressables()
     {
-        var handle = Addressables.LoadAssetsAsync<GameObject>("poolObj", null);
-        var loadedSettings = await handle.ToUniTask();
+        var loadedSettings = await AddressableManager.Instance.LoadDataAssetsAsync<GameObject>("poolObj");
 
         foreach (var setting in loadedSettings)
         {
 
             var p = setting.GetComponent<IPoolable>();
 
-       
             RegisterPool(setting.name, p as Component, 5);
         }
+    }
 
+    protected override void OnDestroy()
+    {
+        AddressableManager.Instance.ReleaseAsset("poolObj");
+
+        base.OnDestroy();
     }
 
     public void RegisterPool<T>(string key, T prefab, int initPoolSize = 0) where T : Component
@@ -86,7 +91,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     private T CreatePool<T>(string key) where T : Component
     {
         var p = prefabMap[key];
-        T comp= Instantiate(p.prefab, parentMap[key].transform) as T;
+        T comp = Instantiate(p.prefab, parentMap[key].transform) as T;
         comp.GetComponent<IPoolable>()?.Init(o => ReturnObject(key, o));
         return comp;
     }
