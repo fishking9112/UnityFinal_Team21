@@ -29,7 +29,7 @@ public class CollectionUI : MonoBehaviour
     public Dictionary<int, CollectionIcon> queenIcons = new();
     public Dictionary<int, CollectionIcon> enhanceIcons = new();
     public Dictionary<int, CollectionIcon> activeSkillIcons = new();
-    public Dictionary<int, CollectionIcon> heroIcons = new();
+    //public Dictionary<int, CollectionIcon> heroIcons = new();
     public Dictionary<int, CollectionIcon> heroAbilityIcons = new();
     public List<Dictionary<int, CollectionIcon>> iconList = new();
 
@@ -54,7 +54,7 @@ public class CollectionUI : MonoBehaviour
         CreateIcons(DataManager.Instance.queenAbilityDic, queenIcons, contentTransform);
         CreateIcons(DataManager.Instance.queenEnhanceDic, enhanceIcons, contentTransform);
         CreateIcons(DataManager.Instance.queenActiveSkillDic, activeSkillIcons, contentTransform);
-        CreateIcons(DataManager.Instance.heroStatusDic, heroIcons, contentTransform);
+        //CreateIcons(DataManager.Instance.heroStatusDic, heroIcons, contentTransform);
         CreateIcons(DataManager.Instance.heroAbilityDic, heroAbilityIcons, contentTransform);
 
         iconList.Add(allIcons);
@@ -62,7 +62,7 @@ public class CollectionUI : MonoBehaviour
         iconList.Add(queenIcons);
         iconList.Add(enhanceIcons);
         iconList.Add(activeSkillIcons);
-        iconList.Add(heroIcons);
+        //iconList.Add(heroIcons);
         iconList.Add(heroAbilityIcons);
 
         closeButton.onClick.AddListener(() => gameObject.SetActive(false));
