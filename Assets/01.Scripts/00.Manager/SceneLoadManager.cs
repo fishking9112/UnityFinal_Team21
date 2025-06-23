@@ -44,13 +44,12 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                     //titleProgressText.StartAnimating();
                     await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
                     await UGSManager.Instance.InitAsync(); // UGS 초기화
-                    titleProgressText.StopAnimating();
-
+                    //titleProgressText.StopAnimating();
                     titleProgressText.SetLoadingText("9900009");
                     //titleProgressText.StartAnimating();
                     await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
                     await AddressableManager.Instance.InitDownloadAsync(); // Addressable 다운로드
-                    titleProgressText.StopAnimating();
+                    //titleProgressText.StopAnimating();
                     titleProgressText.ActiveUIGroup(false);
                 }
 
