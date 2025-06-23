@@ -1447,6 +1447,98 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd78d09f95f1be244bb0de66d53088eb, type: 3}
+--- !u!1 &832372348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 832372351}
+  - component: {fileID: 832372350}
+  - component: {fileID: 832372349}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &832372349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832372348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6ee15c23b18da442a638052faaf80da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneBGM:
+  - sceneNames:
+    - IntroScene
+    - AppScene
+    bgmClips:
+    - {fileID: 8300000, guid: 87c571dd6bc725f4a94631d4663b95d0, type: 3}
+  - sceneNames:
+    - MenuScene
+    bgmClips:
+    - {fileID: 8300000, guid: 157b2c87faff24a4fa143a854dbe4c65, type: 3}
+  - sceneNames:
+    - GameScene
+    bgmClips:
+    - {fileID: 8300000, guid: 73eb928909e92d24e8a9f44fad627a08, type: 3}
+    - {fileID: 8300000, guid: 275f50498f4e4f04da7e2f0dc6010cdc, type: 3}
+--- !u!114 &832372350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832372348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 374f110da96f512409245ce9fdc08e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDontDestroy: 1
+  audioMixer: {fileID: 24100000, guid: 73546ae4f21f5ef40a1e2167863997bb, type: 2}
+  bgmVolumeParam: BGMVolume
+  sfxVolumeParam: SFXVolume
+  bgmGroup: {fileID: 8038239515676956668, guid: 73546ae4f21f5ef40a1e2167863997bb, type: 2}
+  sfxGroup: {fileID: -1866841134157446548, guid: 73546ae4f21f5ef40a1e2167863997bb, type: 2}
+  audioClips:
+  - {fileID: 8300000, guid: 157b2c87faff24a4fa143a854dbe4c65, type: 3}
+  - {fileID: 8300000, guid: f888df44ae1bfc948b75cdad54dc0d8d, type: 3}
+  - {fileID: 8300000, guid: 87c571dd6bc725f4a94631d4663b95d0, type: 3}
+  - {fileID: 8300000, guid: ad98ccdcb54bdd74992336395f11f77f, type: 3}
+  - {fileID: 8300000, guid: 5aa948679296f2649802b2f562804537, type: 3}
+  - {fileID: 8300000, guid: 397f887ca5a702240b4c9338fe65fb9c, type: 3}
+  - {fileID: 8300000, guid: 87c571dd6bc725f4a94631d4663b95d0, type: 3}
+  - {fileID: 8300000, guid: 73eb928909e92d24e8a9f44fad627a08, type: 3}
+  - {fileID: 8300000, guid: 275f50498f4e4f04da7e2f0dc6010cdc, type: 3}
+  - {fileID: 8300000, guid: 8cdf831e16bd02f4b802b3760ae254d9, type: 3}
+  - {fileID: 8300000, guid: 39ad5bf13cc8080478ae109572808944, type: 3}
+  poolSize: 10
+  bgmController: {fileID: 832372349}
+--- !u!4 &832372351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832372348}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1067349609
 GameObject:
   m_ObjectHideFlags: 0
@@ -3170,80 +3262,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2041497138}
   m_CullTransparentMesh: 1
---- !u!1 &2054310043
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2054310045}
-  - component: {fileID: 2054310044}
-  - component: {fileID: 2054310046}
-  m_Layer: 0
-  m_Name: SoundManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2054310044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2054310043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 374f110da96f512409245ce9fdc08e27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDontDestroy: 1
-  audioMixer: {fileID: 0}
-  bgmVolumeParam: BGMVolume
-  sfxVolumeParam: SFXVolume
-  bgmGroup: {fileID: 0}
-  sfxGroup: {fileID: 0}
-  audioClips:
-  - {fileID: 8300000, guid: 157b2c87faff24a4fa143a854dbe4c65, type: 3}
-  - {fileID: 8300000, guid: f888df44ae1bfc948b75cdad54dc0d8d, type: 3}
-  - {fileID: 8300000, guid: 87c571dd6bc725f4a94631d4663b95d0, type: 3}
-  - {fileID: 8300000, guid: ad98ccdcb54bdd74992336395f11f77f, type: 3}
-  - {fileID: 8300000, guid: 5aa948679296f2649802b2f562804537, type: 3}
-  - {fileID: 8300000, guid: 397f887ca5a702240b4c9338fe65fb9c, type: 3}
-  - {fileID: 8300000, guid: 8cdf831e16bd02f4b802b3760ae254d9, type: 3}
-  poolSize: 10
-  bgmController: {fileID: 2054310046}
---- !u!4 &2054310045
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2054310043}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2054310046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2054310043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6ee15c23b18da442a638052faaf80da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneBGM: []
 --- !u!1 &2081961595
 GameObject:
   m_ObjectHideFlags: 0
@@ -3649,7 +3667,7 @@ SceneRoots:
   - {fileID: 591244089}
   - {fileID: 198115009}
   - {fileID: 1626919220}
-  - {fileID: 2054310045}
+  - {fileID: 832372351}
   - {fileID: 1481221097}
   - {fileID: 788316714}
   - {fileID: 432128107}
