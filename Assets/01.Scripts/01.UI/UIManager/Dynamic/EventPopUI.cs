@@ -4,10 +4,12 @@ using System;
 using TMPro;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using UnityEngine.Localization.Components;
 
 public class EventPopUI : BaseUI
 {
     [SerializeField] private TextMeshProUGUI titleText;
+    public LocalizeStringEvent titleLocalize;
     [SerializeField] private Image iconImg;
 
     [SerializeField] private CanvasGroup canvasGroup; // 반드시 할당
@@ -27,8 +29,7 @@ public class EventPopUI : BaseUI
     /// </summary>
     public void Setup(string title, string icon)
     {
-        if (titleText != null)
-            titleText.text = title;
+        StringManager.Instance.SetString(title, titleLocalize);
 
         var iconSprite = DataManager.Instance.iconAtlas.GetSprite(icon);
         if (iconSprite != null)

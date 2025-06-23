@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 public class GameResultUnitData
@@ -35,7 +36,9 @@ public class GameResultUI : SingleUI
     public GameObject DescriptionPopupUI => descriptionPopupUI.gameObject;
     public Image popupUIAbilityImage;
     public TextMeshProUGUI popupUIAbilityName;
+    [SerializeField] private LocalizeStringEvent abilityNameLocalize;
     public TextMeshProUGUI popupUIAbilityDec;
+    [SerializeField] private LocalizeStringEvent abilityDecLocalize;
     public TextMeshProUGUI popupUIAbilityLevel;
 
     [Header("Enhance/Skill Item Prefabs")]
@@ -230,13 +233,14 @@ public class GameResultUI : SingleUI
         int currentLevel = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
 
         popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
-        popupUIAbilityName.text = info.name;
+        // popupUIAbilityName.text = info.name;
+        StringManager.Instance.SetString(info.name, abilityNameLocalize);
 
         float previewValue = (currentLevel / 2f) * (2 * info.state_Base + (currentLevel - 1) * info.state_LevelUp);
 
         string formattedValue = $"{previewValue * 100:F0}%";
 
-        popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
+        SetAbilityDecText(info, formattedValue).Forget();
 
         if (info.type != QueenEnhanceType.AddSkill)
         {
@@ -246,5 +250,11 @@ public class GameResultUI : SingleUI
         {
             popupUIAbilityLevel.text = "-";
         }
+    }
+
+    public async UniTask SetAbilityDecText(QueenEnhanceInfo info, string formattedValue)
+    {
+        var description = await StringManager.Instance.GetString(info.description);
+        popupUIAbilityDec.text = string.Format(description, formattedValue);
     }
 }

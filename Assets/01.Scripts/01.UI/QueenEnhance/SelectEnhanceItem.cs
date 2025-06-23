@@ -1,7 +1,9 @@
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
@@ -11,9 +13,12 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI enhanceNameText;
+    [SerializeField] private LocalizeStringEvent enhanceNameLocalize;
     [SerializeField] private TextMeshProUGUI enhanceNextLevelText;
     [SerializeField] private TextMeshProUGUI enhanceTypeText;
+    [SerializeField] private LocalizeStringEvent enhanceTypeLocalize;
     [SerializeField] private TextMeshProUGUI enhanceDecText;
+    readonly object[] enhanceDecLocalizeArgs = new object[1];
 
     private Transform targetTransform;
     private QueenEnhanceInfo currentInfo;
@@ -42,7 +47,7 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void OnEnable()
     {
-        OnPointerExit(null); 
+        OnPointerExit(null);
     }
 
     private void Update()
@@ -62,31 +67,44 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         int nextLevel = currentLevel + 1;
 
         iconImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
-        enhanceNameText.text = info.name;
+        // enhanceNameText.text = info.name;
+
+        StringManager.Instance.SetString(info.name, enhanceNameLocalize);
 
         enhanceNextLevelText.text = info.type == QueenEnhanceType.AddSkill ? string.Empty : (nextLevel >= info.maxLevel ? $"Lv. {nextLevel}(Max)" : $"Lv. {nextLevel}");
 
-        enhanceTypeText.text = GetEnhanceTypeText(info.type);
+        // enhanceTypeText.text = GetEnhanceTypeText(info.type);
+        StringManager.Instance.SetString(GetEnhanceTypeText(info.type), enhanceTypeLocalize);
 
+        SetEnhanceDecText(info, currentLevel).Forget();
+    }
+
+    public async UniTask SetEnhanceDecText(QueenEnhanceInfo info, int currentLevel)
+    {
         float previewValue = currentLevel == 0
             ? info.state_Base
             : info.state_Base + (info.state_LevelUp * currentLevel);
 
         string formattedValue = $"{previewValue * 100:F0}%";
 
-
-        enhanceDecText.text = info.description.Replace("n", formattedValue);
+        var description = await StringManager.Instance.GetString(info.description);
+        enhanceDecText.text = string.Format(description, formattedValue);
 
         if (info.skill_ID != 0)
         {
-            enhanceDecText.text += $"\n\n<color=#FFB600>* {DataManager.Instance.queenActiveSkillDic[info.skill_ID].name} : {DataManager.Instance.queenActiveSkillDic[info.skill_ID].description}</color>";
+            var skillDicName = await StringManager.Instance.GetString(DataManager.Instance.queenActiveSkillDic[info.skill_ID].name);
+            var skillDicDesc = await StringManager.Instance.GetString(DataManager.Instance.queenActiveSkillDic[info.skill_ID].description);
+            enhanceDecText.text += $"\n\n<color=#FFB600>* {skillDicName} : {skillDicDesc}</color>";
         }
 
         if (GameManager.Instance.queen.condition.Level.Value % 5 == 0)
         {
-            enhanceDecText.text += "\n\n<color=#FFFF00>진화포인트<sprite=0> +1";
+            var pointDesc = await StringManager.Instance.GetString("9900501");
+            enhanceDecText.text += $"\n\n<color=#FFFF00>{pointDesc}<sprite=0> +1";
         }
     }
+
+
 
     /// <summary>
     /// 강화의 타입의 따라 표기 텍스트 분류
@@ -97,11 +115,11 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         return type switch
         {
-            QueenEnhanceType.Point => "포인트",
-            QueenEnhanceType.QueenPassive => "여왕 강화",
-            QueenEnhanceType.MonsterPassive => "몬스터 강화",
-            QueenEnhanceType.AddSkill => "스킬 습득",
-            _ => "알 수 없음"
+            QueenEnhanceType.Point => "9902421",
+            QueenEnhanceType.QueenPassive => "9902414",
+            QueenEnhanceType.MonsterPassive => "9902412",
+            QueenEnhanceType.AddSkill => "9902413",
+            _ => "9902422"
         };
     }
 
