@@ -31,6 +31,8 @@ public class StringManager : MonoSingleton<StringManager>
     public void SetString(string key, LocalizeStringEvent comp)
     {
         comp.SetEntry(key);
+
+        comp.RefreshString();
     }
 
     public void SetString(string key, LocalizeStringEvent comp, string arg)
@@ -46,20 +48,32 @@ public class StringManager : MonoSingleton<StringManager>
 
         comp.StringReference.Arguments.Clear();
         comp.StringReference.Arguments.Add(arg);
+
+        comp.RefreshString();
     }
-    public void SetString(string key, LocalizeStringEvent comp, string arg,string arg2)
+    public void SetString(string key, LocalizeStringEvent comp, string arg, string arg2)
     {
+        if (comp.StringReference == null)
+            comp.StringReference = new LocalizedString();
+
+        comp.SetEntry(key); // Entry를 먼저 지정
+
+        // Arguments null 오류 계속 떠서 추가했어요.
+        if (comp.StringReference.Arguments == null)
+            comp.StringReference.Arguments = new List<object>();
+
         comp.StringReference.Arguments.Clear();
         comp.StringReference.Arguments.Add(arg);
         comp.StringReference.Arguments.Add(arg2);
-        comp.SetEntry(key);
+
+        comp.RefreshString();
     }
 
 
     public void SetBasicLocalLanguage()
     {
         int selectLang;
-        if(PlayerPrefs.HasKey("language"))
+        if (PlayerPrefs.HasKey("language"))
         {
             selectLang = PlayerPrefs.GetInt("language");
         }
@@ -79,7 +93,7 @@ public class StringManager : MonoSingleton<StringManager>
     {
         foreach (var locale in LocalizationSettings.AvailableLocales.Locales)
         {
-            if(locale.Identifier.Code==code)
+            if (locale.Identifier.Code == code)
             {
                 return locale;
             }
