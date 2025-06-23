@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using UnityEngine.Localization.Components;
 
 /// <summary>
 /// 제목, 설명, 확인, 취소 버튼이 있는 팝업UI
@@ -10,6 +11,8 @@ public class PopupUI : BaseUI
 {
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI messageText;
+    [SerializeField] private LocalizeStringEvent titleLocalize;
+    [SerializeField] private LocalizeStringEvent messageLocalize;
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
 
@@ -40,6 +43,23 @@ public class PopupUI : BaseUI
 
         if (messageText != null)
             messageText.text = message;
+
+        onConfirm = onConfirmAction;
+        onCancel = onCancelAction;
+
+        // 만약 취소버튼이 없다면 자동으로 취소 버튼을 숨긴 뒤 확인버튼만 활성화 됨
+        if (onCancel == null)
+            cancelButton.gameObject.SetActive(false);
+    }
+
+
+    /// <summary>
+    /// 팝업 설정
+    /// </summary>
+    public void SetupLocalization(string titleID, string messageID, Action onConfirmAction, Action onCancelAction = null)
+    {
+        StringManager.Instance.SetString(titleID, titleLocalize);
+        StringManager.Instance.SetString(messageID, messageLocalize);
 
         onConfirm = onConfirmAction;
         onCancel = onCancelAction;

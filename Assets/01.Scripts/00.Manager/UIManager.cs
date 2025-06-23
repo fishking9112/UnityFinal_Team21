@@ -85,22 +85,22 @@ public class UIManager : MonoSingleton<UIManager>
     /// <param name="message">팝업 메시지</param>
     /// <param name="onConfirmAction">확인 버튼 동작</param>
     /// <param name="onCancelAction">취소 버튼 동작</param>
-    public void ShowPopup(string title, string message, Action onConfirmAction, Action onCancelAction = null)
+    public void ShowPopup(string titleID, string messageID, Action onConfirmAction, Action onCancelAction = null)
     {
-        ShowPopupAsync(title, message, onConfirmAction, onCancelAction).Forget();
+        ShowPopupAsync(titleID, messageID, onConfirmAction, onCancelAction).Forget();
     }
 
     /// <summary>
     /// 팝업 호출
     /// </summary>
-    /// <param name="title">팝업 제목</param>
-    /// <param name="message">팝업 메시지</param>
+    /// <param name="titleID">팝업 제목</param>
+    /// <param name="messageID">팝업 메시지</param>
     /// <param name="onConfirmAction">확인 버튼 동작</param>
     /// <param name="onCancelAction">취소 버튼 동작</param>
-    public async UniTask ShowPopupAsync(string title, string message, Action onConfirmAction, Action onCancelAction = null)
+    public async UniTask ShowPopupAsync(string titleID, string messageID, Action onConfirmAction, Action onCancelAction = null)
     {
         var popup = await ShowUI<PopupUI>();
-        popup.Setup(title, message, onConfirmAction, onCancelAction);
+        popup.SetupLocalization(titleID, messageID, onConfirmAction, onCancelAction);
     }
 
 
