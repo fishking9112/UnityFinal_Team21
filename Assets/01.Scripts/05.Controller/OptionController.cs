@@ -87,7 +87,7 @@ public class OptionController : MonoBehaviour
     /// </summary>
     /// <param name="index"></param>
 
-    private void OnLanguageChanged(int index)
+    public void OnLanguageChanged(int index)
     {
 
     }
