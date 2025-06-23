@@ -6,6 +6,8 @@ using UnityEngine.Events;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Components;
+using System.Threading.Tasks;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 
 public class StringManager : MonoSingleton<StringManager>
@@ -15,6 +17,15 @@ public class StringManager : MonoSingleton<StringManager>
     void Start()
     {
         SetBasicLocalLanguage();
+    }
+
+    public async Task<string> GetString(string key)
+    {
+        var str = new LocalizedString("StringTable", key);
+        AsyncOperationHandle<string> handle = str.GetLocalizedStringAsync();
+        await handle.Task;
+
+        return handle.Result;
     }
 
     public void SetString(string key, LocalizeStringEvent comp)
