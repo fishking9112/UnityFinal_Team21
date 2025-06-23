@@ -90,5 +90,6 @@ public class StringManager : MonoSingleton<StringManager>
     public void ChangeLocale(int index)
     {
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+        PlayerPrefs.SetInt("language", index);
     }
 }

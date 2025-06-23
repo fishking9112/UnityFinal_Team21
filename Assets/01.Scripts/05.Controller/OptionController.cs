@@ -89,6 +89,6 @@ public class OptionController : MonoBehaviour
 
     public void OnLanguageChanged(int index)
     {
-
+        StringManager.Instance.ChangeLocale(index);
     }
 }
