@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Components;
 
 public class TitleProgressText : MonoBehaviour
 {
@@ -41,6 +42,11 @@ public class TitleProgressText : MonoBehaviour
     public void SetAnimText(string textValue)
     {
         this.textValue = textValue;
+    }
+    public void SetLoadingText(string key)
+    {
+        LocalizeStringEvent comp = MyExtensionMethod.GetOrAddComponent<LocalizeStringEvent>(this.gameObject);
+        StringManager.Instance.SetString(key, comp);
     }
 
     public void StartAnimating()

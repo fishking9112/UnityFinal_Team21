@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Localization.Components;
 using UnityEngine.SceneManagement;
 using static GameLog;
 
@@ -18,6 +19,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
     private bool isSceneLoading = false;
     void Start()
     {
+        a = titleProgressText.GetComponent<LocalizeStringEvent>();
         LoadScene(LoadSceneEnum.AppScene).Forget();
     }
 
@@ -38,15 +40,14 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 if (titleProgressText != null)
                 {
                     LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.GameStart);
-
                     titleProgressText.ActiveUIGroup(true);
-                    titleProgressText.SetAnimText("로그인 중");
+                    titleProgressText.SetLoadingText("9900008");
                     titleProgressText.StartAnimating();
                     await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
                     await UGSManager.Instance.InitAsync(); // UGS 초기화
                     titleProgressText.StopAnimating();
 
-                    titleProgressText.SetAnimText("데이터 로딩 중");
+                    titleProgressText.SetLoadingText("9900009");
                     titleProgressText.StartAnimating();
                     await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
                     await AddressableManager.Instance.InitDownloadAsync(); // Addressable 다운로드
