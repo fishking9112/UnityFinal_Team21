@@ -45,7 +45,7 @@ public class TitleProgressText : MonoBehaviour
     }
     public void SetLoadingText(string key)
     {
-        LocalizeStringEvent comp = MyExtensionMethod.GetOrAddComponent<LocalizeStringEvent>(this.gameObject);
+        LocalizeStringEvent comp = progressText.GetComponent<LocalizeStringEvent>();
         StringManager.Instance.SetString(key, comp);
     }
 

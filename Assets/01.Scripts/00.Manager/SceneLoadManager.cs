@@ -19,7 +19,6 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
     private bool isSceneLoading = false;
     void Start()
     {
-        a = titleProgressText.GetComponent<LocalizeStringEvent>();
         LoadScene(LoadSceneEnum.AppScene).Forget();
     }
 
@@ -42,13 +41,13 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                     LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.GameStart);
                     titleProgressText.ActiveUIGroup(true);
                     titleProgressText.SetLoadingText("9900008");
-                    titleProgressText.StartAnimating();
+                    //titleProgressText.StartAnimating();
                     await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
                     await UGSManager.Instance.InitAsync(); // UGS 초기화
                     titleProgressText.StopAnimating();
 
                     titleProgressText.SetLoadingText("9900009");
-                    titleProgressText.StartAnimating();
+                    //titleProgressText.StartAnimating();
                     await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
                     await AddressableManager.Instance.InitDownloadAsync(); // Addressable 다운로드
                     titleProgressText.StopAnimating();
