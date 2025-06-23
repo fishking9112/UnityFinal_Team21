@@ -1001,7 +1001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b03f68679634745b72a5556be191b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 4160985719063948808}
+  LocalizeNameText: {fileID: 1336561492042278844}
   upgradeIndicator: {fileID: 1136753432047189871}
   upgradeButton: {fileID: 1290272884437500447}
   downgradeButton: {fileID: 7466709248678330702}
@@ -1429,6 +1429,7 @@ GameObject:
   - component: {fileID: 7328857156496555855}
   - component: {fileID: 8942547717471769407}
   - component: {fileID: 4160985719063948808}
+  - component: {fileID: 1336561492042278844}
   m_Layer: 5
   m_Name: Name Text (TMP)
   m_TagString: Untagged
@@ -1552,6 +1553,46 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1336561492042278844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5735793600138606921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:77afc9de253d3594dafedafcb44696a1
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4160985719063948808}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &6030669098867440447
 GameObject:
   m_ObjectHideFlags: 0
@@ -2533,7 +2574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b03f68679634745b72a5556be191b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 0}
+  LocalizeNameText: {fileID: 0}
   upgradeIndicator: {fileID: 0}
   upgradeButton: {fileID: 0}
   downgradeButton: {fileID: 0}
