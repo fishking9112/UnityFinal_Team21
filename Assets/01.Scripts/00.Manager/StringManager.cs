@@ -12,8 +12,8 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class StringManager : MonoSingleton<StringManager>
 {
+    public int SelectLang { private set; get; }
 
-    // Start is called before the first frame update
     void Start()
     {
         SetBasicLocalLanguage();
@@ -58,17 +58,16 @@ public class StringManager : MonoSingleton<StringManager>
 
     public void SetBasicLocalLanguage()
     {
-        int selectLang;
         if(PlayerPrefs.HasKey("language"))
         {
-            selectLang = PlayerPrefs.GetInt("language");
+            SelectLang = PlayerPrefs.GetInt("language");
         }
         else
         {
-            selectLang = (int)Application.systemLanguage;
+            SelectLang = (int)Application.systemLanguage;
         }
 
-        string code = selectLang == (int)SystemLanguage.Korean ? "ko" : "en";
+        string code = SelectLang == (int)SystemLanguage.Korean ? "ko" : "en";
 
         Locale lang = GetLocaleCode(code);
         LocalizationSettings.SelectedLocale = lang;
