@@ -38,6 +38,7 @@ public class OptionController : MonoBehaviour
 
         // 언어 드롭다운 연결
         languageDropdown.onValueChanged.AddListener(OnLanguageChanged);
+        languageDropdown.value = StringManager.Instance.SelectLang;
     }
 
     /// <summary>
