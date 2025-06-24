@@ -36,9 +36,17 @@ public class StringManager : MonoSingleton<StringManager>
 
     public void SetString(string key, LocalizeStringEvent comp, string arg)
     {
+        if (comp.StringReference == null)
+            comp.StringReference = new LocalizedString();
+
+        comp.SetEntry(key); // Entry를 먼저 지정
+
+        // Arguments null 오류 계속 떠서 추가했어요.
+        if (comp.StringReference.Arguments == null)
+            comp.StringReference.Arguments = new List<object>();
+
         comp.StringReference.Arguments.Clear();
         comp.StringReference.Arguments.Add(arg);
-        comp.SetEntry(key);
     }
     public void SetString(string key, LocalizeStringEvent comp, string arg,string arg2)
     {
@@ -47,7 +55,6 @@ public class StringManager : MonoSingleton<StringManager>
         comp.StringReference.Arguments.Add(arg2);
         comp.SetEntry(key);
     }
-
 
 
     public void SetBasicLocalLanguage()

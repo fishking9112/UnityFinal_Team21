@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 
@@ -12,6 +15,8 @@ public class QueenBasicSkillDescription
     public Image SkillIcon;
     public TextMeshProUGUI SkillName;
     public TextMeshProUGUI SkillDescription;
+    public LocalizeStringEvent LocalizeSkillName;
+    public LocalizeStringEvent LocalizeSkillDescription;
 }
 
 public class QueenSelectUI : MonoBehaviour
@@ -29,6 +34,9 @@ public class QueenSelectUI : MonoBehaviour
     public TextMeshProUGUI queenNameText;
 
     private int selcetedQueenID;
+
+    [Header("Localize용 텍스트")]
+    [SerializeField] LocalizeStringEvent LocalizeQueenNameText;
 
     private void OnEnable()
     {
@@ -77,7 +85,9 @@ public class QueenSelectUI : MonoBehaviour
         GameManager.Instance.QueenCharaterID = queenID;
 
         var queenInfo = DataManager.Instance.queenStatusDic[queenID];
-        queenNameText.text = queenInfo.Name;
+
+        StringManager.Instance.SetString(queenInfo.Name, LocalizeQueenNameText);
+
         MainQueenImage.sprite = DataManager.Instance.iconAtlas.GetSprite(queenInfo.Image);
 
         // 액티브 스킬 설정
@@ -131,7 +141,9 @@ public class QueenSelectUI : MonoBehaviour
         selcetedQueenID = queenID;
 
         var queenInfo = DataManager.Instance.queenStatusDic[queenID];
-        queenNameText.text = queenInfo.Name;
+
+        StringManager.Instance.SetString(queenInfo.Name, LocalizeQueenNameText);
+
         MainQueenImage.sprite = DataManager.Instance.iconAtlas.GetSprite(queenInfo.Image);
 
         // 액티브 스킬 설정
@@ -157,16 +169,20 @@ public class QueenSelectUI : MonoBehaviour
     private void SetSkillInfo(QueenBasicSkillDescription ui, QueenActiveSkillInfo skill)
     {
         ui.SkillIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(skill.Icon);
-        ui.SkillName.text = skill.Name;
-        ui.SkillDescription.text = skill.Description;
+
+        StringManager.Instance.SetString(skill.Name, ui.LocalizeSkillName);
+        StringManager.Instance.SetString(skill.Description, ui.LocalizeSkillDescription);
     }
 
     // QueenPassiveSkillInfo에 맞는 오버로드
     private void SetSkillInfo(QueenBasicSkillDescription ui, QueenPassiveSkillInfo skill)
     {
         ui.SkillIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(skill.Icon);
-        ui.SkillName.text = skill.Name;
-        ui.SkillDescription.text = skill.Description.Replace("n", (skill.value * 100f).ToString());
+
+        StringManager.Instance.SetString(skill.Name, ui.LocalizeSkillName);
+
+        float percentValue = skill.value * 100f;
+        StringManager.Instance.SetString(skill.Description, ui.LocalizeSkillDescription, percentValue.ToString("0"));
     }
 
 }

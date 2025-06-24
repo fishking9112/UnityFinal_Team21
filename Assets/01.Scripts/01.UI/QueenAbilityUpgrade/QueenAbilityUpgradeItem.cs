@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 public class QueenAbilityUpgradeItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private LocalizeStringEvent LocalizeNameText;
     [SerializeField] private Transform upgradeIndicator;
     [SerializeField] private Button upgradeButton;
     [SerializeField] private Button downgradeButton;
@@ -24,7 +25,7 @@ public class QueenAbilityUpgradeItem : MonoBehaviour, IPointerEnterHandler, IPoi
         manager = QueenAbilityUpgradeManager.Instance;
         queenAbilityInfo = info;
 
-        nameText.text = queenAbilityInfo.name;
+        StringManager.Instance.SetString(queenAbilityInfo.Name, LocalizeNameText);
 
         upgradeButton.onClick.RemoveAllListeners(); 
         upgradeButton.onClick.AddListener(() =>

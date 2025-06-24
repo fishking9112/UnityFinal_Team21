@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine.InputSystem;
+using UnityEngine.Localization.Components;
 
 public class CollectionUI : MonoBehaviour
 {
@@ -32,6 +34,11 @@ public class CollectionUI : MonoBehaviour
     //public Dictionary<int, CollectionIcon> heroIcons = new();
     public Dictionary<int, CollectionIcon> heroAbilityIcons = new();
     public List<Dictionary<int, CollectionIcon>> iconList = new();
+
+
+    [Header("Localize용 텍스트")]
+    [SerializeField] LocalizeStringEvent ItemName;
+    [SerializeField] LocalizeStringEvent ItemDesc;
 
 
     public void Awake()
@@ -117,13 +124,15 @@ public class CollectionUI : MonoBehaviour
         }
     }
 
+   
     /// <summary>
     /// 아이콘 클릭 시 디테일 보여주기 allIcons들에게 Action으로 callback함수로 넘김
     /// </summary>
     public void OnClickDetail(Sprite sprite, string _name, string _description, bool _isActive)
     {
         descIcon.sprite = sprite;
-        title.text = _name;
+
+        StringManager.Instance.SetString(_name, ItemName);
 
         if (_description.Contains(">n<"))
         {
@@ -134,7 +143,7 @@ public class CollectionUI : MonoBehaviour
             );
         }
 
-        desc.text = _description;
+        StringManager.Instance.SetString(_description, ItemDesc);
 
         if (_isActive)
         {
