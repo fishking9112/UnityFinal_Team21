@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -37,12 +38,18 @@ public class EvolutionTreeUI : SingleUI
     [SerializeField] private TextMeshProUGUI evolutionPointText;
     [SerializeField] private UnityEngine.UI.Image descriptionImage;
     [SerializeField] private TextMeshProUGUI monsterName;
+    [SerializeField] private LocalizeStringEvent monsterNameLocalize;
     [SerializeField] private TextMeshProUGUI description;
+    [SerializeField] private LocalizeStringEvent descLocalize;
     [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private LocalizeStringEvent healthLocalize;
     [SerializeField] private TextMeshProUGUI attackText;
+    [SerializeField] private LocalizeStringEvent attackLocalize;
     [SerializeField] private TextMeshProUGUI costText;
+    [SerializeField] private LocalizeStringEvent costLocalize;
     [SerializeField] private TextMeshProUGUI evolutionButtonText;
     public TextMeshProUGUI EvolutionButtonText => evolutionButtonText;
+    [SerializeField] private LocalizeStringEvent evolutionButtonLocalize;
 
     [Header("QuickSlot")]
     [SerializeField] private List<EvolutionSlot> slotList;
@@ -122,13 +129,18 @@ public class EvolutionTreeUI : SingleUI
     {
         MonsterInfo info = node.monsterInfo;
 
-        monsterName.text = info.name;
+        // monsterName.text = info.name;
+        StringManager.Instance.SetString(info.name, monsterNameLocalize);
         descriptionImage.enabled = true;
         descriptionImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.icon);
-        description.text = info.description;
-        healthText.text = $"기본 체력 : {info.health}";
-        attackText.text = $"기본 공격력 : {info.attack}";
-        costText.text = $"소환 비용 : {info.cost}";
+        // description.text = info.description;
+        StringManager.Instance.SetString(info.description, descLocalize);
+        // healthText.text = $"기본 체력 : {info.health}";
+        StringManager.Instance.SetString("9902322", healthLocalize, info.health.ToString());
+        // attackText.text = $"기본 공격력 : {info.attack}";
+        StringManager.Instance.SetString("9902323", attackLocalize, info.attack.ToString());
+        // costText.text = $"소환 비용 : {info.cost}";
+        StringManager.Instance.SetString("9902324", costLocalize, info.cost.ToString());
     }
 
     public void OnClickEvolutionButton()
@@ -149,14 +161,15 @@ public class EvolutionTreeUI : SingleUI
 
         if (!state)
         {
-            text = "진화 완료";
+            text = "9902311"; // 진화 완료
         }
         else
         {
-            text = "진화";
+            text = "9902310"; // 진화
         }
 
-        EvolutionButtonText.text = text;
+        // EvolutionButtonText.text = text;
+        StringManager.Instance.SetString(text, evolutionButtonLocalize);
     }
 
     public void UpdateEvolutionPointText(float evolutionPoint)
