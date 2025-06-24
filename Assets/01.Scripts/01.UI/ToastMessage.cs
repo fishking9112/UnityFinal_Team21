@@ -28,7 +28,6 @@ public class ToastMessage : MonoBehaviour
         textRect = contentText.GetComponent<RectTransform>();
         img=GetComponentsInChildren<Image>();
         rect = GetComponent<RectTransform>();
-        local = GetComponent<LocalizeStringEvent>();
         duration = 2f;
     }
 
