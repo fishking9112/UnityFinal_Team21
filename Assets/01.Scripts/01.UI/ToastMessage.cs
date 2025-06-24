@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Components;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class ToastMessage : MonoBehaviour
 {
     [SerializeField] private TMP_Text contentText; // 말풍선 텍스트
+    [SerializeField] private LocalizeStringEvent local;
     [SerializeField] private RectTransform bubbleRect; // 말풍선 배경
     [SerializeField] private Vector2 maxSize = new Vector2(270f, 120f); // 최대 크기
     [SerializeField] private Vector2 minSize = new Vector2(270f, 30f); // 최소 크기
@@ -25,6 +28,7 @@ public class ToastMessage : MonoBehaviour
         textRect = contentText.GetComponent<RectTransform>();
         img=GetComponentsInChildren<Image>();
         rect = GetComponent<RectTransform>();
+        local = GetComponent<LocalizeStringEvent>();
         duration = 2f;
     }
 
@@ -47,7 +51,8 @@ public class ToastMessage : MonoBehaviour
     /// </summary>
     public void SetText(string message)
     {
-        contentText.SetText(message);
+        //contentText.SetText(message);
+        StringManager.Instance.SetString(message, local);
         ResizeBubble();
     }
 

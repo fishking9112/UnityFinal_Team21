@@ -296,7 +296,7 @@ public class QueenController : MonoBehaviour
         if (!SpawnPointManager.Instance.MonsterPoint.IsAreaIn(worldMousePos))
         {
             ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
-            msg.SetText("<color=red>소환 가능 범위를 벗어났습니다.</color>");
+            msg.SetText("9902419");
             SpawnPointManager.Instance.MonsterPoint.ShowAndHideAreas();
             return;
         }
@@ -305,7 +305,7 @@ public class QueenController : MonoBehaviour
         {
             // 테이블 나오면 적용 필요
             ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
-            msg.SetText("<color=red>소환 게이지가 부족합니다.</color>");
+            msg.SetText("9902418");
 
             return;
         }
@@ -313,7 +313,7 @@ public class QueenController : MonoBehaviour
         if (MonsterManager.Instance.GetMonsterCount() >= condition.MaxPopulation.Value)
         {
             ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
-            msg.SetText("<color=red>인구수가 가득 찼습니다.</color>");
+            msg.SetText("9902420");
 
             return;
         }
@@ -361,7 +361,7 @@ public class QueenController : MonoBehaviour
         {
             // 테이블 나오면 적용 필요
             ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
-            msg.SetText("<color=red>마나가 부족합니다.</color>");
+            msg.SetText("9902424");
             return;
         }
         if (selectedQueenActiveSkill.info.range != -1f)
