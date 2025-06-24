@@ -4,6 +4,7 @@ using System;
 using TMPro;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Localization.Components;
 
 /// <summary>
 /// 제목, 설명, 확인, 취소 버튼이 있는 팝업UI
@@ -12,7 +13,9 @@ public class ToolTipUI : BaseUI
 {
     [SerializeField] private Image tooltipImg;
     [SerializeField] private TextMeshProUGUI titleText;
+    [SerializeField] private LocalizeStringEvent titleLocalize;
     [SerializeField] private TextMeshProUGUI decsText;
+    [SerializeField] private LocalizeStringEvent decsLocalize;
     [SerializeField] private TextMeshProUGUI pageText;
 
     [SerializeField] private Button finishButton;
@@ -86,11 +89,13 @@ public class ToolTipUI : BaseUI
     public void ToolTipUpdate()
     {
         int curId = historyList[curPage];
-        if (titleText != null)
-            titleText.text = DataManager.Instance.toolTipDic[curId].name;
+        // if (titleText != null)
+        //     titleText.text = DataManager.Instance.toolTipDic[curId].name;
+        StringManager.Instance.SetString(DataManager.Instance.toolTipDic[curId].name, titleLocalize);
 
-        if (decsText != null)
-            decsText.text = DataManager.Instance.toolTipDic[curId].description;
+        // if (decsText != null)
+        //     decsText.text = DataManager.Instance.toolTipDic[curId].description;
+        StringManager.Instance.SetString(DataManager.Instance.toolTipDic[curId].description, decsLocalize);
 
         if (pageText != null)
             pageText.text = $"{curPage + 1} / {historyList.Count}";

@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -10,6 +11,7 @@ public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public Image image;
     [SerializeField] private Button button;
     [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private LocalizeStringEvent nameLocalize;
     [SerializeField] private GameObject selectedUI;
     [SerializeField] private EvolutionTreeUI evolutionTreeUI;
 
@@ -26,7 +28,7 @@ public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         selectedUI = transform.Find("Select")?.gameObject;
 
-        if (DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoId,out var info))
+        if (DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoId, out var info))
         {
             monsterInfo = info;
             image.sprite = DataManager.Instance.iconAtlas.GetSprite(monsterInfo.outfit);
@@ -43,7 +45,8 @@ public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             button.interactable = false;
             image.color = Color.red;
-            nameText.text = "잠김";
+            // nameText.text = "잠김";
+            StringManager.Instance.SetString("9900058", nameLocalize);
             return;
         }
 
@@ -51,7 +54,8 @@ public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (isUnlock)
         {
             image.color = Color.white;
-            nameText.text = monsterInfo.name;
+            // nameText.text = monsterInfo.name;
+            StringManager.Instance.SetString(monsterInfo.name, nameLocalize);
             button.interactable = true;
         }
         else
@@ -60,14 +64,16 @@ public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             if (isActive)
             {
                 image.color = Color.gray;
-                nameText.text = monsterInfo.name;
+                // nameText.text = monsterInfo.name;
+                StringManager.Instance.SetString(monsterInfo.name, nameLocalize);
                 button.interactable = true;
             }
             // 아직 해금할 수 없는 노드
             else
             {
                 image.color = Color.black;
-                nameText.text = "???";
+                // nameText.text = "???";
+                StringManager.Instance.SetString("9900059", nameLocalize);
                 button.interactable = false;
             }
         }
@@ -104,7 +110,7 @@ public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(isUnlock)
+        if (isUnlock)
             selectedUI.SetActive(true);
     }
 

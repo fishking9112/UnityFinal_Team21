@@ -15,7 +15,7 @@ public class KillEnemiesEvent : GameEventBase
         maxCount = heros.Count;
         this.contextUI = contextUI;
         tableInfo = eventTableInfo;
-        contextUI.titleText.text = $"◆ {tableInfo.name}";
+        StringManager.Instance.SetString(tableInfo.name, contextUI.titleLocalize);
         UpdateText();
     }
     public KillEnemiesEvent(GameObject spawnedHero, EventInfo eventTableInfo, GameEventContextUI contextUI)
@@ -24,7 +24,7 @@ public class KillEnemiesEvent : GameEventBase
         maxCount = heros.Count;
         this.contextUI = contextUI;
         tableInfo = eventTableInfo;
-        contextUI.titleText.text = $"◆ {tableInfo.name}";
+        StringManager.Instance.SetString(tableInfo.name, contextUI.titleLocalize);
         UpdateText();
     }
 
@@ -75,8 +75,6 @@ public class KillEnemiesEvent : GameEventBase
 
     private void UpdateText()
     {
-        string tmp = DataManager.Instance.eventDic[tableInfo.ID].description;
-        string result = string.Format(tmp, curCount, maxCount);
-        contextUI.SetText(result);
+        contextUI.SetText(DataManager.Instance.eventDic[tableInfo.ID].description, curCount.ToString(), maxCount.ToString());
     }
 }
