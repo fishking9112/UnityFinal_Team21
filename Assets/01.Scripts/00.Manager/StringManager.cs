@@ -8,6 +8,7 @@ using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Components;
 using System.Threading.Tasks;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using System;
 
 
 public class StringManager : MonoSingleton<StringManager>
@@ -82,11 +83,15 @@ public class StringManager : MonoSingleton<StringManager>
             selectLang = (int)Application.systemLanguage;
         }
 
-        string code = selectLang == (int)SystemLanguage.Korean ? "ko" : "en";
 
-        Locale lang = GetLocaleCode(code);
-        LocalizationSettings.SelectedLocale = lang;
-        //Utils.LogError(lang.LocaleName);
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[selectLang];
+
+
+        //string code = selectLang == (int)SystemLanguage.Korean ? "ko" : "en";
+
+        //Locale lang = GetLocaleCode(code);
+        //LocalizationSettings.SelectedLocale = lang;
+        ////Utils.LogError(lang.LocaleName);
     }
 
     private Locale GetLocaleCode(string code)
