@@ -49,6 +49,7 @@ public class EvolutionTreeUI : SingleUI
     [SerializeField] private LocalizeStringEvent costLocalize;
     [SerializeField] private TextMeshProUGUI evolutionButtonText;
     public TextMeshProUGUI EvolutionButtonText => evolutionButtonText;
+    [SerializeField] private LocalizeStringEvent evolutionButtonLocalize;
 
     [Header("QuickSlot")]
     [SerializeField] private List<EvolutionSlot> slotList;
@@ -160,14 +161,15 @@ public class EvolutionTreeUI : SingleUI
 
         if (!state)
         {
-            text = "진화 완료";
+            text = "9902311"; // 진화 완료
         }
         else
         {
-            text = "진화";
+            text = "9902310"; // 진화
         }
 
-        EvolutionButtonText.text = text;
+        // EvolutionButtonText.text = text;
+        StringManager.Instance.SetString(text, evolutionButtonLocalize);
     }
 
     public void UpdateEvolutionPointText(float evolutionPoint)

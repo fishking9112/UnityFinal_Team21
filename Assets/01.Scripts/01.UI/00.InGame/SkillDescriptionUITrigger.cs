@@ -8,7 +8,7 @@ public class SkillDescriptionUITrigger : MonoBehaviour, IPointerEnterHandler, IP
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(GameManager.Instance.queen.controller.curSlot == QueenSlot.QueenActiveSkill)
+        if (GameManager.Instance.queen.controller.curSlot == QueenSlot.QueenActiveSkill)
         {
             if (skill != null)
             {
@@ -18,7 +18,7 @@ public class SkillDescriptionUITrigger : MonoBehaviour, IPointerEnterHandler, IP
                     DataManager.Instance.iconAtlas.GetSprite(info.icon),
                     info.name,
                     info.description,
-                    $"{info.coolTime}초",
+                    $"{info.coolTime} s",
                     $"{info.cost}"
                 );
             }
