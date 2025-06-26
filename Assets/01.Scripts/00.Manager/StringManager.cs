@@ -80,17 +80,11 @@ public class StringManager : MonoSingleton<StringManager>
         else
         {
             SelectLang = (int)Application.systemLanguage;
+            SelectLang = LocalizationSettings.AvailableLocales.Locales.Count < SelectLang ? 1 : SelectLang;
         }
 
+        ChangeLocale(SelectLang);
 
-        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[SelectLang];
-
-
-        //string code = selectLang == (int)SystemLanguage.Korean ? "ko" : "en";
-
-        //Locale lang = GetLocaleCode(code);
-        //LocalizationSettings.SelectedLocale = lang;
-        ////Utils.LogError(lang.LocaleName);
     }
 
     private Locale GetLocaleCode(string code)
