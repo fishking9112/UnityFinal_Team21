@@ -56,7 +56,7 @@ public class GameEventProgressUI : MonoBehaviour
             return;
 
         // 프로그래스 바 진행도
-        float fillAmount = (1 - (curTime / totalTime)) * 10;
+        float fillAmount = (1 - (curTime / totalTime));
         progressBarFill.fillAmount = fillAmount;
 
         CheckEvent(fillAmount);
