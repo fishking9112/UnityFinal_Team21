@@ -134,16 +134,10 @@ public class CollectionUI : MonoBehaviour
 
         StringManager.Instance.SetString(_name, ItemName);
 
-        if (_description.Contains(">n<"))
-        {
-            _description = Regex.Replace(
-                _description,
-                @"([가-힣]+[이가]) <color=.*?>n</color> ([가-힣]+합니다\.)",
-                "$1 $2"
-            );
-        }
-
         StringManager.Instance.SetString(_description, ItemDesc);
+        string localized = ItemDesc.GetComponent<TMP_Text>().text;
+        string cleaned = Regex.Replace(localized, @" by <color=.*?>\{0\}</color>\s*", "");
+        ItemDesc.GetComponent<TMP_Text>().text = cleaned;
 
         if (_isActive)
         {
