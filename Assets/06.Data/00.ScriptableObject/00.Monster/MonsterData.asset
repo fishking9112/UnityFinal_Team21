@@ -15,8 +15,122 @@ MonoBehaviour:
   sheetURL: 1Of0EBz6S6NjUCNtNGPNnWgAcb5RdXT_xJnsCn-1LZ4w
   sheetName: Monster
   startRowIndex: 2
-  endRowIndex: 24
+  endRowIndex: 30
   infoList:
+  - id: 1001
+    name: 9900125
+    description: 9900224
+    health: 20
+    moveSpeed: 1
+    reward: 1
+    cost: 1
+    outfit: Slime_Normal
+    icon: Slime_Normal
+    attack: 5
+    attackRange: 1
+    attackSpeed: 1
+    monsterAttackType: 1
+    monsterBrood: 0
+    projectile: 
+    projectile_size: 0
+    projectile_speed: 0
+    tire: 0
+    preNode: -1
+  - id: 1002
+    name: 9900126
+    description: 9900225
+    health: 40
+    moveSpeed: 1.5
+    reward: 1
+    cost: 2
+    outfit: Slime_Mk2
+    icon: Slime_Mk2
+    attack: 7
+    attackRange: 1
+    attackSpeed: 1
+    monsterAttackType: 1
+    monsterBrood: 0
+    projectile: 
+    projectile_size: 0
+    projectile_speed: 0
+    tire: 1
+    preNode: 1001
+  - id: 1003
+    name: 9900127
+    description: 9900226
+    health: 100
+    moveSpeed: 1
+    reward: 1
+    cost: 4
+    outfit: Slime_Big
+    icon: Slime_Big
+    attack: 15
+    attackRange: 2
+    attackSpeed: 0.5
+    monsterAttackType: 1
+    monsterBrood: 0
+    projectile: 
+    projectile_size: 0
+    projectile_speed: 0
+    tire: 2
+    preNode: 1002
+  - id: 1004
+    name: 9900128
+    description: 9900227
+    health: 30
+    moveSpeed: 2.5
+    reward: 1
+    cost: 2
+    outfit: Slime_Speed
+    icon: Slime_Speed
+    attack: 5
+    attackRange: 1
+    attackSpeed: 1.5
+    monsterAttackType: 1
+    monsterBrood: 0
+    projectile: 
+    projectile_size: 0
+    projectile_speed: 0
+    tire: 2
+    preNode: 1002
+  - id: 1005
+    name: 9900129
+    description: 9900228
+    health: 40
+    moveSpeed: 1.5
+    reward: 1
+    cost: 3
+    outfit: Slime_Poison
+    icon: Slime_Poison
+    attack: 7
+    attackRange: 1
+    attackSpeed: 1
+    monsterAttackType: 1
+    monsterBrood: 0
+    projectile: 
+    projectile_size: 0
+    projectile_speed: 0
+    tire: 1
+    preNode: 1001
+  - id: 1006
+    name: 9900130
+    description: 9900229
+    health: 60
+    moveSpeed: 1.5
+    reward: 1
+    cost: 3
+    outfit: Slime_PoisonMk2
+    icon: Slime_PoisonMk2
+    attack: 7
+    attackRange: 1
+    attackSpeed: 1
+    monsterAttackType: 1
+    monsterBrood: 0
+    projectile: 
+    projectile_size: 0
+    projectile_speed: 0
+    tire: 2
+    preNode: 1005
   - id: 1101
     name: 9900101
     description: 9900201
@@ -303,25 +417,6 @@ MonoBehaviour:
     tire: 1
     preNode: 1401
   - id: 1403
-    name: 9900116
-    description: 9900216
-    health: 240
-    moveSpeed: 1.5
-    reward: 6
-    cost: 15
-    outfit: Elf_Hunter
-    icon: Elf_Hunter
-    attack: 25
-    attackRange: 20
-    attackSpeed: 0.7
-    monsterAttackType: 2
-    monsterBrood: 2
-    projectile: Arrow
-    projectile_size: 2
-    projectile_speed: 7
-    tire: 2
-    preNode: 1402
-  - id: 1404
     name: 9900117
     description: 9900217
     health: 240
@@ -340,6 +435,25 @@ MonoBehaviour:
     projectile_speed: 0
     tire: 1
     preNode: 1401
+  - id: 1404
+    name: 9900116
+    description: 9900216
+    health: 240
+    moveSpeed: 1.5
+    reward: 6
+    cost: 15
+    outfit: Elf_Hunter
+    icon: Elf_Hunter
+    attack: 25
+    attackRange: 20
+    attackSpeed: 0.7
+    monsterAttackType: 2
+    monsterBrood: 2
+    projectile: Arrow
+    projectile_size: 2
+    projectile_speed: 7
+    tire: 2
+    preNode: 1402
   - id: 1405
     name: 9900118
     description: 9900218
@@ -398,25 +512,6 @@ MonoBehaviour:
     tire: 1
     preNode: 1501
   - id: 1503
-    name: 9900121
-    description: 9900221
-    health: 330
-    moveSpeed: 5
-    reward: 10
-    cost: 18
-    outfit: DarkElf_Assassin
-    icon: DarkElf_Assassin
-    attack: 15
-    attackRange: 2
-    attackSpeed: 2.5
-    monsterAttackType: 1
-    monsterBrood: 5
-    projectile: 
-    projectile_size: 0
-    projectile_speed: 0
-    tire: 2
-    preNode: 1502
-  - id: 1504
     name: 9900122
     description: 9900222
     health: 200
@@ -435,6 +530,25 @@ MonoBehaviour:
     projectile_speed: 3
     tire: 1
     preNode: 1501
+  - id: 1504
+    name: 9900121
+    description: 9900221
+    health: 330
+    moveSpeed: 5
+    reward: 10
+    cost: 18
+    outfit: DarkElf_Assassin
+    icon: DarkElf_Assassin
+    attack: 15
+    attackRange: 2
+    attackSpeed: 2.5
+    monsterAttackType: 1
+    monsterBrood: 5
+    projectile: 
+    projectile_size: 0
+    projectile_speed: 0
+    tire: 2
+    preNode: 1502
   - id: 1505
     name: 9900123
     description: 9900223
