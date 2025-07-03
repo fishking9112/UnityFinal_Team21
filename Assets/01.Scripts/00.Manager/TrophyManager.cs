@@ -7,7 +7,7 @@ public class TrophyManager : MonoSingleton<TrophyManager>
     // 해당 Trophy의 id 클리어 여부
     public Dictionary<int, bool> trophyClear = new();
     // 해당 Trophy의 달성 여부
-    public Dictionary<int, int> trophyCount = new();
+    public Dictionary<int, int> trophyCount = new(); // id, count
     // 클리어 여부를 확인하기 위해 unlockId -> TrophyId로 변환을 위함
     public Dictionary<int, int> unlockIdToTrophyIds = new();
     public Dictionary<int, IInfo> allCollections = new();
@@ -69,6 +69,54 @@ public class TrophyManager : MonoSingleton<TrophyManager>
         foreach (var pair in dataDic)
         {
             allCollections[pair.Value.ID] = pair.Value;
+        }
+    }
+
+
+    public bool GetRewardTrophy(int trophyId)
+    {
+        if (trophyClear[trophyId])
+        {
+            Utils.Log("이미 클리어 된 업적입니다.");
+            return true;
+        }
+
+
+        if (DataManager.Instance.trophyDic[trophyId].maxCount < trophyCount[trophyId])
+        {
+            Utils.Log("클리어 되지 않은 업적입니다.");
+            return false;
+        }
+
+        trophyClear[trophyId] = true;
+        // TODO : 획득
+
+        return true;
+    }
+
+    /// <summary>
+    /// 업적 기록
+    /// </summary>
+    /// <param name="trophyId"></param>
+    public void Record(int trophyId)
+    {
+        trophyCount[trophyId]++;
+    }
+
+    /// <summary>
+    /// 업적 초기화
+    /// </summary>
+    public void ResetGameOut()
+    {
+
+        foreach (var trophydic in DataManager.Instance.trophyDic)
+        {
+            if (trophydic.Value.type == TrophyType.Stack) continue;
+
+            if (trophyCount.ContainsKey(trophydic.Value.ID))
+            {
+                trophyCount[trophydic.Value.ID] = 0; // Stack이 아니라면 누적이 아니기 때문에 매판
+            }
         }
     }
 }

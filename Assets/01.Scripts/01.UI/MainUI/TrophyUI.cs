@@ -25,7 +25,7 @@ public class TrophyUI : MonoBehaviour
         {
             var tempPrefab = Instantiate(panelPrefab, parent);
             var temp = pair.Value;
-            tempPrefab.Init(temp.icon, temp.name, TrophyManager.Instance.trophyClear[temp.id], toggleGroup);
+            tempPrefab.Init(temp.id, temp.icon, temp.name, temp.description, temp.maxCount, TrophyManager.Instance.trophyCount[temp.id], TrophyManager.Instance.trophyClear[temp.id], toggleGroup);
             infos.Add(temp);
             toggleList.Add(tempPrefab.toggle);
         }
