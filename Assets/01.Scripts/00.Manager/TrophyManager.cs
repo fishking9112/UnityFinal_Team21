@@ -94,13 +94,70 @@ public class TrophyManager : MonoSingleton<TrophyManager>
         return true;
     }
 
+    public void KillHeroId(int heroId)
+    {
+        RecordTrophyId(1000001);
+        RecordTrophyId(1000004);
+    }
+
+    public void Levelup(int level)
+    {
+        RecordTrophyId(1000002, level);
+        RecordTrophyId(1000003, level);
+    }
+
+    public void SummonMonsterId(int monsterId)
+    {
+        if (monsterId == (int)IDMonster.SKELETON_ARCHER)
+            RecordTrophyId(1000005);
+
+        if (monsterId == (int)IDMonster.ORC_NORMAL
+        || monsterId == (int)IDMonster.ORC_WARRIOR
+        || monsterId == (int)IDMonster.ORC_SHAMAN
+        || monsterId == (int)IDMonster.ORC_WARRIOR2
+        || monsterId == (int)IDMonster.ORC_BERSERKER
+        || monsterId == (int)IDMonster.ORC_SHAMAN2)
+            RecordTrophyId(1000006);
+    }
+
+    public void ClearGameEventId(int eventId)
+    {
+        RecordTrophyId(1000007);
+        RecordTrophyId(1000008);
+    }
+
+    public void StartQueenId(int queenId)
+    {
+        if (queenId == (int)IDQueenStatus.ORC)
+            RecordTrophyId(1000009);
+    }
+
+    public void UseSkillId(int skillId)
+    {
+        if (skillId == (int)IDQueenActiveSkill.SACRIFICE)
+            RecordTrophyId(1000010);
+
+        if (skillId == (int)IDQueenActiveSkill.SKELETON_LEGION)
+            RecordTrophyId(1000011);
+    }
+
     /// <summary>
     /// 업적 기록
     /// </summary>
     /// <param name="trophyId"></param>
-    public void Record(int trophyId)
+    public void RecordTrophyId(int trophyId)
     {
         trophyCount[trophyId]++;
+    }
+
+    /// <summary>
+    /// 업적 기록
+    /// </summary>
+    /// <param name="trophyId"></param>
+    /// <param name="trophyId"></param>
+    public void RecordTrophyId(int trophyId, int count)
+    {
+        trophyCount[trophyId] = count;
     }
 
     /// <summary>
@@ -113,9 +170,14 @@ public class TrophyManager : MonoSingleton<TrophyManager>
         {
             if (trophydic.Value.type == TrophyType.Stack) continue;
 
+            // Stack이 아니라면 누적이 아니기 때문에 매판 초기화
             if (trophyCount.ContainsKey(trophydic.Value.ID))
             {
-                trophyCount[trophydic.Value.ID] = 0; // Stack이 아니라면 누적이 아니기 때문에 매판
+                // 도달하지 못했다면 0으로 초기화
+                if (trophydic.Value.maxCount > trophyCount[trophydic.Value.ID])
+                {
+                    trophyCount[trophydic.Value.ID] = 0;
+                }
             }
         }
     }
