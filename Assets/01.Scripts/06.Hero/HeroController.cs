@@ -84,16 +84,16 @@ public class HeroController : BaseController
         eventMark.SetActive(isEventMark);
 
         weaponDic.Clear();
-         var a = Enum.GetValues(typeof(IDHeroAbility));
+        var a = Enum.GetValues(typeof(IDHeroAbility));
 
-        for(int i=0;i<stat.startLevel;i++)
+        for (int i = 0; i < stat.startLevel; i++)
         {
-            int weapon= UnityEngine.Random.Range(0, a.Length);
+            int weapon = UnityEngine.Random.Range(0, a.Length);
             int weaponNum = (int)a.GetValue(weapon);
 
             if (weaponDic.ContainsKey(weaponNum))
             {
-                if (weaponDic[weaponNum]>=8)
+                if (weaponDic[weaponNum] >= 8)
                 {
                     i--;
                     continue;
@@ -106,7 +106,7 @@ public class HeroController : BaseController
             }
         }
 
-        foreach(var data in weaponDic)
+        foreach (var data in weaponDic)
         {
             hero.SetAbilityLevel(data.Key, data.Value);
         }
@@ -213,6 +213,7 @@ public class HeroController : BaseController
         _collider.enabled = false;
 
         stateMachine.ChangeState(stateMachine.deadState);
+        TrophyManager.Instance.KillHeroId(statusInfo.id);
         ResetObj();
     }
 
