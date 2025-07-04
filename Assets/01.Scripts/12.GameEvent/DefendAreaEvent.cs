@@ -63,6 +63,7 @@ public class DefendAreaEvent : GameEventBase
         GameManager.Instance.queen.condition.QuestLevelUp(tableInfo.reward);
         GameObject.Destroy(castleInstance.gameObject);
         GameObject.Destroy(contextUI.gameObject);
+        TrophyManager.Instance.ClearGameEventId(tableInfo.id);
         // 보상 지급 로직 추가 가능
     }
 
