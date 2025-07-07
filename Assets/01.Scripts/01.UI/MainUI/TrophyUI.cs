@@ -14,7 +14,7 @@ public class TrophyUI : MonoBehaviour
 
     [Header("업적 설명")]
     public List<TrophyInfo> infos = new();
-    public List<Toggle> toggleList = new();
+    public List<Toggle> toggleList = new(); // 만약 설명창이 다시 UI에 등장할 경우를 대비해 그대로 놔둠
 
     [Header("뒤로가기 버튼")]
     public Button closeButton;
