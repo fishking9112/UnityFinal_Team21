@@ -8,6 +8,7 @@ public class StaticUIManager : MonoSingleton<StaticUIManager>
 {
     public HUDLayer hudLayer;
     public DamageLayer damageLayer;
+    public UIParticleLayer uiParticleLayer;
 
 
     public LoadingUI loadingUI;
