@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,7 +45,6 @@ public class TrophyManager : MonoSingleton<TrophyManager>
         CreateCollection(DataManager.Instance.queenActiveSkillDic);
         CreateCollection(DataManager.Instance.heroStatusDic);
         CreateCollection(DataManager.Instance.heroAbilityDic);
-
     }
 
     /// <summary>
@@ -72,9 +72,21 @@ public class TrophyManager : MonoSingleton<TrophyManager>
         }
     }
 
-
-    public bool GetRewardTrophy(int trophyId)
+    public bool IsRewardTrophy(int trophyId)
     {
+        if (trophyClear[trophyId])
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool GetRewardTrophy(int trophyId, Vector2 buttonPos)
+    {
+        var trophyInfo = DataManager.Instance.trophyDic[trophyId];
         if (trophyClear[trophyId])
         {
             Utils.Log("이미 클리어 된 업적입니다.");
@@ -82,16 +94,42 @@ public class TrophyManager : MonoSingleton<TrophyManager>
         }
 
 
-        if (DataManager.Instance.trophyDic[trophyId].maxCount < trophyCount[trophyId])
+        if (trophyInfo.maxCount > trophyCount[trophyId])
         {
-            Utils.Log("클리어 되지 않은 업적입니다.");
+            Utils.Log("클리어 되지 않은 상태라 리워드를 얻을 수 없습니다.");
             return false;
         }
 
         trophyClear[trophyId] = true;
-        // TODO : 획득
+        if (trophyInfo.unLockID != 0) // 돈이 아닌 해금
+        {
+            // 나중에 해금되는 것 만들 때 사용될 것(열쇠 아이콘)
+
+        }
+        else
+        {
+            int amount = 100;
+            var goldCount = trophyInfo.reward / amount;
+            // 골드 획득
+            for (int i = 0; i < goldCount; i++)
+            {
+                Vector2 moneyPos = new Vector2(-865, 488);
+                StaticUIManager.Instance.uiParticleLayer.ShowParticle("gameicon_tilemap-Sheet_1179", buttonPos, moneyPos, () =>
+                {
+                    GameManager.Instance.AddGold(amount);
+                    StaticUIManager.Instance.hudLayer.GetHUD<MenuHUD>().GoldTextScaleUpAndDown();
+                });
+            }
+            Invoke(nameof(DelayedStart), 2.3f);
+            // UGSManager.Instance.SaveLoad.SaveAsync().Forget();
+        }
 
         return true;
+    }
+
+    void DelayedStart()
+    {
+        UGSManager.Instance.SaveLoad.SaveAsync().Forget();
     }
 
     public void KillHeroId(int heroId)
@@ -163,7 +201,7 @@ public class TrophyManager : MonoSingleton<TrophyManager>
     /// <summary>
     /// 업적 초기화
     /// </summary>
-    public void ResetGameOut()
+    public void ResetNonStackTrophy()
     {
 
         foreach (var trophydic in DataManager.Instance.trophyDic)
