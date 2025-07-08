@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -96,6 +97,46 @@ public class MenuHUD : HUDUI
     public void RefreshGoldText(int gold)
     {
         goldText.text = Utils.GetThousandCommaText(gold);
+    }
+    public void GoldTextScaleUpAndDown()
+    {
+        if (this != null)
+        {
+            StopAllCoroutines(); // 중복 재생 방지
+            StartCoroutine(CoGoldTextScaleUpAndDown());
+        }
+    }
+
+
+    private IEnumerator CoGoldTextScaleUpAndDown()
+    {
+
+        Vector3 targetScale = Vector3.one * 1.5f;
+        float growDuration = 0.2f;
+        float shrinkDuration = 0.3f;
+
+        // 1. 커지기
+        float t = 0f;
+        while (t < growDuration)
+        {
+            t += Time.deltaTime;
+            float lerp = t / growDuration;
+            goldText.transform.localScale = Vector3.Lerp(Vector3.one, targetScale, lerp);
+            yield return null;
+        }
+
+        // 2. 줄어들기
+        t = 0f;
+        while (t < shrinkDuration)
+        {
+            t += Time.deltaTime;
+            float lerp = t / shrinkDuration;
+            goldText.transform.localScale = Vector3.Lerp(targetScale, Vector3.one, lerp);
+            yield return null;
+        }
+
+        goldText.transform.localScale = Vector3.one; // 정확히 복원
+        yield return null;
     }
 
     public void OnClickGameStart()

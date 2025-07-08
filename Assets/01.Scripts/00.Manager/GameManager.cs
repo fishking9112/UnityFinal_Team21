@@ -143,6 +143,7 @@ public class GameManager : MonoSingleton<GameManager>
         LogManager.Instance.PlayStartLog(tryCount);
         funnelType = GameLog.FunnelType.Minite_1;
         MiniteCount(token.Token).Forget();
+        TrophyManager.Instance.ResetNonStackTrophy();
     }
 
     private async UniTask MiniteCount(CancellationToken token)

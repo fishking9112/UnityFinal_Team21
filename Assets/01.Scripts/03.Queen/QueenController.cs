@@ -336,6 +336,8 @@ public class QueenController : MonoBehaviour
         var monster = objectPoolManager.GetObject<MonsterController>(tempMonster.outfit, worldMousePos);
         monster.StatInit(tempMonster, MonsterManager.Instance.isHealthUI);
 
+        TrophyManager.Instance.SummonMonsterId(tempMonster.id);
+
         Vector3 targetScale = monster.transform.localScale;
         Vector3 particlePos = monster.transform.position + new Vector3(0, targetScale.y * 0.25f, 0);
         Vector3 particleScale = targetScale * 0.1f;
