@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
+using Stove.PCSDK.NET;
+using Stove;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,11 +11,12 @@ using Unity.Services.CloudSave;
 using Unity.Services.CloudSave.Models.Data.Player;
 using Unity.Services.Core;
 using UnityEngine;
+using Unity.Services.CloudCode;
+using static Google.GData.Spreadsheets.ListEntry;
 
 public class UGSAuth : MonoBehaviour
 {
     private const string NicknameKey = "NickName";
-
 
     /// <summary>
     /// 익명 로그인 (게스트 로그인)
@@ -74,7 +77,6 @@ public class UGSAuth : MonoBehaviour
         }
 
     }
-
 
     /// <summary>
     /// 닉네임 존재 여부 확인

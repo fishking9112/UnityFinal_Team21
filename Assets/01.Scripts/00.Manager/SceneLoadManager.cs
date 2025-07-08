@@ -43,7 +43,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                     titleProgressText.SetLoadingText("9900008");
                     //titleProgressText.StartAnimating();
                     await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
-                    await UGSManager.Instance.InitAsync(); // UGS 초기화
+                  //  await UGSManager.Instance.InitAsync(); // UGS 초기화
                     //titleProgressText.StopAnimating();
                     titleProgressText.SetLoadingText("9900009");
                     //titleProgressText.StartAnimating();
@@ -58,7 +58,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 {
                     tapToStartUI.ActiveUIGroup(true);
                     await WaitForUserTapAsync();
-                    UGSManager.Instance.UIDtextUneable();
+                  //  UGSManager.Instance.UIDtextUneable();
                     tapToStartUI.ActiveUIGroup(false);
                 }
 
@@ -72,8 +72,8 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Lobby);
                 await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.MainMenu, false);
                 if (QueenAbilityUpgradeManager.Instance.ShouldRestoreAbilityMonsterValues) { QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues(); }
-                await UGSManager.Instance.LoadLeaderboardTop10Async();
-                await UGSManager.Instance.LoadMyRankAsync();
+              //  await UGSManager.Instance.LoadLeaderboardTop10Async();
+              //  await UGSManager.Instance.LoadMyRankAsync();
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
                 Time.timeScale = 1;
