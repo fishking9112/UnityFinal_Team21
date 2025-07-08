@@ -1,0 +1,64 @@
+﻿2025-07-08 22:13:43.241 NONE  [35440] <<<<< ---------------- StoveSDK Module Load ---------------- >>>>>
+2025-07-08 22:13:43.242 INFO  [35440] 
+2025-07-08 22:13:43.242 NONE  [35440] --> StovePC_Init
+2025-07-08 22:13:43.242 NONE  [35440]     checking input config value...
+2025-07-08 22:13:43.242 NONE  [35440]     config value checking successful
+2025-07-08 22:13:43.242 NONE  [35440]     checking log...
+2025-07-08 22:13:43.242 NONE  [35440] ---------------------------------------------
+2025-07-08 22:13:43.242 NONE  [35440] StovePCSDK(ver :2.6.6)
+2025-07-08 22:13:43.242 NONE  [35440] Game Env : live
+2025-07-08 22:13:43.242 NONE  [35440] Game LogLevel : 4
+2025-07-08 22:13:43.242 NONE  [35440] Game LogPath : 
+2025-07-08 22:13:43.242 NONE  [35440] ---------------------------------------------
+2025-07-08 22:13:43.242 NONE  [35440]     core instance creation in progress...
+2025-07-08 22:13:43.243 DEBUG [35440]     osLanguage : ko
+2025-07-08 22:13:43.243 DEBUG [35440]     .stove.popup.json file path : E:\forUnity\EditorVersion\2022.3.17f1\Editor\.stove.popup.json
+2025-07-08 22:13:43.243 WARN  [35440]     .stove.popup.json file does not exist
+2025-07-08 22:13:43.243 DEBUG [35440]     ShutdownCallback - Off
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : E:\forUnity\EditorVersion\2022.3.17f1\Editor\Unity.exe
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : -projectpath
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : G:\Unity_Project\Sparta_Projects\UnityFinal_Team21
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : -useHub
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : -hubIPC
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : -cloudEnvironment
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : production
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : -licensingIpc
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : LicenseClient-wnssi
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : -hubSessionId
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : 6b1ee06a-f44e-46f7-beb9-2ed1471bad46
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : -accessToken
+2025-07-08 22:13:43.243 DEBUG [35440]     commandline : jJ19Iex0mp8OHh6D4Xbtoz8DbkzAczmPVxseus18yxs00df
+2025-07-08 22:13:43.243 DEBUG [35440]     init tasks
+2025-07-08 22:13:43.243 DEBUG [35440]     transactionId : d28f9c53-d8a9-4318-80ed-430cd379fbd1
+2025-07-08 22:13:43.244 DEBUG [35440]     HKEY_CURRENT_USER : FFFFFFFF80000001
+2025-07-08 22:13:43.244 DEBUG [35440]     subkey : SOFTWARE\SGUP
+2025-07-08 22:13:43.244 DEBUG [35440]     RegOpenKeyEx : 0
+2025-07-08 22:13:43.244 DEBUG [35440]     RegQueryValueEx : 0, size : 82
+2025-07-08 22:13:43.244 DEBUG [35440]     RegQueryValueEx : 0
+2025-07-08 22:13:43.244 DEBUG [35440]     callerDetail : f58fc5a9cddc83384984e4a78feb6e311a054c4b
+2025-07-08 22:13:43.244 INFO  [35440] --> SGUPAPITask::Init
+2025-07-08 22:13:43.269 INFO  [35440]     protocol data from ipc
+2025-07-08 22:13:43.269 ERROR [35440]     SGUPAPI_Init is fail
+2025-07-08 22:13:43.269 ERROR [35440]     Init sgup task error
+2025-07-08 22:13:43.269 ERROR [35440]     init tasks - error
+2025-07-08 22:13:43.269 DEBUG [35440]     tasks UnInit error
+2025-07-08 22:13:43.270 DEBUG [35440]     log data:
+ {"action_info":{"action_param":{"error_external":"","error_func":"STOVE_PC_INIT","error_msg":"stove exception default error","error_type":"150"},"action_type":"pcsdk.onerror"},"character_info":null,"client_time":"2025-07-08T22:13:43","client_timestamp":"1751980423270","country_ip":"","custom_action_info":null,"device_os":"Windows 10(10.0), 10.0.19045, 64bit","environment":"live","event_tag":"","game_id":"GM-22B9-68593725_IND","guid":"","locale":"ko","log_source_type":"pc_sdk","member_no":"","protocol_type":"ipc","ref_session_id":"","ref_source_type":"","sdk_version":"2.6.6","service_protocol":"","session_id":"d28f9c53-d8a9-4318-80ed-430cd379fbd1","uuid":""}
+2025-07-08 22:13:43.270 DEBUG [35440]     RemoteLog url: http://logs.81plug.com/std_stove
+2025-07-08 22:13:43.270 ERROR [35440]     error occurred when calling StovePC_Init. StovePCResult : 150
+2025-07-08 22:13:43.270 DEBUG [2936]     -StoveLog rest: response is 200
+2025-07-08 22:13:43.270 DEBUG [2936]      -  Send remote log success.
+2025-07-08 22:13:43.290 DEBUG [14980]     -StoveLog rest: response is 200
+2025-07-08 22:13:43.290 DEBUG [14980]      -  Send remote log success.
+2025-07-08 22:14:16.036 INFO  [35440] --> StovePC_UnInit
+2025-07-08 22:14:16.036 DEBUG [35440]     log data:
+ {"action_info":{"action_param":{},"action_type":"pcsdk.uninit.try"},"character_info":null,"client_time":"2025-07-08T22:14:16","client_timestamp":"1751980456036","country_ip":"","custom_action_info":null,"device_os":"Windows 10(10.0), 10.0.19045, 64bit","environment":"live","event_tag":"","game_id":"GM-22B9-68593725_IND","guid":"","locale":"ko","log_source_type":"pc_sdk","member_no":"","protocol_type":"ipc","ref_session_id":"","ref_source_type":"","sdk_version":"2.6.6","service_protocol":"","session_id":"d28f9c53-d8a9-4318-80ed-430cd379fbd1","uuid":""}
+2025-07-08 22:14:16.036 DEBUG [35440]     RemoteLog url: http://logs.81plug.com/std_stove
+2025-07-08 22:14:16.037 DEBUG [35440]     log data:
+ {"action_info":{"action_param":{"error_external":"","error_func":"StovePC_UnInit","error_msg":"stoveexception","error_type":"100"},"action_type":"pcsdk.uninit.fail"},"character_info":null,"client_time":"2025-07-08T22:14:16","client_timestamp":"1751980456037","country_ip":"","custom_action_info":null,"device_os":"Windows 10(10.0), 10.0.19045, 64bit","environment":"live","event_tag":"","game_id":"GM-22B9-68593725_IND","guid":"","locale":"ko","log_source_type":"pc_sdk","member_no":"","protocol_type":"ipc","ref_session_id":"","ref_source_type":"","sdk_version":"2.6.6","service_protocol":"","session_id":"d28f9c53-d8a9-4318-80ed-430cd379fbd1","uuid":""}
+2025-07-08 22:14:16.037 DEBUG [35440]     RemoteLog url: http://logs.81plug.com/std_stove
+2025-07-08 22:14:16.037 ERROR [35440]     StovePC_UnInit stove exception occurred. StovePCResult : 100
+2025-07-08 22:14:16.057 DEBUG [15040]     -StoveLog rest: response is 200
+2025-07-08 22:14:16.057 DEBUG [15040]      -  Send remote log success.
+2025-07-08 22:14:16.374 DEBUG [7156]     -StoveLog rest: response is 200
+2025-07-08 22:14:16.374 DEBUG [7156]      -  Send remote log success.
