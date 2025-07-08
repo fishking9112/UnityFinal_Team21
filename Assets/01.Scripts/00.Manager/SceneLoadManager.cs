@@ -94,6 +94,8 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
                 LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.EnterInGame);
                 GameManager.Instance.GameStart(); // 게임 스타트(?)
+                TrophyManager.Instance.StartQueenId(GameManager.Instance.QueenCharaterID);
+
                 break;
             default:
                 // await LoadSceneAsync("Error"); // 에러씬으로 이동(?)

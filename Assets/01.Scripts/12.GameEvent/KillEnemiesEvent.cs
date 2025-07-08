@@ -65,6 +65,7 @@ public class KillEnemiesEvent : GameEventBase
         GameObject.Destroy(contextUI.gameObject);
         // GameManager.Instance.queen.condition.AdjustCurExpGauge(tableInfo.reward);
         GameManager.Instance.queen.condition.QuestLevelUp(tableInfo.reward);
+        TrophyManager.Instance.ClearGameEventId(tableInfo.id);
     }
 
     protected override void OnFail()

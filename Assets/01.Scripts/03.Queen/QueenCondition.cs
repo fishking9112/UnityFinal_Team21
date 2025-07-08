@@ -194,6 +194,7 @@ public class QueenCondition : MonoBehaviour
         Level.Value++;
         EnhancePoint++;
         ExpIncrease();
+        TrophyManager.Instance.Levelup((int)Level.Value);
         if (Level.Value % 5 == 0)
         {
             AdjustEvolutionPoint(1);

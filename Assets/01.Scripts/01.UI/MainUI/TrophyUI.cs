@@ -14,7 +14,7 @@ public class TrophyUI : MonoBehaviour
 
     [Header("업적 설명")]
     public List<TrophyInfo> infos = new();
-    public List<Toggle> toggleList = new();
+    public List<Toggle> toggleList = new(); // 만약 설명창이 다시 UI에 등장할 경우를 대비해 그대로 놔둠
 
     [Header("뒤로가기 버튼")]
     public Button closeButton;
@@ -25,7 +25,7 @@ public class TrophyUI : MonoBehaviour
         {
             var tempPrefab = Instantiate(panelPrefab, parent);
             var temp = pair.Value;
-            tempPrefab.Init(temp.icon, temp.name, TrophyManager.Instance.trophyClear[temp.id], toggleGroup);
+            tempPrefab.Init(temp.id, temp.icon, temp.name, temp.description, temp.maxCount, TrophyManager.Instance.trophyCount[temp.id], TrophyManager.Instance.trophyClear[temp.id], toggleGroup);
             infos.Add(temp);
             toggleList.Add(tempPrefab.toggle);
         }
