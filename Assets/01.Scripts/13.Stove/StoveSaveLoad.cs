@@ -1,178 +1,263 @@
 using Cysharp.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using Stove.PCSDK.NET;
+using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using Unity.Services.CloudSave;
+using Unity.Services.CloudSave.Models.Data.Player;
 using UnityEngine;
+
 
 public class StoveSaveLoad : MonoBehaviour
 {
-    public async UniTask LoadPlayerDataAsync()
-    {
-        Utils.Log("플레이어 데이터 불러오기");
-        StovePC.GetStat("SAVE_DATA");
-        await UniTask.Delay(500); // 콜백 기다리는 코드 추가 필요
-    }
+    private const int CurrentVersion = 4; // 최신 데이터 버전
 
-    public void SavePlayerData(int value)
-    {
-        Utils.Log($"플레이어 데이터 저장: {value}");
-        StovePC.SetStat("SAVE_DATA", value);
-    }
-
-
-
-    /*
-
+    private const string SaveKey = "PlayerSaveData"; 
+    private const string RankDataKey = "PlayerRankDataKey";
     private const string SaveFileName = "PlayerSaveData.json";
-    private const string RankFileName = "PlayerRankData.json";
 
-    #region 저장
+    private static readonly string SaveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "testwall");
+    private static readonly string SaveFilePath = Path.Combine(SaveDirectory, SaveFileName);
 
+    /// <summary>
+    /// 저장 (비동기)
+    /// </summary>
     public async UniTask SaveAsync()
     {
         try
         {
             var saveData = Collect();
-            var json = JsonConvert.SerializeObject(saveData);
+            saveData.version = CurrentVersion; // 항상 최신 버전으로 설정
+            ValidateSaveData(ref saveData); // 데이터 유효성 검사
 
-            var uploadResult = StovePC.UploadStorageFile(SaveFileName, System.Text.Encoding.UTF8.GetBytes(json));
-            if (uploadResult != StovePCResult.NoError)
+            string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
+
+            if (!Directory.Exists(SaveDirectory))
             {
-                Debug.LogWarning($"스토브 클라우드 저장 실패: {uploadResult}");
-                return;
+                Directory.CreateDirectory(SaveDirectory);
             }
 
             PlayerPrefs.SetFloat("BGM_VOLUME", SoundManager.Instance.BGMVolume);
             PlayerPrefs.SetFloat("SFX_VOLUME", SoundManager.Instance.SFXVolume);
             PlayerPrefs.Save();
 
-            Debug.Log("스토브 클라우드 저장 성공");
+            // 비동기 저장
+            await File.WriteAllTextAsync(SaveFilePath, json);
+            Utils.Log($"저장 성공: {SaveFilePath}");
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"스토브 저장 중 예외 발생: {e.Message}");
+            Utils.LogError($"저장 실패: {e.Message}");
         }
-        await UniTask.Yield();
     }
 
-    public async UniTask UploadRankDataAsync(int queenID)
+    /// <summary>
+    /// 게임 정보(랭크)를 업로드
+    /// </summary>
+    /// <param name="rankInfo"></param>
+    /// <returns></returns>
+    public async UniTask UploadRankDataAsync(int QueenID)
     {
         try
         {
-            var rankData = new LeaderBoardData
+            var leaderBoardData = new LeaderBoardData
             {
-                queenID = queenID
+                queenID = QueenID
             };
-            var json = JsonConvert.SerializeObject(rankData);
 
-            var uploadResult = StovePC.UploadStorageFile(RankFileName, System.Text.Encoding.UTF8.GetBytes(json));
-            if (uploadResult != StovePCResult.NoError)
-            {
-                Debug.LogWarning($"랭크 데이터 저장 실패: {uploadResult}");
-                return;
-            }
+            var saveJson = JsonConvert.SerializeObject(leaderBoardData);
+            var saveDict = new Dictionary<string, object> { { RankDataKey, saveJson } };
 
-            Debug.Log("랭크 데이터 저장 성공");
+            await CloudSaveService.Instance.Data.Player.SaveAsync(
+                saveDict,
+                new Unity.Services.CloudSave.Models.Data.Player.SaveOptions(new PublicWriteAccessClassOptions())
+            );
+            Utils.Log("랭크 데이터 업로드 완료");
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"랭크 저장 중 예외 발생: {e.Message}");
+            Utils.Log($"랭크 데이터 업로드 실패: {e.Message}");
         }
-        await UniTask.Yield();
     }
 
-    #endregion
+    /// <summary>
+    /// 저장할 변수를 SaveData에 입력
+    /// </summary>
+    private SaveData Collect()
+    {
+        SaveData data = new SaveData
+        {
+            version = CurrentVersion,
+            player = CollectPlayerData(),
+            settings = CollectSettingsData(),
+            queenUpgrades = CollectQueenAbilityUpgradeData(),
+            extraRootFields = new Dictionary<string, JToken>()
+        };
 
-    #region 불러오기
+        return data;
+    }
+    private PlayerData CollectPlayerData()
+    {
+        return new PlayerData
+        {
+            gold = Mathf.Max(0, GameManager.Instance.GetGold()),
+            extraPlayerFields = new Dictionary<string, JToken>()
+        };
+    }
+    private SettingsData CollectSettingsData()
+    {
+        return new SettingsData
+        {
+            // bgmVolume = Mathf.Clamp(SoundManager.Instance.BGMVolume, 0f, 1f),
+            // sfxVolume = Mathf.Clamp(SoundManager.Instance.SFXVolume, 0f, 1f),
+            //  language = SettingsManager.Instance.CurrentLanguage
+            extraSettingsFields = new Dictionary<string, JToken>()
+        };
+    }
+    private QueenAbilityUpgradeData CollectQueenAbilityUpgradeData()
+    {
+        var data = QueenAbilityUpgradeManager.Instance.SetSaveData();
+        data.extraQueenUpgradeFields = new Dictionary<string, JToken>();
+        return data;
+    }
 
+    /// <summary>
+    /// 저장 데이터 유효성 검사
+    /// </summary>
+    private void ValidateSaveData(ref SaveData data)
+    {
+        // 금액 음수 방지
+        if (data.player.gold < 0)
+            data.player.gold = 0;
+
+        // 볼륨 범위 제한
+        // data.settings.bgmVolume = Mathf.Clamp(data.settings.bgmVolume, 0f, 1f);
+        // data.settings.sfxVolume = Mathf.Clamp(data.settings.sfxVolume, 0f, 1f);
+
+        // 언어 null 체크
+        // if (string.IsNullOrEmpty(data.settings.language))
+        //     data.settings.language = "en";
+    }
+
+
+    /// <summary>
+    /// 불러오기 (비동기)
+    /// </summary>
     public async UniTask LoadAsync()
     {
         try
         {
-            var downloadResult = StovePC.DownloadStorageFile(SaveFileName, out byte[] data);
-            if (downloadResult != StovePCResult.NoError)
+            if (!File.Exists(SaveFilePath))
             {
-                Debug.LogWarning($"스토브 클라우드 데이터 다운로드 실패: {downloadResult}");
+                Utils.LogWarning("저장된 데이터가 없습니다. 기본값 생성");
                 OnLoadComplete(CreateDefaultSaveData());
                 return;
             }
 
-            var json = System.Text.Encoding.UTF8.GetString(data);
-
-            var saveData = JsonConvert.DeserializeObject<SaveData>(json);
-            if (saveData == null)
+            string json = await File.ReadAllTextAsync(SaveFilePath);
+            SaveData saveData;
+            try
             {
-                Debug.LogWarning("저장된 데이터 역직렬화 실패, 기본 데이터 생성");
+                saveData = JsonConvert.DeserializeObject<SaveData>(json);
+            }
+            catch (Exception ex)
+            {
+                Utils.LogError($"역직렬화 실패: {ex.Message}");
                 saveData = CreateDefaultSaveData();
             }
+            Utils.Log($"불러오기 성공: {SaveFilePath}");
 
+            saveData = MigrateData(saveData);
             OnLoadComplete(saveData);
-            Debug.Log("스토브 클라우드 데이터 불러오기 완료");
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"스토브 데이터 불러오기 예외 발생: {e.Message}");
+            Utils.LogError($"불러오기 실패: {e.Message}");
             OnLoadComplete(CreateDefaultSaveData());
         }
-        await UniTask.Yield();
     }
 
-    public async UniTask<(string nickname, int queenID)> LoadRankDataAsync()
+    /// <summary>
+    /// 데이터 마이그레이션
+    /// </summary>
+    private SaveData MigrateData(SaveData data)
     {
-        try
+        // 버전 정보가 없는 경우 (최초 데이터)
+        if (data.version == 0)
         {
-            var downloadResult = StovePC.DownloadStorageFile(RankFileName, out byte[] data);
-            if (downloadResult != StovePCResult.NoError)
+            data.version = 1;
+            data.player = new PlayerData
             {
-                Debug.LogWarning($"랭크 데이터 다운로드 실패: {downloadResult}");
-                return ("Unknown", -1);
+                gold = Mathf.Max(0, data.player.gold),
+                extraPlayerFields = new Dictionary<string, JToken>()
+            };
+
+            data.settings = new SettingsData
+            {
+                extraSettingsFields = new Dictionary<string, JToken>()
+            };
+            data.queenUpgrades = data.queenUpgrades.upgrades != null
+                ? data.queenUpgrades
+                : new QueenAbilityUpgradeData { upgrades = new List<QueenAbilityUpgradeInfo>(), extraQueenUpgradeFields = new Dictionary<string, JToken>() };
+            data.extraRootFields = new Dictionary<string, JToken>();
+        }
+
+        // 버전 1 -> 버전 2 (예시로 language 필드 추가)
+        if (data.version == 1)
+        {
+            data.settings = new SettingsData
+            {
+                // 언어 부분 추가
+                extraSettingsFields = data.settings.extraSettingsFields ?? new Dictionary<string, JToken>()
+            };
+            data.version = 2;
+        }
+
+        // 버전 2 -> 버전 3 (PlayerData의 nickName 삭제)
+        if (data.version == 2)
+        {
+            data.player = new PlayerData
+            {
+                gold = Mathf.Max(0, data.player.gold),
+                extraPlayerFields = new Dictionary<string, JToken>()
+            };
+            data.version = 3;
+        }
+
+        // 버전 3 -> 버전 4 ( bgmVolume/sfxVolume 제거)
+        if (data.version == 3)
+        {
+            if (data.settings.extraSettingsFields != null)
+            {
+                data.settings.extraSettingsFields.Remove("bgmVolume");
+                data.settings.extraSettingsFields.Remove("sfxVolume");
             }
 
-            var json = System.Text.Encoding.UTF8.GetString(data);
-
-            var rankData = JsonConvert.DeserializeObject<LeaderBoardData>(json);
-            if (rankData == null)
-            {
-                Debug.LogWarning("랭크 데이터 역직렬화 실패");
-                return ("Unknown", -1);
-            }
-
-            // 닉네임은 별도 API에서 받아오거나 STOVE 유저 데이터에서 받아와야 합니다.
-            string nickname = StoveManager.Instance.User?.Nickname ?? "Unknown";
-
-            Debug.Log("랭크 데이터 불러오기 완료");
-            return (nickname, rankData.queenID);
+            data.version = 4;
         }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"랭크 데이터 불러오기 예외 발생: {e.Message}");
-            return ("Unknown", -1);
-        }
+
+        // 추가 버전 마이그레이션은 여기에 구현
+        return data;
     }
 
-    #endregion
-
-    #region 데이터 수집 및 적용
-
-    private SaveData Collect()
+    /// <summary>
+    /// 기본 SaveData 생성
+    /// </summary>
+    private SaveData CreateDefaultSaveData()
     {
         return new SaveData
         {
-            version = 4,
-            player = new PlayerData
+            version = CurrentVersion,
+            player = new PlayerData { gold = 0, extraPlayerFields = new() },
+            settings = new SettingsData { extraSettingsFields = new() },
+            queenUpgrades = new QueenAbilityUpgradeData
             {
-                gold = Mathf.Max(0, GameManager.Instance.GetGold()),
-                extraPlayerFields = new Dictionary<string, JToken>()
+                upgrades = new(),
+                extraQueenUpgradeFields = new()
             },
-            settings = new SettingsData
-            {
-                extraSettingsFields = new Dictionary<string, JToken>()
-            },
-            queenUpgrades = QueenAbilityUpgradeManager.Instance.SetSaveData(),
-            extraRootFields = new Dictionary<string, JToken>()
+            extraRootFields = new()
         };
     }
 
@@ -190,22 +275,62 @@ public class StoveSaveLoad : MonoBehaviour
         }
     }
 
-    private SaveData CreateDefaultSaveData()
+    
+    /// <summary>
+    /// playerId에 해당하는 공개 데이터를 읽어 nickname과 queenID를 반환합니다.
+    /// </summary>
+    public async Task<(string nickname, int queenID)> LoadPublicDataWithQueenId(string playerId)
     {
-        return new SaveData
+        try
         {
-            version = 4,
-            player = new PlayerData { gold = 0, extraPlayerFields = new Dictionary<string, JToken>() },
-            settings = new SettingsData { extraSettingsFields = new Dictionary<string, JToken>() },
-            queenUpgrades = new QueenAbilityUpgradeData
+            var rankData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { RankDataKey }, new LoadOptions(new PublicReadAccessClassOptions(playerId)));
+
+            string nickname = await UGSManager.Instance.Auth.LoadPublicDataByPlayerId(playerId);
+
+            if (rankData.TryGetValue(RankDataKey, out var savedValue))
             {
-                upgrades = new List<QueenAbilityUpgradeInfo>(),
-                extraQueenUpgradeFields = new Dictionary<string, JToken>()
-            },
-            extraRootFields = new Dictionary<string, JToken>()
-        };
+                var json = savedValue.Value.GetAsString();
+
+                LeaderBoardData leaderBoardData;
+                try
+                {
+                    leaderBoardData = JsonConvert.DeserializeObject<LeaderBoardData>(json);
+                }
+                catch (Exception ex)
+                {
+                    Utils.Log($"역직렬화 실패: {ex.Message}");
+                    leaderBoardData = CreateDefaultLeaderBoardData();
+                }
+
+                // 데이터 마이그레이션 (필요하면 추가하기)
+                // leaderBoardData = MigrateData(leaderBoardData);
+
+                Utils.Log("랭크 데이터 반환 완료");
+                return (nickname, leaderBoardData.queenID);
+            }
+            else
+            {
+                Utils.Log("저장된 랭크 데이터가 없음.");
+                return (nickname, -1);
+            }
+
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"랭크 데이터 로드 실패: {e.Message}");
+            return ("Unknown", -1);
+        }
     }
 
-    #endregion
-    */
+    /// <summary>
+    /// 기본 LeaderBoardData 생성
+    /// </summary>
+    private LeaderBoardData CreateDefaultLeaderBoardData()
+    {
+        return new LeaderBoardData
+        {
+            queenID = -1,
+            extraLeaderboardResultFields = new Dictionary<string, JToken>()
+        };
+    }
 }

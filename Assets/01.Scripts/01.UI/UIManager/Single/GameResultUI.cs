@@ -95,7 +95,7 @@ public class GameResultUI : SingleUI
         int isC = isClear ? 1 : 0;
 
         LogManager.Instance.PlayEndLog(queenid, time, isC, mostSummonID, mostSummon, leastSummonID, leastSummon, mvpID, tryCnt);
-        UGSManager.Instance.SaveLoad.SaveAsync().Forget();
+        StoveGameServiceManager.Instance.SaveLoad.SaveAsync().Forget();
     }
 
     /// <summary>

@@ -25,7 +25,7 @@ public class GameResultController : MonoBehaviour
     public void GameClear()
     {
         gameEnd = true;
-        if (GameManager.Instance.queen.condition.KillCnt.Value > UGSManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
+      //  if (GameManager.Instance.queen.condition.KillCnt.Value > StoveGameServiceManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
 
         StartCoroutine(GameClearProcess());
     }
@@ -49,7 +49,7 @@ public class GameResultController : MonoBehaviour
     public void GameOver()
     {
         gameEnd = true;
-        if (GameManager.Instance.queen.condition.KillCnt.Value > UGSManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
+      //  if (GameManager.Instance.queen.condition.KillCnt.Value > StoveGameServiceManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
 
         StartCoroutine(GameOverProcess());
     }
@@ -108,10 +108,10 @@ public class GameResultController : MonoBehaviour
         try
         {
             StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.bestUI.SetActive(true);
-            await UGSManager.Instance.UploadScoreAsync(GameManager.Instance.queen.condition.KillCnt.Value);
-            await UGSManager.Instance.SaveLoad.UploadRankDataAsync(GameManager.Instance.QueenCharaterID);
-            await UGSManager.Instance.LoadLeaderboardTop10Async();
-            await UGSManager.Instance.LoadMyRankAsync();
+            await StoveGameServiceManager.Instance.UploadScoreAsync(GameManager.Instance.queen.condition.KillCnt.Value);
+            await StoveGameServiceManager.Instance.SaveLoad.UploadRankDataAsync(GameManager.Instance.QueenCharaterID);
+            await StoveGameServiceManager.Instance.LoadLeaderboardTop10Async();
+            await StoveGameServiceManager.Instance.LoadMyRankAsync();
         }
         catch (System.Exception e)
         {

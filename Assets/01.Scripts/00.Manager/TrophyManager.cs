@@ -121,7 +121,7 @@ public class TrophyManager : MonoSingleton<TrophyManager>
                 });
             }
             Invoke(nameof(DelayedStart), 2.3f);
-            // UGSManager.Instance.SaveLoad.SaveAsync().Forget();
+            StoveGameServiceManager.Instance.SaveLoad.SaveAsync().Forget();
         }
 
         return true;
@@ -129,7 +129,7 @@ public class TrophyManager : MonoSingleton<TrophyManager>
 
     void DelayedStart()
     {
-        UGSManager.Instance.SaveLoad.SaveAsync().Forget();
+        StoveGameServiceManager.Instance.SaveLoad.SaveAsync().Forget();
     }
 
     public void KillHeroId(int heroId)

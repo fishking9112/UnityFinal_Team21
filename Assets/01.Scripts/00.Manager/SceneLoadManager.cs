@@ -43,7 +43,8 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                     titleProgressText.SetLoadingText("9900008");
                     //titleProgressText.StartAnimating();
                     await UniTask.Delay(2000, DelayType.UnscaledDeltaTime);
-                  //  await UGSManager.Instance.InitAsync(); // UGS 초기화
+                    //  await UGSManager.Instance.InitAsync(); // UGS 초기화
+                    await StoveGameServiceManager.Instance.InitAsync(); // stove 게임 기능 초기화
                     //titleProgressText.StopAnimating();
                     titleProgressText.SetLoadingText("9900009");
                     //titleProgressText.StartAnimating();

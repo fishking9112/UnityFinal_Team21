@@ -66,7 +66,7 @@ public class OptionController : MonoBehaviour
         tempSFXVolume = SoundManager.Instance.SFXVolume;
         OptionPanelUI.SetActive(false);
 
-        UGSManager.Instance.SaveLoad.SaveAsync().Forget();
+        StoveGameServiceManager.Instance.SaveLoad.SaveAsync().Forget();
     }
 
     /// <summary>

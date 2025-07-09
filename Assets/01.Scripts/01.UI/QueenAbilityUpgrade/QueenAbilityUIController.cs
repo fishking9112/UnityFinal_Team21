@@ -63,7 +63,7 @@ public class QueenAbilityUIController : MonoBehaviour
 
     private void OnDisable()
     {
-        UGSManager.Instance.SaveLoad.SaveAsync().Forget();
+        StoveGameServiceManager.Instance.SaveLoad.SaveAsync().Forget();
     }
 
     /// <summary>   

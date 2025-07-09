@@ -70,11 +70,12 @@ public class GameManager : MonoSingleton<GameManager>
         if (Input.GetKeyDown(KeyCode.H))
         {
             castle.TakeDamaged(100f);
-        }
+        }*/
         if (Input.GetKeyDown(KeyCode.G))
         {
             AddGold(100);
         }
+        /*
         if (Input.GetKeyDown(KeyCode.S))
         {
             UGSManager.Instance.SaveLoad.SaveAsync().Forget();

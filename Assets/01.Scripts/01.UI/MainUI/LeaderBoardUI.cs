@@ -62,7 +62,7 @@ public class LeaderBoardUI : MonoBehaviour
         noRankText.SetActive(false);
 
         // 서버에서 최신 데이터 불러오기
-        await UGSManager.Instance.LoadLeaderboardTop10Async();
+        await StoveGameServiceManager.Instance.LoadLeaderboardTop10Async();
 
         // UI 갱신
         UpdateLeaderboardUI();
@@ -75,8 +75,8 @@ public class LeaderBoardUI : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        rankerInfo = UGSManager.Instance.Leaderboard.rankerInfo;
-        myRankInfo = UGSManager.Instance.Leaderboard.myRankerInfo;
+       // rankerInfo = StoveGameServiceManager.Instance.Leaderboard.rankerInfo;
+       // myRankInfo = StoveGameServiceManager.Instance.Leaderboard.myRankerInfo;
 
         noRankText.SetActive(rankerInfo.Count <= 0);
 
