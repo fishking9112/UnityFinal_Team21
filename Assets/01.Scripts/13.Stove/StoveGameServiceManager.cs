@@ -37,9 +37,9 @@ public class StoveGameServiceManager : MonoSingleton<StoveGameServiceManager>
 
     public async UniTask StartGameFlowAsync()
     {
-       /*await Auth.SignInAsync();
-        UIDtext.text = "STOVE 로그인됨";
-
+       await Auth.SignInAsync();
+        UIDtext.text = StoveManager.Instance.User.Nickname;
+        /*
         bool hasNickname = await Auth.HasNicknameAsync();
 
         if (!hasNickname)

@@ -18,7 +18,12 @@ public class StoveSaveLoad : MonoBehaviour
     private const string RankDataKey = "PlayerRankDataKey";
     private const string SaveFileName = "PlayerSaveData.json";
 
-    private static readonly string SaveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "testwall");
+    private static readonly string SaveDirectory = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).Replace("Local", "LocalLow"),
+    "DefaultCompany",
+    "Stop Breaking My Castle!"
+);
+
     private static readonly string SaveFilePath = Path.Combine(SaveDirectory, SaveFileName);
 
     /// <summary>

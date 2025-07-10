@@ -6,7 +6,7 @@ public class StoveAuth : MonoBehaviour
     public async UniTask SignInAsync()
     {
         await UniTask.WaitUntil(() => StoveManager.Instance.User.MemberNo > 0);
-        Debug.Log($"로그인 완료: {StoveManager.Instance.User.Nickname}");
+        Utils.Log($"로그인 완료: {StoveManager.Instance.User.Nickname}");
     }
 
     public async UniTask<bool> HasNicknameAsync()
