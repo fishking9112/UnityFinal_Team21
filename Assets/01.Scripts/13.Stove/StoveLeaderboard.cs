@@ -23,7 +23,8 @@ public struct StoveRankInfo
 
 public class StoveLeaderboard : MonoBehaviour
 {
-    private const string LeaderboardId = "LEADERBOARD_ID";
+    private const string RankStatId = "LEADERBOARD_ID";
+    private const string LeaderboardId = "GM-22B9-68593725_IND|LEADERBOARD_ID";
     public List<StoveRankInfo> rankerInfo { get; private set; } = new();
     public StoveRankInfo myRankerInfo { get; private set; }
 
@@ -57,7 +58,7 @@ public class StoveLeaderboard : MonoBehaviour
     public async UniTask UploadScoreAsync(int score)
     {
         Utils.Log($"점수 업로드 요청: {score}");
-        StovePC.SetStat(LeaderboardId, score);
+        StovePC.SetStat(RankStatId, score);
         await UniTask.Delay(500);
     }
 
