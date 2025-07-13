@@ -20,6 +20,14 @@ public struct RankInfo
         QueenID = queenId;
         Score = score;
     }
+
+    public RankInfo(uint rank, string nickname, int queenId, int score)
+    {
+        Rank = (int)rank; 
+        Nickname = nickname;
+        QueenID = queenId;
+        Score = score;
+    }
 }
 
 public class UGSLeaderboard : MonoBehaviour

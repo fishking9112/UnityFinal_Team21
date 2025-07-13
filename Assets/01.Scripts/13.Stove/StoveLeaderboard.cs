@@ -3,29 +3,13 @@ using Stove.PCSDK.NET;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct StoveRankInfo
-{
-    public uint Rank; // uint 그대로 유지
-    public string Nickname;
-    public int QueenID;
-    public int Score;
-
-    public StoveRankInfo(uint rank, string nickname, int queenId, int score)
-    {
-        Rank = rank;
-        Nickname = nickname;
-        QueenID = queenId;
-        Score = score;
-    }
-}
-
 public class StoveLeaderboard : MonoBehaviour
 {
     private const string RankStatId = "LEADERBOARD_ID";
     private const string LeaderboardId = "GM-22B9-68593725_IND|LEADERBOARD_ID";
 
-    public List<StoveRankInfo> rankerInfo { get; private set; } = new();
-    public StoveRankInfo myRankerInfo { get; private set; }
+    public List<RankInfo> rankerInfo { get; private set; } = new();
+    public RankInfo myRankerInfo { get; private set; }
 
     private string myNickname;
     private bool isInitialized = false;
@@ -54,7 +38,7 @@ public class StoveLeaderboard : MonoBehaviour
         StovePC.SetStat(RankStatId, combinedScore);
         await UniTask.Delay(500);
 
-        Debug.Log($"STOVE 점수 업로드 완료: 점수 {score}, 여왕ID {queenCharacterID}, 업로드값 {combinedScore}");
+        Utils.Log($"STOVE 점수 업로드 완료: 점수 {score}, 여왕ID {queenCharacterID}, 업로드값 {combinedScore}");
     }
 
     /// <summary>
@@ -78,7 +62,7 @@ public class StoveLeaderboard : MonoBehaviour
                     int queenId = combined % 100;
                     int actualScore = combined / 100;
 
-                    rankerInfo.Add(new StoveRankInfo(rank.Rank, rank.Nickname, queenId, actualScore));
+                    rankerInfo.Add(new RankInfo(rank.Rank, rank.Nickname, queenId, actualScore));
                 }
 
                 Utils.Log("Top10 랭킹 조회 완료");
@@ -113,7 +97,7 @@ public class StoveLeaderboard : MonoBehaviour
                         int queenId = combined % 100;
                         int actualScore = combined / 100;
 
-                        myRankerInfo = new StoveRankInfo(rank.Rank, rank.Nickname, queenId, actualScore);
+                        myRankerInfo = new RankInfo(rank.Rank, rank.Nickname, queenId, actualScore);
                         break;
                     }
                 }
