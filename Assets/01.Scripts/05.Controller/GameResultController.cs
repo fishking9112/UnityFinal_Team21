@@ -108,8 +108,7 @@ public class GameResultController : MonoBehaviour
         try
         {
             StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.bestUI.SetActive(true);
-            await StoveGameServiceManager.Instance.UploadScoreAsync(GameManager.Instance.queen.condition.KillCnt.Value);
-            await StoveGameServiceManager.Instance.SaveLoad.UploadRankDataAsync(GameManager.Instance.QueenCharaterID);
+            await StoveGameServiceManager.Instance.UploadScoreAsync(GameManager.Instance.queen.condition.KillCnt.Value, GameManager.Instance.QueenCharaterID);
             await StoveGameServiceManager.Instance.LoadLeaderboardTop10Async();
             await StoveGameServiceManager.Instance.LoadMyRankAsync();
         }

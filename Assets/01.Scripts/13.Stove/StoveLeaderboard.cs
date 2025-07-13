@@ -1,13 +1,11 @@
 using Cysharp.Threading.Tasks;
 using Stove.PCSDK.NET;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+
 public struct StoveRankInfo
 {
-    public uint Rank; // uint 유지
+    public uint Rank; // uint 그대로 유지
     public string Nickname;
     public int QueenID;
     public int Score;
@@ -25,72 +23,83 @@ public class StoveLeaderboard : MonoBehaviour
 {
     private const string RankStatId = "LEADERBOARD_ID";
     private const string LeaderboardId = "GM-22B9-68593725_IND|LEADERBOARD_ID";
+
     public List<StoveRankInfo> rankerInfo { get; private set; } = new();
     public StoveRankInfo myRankerInfo { get; private set; }
 
     private string myNickname;
+    private bool isInitialized = false;
 
-    /// <summary>
-    /// 유저 닉네임 불러오기
-    /// </summary>
-    public async UniTask GetMyNicknameAsync()
+    private void EnsureInitialize()
     {
-        var tcs = new UniTaskCompletionSource<bool>();
-
-        StovePCCallback callback = new StovePCCallback
+        if (!isInitialized)
         {
-            OnUser = (user) =>
+            StovePC.Initialize(new StovePCConfig(), new StovePCCallback
             {
-                myNickname = user.Nickname;
-                Utils.Log($"내 닉네임: {myNickname}");
-                tcs.TrySetResult(true);
-            }
-        };
-
-        StovePC.Initialize(new StovePCConfig(), callback);
-        StovePC.GetUser();
-        await tcs.Task;
+                OnError = (error) => Utils.Log($"STOVE Error: {error.Message}")
+            });
+            isInitialized = true;
+        }
     }
 
     /// <summary>
     /// 점수 업로드
     /// </summary>
-    public async UniTask UploadScoreAsync(int score)
+    public async UniTask UploadScoreAsync(int score, int queenCharacterID)
     {
-        Utils.Log($"점수 업로드 요청: {score}");
-        StovePC.SetStat(RankStatId, score);
+        EnsureInitialize();
+
+        int combinedScore = score * 100 + queenCharacterID;
+
+        StovePC.SetStat(RankStatId, combinedScore);
         await UniTask.Delay(500);
+
+        Debug.Log($"STOVE 점수 업로드 완료: 점수 {score}, 여왕ID {queenCharacterID}, 업로드값 {combinedScore}");
     }
 
+    /// <summary>
+    /// Top10 랭크 가져오기
+    /// </summary>
     public async UniTask GetTop10ScoresAsync()
     {
+        EnsureInitialize();
+
         var tcs = new UniTaskCompletionSource<bool>();
 
-        StovePCCallback callback = new StovePCCallback
+        StovePC.Initialize(new StovePCConfig(), new StovePCCallback
         {
             OnRank = (ranks, totalCount) =>
             {
                 rankerInfo.Clear();
+
                 foreach (var rank in ranks)
                 {
-                    rankerInfo.Add(new StoveRankInfo(rank.Rank, rank.Nickname, 0, rank.Score));
+                    int combined = (int)rank.Score;
+                    int queenId = combined % 100;
+                    int actualScore = combined / 100;
+
+                    rankerInfo.Add(new StoveRankInfo(rank.Rank, rank.Nickname, queenId, actualScore));
                 }
 
                 Utils.Log("Top10 랭킹 조회 완료");
                 tcs.TrySetResult(true);
             }
-        };
+        });
 
-        StovePC.Initialize(new StovePCConfig(), callback);
-        StovePC.GetRank(LeaderboardId, 1, 10, false); // 내 순위 포함 X → 순수 Top10만 가져오기
+        StovePC.GetRank(LeaderboardId, 1, 10, false);
         await tcs.Task;
     }
 
+    /// <summary>
+    /// 내 점수 및 순위 가져오기
+    /// </summary>
     public async UniTask GetMyRankAsync()
     {
+        EnsureInitialize();
+
         var tcs = new UniTaskCompletionSource<bool>();
 
-        StovePCCallback callback = new StovePCCallback
+        StovePC.Initialize(new StovePCConfig(), new StovePCCallback
         {
             OnRank = (ranks, totalCount) =>
             {
@@ -100,7 +109,11 @@ public class StoveLeaderboard : MonoBehaviour
                 {
                     if (rank.Nickname == myNickname)
                     {
-                        myRankerInfo = new StoveRankInfo(rank.Rank, rank.Nickname, 0, rank.Score);
+                        int combined = (int)rank.Score;
+                        int queenId = combined % 100;
+                        int actualScore = combined / 100;
+
+                        myRankerInfo = new StoveRankInfo(rank.Rank, rank.Nickname, queenId, actualScore);
                         break;
                     }
                 }
@@ -108,10 +121,9 @@ public class StoveLeaderboard : MonoBehaviour
                 Utils.Log("내 랭크 조회 완료");
                 tcs.TrySetResult(true);
             }
-        };
+        });
 
-        StovePC.Initialize(new StovePCConfig(), callback);
-        StovePC.GetRank(LeaderboardId, 1, 1, true); // 내 순위만 포함 → 최소 페이지로
+        StovePC.GetRank(LeaderboardId, 1, 1, true);
         await tcs.Task;
     }
 }

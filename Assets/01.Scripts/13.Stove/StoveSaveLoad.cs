@@ -59,35 +59,6 @@ public class StoveSaveLoad : MonoBehaviour
     }
 
     /// <summary>
-    /// 게임 정보(랭크)를 업로드
-    /// </summary>
-    /// <param name="rankInfo"></param>
-    /// <returns></returns>
-    public async UniTask UploadRankDataAsync(int QueenID)
-    {
-        try
-        {
-            var leaderBoardData = new LeaderBoardData
-            {
-                queenID = QueenID
-            };
-
-            var saveJson = JsonConvert.SerializeObject(leaderBoardData);
-            var saveDict = new Dictionary<string, object> { { RankDataKey, saveJson } };
-
-            await CloudSaveService.Instance.Data.Player.SaveAsync(
-                saveDict,
-                new Unity.Services.CloudSave.Models.Data.Player.SaveOptions(new PublicWriteAccessClassOptions())
-            );
-            Utils.Log("랭크 데이터 업로드 완료");
-        }
-        catch (Exception e)
-        {
-            Utils.Log($"랭크 데이터 업로드 실패: {e.Message}");
-        }
-    }
-
-    /// <summary>
     /// 저장할 변수를 SaveData에 입력
     /// </summary>
     private SaveData Collect()

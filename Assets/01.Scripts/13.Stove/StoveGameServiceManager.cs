@@ -76,9 +76,9 @@ public class StoveGameServiceManager : MonoSingleton<StoveGameServiceManager>
     /// 리더보드에 플레이어 점수를 업로드합니다.
     /// </summary>
     /// <param name="score">업로드할 점수</param>
-    public async UniTask UploadScoreAsync(int score)
+    public async UniTask UploadScoreAsync(int score, int queenCharaterID)
     {
-        await Leaderboard.UploadScoreAsync(score);
+        await Leaderboard.UploadScoreAsync(score, queenCharaterID);
     }
 
     /// <summary>
