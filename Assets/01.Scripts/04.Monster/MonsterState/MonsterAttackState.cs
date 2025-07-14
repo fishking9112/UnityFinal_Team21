@@ -137,6 +137,11 @@ public class MonsterAttackState : MonsterBaseState
             float waitTime = 550f * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed));
             await UniTask.Delay((int)waitTime, false, PlayerLoopTiming.Update, cancellationToken: token);
 
+            if (token.IsCancellationRequested || navMeshAgent == null || target == null || stateMachine.Controller == null)
+            {
+                return;
+            }
+
             float minDist = float.MaxValue;
             Vector2 origin = navMeshAgent.transform.position + ((target.transform.position - navMeshAgent.transform.position).normalized * stat.attackRange.Value / 2f);
             Collider2D[] hits = Physics2D.OverlapCircleAll(origin, stat.attackRange.Value, stateMachine.Controller.attackLayer);
@@ -196,9 +201,6 @@ public class MonsterAttackState : MonsterBaseState
             {
                 return;
             }
-
-            if (navMeshAgent == null)
-                return;
 
             var projectileObject = ObjectPoolManager.Instance.GetObject<MonsterProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
             projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);
