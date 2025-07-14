@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using Stove.PCSDK.NET;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,103 +10,56 @@ public class StoveLeaderboard : MonoBehaviour
     public List<RankInfo> rankerInfo { get; private set; } = new();
     public RankInfo myRankerInfo { get; private set; }
 
-    private string myNickname;
-    private bool isInitialized = false;
-
-    private void EnsureInitialize()
+    /// <summary>
+    /// 점수 업로드 (QueenID 포함)
+    /// </summary>
+    public async UniTask UploadScoreAsync(int score, int queenCharacterID)
     {
-        if (!isInitialized)
+        int combinedScore = score * 100 + queenCharacterID;
+        StoveManager.Instance.SetStat(RankStatId, combinedScore);
+
+        await UniTask.Delay(500); // 콜백 처리 안정화
+    }
+
+    /// <summary>
+    /// Top10 랭크 조회
+    /// </summary>
+    public async UniTask GetTop10ScoresAsync()
+    {
+        rankerInfo.Clear();
+
+        var ranklist = await StoveManager.Instance.GetRankAsync(LeaderboardId, 1, 10, false);
+
+        foreach (var rank in ranklist)
         {
-            StovePC.Initialize(new StovePCConfig(), new StovePCCallback
-            {
-                OnError = (error) => Utils.Log($"STOVE Error: {error.Message}")
-            });
-            isInitialized = true;
+            int combined = (int)rank.Score;
+            int queenId = combined % 100;
+            int actualScore = combined / 100;
+
+            rankerInfo.Add(new RankInfo(rank.Rank, rank.Nickname, queenId, actualScore));
         }
     }
 
     /// <summary>
-    /// 점수 업로드
-    /// </summary>
-    public async UniTask UploadScoreAsync(int score, int queenCharacterID)
-    {
-        EnsureInitialize();
-
-        int combinedScore = score * 100 + queenCharacterID;
-
-        StovePC.SetStat(RankStatId, combinedScore);
-        await UniTask.Delay(500);
-
-        Utils.Log($"STOVE 점수 업로드 완료: 점수 {score}, 여왕ID {queenCharacterID}, 업로드값 {combinedScore}");
-    }
-
-    /// <summary>
-    /// Top10 랭크 가져오기
-    /// </summary>
-    public async UniTask GetTop10ScoresAsync()
-    {
-        EnsureInitialize();
-
-        var tcs = new UniTaskCompletionSource<bool>();
-
-        StovePC.Initialize(new StovePCConfig(), new StovePCCallback
-        {
-            OnRank = (ranks, totalCount) =>
-            {
-                rankerInfo.Clear();
-
-                foreach (var rank in ranks)
-                {
-                    int combined = (int)rank.Score;
-                    int queenId = combined % 100;
-                    int actualScore = combined / 100;
-
-                    rankerInfo.Add(new RankInfo(rank.Rank, rank.Nickname, queenId, actualScore));
-                }
-
-                Utils.Log("Top10 랭킹 조회 완료");
-                tcs.TrySetResult(true);
-            }
-        });
-
-        StovePC.GetRank(LeaderboardId, 1, 10, false);
-        await tcs.Task;
-    }
-
-    /// <summary>
-    /// 내 점수 및 순위 가져오기
+    /// 내 랭크 단독 조회
     /// </summary>
     public async UniTask GetMyRankAsync()
     {
-        EnsureInitialize();
+        var ranklist = await StoveManager.Instance.GetRankAsync(LeaderboardId, 1, 1, true);
 
-        var tcs = new UniTaskCompletionSource<bool>();
-
-        StovePC.Initialize(new StovePCConfig(), new StovePCCallback
+        if (ranklist == null || ranklist.Count == 0)
         {
-            OnRank = (ranks, totalCount) =>
-            {
-                myRankerInfo = default;
+            Utils.LogError("내 랭크 정보가 없습니다. 아직 점수를 업로드하지 않았거나, 서버에서 데이터를 불러오지 못했습니다.");
+            return;
+        }
 
-                foreach (var rank in ranks)
-                {
-                    if (rank.Nickname == myNickname)
-                    {
-                        int combined = (int)rank.Score;
-                        int queenId = combined % 100;
-                        int actualScore = combined / 100;
+        var my = ranklist[0]; // 문서 기준: 내 랭크는 항상 0번에 위치
+        int combined = (int)my.Score;
+        int queenId = combined % 100;
+        int actualScore = combined / 100;
 
-                        myRankerInfo = new RankInfo(rank.Rank, rank.Nickname, queenId, actualScore);
-                        break;
-                    }
-                }
-
-                Utils.Log("내 랭크 조회 완료");
-                tcs.TrySetResult(true);
-            }
-        });
-
-        StovePC.GetRank(LeaderboardId, 1, 1, true);
-        await tcs.Task;
+        myRankerInfo = new RankInfo(my.Rank, my.Nickname, queenId, actualScore);
+        Utils.Log($"STOVE 내 랭크 조회 완료  랭킹: {my.Rank}, 점수: {actualScore}, 여왕ID: {queenId}");
     }
+
 }

@@ -1,4 +1,7 @@
 using Cysharp.Threading.Tasks;
+using Stove.PCSDK.NET;
+using System.Diagnostics;
+using System.Text;
 using TMPro;
 
 public class StoveGameServiceManager : MonoSingleton<StoveGameServiceManager>
@@ -9,6 +12,7 @@ public class StoveGameServiceManager : MonoSingleton<StoveGameServiceManager>
     public StoveAchievement Achievement { get; private set; }
 
     public TextMeshProUGUI UIDtext;
+    public TextMeshProUGUI statdtext;
     public event System.Action OnRequireNickname;
 
     private UniTaskCompletionSource<bool> nicknameRegisterTCS;
@@ -37,25 +41,9 @@ public class StoveGameServiceManager : MonoSingleton<StoveGameServiceManager>
 
     public async UniTask StartGameFlowAsync()
     {
-       await Auth.SignInAsync();
+        await Auth.SignInAsync();
         UIDtext.text = StoveManager.Instance.User.Nickname;
-        /*
-        bool hasNickname = await Auth.HasNicknameAsync();
 
-        if (!hasNickname)
-        {
-            nicknameRegisterTCS = new UniTaskCompletionSource<bool>();
-
-            SceneLoadManager.Instance.titleProgressText.ActiveUIGroup(false);
-
-            OnRequireNickname?.Invoke();
-
-            // 닉네임 등록이 완료될 때까지 대기
-            await nicknameRegisterTCS.Task;
-
-            SceneLoadManager.Instance.titleProgressText.ActiveUIGroup(true);
-        }
-        */
         await LoadPlayerDataAsync();
     }
 

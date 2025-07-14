@@ -1,3 +1,4 @@
+using Stove.PCSDK.NET;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -24,7 +25,7 @@ public class RankPanel : MonoBehaviour
         }
         else
         {
-            int showRankText = rankInfo.Rank + 1;
+            int showRankText = rankInfo.Rank;
             // 랭크 표시 (100위 초과는 "100~")
             rankText.text = showRankText > 100 ? "100~" : showRankText.ToString();
 

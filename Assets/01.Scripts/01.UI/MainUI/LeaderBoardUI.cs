@@ -75,8 +75,8 @@ public class LeaderBoardUI : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-       // rankerInfo = StoveGameServiceManager.Instance.Leaderboard.rankerInfo;
-       // myRankInfo = StoveGameServiceManager.Instance.Leaderboard.myRankerInfo;
+        rankerInfo = StoveGameServiceManager.Instance.Leaderboard.rankerInfo;
+        myRankInfo = StoveGameServiceManager.Instance.Leaderboard.myRankerInfo;
 
         noRankText.SetActive(rankerInfo.Count <= 0);
 
