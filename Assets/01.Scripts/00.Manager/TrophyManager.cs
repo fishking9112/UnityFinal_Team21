@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Steamworks;
 
 public class TrophyManager : MonoSingleton<TrophyManager>
 {
@@ -16,7 +17,8 @@ public class TrophyManager : MonoSingleton<TrophyManager>
     void Start()
     {
         // TODO : 클리어 여부 및 Count 불러오기 SAVE LOAD
-
+        SteamUserStats.SetAchievement("HELLOWORLD_1");
+        SteamUserStats.StoreStats();
 
         foreach (var trophydic in DataManager.Instance.trophyDic)
         {
