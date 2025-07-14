@@ -63,6 +63,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 }
 
                 isSceneLoading = false; // 여기서 다른 씬을 로드하기 위해 필요
+                StoveAchievementHandler.SetStat("HELLOWORLD_1", 1);
                 await LoadScene(LoadSceneEnum.MenuScene); // 다 됬으면 메뉴 씬으로 이동
                 break;
             case LoadSceneEnum.MenuScene: // 메뉴 씬 일 경우
