@@ -191,6 +191,12 @@ public class MonsterAttackState : MonsterBaseState
         {
             float waitTime = 600f * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed));
             await UniTask.Delay((int)waitTime, false, PlayerLoopTiming.Update, cancellationToken: token);
+
+            if (token.IsCancellationRequested || navMeshAgent == null || target == null || stateMachine.Controller == null)
+            {
+                return;
+            }
+
             if (navMeshAgent == null)
                 return;
 
