@@ -72,8 +72,11 @@ public class HeroAbilityThunder : HeroAbilitySystem
         var thunder = objectPoolManager.GetObject<ThunderEffect>("HeroThunder", hero.transform.position);
         thunder.SetData(damage,knockback,size.x,damage_Range);
 
-        await UniTask.WaitUntil(() => !thunder.IsAlive());
-        thunder.OnDespawn();
+        await UniTask.WaitUntil(() => thunder == null || !thunder.IsAlive(), cancellationToken: tk);
+        if (thunder != null)
+        {
+            thunder.OnDespawn();
+        }
     }
 
     public override void AbilityLevelUp()
