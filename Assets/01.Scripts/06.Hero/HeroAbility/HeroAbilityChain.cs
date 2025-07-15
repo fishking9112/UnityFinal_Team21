@@ -72,6 +72,7 @@ public class HeroAbilityChain : HeroAbilitySystem
 
     private GameObject FindNextTarget()
     {
+        if (this == null) return null;
         Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, range, 1 << 7 | 1 << 13);
 
         foreach (Collider2D c in col)

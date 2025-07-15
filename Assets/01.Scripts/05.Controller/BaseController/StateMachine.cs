@@ -8,14 +8,14 @@ public interface IState
 
 public abstract class StateMachine
 {
-    protected IState currentState;
+    public IState currentState;
 
     public void ChangeState(IState state)
     {
         currentState?.Exit();
-        Utils.Log(currentState?.ToString());
+        // Utils.Log(currentState?.ToString());
         currentState = state;
-        Utils.Log(currentState.ToString());
+        // Utils.Log(currentState.ToString());
         currentState?.Enter();
     }
 

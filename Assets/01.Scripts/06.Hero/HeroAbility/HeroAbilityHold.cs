@@ -48,6 +48,8 @@ public class HeroAbilityHold : HeroAbilitySystem
 
     private async UniTask SetHolding(CancellationToken tk)
     {
+        if (this == null) return;
+
         if (hero == null || token == null)
         {
             return;
@@ -83,6 +85,8 @@ public class HeroAbilityHold : HeroAbilitySystem
     {
         token?.Cancel();
         token?.Dispose();
+        tk?.Cancel();
+        tk?.Dispose();
     }
     public override void SetAbilityLevel(int level)
     {

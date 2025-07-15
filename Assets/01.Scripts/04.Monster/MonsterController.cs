@@ -33,6 +33,8 @@ public class MonsterController : BaseController, IPoolable
         if (gameObject == null)
             return;
 
+        stateMachine?.currentState?.Exit();
+
         transform.localScale = originScale;
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();

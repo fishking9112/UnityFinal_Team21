@@ -47,6 +47,8 @@ public class HeroAbilityMeleeAttack : HeroAbilitySystem
 
     private async UniTaskVoid SwingSword(CancellationToken tk)
     {
+        if (this == null) return;
+
         float angle;
 
         if (animator == null)

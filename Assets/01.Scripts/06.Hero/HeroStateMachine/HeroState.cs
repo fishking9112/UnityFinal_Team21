@@ -38,6 +38,13 @@ public class HeroState : StateMachine
 
     public Vector2 GetDir()
     {
+        // target Transform이 유효한지 확인
+        if (target == null || target.gameObject == null)
+        {
+            // 유효하지 않다면, 기본값 (예: Vector2.zero)을 반환하여 오류 방지
+            return Vector2.zero;
+        }
+
         return target.position;
     }
 }
