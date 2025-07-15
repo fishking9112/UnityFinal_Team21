@@ -20,6 +20,8 @@ public class UGSManager : MonoSingleton<UGSManager>
 
     private UniTaskCompletionSource<bool> nicknameRegisterTCS;
 
+    public bool IsLoaded;
+
     protected override void Awake()
     {
         base.Awake();
@@ -114,6 +116,7 @@ public class UGSManager : MonoSingleton<UGSManager>
     public async UniTask LoadPlayerDataAsync()
     {
         await SaveLoad.LoadAsync();
+        IsLoaded = true;
     }
 
     /// <summary>

@@ -13,30 +13,29 @@ public class TrophyManager : MonoSingleton<TrophyManager>
     public Dictionary<int, int> unlockIdToTrophyIds = new();
     public Dictionary<int, IInfo> allCollections = new();
 
-    void Start()
+    private void Start()
     {
-        // TODO : 클리어 여부 및 Count 불러오기 SAVE LOAD
+        startAsync().Forget();
+    }
 
+    private async UniTaskVoid startAsync()
+    {
+        await UniTask.WaitUntil(() => UGSManager.Instance != null && UGSManager.Instance.IsLoaded);
+        InitializeTrophyData();
+    }
 
+    private void InitializeTrophyData()
+    {
         foreach (var trophydic in DataManager.Instance.trophyDic)
         {
-            // Trophy에서 저장되어 있는 ID가 아니면 추가해서 Clear상태 false로 만듬
             if (!trophyClear.ContainsKey(trophydic.Value.ID))
-            {
                 trophyClear[trophydic.Value.ID] = false;
-            }
 
-            // Trophy에서 저장되어 있는 ID가 아니면 추가해서 더해야할 Count를 0으로 만듬
             if (!trophyCount.ContainsKey(trophydic.Value.ID))
-            {
                 trophyCount[trophydic.Value.ID] = 0;
-            }
 
-            // 풀어야 할 ID와 업적 ID 매칭
             if (trophydic.Value.unLockID != 0)
-            {
                 unlockIdToTrophyIds[trophydic.Value.unLockID] = trophydic.Value.ID;
-            }
         }
 
         CreateCollection(DataManager.Instance.monsterDic);
@@ -45,7 +44,10 @@ public class TrophyManager : MonoSingleton<TrophyManager>
         CreateCollection(DataManager.Instance.queenActiveSkillDic);
         CreateCollection(DataManager.Instance.heroStatusDic);
         CreateCollection(DataManager.Instance.heroAbilityDic);
+
+        Utils.Log("TrophyManager 초기화 완료");
     }
+
 
     /// <summary>
     /// 해금되어있다면 true 반환
