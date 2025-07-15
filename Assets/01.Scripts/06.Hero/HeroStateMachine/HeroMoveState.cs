@@ -24,7 +24,10 @@ public class HeroMoveState : HeroBaseState
         }
         isMove = true;
         MoveAndSearch(token.Token).Forget();
-        state.controller.SetMove(true);
+        if (state.controller != null)
+        {
+            state.controller.SetMove(true);
+        }
         detectedRange = state.controller.statusInfo.detectedRange;
 
     }
