@@ -65,7 +65,7 @@ public class SlotChange : MonoBehaviour
 
             if (queenActiveSkillGroupTransform == null || monsterGroupTransform == null)
             {
-                Debug.LogWarning("RectTransform objects are null. Cannot perform slot change.");
+                Utils.LogWarning("RectTransform objects are null. Cannot perform slot change.");
                 return;
             }
 

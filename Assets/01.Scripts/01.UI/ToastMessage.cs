@@ -26,7 +26,7 @@ public class ToastMessage : MonoBehaviour
     {
         if (contentText == null)
         {
-            Debug.LogWarning("ToastMessage: contentText가 Inspector에 할당되지 않았습니다. 할당해주세요.");
+            Utils.LogWarning("ToastMessage: contentText가 Inspector에 할당되지 않았습니다. 할당해주세요.");
             return; // 필수 컴포넌트가 없으면 조기 종료
         }
         textRect = contentText.GetComponent<RectTransform>();
@@ -56,7 +56,7 @@ public class ToastMessage : MonoBehaviour
     {
         if (contentText == null || bubbleRect == null)
         {
-            Debug.LogWarning("ToastMessage: contentText 또는 bubbleRect가 할당되지 않았습니다. 텍스트를 설정하거나 말풍선 크기를 조절할 수 없습니다.");
+            Utils.LogWarning("ToastMessage: contentText 또는 bubbleRect가 할당되지 않았습니다. 텍스트를 설정하거나 말풍선 크기를 조절할 수 없습니다.");
             return;
         }
         // contentText.SetText(message);

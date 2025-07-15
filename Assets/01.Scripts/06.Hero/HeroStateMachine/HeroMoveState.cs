@@ -20,7 +20,7 @@ public class HeroMoveState : HeroBaseState
         state.dir = state.GetDir();
         if (state.dir == Vector2.zero)
         {
-            Debug.LogWarning($"dir이 0");
+            Utils.LogWarning($"dir이 0");
         }
         isMove = true;
         MoveAndSearch(token.Token).Forget();
@@ -37,7 +37,7 @@ public class HeroMoveState : HeroBaseState
         MoveHero().Forget();
         while (isMove)
         {
-            if(state.hero == null)
+            if (state.hero == null)
             {
                 break;
             }
