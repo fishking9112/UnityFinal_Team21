@@ -174,17 +174,26 @@ public class HeroController : BaseController
 
     public void SetMove(bool isMove)
     {
-        stateMachine.animator.SetBool("1_Move", isMove);
+        if (stateMachine.animator != null)
+        {
+            stateMachine.animator.SetBool("1_Move", isMove);
+        }
     }
 
     public void SetAttack(bool isAttack)
     {
-        stateMachine.animator.SetBool("2_Attack", isAttack);
+        if (stateMachine.animator != null)
+        {
+            stateMachine.animator.SetBool("2_Attack", isAttack);
+        }
     }
     public void SetDead(bool isDead)
     {
-        stateMachine.animator.SetBool("4_Death", isDead);
-        stateMachine.animator.SetBool("isDeath", isDead);
+        if (stateMachine.animator != null)
+        {
+            stateMachine.animator.SetBool("4_Death", isDead);
+            stateMachine.animator.SetBool("isDeath", isDead);
+        }
     }
 
     public async UniTask GetAnimFinish()
@@ -193,6 +202,14 @@ public class HeroController : BaseController
         // await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).IsName("DEATH"));
         await UniTask.Delay(TimeSpan.FromSeconds(1f), false, PlayerLoopTiming.Update);
         // await UniTask.WaitUntil(() => stateMachine.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f);
+
+        if (this == null || this.gameObject == null)
+        {
+            return;
+        }
+
+        SetOriginColor();
+
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
         _takeDamagedRendererCts = null;
@@ -243,10 +260,26 @@ public class HeroController : BaseController
         {
             foreach (var renderer in renderers)
             {
+                // SpriteRenderer가 유효한지 확인
+                if (renderer == null || renderer.gameObject == null)
+                {
+                    continue; // 유효하지 않으면 다음으로 넘어감
+                }
                 renderer.color = Color.red;
             }
             await UniTask.Delay(TimeSpan.FromSeconds(takeDamagedRendererTimer), cancellationToken: token);
+
+            // await 이후에 HeroController 자체가 파괴되었는지 확인
+            if (this == null || gameObject == null)
+            {
+                return; // 파괴되었으면 더 이상 진행하지 않고 종료
+            }
+
             SetOriginColor();
+        }
+        catch (OperationCanceledException)
+        {
+            // 쿨타임 도중 취소된 경우. 무시해도 됨
         }
         finally
         {
@@ -262,6 +295,11 @@ public class HeroController : BaseController
         // 저장한 색상으로 복원
         for (int i = 0; i < renderers.Count; i++)
         {
+            // SpriteRenderer가 유효한지 확인
+            if (renderers[i] == null || renderers[i].gameObject == null)
+            {
+                continue; // 유효하지 않으면 다음으로 넘어감
+            }
             if (i < originalColors.Count)
             {
                 renderers[i].color = originalColors[i];

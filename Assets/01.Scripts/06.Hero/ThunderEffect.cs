@@ -74,8 +74,8 @@ public class ThunderEffect : MonoBehaviour, IPoolable
 
     public bool IsAlive()
     {
+        if (particle == null) return false;
         return particle.IsAlive(true);
-
     }
 
 

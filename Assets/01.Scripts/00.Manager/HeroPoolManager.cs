@@ -144,6 +144,11 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
 
     public void ReturnObject(HeroController obj)
     {
+        if (obj == null || obj.gameObject == null)
+        {
+            return;
+        }
+
         HeroManager.Instance.hero.Remove(obj.gameObject);
 
         // 보스일경우

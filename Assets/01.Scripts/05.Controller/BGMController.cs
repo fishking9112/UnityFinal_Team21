@@ -56,6 +56,7 @@ public class BGMController : MonoBehaviour
             isLooping = false;
             cts?.Cancel();
             cts?.Dispose();
+            cts = null; // 이 줄을 추가합니다.
 
             if (nextGroup != null && nextGroup.bgmClips.Count > 0)
             {
@@ -118,6 +119,7 @@ public class BGMController : MonoBehaviour
         isLooping = false;
         cts?.Cancel();
         cts?.Dispose();
+        cts = null; // 이 줄을 추가합니다.
 
         oneShotCts?.Cancel();
         oneShotCts = new CancellationTokenSource();

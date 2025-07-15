@@ -105,6 +105,8 @@ public class HeroAbilityBible : HeroAbilitySystem
         }
         token?.Cancel();
         token?.Dispose();
+        cancel?.Cancel();
+        cancel?.Dispose();
         bibleList.Clear();
     }
     public override void SetAbilityLevel(int level)

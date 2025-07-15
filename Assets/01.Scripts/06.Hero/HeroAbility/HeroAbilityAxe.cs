@@ -44,9 +44,11 @@ public class HeroAbilityAxe : HeroAbilitySystem
 
     private async UniTaskVoid ShootAxe(CancellationToken tk)
     {
+        if (this == null) return;
+
         float angle;
 
-        if (tk.IsCancellationRequested)
+        if (tk.IsCancellationRequested || hero == null)
             return;
 
         if (target == null)
@@ -55,12 +57,20 @@ public class HeroAbilityAxe : HeroAbilitySystem
         }
         else
         {
+            if (hero.transform == null)
+            {
+                return;
+            }
             angle = Mathf.Atan2(target.transform.position.y - hero.transform.position.y,
                 target.transform.position.x - hero.transform.position.x) * Mathf.Rad2Deg;
         }
 
         for (int i = 0; i < count; i++)
         {
+            if (hero.transform == null)
+            {
+                return;
+            }
             var bullet = objectPoolManager.GetObject<HeroBullet>("axe", hero.transform.position);
             bullet.SetBullet(duration, pierce, damage, speed, rotateSpeed,size,knockback);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);

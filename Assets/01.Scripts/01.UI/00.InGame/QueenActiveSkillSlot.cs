@@ -111,6 +111,12 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
         {
             while (time < coolTime)
             {
+                // Image 컴포넌트가 유효한지 확인
+                if (index >= coolTimeMask.Count || coolTimeMask[index] == null || coolTimeMask[index].gameObject == null)
+                {
+                    return; // 유효하지 않으면 즉시 종료
+                }
+
                 time += Time.deltaTime;
 
                 if (index < coolTimeMask.Count)
@@ -125,6 +131,12 @@ public class QueenActiveSkillSlot : BaseSlot<QueenActiveSkillBase>
             // 쿨타임 도중 취소된 경우. 무시해도 됨
         }
         
+        // 마지막으로 fillAmount를 0으로 설정하기 전에도 유효성 확인
+        if (index >= coolTimeMask.Count || coolTimeMask[index] == null || coolTimeMask[index].gameObject == null)
+        {
+            return; // 유효하지 않으면 즉시 종료
+        }
+
         if (index < coolTimeMask.Count)
         {
             coolTimeMask[index].fillAmount = 0f;
