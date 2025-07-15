@@ -47,6 +47,8 @@ public class HeroAbilityMissile : HeroAbilitySystem
 
     private async UniTaskVoid ShootBullet()
     {
+        if (this == null) return;
+
         if(hero == null || token == null)
         {
             return;
@@ -75,7 +77,7 @@ public class HeroAbilityMissile : HeroAbilitySystem
             bullet.SetBullet(duration, pierce, damage, speed, 0,size, knockback);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(delay));
+            await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: token.Token);
         }
     }
 

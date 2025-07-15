@@ -88,6 +88,8 @@ public class HeroAbilityThunder : HeroAbilitySystem
     {
         token?.Cancel();
         token?.Dispose();
+        tk?.Cancel();
+        tk?.Dispose();
     }
     public override void SetAbilityLevel(int level)
     {

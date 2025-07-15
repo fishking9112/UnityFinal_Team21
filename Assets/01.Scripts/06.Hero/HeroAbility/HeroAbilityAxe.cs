@@ -44,6 +44,8 @@ public class HeroAbilityAxe : HeroAbilitySystem
 
     private async UniTaskVoid ShootAxe(CancellationToken tk)
     {
+        if (this == null) return;
+
         float angle;
 
         if (tk.IsCancellationRequested || hero == null)

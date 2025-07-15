@@ -50,6 +50,8 @@ public class HeroAbilityBurst : HeroAbilitySystem
 
     private async UniTask ShootBullet(CancellationToken tk)
     {
+        if (this == null) return;
+
         if (hero == null || token == null)
         {
             return;
@@ -92,6 +94,8 @@ public class HeroAbilityBurst : HeroAbilitySystem
     {
         token?.Cancel();
         token?.Dispose();
+        tk?.Cancel();
+        tk?.Dispose();
     }
     public override void SetAbilityLevel(int level)
     {
