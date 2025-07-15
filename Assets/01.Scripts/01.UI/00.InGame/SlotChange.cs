@@ -29,7 +29,8 @@ public class SlotChange : MonoBehaviour
     public void Init(QueenController queenController, InputAction slotChangeAction)
     {
         controller = queenController;
-        slotChangeAction.started += OnChangeSlots;
+        inputAction = slotChangeAction;
+        inputAction.started += OnChangeSlots;
         InitOrder();
     }
 
@@ -59,6 +60,12 @@ public class SlotChange : MonoBehaviour
             }
             if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused == true)
             {
+                return;
+            }
+
+            if (queenActiveSkillGroupTransform == null || monsterGroupTransform == null)
+            {
+                Debug.LogWarning("RectTransform objects are null. Cannot perform slot change.");
                 return;
             }
 
