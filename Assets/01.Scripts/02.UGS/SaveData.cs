@@ -18,6 +18,9 @@ public struct SaveData
     [JsonProperty("queenUpgrades")]
     public QueenAbilityUpgradeData queenUpgrades;
 
+    [JsonProperty("trophies")]
+    public TrophySaveData trophies;
+
     [JsonExtensionData]
     public Dictionary<string, JToken> extraRootFields;
 }
@@ -58,7 +61,6 @@ public struct QueenAbilityUpgradeData
     public Dictionary<string, JToken> extraQueenUpgradeFields;
 }
 
-
 [Serializable]
 public struct LeaderBoardData
 {
@@ -67,6 +69,22 @@ public struct LeaderBoardData
 
     [JsonExtensionData]
     public Dictionary<string, JToken> extraLeaderboardResultFields;
+}
+
+[Serializable]
+public struct TrophySaveData
+{
+    [JsonProperty("trophyClear")]
+    public Dictionary<int, bool> trophyClear;
+
+    [JsonProperty("trophyCount")]
+    public Dictionary<int, int> trophyCount;
+
+    [JsonProperty("unlockIdToTrophyIds")]
+    public Dictionary<int, int> unlockIdToTrophyIds;
+
+    [JsonExtensionData]
+    public Dictionary<string, JToken> extraTrophyFields;
 }
 
 // 이후 필요한 데이터 구조체로 추가
