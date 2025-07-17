@@ -1,6 +1,8 @@
+using Cysharp.Threading.Tasks;
 using Stove.PCSDK.NET;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
@@ -35,6 +37,9 @@ public class StoveManager : MonoBehaviour
 
     public StovePCUser User { get; private set; }
     public StovePCOwnership[] Ownerships { get; private set; }
+
+    private UniTaskCompletionSource<List<StoveRankInfo>> rankTcs;
+    private List<StoveRankInfo> latestRankList;
 
     void Awake()
     {
@@ -105,6 +110,7 @@ public class StoveManager : MonoBehaviour
 
             OnStat = new StovePCStatDelegate(this.OnStat),
             OnSetStat = new StovePCSetStatDelegate(this.OnSetStat),
+            OnRank = new StovePCRankDelegate(this.OnRank),
         };
 
         StovePCResult callResult = StovePC.Initialize(config, callback);
@@ -250,6 +256,42 @@ public class StoveManager : MonoBehaviour
 
         WriteLog(sb.ToString());
     }
+    private void OnRank(StovePCRank[] ranks, uint totalCount)
+    {
+        List<StoveRankInfo> parsedRanks = new();
+
+        for (int i = 0; i < ranks.Length; i++)
+        {
+            var r = ranks[i];
+            parsedRanks.Add(new StoveRankInfo
+            {
+                MemberNo = r.MemberNo,
+                Score = r.Score,
+                Rank = r.Rank,
+                Nickname = r.Nickname,
+                ProfileImage = r.ProfileImage
+            });
+        }
+
+        latestRankList = parsedRanks;
+
+        // 콜백 대기중인 곳에 완료 신호 보내기
+        rankTcs?.TrySetResult(latestRankList);
+
+        latestRankList.Clear();
+
+        foreach (var r in ranks)
+        {
+            latestRankList.Add(new StoveRankInfo
+            {
+                MemberNo = r.MemberNo,
+                Score = r.Score,
+                Rank = r.Rank,
+                Nickname = r.Nickname,
+                ProfileImage = r.ProfileImage
+            });
+        }
+    }
 
     private void HandleStoveCallResult(StovePCFunctionType type, StovePCResult result)
     {
@@ -328,5 +370,27 @@ public class StoveManager : MonoBehaviour
         Application.Quit();
     }
 
+    public StovePCResult GetStat(string statId)
+    {
+        return StovePC.GetStat(statId);
+    }
 
+    public async UniTask<List<StoveRankInfo>> GetRankAsync(string leaderboardId, uint pageIndex, uint pageSize, bool includeMyRank)
+    {
+        rankTcs = new UniTaskCompletionSource<List<StoveRankInfo>>();
+
+        StovePCResult result = StovePC.GetRank(leaderboardId, pageIndex, pageSize, includeMyRank);
+        if (result != StovePCResult.NoError)
+        {
+            Utils.LogError($"STOVE GetRank 실패: {result}");
+            return new List<StoveRankInfo>();
+        }
+
+        return await rankTcs.Task;
+    }
+
+    public StovePCResult SetStat(string statId, int value)
+    {
+        return StovePC.SetStat(statId, value);
+    }
 }
