@@ -52,10 +52,12 @@ public class UGSManager : MonoSingleton<UGSManager>
     {
         if (!IsLoggedIn)
         {
-            await Auth.SignInAnonymously();
+            //await Auth.SignInAnonymously();
+
+            await Auth.SignInWithSteamAsync();
             UIDtext.text = PlayerId;
         }
-
+        /*
         bool hasNickname = await Auth.HasNicknameAsync();
 
         if (!hasNickname)
@@ -78,7 +80,7 @@ public class UGSManager : MonoSingleton<UGSManager>
                 Debug.LogError("닉네임 저장 실패");
                 return;
             }
-        }
+        }*/
 
         await LoadPlayerDataAsync();
     }

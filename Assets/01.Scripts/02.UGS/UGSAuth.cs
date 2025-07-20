@@ -1,7 +1,9 @@
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
+using Steamworks;
 using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using TinyJSON;
 using Unity.Services.Authentication;
@@ -13,6 +15,88 @@ using UnityEngine;
 public class UGSAuth : MonoBehaviour
 {
     private const string NicknameKey = "NickName";
+
+    public async UniTask SignInWithSteamAsync()
+    {
+        if (!SteamManager.Initialized)
+        {
+            Debug.LogError("[UGS] SteamManager 초기화되지 않았습니다.");
+            return;
+        }
+
+        try
+        {
+            // 인증 티켓 요청
+            SteamNetworkingIdentity identity = new SteamNetworkingIdentity();
+            identity.Clear();
+            identity.SetSteamID(SteamUser.GetSteamID());
+
+            byte[] ticketBuffer = new byte[1024];
+            uint ticketSize = 0;
+
+            HAuthTicket authTicket = SteamUser.GetAuthSessionTicket(
+                ticketBuffer,
+                ticketBuffer.Length,
+                out ticketSize,
+                ref identity
+            );
+
+            string sessionTicket = Convert.ToBase64String(ticketBuffer, 0, (int)ticketSize);
+
+            await AuthenticationService.Instance.SignInWithSteamAsync(
+                sessionTicket,
+                "steam"
+            );
+
+            Debug.Log($"[UGS] Steam 로그인 성공 - PlayerID: {AuthenticationService.Instance.PlayerId}");
+        }
+        catch (AuthenticationException e)
+        {
+            Debug.LogError($"[UGS] 인증 실패: {e.Message}");
+        }
+        catch (RequestFailedException e)
+        {
+            Debug.LogError($"[UGS] 요청 실패: {e.Message}");
+        }
+
+        /*
+        try
+        {
+            // 인증 티켓 요청
+            SteamNetworkingIdentity identity = new SteamNetworkingIdentity();
+            identity.Clear();
+            identity.SetSteamID(SteamUser.GetSteamID());
+
+            byte[] ticketBuffer = new byte[1024];
+            uint ticketSize = 0;
+
+            HAuthTicket authTicket = SteamUser.GetAuthSessionTicket(
+                ticketBuffer,
+                ticketBuffer.Length,
+                out ticketSize,
+                ref identity
+            );
+
+            string identityToken = Convert.ToBase64String(ticketBuffer, 0, (int)ticketSize);
+
+            // Unity Authentication - External Provider ("steam")
+            await AuthenticationService.Instance.SignInWithSteamAsync(
+                "steam",
+                identityToken
+            );
+
+            Debug.Log($"[UGS] Steam 로그인 성공 - PlayerID: {AuthenticationService.Instance.PlayerId}");
+        }
+        catch (AuthenticationException e)
+        {
+            Debug.LogError($"[UGS] 인증 실패: {e.Message}");
+        }
+        catch (RequestFailedException e)
+        {
+            Debug.LogError($"[UGS] 요청 실패: {e.Message}");
+        }*/
+
+    }
 
 
     /// <summary>
