@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Steamworks;
 using System;
 using System.Threading.Tasks;
 using TMPro;
@@ -52,26 +53,39 @@ public class UGSManager : MonoSingleton<UGSManager>
     {
         if (!IsLoggedIn)
         {
-            //await Auth.SignInAnonymously();
-
             await Auth.SignInWithSteamAsync();
-            UIDtext.text = PlayerId;
+           // string nickname = SteamFriends.GetPersonaName();
+
+           // UIDtext.text = nickname;
+
+           /// UIDtext.text = PlayerId;
         }
+
+
+
+        // 닉네임 가져오기 (CloudSave에 없으면 저장)
+        bool hasNickname = await Auth.HasNicknameAsync();
+
+        if (!hasNickname)
+        {
+            string nickname = SteamFriends.GetPersonaName();
+            await Auth.SaveNicknameAsync(nickname);
+        }
+
+        // 닉네임 불러오기 (CloudSave에 저장된 닉네임)
+        string finalNickname = await Auth.LoadPublicDataByPlayerId(PlayerId);
+        UIDtext.text = finalNickname;
+
+        await LoadPlayerDataAsync();
         /*
         bool hasNickname = await Auth.HasNicknameAsync();
 
         if (!hasNickname)
         {
-            nicknameRegisterTCS = new UniTaskCompletionSource<bool>();
+            // 닉네임 가져오기
+            string nickname = SteamFriends.GetPersonaName();
 
-            SceneLoadManager.Instance.titleProgressText.ActiveUIGroup(false);
-
-            OnRequireNickname?.Invoke(); // 외부에서 UI 띄우도록 연결
-
-            // 닉네임 등록이 완료될 때까지 대기
-            await nicknameRegisterTCS.Task;
-
-            SceneLoadManager.Instance.titleProgressText.ActiveUIGroup(true);
+            await Auth.SaveNicknameAsync(nickname);
 
             // 닉네임 저장 완료 후, 재확인
             hasNickname = await Auth.HasNicknameAsync();
@@ -81,8 +95,6 @@ public class UGSManager : MonoSingleton<UGSManager>
                 return;
             }
         }*/
-
-        await LoadPlayerDataAsync();
     }
 
     public void UIDtextUneable()

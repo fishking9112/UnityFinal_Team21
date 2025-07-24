@@ -1,11 +1,8 @@
 using Cysharp.Threading.Tasks;
-using Newtonsoft.Json;
 using Steamworks;
 using System;
 using System.Collections.Generic;
-using System.Security.Principal;
 using System.Threading.Tasks;
-using TinyJSON;
 using Unity.Services.Authentication;
 using Unity.Services.CloudSave;
 using Unity.Services.CloudSave.Models.Data.Player;
@@ -18,7 +15,9 @@ public class UGSAuth : MonoBehaviour
 
     private Callback<GetTicketForWebApiResponse_t> m_AuthTicketForWebApiResponseCallback;
     private string m_SessionTicket;
-    private const string steamIdentity = "unityauthenticationservice"; 
+    private const string steamIdentity = "unityauthenticationservice";
+
+    private TaskCompletionSource<bool> _steamLoginTCS;
 
     public async UniTask SignInWithSteamAsync()
     {
@@ -31,9 +30,14 @@ public class UGSAuth : MonoBehaviour
             return;
         }
 
+        _steamLoginTCS = new TaskCompletionSource<bool>();
+
         // Steam 세션 티켓 요청
         m_AuthTicketForWebApiResponseCallback = Callback<GetTicketForWebApiResponse_t>.Create(OnAuthCallback);
         SteamUser.GetAuthTicketForWebApi(steamIdentity);
+
+        // 로그인 완료될 때까지 대기
+        await _steamLoginTCS.Task;
     }
 
     private async void OnAuthCallback(GetTicketForWebApiResponse_t callback)
@@ -46,25 +50,24 @@ public class UGSAuth : MonoBehaviour
         m_AuthTicketForWebApiResponseCallback.Dispose();
         m_AuthTicketForWebApiResponseCallback = null;
 
-        await SignInWithSteamAsync(m_SessionTicket, steamIdentity);
-    }
-
-    private async Task SignInWithSteamAsync(string ticket, string identity)
-    {
         try
         {
-            await AuthenticationService.Instance.SignInWithSteamAsync(ticket, identity);
-            Utils.Log($"[UGS] Steam 로그인 성공 - PlayerID: {AuthenticationService.Instance.PlayerId}");
+            await AuthenticationService.Instance.SignInWithSteamAsync(m_SessionTicket, steamIdentity);
+            Utils.Log($"UGS Steam 로그인 성공 - PlayerID: {AuthenticationService.Instance.PlayerId}");
+            _steamLoginTCS?.SetResult(true);
         }
         catch (AuthenticationException e)
         {
-            Utils.LogError($"[UGS] 인증 실패: {e.Message}");
+            Utils.LogError($"UGS 인증 실패: {e.Message}");
+            _steamLoginTCS?.SetException(e);
         }
         catch (RequestFailedException e)
         {
-            Utils.LogError($"[UGS] 요청 실패: {e.Message}");
+            Utils.LogError($"UGS 요청 실패: {e.Message}");
+            _steamLoginTCS?.SetException(e);
         }
     }
+
 
     /// <summary>
     /// 익명 로그인 (게스트 로그인)
