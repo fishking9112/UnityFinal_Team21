@@ -123,6 +123,10 @@ public abstract class HeroAbilitySystem : MonoBehaviour
         {
             // 무시해도 되는 예외
         }
+        catch (NullReferenceException ex)
+        {
+            Utils.LogError($"NullReferenceException in {this.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
+        }
 
     }
 

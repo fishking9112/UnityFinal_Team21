@@ -38,6 +38,7 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
     private Dictionary<string, Stack<Component>> pools = new();
     private Dictionary<string, GameObject> parentMap = new();
     private Dictionary<string, PrefabType> prefabMap = new();
+    public bool InitComplete = false;
 
     protected override async void Awake()
     {
@@ -51,11 +52,12 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
 
         foreach (var setting in loadedSettings)
         {
-
             var p = setting.GetComponent<IPoolable>();
 
             RegisterPool(setting.name, p as Component, 5);
         }
+
+        InitComplete = true;
     }
 
     protected override void OnDestroy()
