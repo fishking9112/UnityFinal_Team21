@@ -29,6 +29,9 @@ public class GameSceneStartFlow : MonoBehaviour
     {
         await UniTask.WaitUntil(() =>
             GameManager.Instance?.queen?.condition?.InitComplete == true);
+            
+        await UniTask.WaitUntil(() =>
+            ObjectPoolManager.Instance?.InitComplete == true);
     }
 
     private void EquipDefaultUnitToQuickSlot()
