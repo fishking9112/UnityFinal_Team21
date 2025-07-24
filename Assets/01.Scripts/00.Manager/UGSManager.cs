@@ -54,14 +54,7 @@ public class UGSManager : MonoSingleton<UGSManager>
         if (!IsLoggedIn)
         {
             await Auth.SignInWithSteamAsync();
-           // string nickname = SteamFriends.GetPersonaName();
-
-           // UIDtext.text = nickname;
-
-           /// UIDtext.text = PlayerId;
         }
-
-
 
         // 닉네임 가져오기 (CloudSave에 없으면 저장)
         bool hasNickname = await Auth.HasNicknameAsync();
@@ -72,29 +65,9 @@ public class UGSManager : MonoSingleton<UGSManager>
             await Auth.SaveNicknameAsync(nickname);
         }
 
-        // 닉네임 불러오기 (CloudSave에 저장된 닉네임)
-        string finalNickname = await Auth.LoadPublicDataByPlayerId(PlayerId);
-        UIDtext.text = finalNickname;
+        UIDtext.text = PlayerId;
 
         await LoadPlayerDataAsync();
-        /*
-        bool hasNickname = await Auth.HasNicknameAsync();
-
-        if (!hasNickname)
-        {
-            // 닉네임 가져오기
-            string nickname = SteamFriends.GetPersonaName();
-
-            await Auth.SaveNicknameAsync(nickname);
-
-            // 닉네임 저장 완료 후, 재확인
-            hasNickname = await Auth.HasNicknameAsync();
-            if (!hasNickname)
-            {
-                Debug.LogError("닉네임 저장 실패");
-                return;
-            }
-        }*/
     }
 
     public void UIDtextUneable()
