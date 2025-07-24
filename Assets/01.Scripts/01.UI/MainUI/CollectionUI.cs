@@ -116,6 +116,9 @@ public class CollectionUI : MonoBehaviour
     {
         foreach (var pair in dataDic)
         {
+            if (1001 <= pair.Value.ID && pair.Value.ID <= 1006) {
+                continue; // 슬라임은 아이콘 생성 안하게 만들기
+            }
             var tempPrefab = Instantiate(iconPrefab, parent);
             IInfo info = pair.Value;
             tempPrefab.Init(info, OnClickDetail);
