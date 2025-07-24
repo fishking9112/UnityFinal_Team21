@@ -16,88 +16,55 @@ public class UGSAuth : MonoBehaviour
 {
     private const string NicknameKey = "NickName";
 
+    private Callback<GetTicketForWebApiResponse_t> m_AuthTicketForWebApiResponseCallback;
+    private string m_SessionTicket;
+    private const string steamIdentity = "unityauthenticationservice"; 
+
     public async UniTask SignInWithSteamAsync()
     {
+        // UGS 초기화
+        await UnityServices.InitializeAsync();
+
         if (!SteamManager.Initialized)
         {
-            Debug.LogError("[UGS] SteamManager 초기화되지 않았습니다.");
+            Utils.LogError("SteamManager가 초기화되지 않았습니다.");
             return;
         }
 
-        try
-        {
-            // 인증 티켓 요청
-            SteamNetworkingIdentity identity = new SteamNetworkingIdentity();
-            identity.Clear();
-            identity.SetSteamID(SteamUser.GetSteamID());
-
-            byte[] ticketBuffer = new byte[1024];
-            uint ticketSize = 0;
-
-            HAuthTicket authTicket = SteamUser.GetAuthSessionTicket(
-                ticketBuffer,
-                ticketBuffer.Length,
-                out ticketSize,
-                ref identity
-            );
-
-            string sessionTicket = Convert.ToBase64String(ticketBuffer, 0, (int)ticketSize);
-
-            await AuthenticationService.Instance.SignInWithSteamAsync(
-                sessionTicket,
-                "steam"
-            );
-
-            Debug.Log($"[UGS] Steam 로그인 성공 - PlayerID: {AuthenticationService.Instance.PlayerId}");
-        }
-        catch (AuthenticationException e)
-        {
-            Debug.LogError($"[UGS] 인증 실패: {e.Message}");
-        }
-        catch (RequestFailedException e)
-        {
-            Debug.LogError($"[UGS] 요청 실패: {e.Message}");
-        }
-
-        /*
-        try
-        {
-            // 인증 티켓 요청
-            SteamNetworkingIdentity identity = new SteamNetworkingIdentity();
-            identity.Clear();
-            identity.SetSteamID(SteamUser.GetSteamID());
-
-            byte[] ticketBuffer = new byte[1024];
-            uint ticketSize = 0;
-
-            HAuthTicket authTicket = SteamUser.GetAuthSessionTicket(
-                ticketBuffer,
-                ticketBuffer.Length,
-                out ticketSize,
-                ref identity
-            );
-
-            string identityToken = Convert.ToBase64String(ticketBuffer, 0, (int)ticketSize);
-
-            // Unity Authentication - External Provider ("steam")
-            await AuthenticationService.Instance.SignInWithSteamAsync(
-                "steam",
-                identityToken
-            );
-
-            Debug.Log($"[UGS] Steam 로그인 성공 - PlayerID: {AuthenticationService.Instance.PlayerId}");
-        }
-        catch (AuthenticationException e)
-        {
-            Debug.LogError($"[UGS] 인증 실패: {e.Message}");
-        }
-        catch (RequestFailedException e)
-        {
-            Debug.LogError($"[UGS] 요청 실패: {e.Message}");
-        }*/
-
+        // Steam 세션 티켓 요청
+        m_AuthTicketForWebApiResponseCallback = Callback<GetTicketForWebApiResponse_t>.Create(OnAuthCallback);
+        SteamUser.GetAuthTicketForWebApi(steamIdentity);
     }
 
+    private async void OnAuthCallback(GetTicketForWebApiResponse_t callback)
+    {
+        // 콜백에서 세션 티켓을 16진수 문자열로 받음
+        m_SessionTicket = BitConverter.ToString(callback.m_rgubTicket, 0, (int)callback.m_cubTicket).Replace("-", string.Empty);
+
+        Utils.Log($"Steam 세션 티켓 획득 완료: {m_SessionTicket}");
+
+        m_AuthTicketForWebApiResponseCallback.Dispose();
+        m_AuthTicketForWebApiResponseCallback = null;
+
+        await SignInWithSteamAsync(m_SessionTicket, steamIdentity);
+    }
+
+    private async Task SignInWithSteamAsync(string ticket, string identity)
+    {
+        try
+        {
+            await AuthenticationService.Instance.SignInWithSteamAsync(ticket, identity);
+            Utils.Log($"[UGS] Steam 로그인 성공 - PlayerID: {AuthenticationService.Instance.PlayerId}");
+        }
+        catch (AuthenticationException e)
+        {
+            Utils.LogError($"[UGS] 인증 실패: {e.Message}");
+        }
+        catch (RequestFailedException e)
+        {
+            Utils.LogError($"[UGS] 요청 실패: {e.Message}");
+        }
+    }
 
     /// <summary>
     /// 익명 로그인 (게스트 로그인)
