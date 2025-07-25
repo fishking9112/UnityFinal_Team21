@@ -69,7 +69,7 @@ public class StoveManager : MonoBehaviour
 
     private IEnumerator RunCallbacks(float intervalSeconds)
     {
-        WaitForSeconds wfs = new WaitForSeconds(intervalSeconds);
+        var wfs = new WaitForSecondsRealtime(intervalSeconds);
         while (true)
         {
             StovePC.RunCallback();
