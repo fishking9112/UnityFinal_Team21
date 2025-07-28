@@ -20,7 +20,7 @@ public class TrophyManager : MonoSingleton<TrophyManager>
 
     private async UniTaskVoid startAsync()
     {
-        await UniTask.WaitUntil(() => UGSManager.Instance != null && UGSManager.Instance.IsLoaded);
+       // await UniTask.WaitUntil(() => UGSManager.Instance != null && UGSManager.Instance.IsLoaded);
         InitializeTrophyData();
     }
 
