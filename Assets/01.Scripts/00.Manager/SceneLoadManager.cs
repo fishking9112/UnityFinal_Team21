@@ -59,7 +59,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 {
                     tapToStartUI.ActiveUIGroup(true);
                     await WaitForUserTapAsync();
-                  //  UGSManager.Instance.UIDtextUneable();
+                    StoveGameServiceManager.Instance.UIDtextUneable();
                     tapToStartUI.ActiveUIGroup(false);
                 }
 

@@ -33,6 +33,11 @@ public class StoveGameServiceManager : MonoSingleton<StoveGameServiceManager>
         }
     }
 
+    public void UIDtextUneable()
+    {
+        UIDtext.transform.parent.gameObject.SetActive(false);
+    }
+
     public async UniTask InitAsync()
     {
         UIDtext.text = "";
