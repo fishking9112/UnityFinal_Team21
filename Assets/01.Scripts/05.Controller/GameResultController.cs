@@ -49,8 +49,8 @@ public class GameResultController : MonoBehaviour
     public void GameOver()
     {
         gameEnd = true;
-        UpdateLeaderBoard().Forget();
-        //if (GameManager.Instance.queen.condition.KillCnt.Value > StoveGameServiceManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
+
+        if (GameManager.Instance.queen.condition.KillCnt.Value > StoveGameServiceManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
 
         StartCoroutine(GameOverProcess());
     }
