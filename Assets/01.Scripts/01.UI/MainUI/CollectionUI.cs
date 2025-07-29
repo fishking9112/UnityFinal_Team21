@@ -139,8 +139,9 @@ public class CollectionUI : MonoBehaviour
 
         StringManager.Instance.SetString(_description, ItemDesc);
         string localized = ItemDesc.GetComponent<TMP_Text>().text;
-        string cleaned = Regex.Replace(localized, @" by <color=.*?>\{0\}</color>\s*", "");
-        ItemDesc.GetComponent<TMP_Text>().text = cleaned;
+        string cleanedEn = Regex.Replace(localized, @" by <color=.*?>\{0\}</color>\s*", ""); // 영어 필터
+        string cleanedKr = Regex.Replace(cleanedEn, @"<color=.*?>\{0\}</color>\s*", ""); // 한국어 필터
+        ItemDesc.GetComponent<TMP_Text>().text = cleanedKr;
 
         if (_isActive)
         {
