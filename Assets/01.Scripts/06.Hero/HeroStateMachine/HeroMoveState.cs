@@ -16,6 +16,14 @@ public class HeroMoveState : HeroBaseState
     public override void Enter()
     {
         base.Enter();
+        
+        // 필수 컴포넌트가 없으면, 오류를 기록하고 히어로를 비활성화하여 게임이 멈추는 것을 방지
+        if (state?.controller == null || state.hero == null || state.controller.statusInfo == null)
+        {
+            Utils.Log("HeroMoveState 진입 오류: 필수 컴포넌트가 없음, 히어로 비활성화");
+            return;
+        }
+
         token = new CancellationTokenSource();
         state.dir = state.GetDir();
         if (state.dir == Vector2.zero)
@@ -24,18 +32,14 @@ public class HeroMoveState : HeroBaseState
         }
         isMove = true;
         MoveAndSearch(token.Token).Forget();
-        if (state.controller != null)
-        {
-            state.controller.SetMove(true);
-        }
+        state.controller.SetMove(true);
         detectedRange = state.controller.statusInfo.detectedRange;
-
     }
 
     private async UniTask MoveAndSearch(CancellationToken tk)
     {
         MoveHero().Forget();
-        while (isMove)
+        while (isMove && !tk.IsCancellationRequested)
         {
             if (state.hero == null)
             {
@@ -67,18 +71,19 @@ public class HeroMoveState : HeroBaseState
 
     private async UniTask Search()
     {
-        // Find Enemy that inside check area
+        if (state.hero == null) return;
+
+        // 확인 영역 내의 적 찾기
         Utils.DrawOverlapCircle(state.hero.transform.position, detectedRange, Color.red);
         Collider2D col = Physics2D.OverlapCircle(state.hero.transform.position, detectedRange, 1 << 7 | 1 << 13);
-        if (col == null)
+        if (col != null && col.gameObject != null)
         {
-            return;
-        }
-        else
-        {
+            if (state.attackState is HeroAttackState attackState)
+            {
+                attackState.TargetEnemy = col.gameObject;
+            }
             await UniTask.NextFrame();
             state.ChangeState(state.attackState);
         }
     }
-
 }
