@@ -1,15 +1,12 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using UnityEngine;
 
 public class HeroAttackState : HeroBaseState
 {
-    private GameObject enemy;
-    private CancellationTokenSource token;
-    private float detectedRange;
+    public GameObject TargetEnemy { get; set; }
+    private GameObject _enemy;
+    private CancellationTokenSource _cancellationTokenSource;
 
     public HeroAttackState(HeroState state) : base(state)
     {
@@ -19,111 +16,78 @@ public class HeroAttackState : HeroBaseState
     {
         base.Enter();
 
-        // 상태 진입에 필요한 객체들이 유효한지 먼저 확인
-        if (state == null || state.controller == null || state.controller.statusInfo == null || state.hero == null || state.navMeshAgent == null)
-        {
-            // 문제가 있으면, 안전하게 이전 상태나 기본 상태로 돌아감
-            // 여기서는 다시 추적 상태로 보내는 것이 합리적으로 보임
-            state?.ChangeState(state.moveState); 
-            return;
-        }
-
-        token = new CancellationTokenSource();
-        detectedRange = state.controller.statusInfo.detectedRange;
-        if (state.hero == null) // Additional null check for safety
+        // 예외 처리
+        if (state?.controller == null || state.hero == null || state.navMeshAgent == null || !state.navMeshAgent.isOnNavMesh)
         {
             state.ChangeState(state.moveState);
             return;
         }
-        state.dir = GetEnemyDir();
-        Move(token.Token).Forget();
+
+        // 적 설정
+        _enemy = TargetEnemy;
+        TargetEnemy = null; // 속성 초기화
+
+        if (_enemy == null)
+        {
+            _enemy = state.hero.FindNearestTarget();
+        }
+
+        if (_enemy == null) // 여전히 적이 없으면 이동 상태로 돌아감
+        {
+            state.ChangeState(state.moveState);
+            return;
+        }
+
+        // 공격 로직 시작
+        _cancellationTokenSource = new CancellationTokenSource();
+        AttackLoop(_cancellationTokenSource.Token).Forget();
     }
 
-    private async UniTask Move(CancellationToken tk)
+    private async UniTask AttackLoop(CancellationToken cancellationToken)
     {
-        while (!token.IsCancellationRequested && state.hero != null)
+        // 유효한 타겟이 있고 작업이 취소되지 않는 한 반복
+        while (_enemy != null && _enemy.activeInHierarchy && !cancellationToken.IsCancellationRequested && state.hero != null)
         {
-            while (enemy != null && enemy.activeSelf && state.hero != null)
+            // 적을 바라보게 함
+            state.dir = _enemy.transform.position;
+
+            // 공격 범위 내에 있는지 확인
+            if (Vector2.Distance(state.hero.transform.position, _enemy.transform.position) <= state.navMeshAgent.stoppingDistance)
             {
-                state.dir = GetEnemyDir();
-
-                if (state.navMeshAgent != null && state.navMeshAgent.isActiveAndEnabled && state.navMeshAgent.remainingDistance < state.navMeshAgent.stoppingDistance)
-                {
-                    state.controller.SetMove(false);
-                    state.navMeshAgent.ResetPath();
-                    await UniTask.WaitUntil(() => { return enemy == null || !enemy.activeInHierarchy; }, PlayerLoopTiming.Update, tk);
-
-                    if (state.hero == null)
-                    {
-                        return;
-                    }
-
-                    state.controller.SetMove(true);
-                    GetEnemyDir();
-                    break;
-                }
-                else
-                {
-                    if (state.navMeshAgent != null && state.navMeshAgent.isActiveAndEnabled)
-                    {
-                        state.navMeshAgent.SetDestination(state.dir);
-                    }
-                    else
-                    {
-                        state.ChangeState(state.moveState);
-                        return;
-                    }
-                }
-                await UniTask.Yield(tk, true);
+                // 이동을 멈추고 공격
+                state.navMeshAgent.ResetPath();
+                state.controller.SetMove(false);
+                
+                // 적이 사라지거나 작업이 취소될 때까지 여기서 대기
+                await UniTask.WaitUntil(() => _enemy == null || !_enemy.activeInHierarchy, cancellationToken: cancellationToken);
             }
-            GetEnemyDir();
-            await UniTask.Yield(tk, true);
+            else
+            {
+                // 적을 향해 이동
+                state.controller.SetMove(true);
+                if (state.navMeshAgent.isOnNavMesh)
+                {
+                    state.navMeshAgent.SetDestination(_enemy.transform.position);
+                }
+            }
+
+            await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
+        }
+
+        // 루프가 끝나면 적이 죽었거나 공격을 멈춰야 한다는 의미
+        // 이동/탐색 상태로 돌아감
+        if (!cancellationToken.IsCancellationRequested)
+        {
+            state.ChangeState(state.moveState);
         }
     }
-
 
     public override void Exit()
     {
         base.Exit();
-        token?.Cancel();
-        token?.Dispose();
-        token = null;
-        enemy = null;
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
+        _cancellationTokenSource = null;
+        _enemy = null;
     }
-
-    private Vector2 GetEnemyDir()
-    {
-        if (state.hero == null)
-        {
-            return state.GetDir();
-        }
-        enemy = state.hero?.FindNearestTarget();
-
-        if(enemy==null)
-        {
-            state.ChangeState(state.moveState);
-            return state.GetDir();
-        }
-        else
-        {
-            if (enemy.transform == null)
-            {
-                state.ChangeState(state.moveState);
-                return state.GetDir();
-            }
-            state.dir = enemy.transform.position;
-            if (state.navMeshAgent != null && state.navMeshAgent.isActiveAndEnabled)
-            {
-                state.navMeshAgent.SetDestination(state.dir);
-            }
-            else
-            {
-                state.ChangeState(state.moveState);
-                return state.GetDir();
-            }
-            return state.dir;
-        }
-
-    }
-
 }

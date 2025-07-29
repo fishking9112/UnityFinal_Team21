@@ -382,11 +382,24 @@ public class GameHUD : HUDUI
 
     private void OnDestroy()
     {
-        curTime?.RemoveAction(UpdateTimerText);
-        condition.Level?.RemoveAction(UpdateLevelText);
-        condition.Gold?.RemoveAction(UpdateGoldText);
+        // GameManager 또는 관련 객체가 먼저 파괴되었을 수 있으므로 안전하게 확인
+        if (GameManager.Instance != null)
+        {
+            curTime?.RemoveAction(UpdateTimerText);
 
-        if (inputAction != null)
-            inputAction.started -= OnPauseUI;
+            // Queen과 condition 객체가 모두 유효할 때만 이벤트 리스너를 제거
+            if (GameManager.Instance.queen != null && condition != null)
+            {
+                condition.Level?.RemoveAction(UpdateLevelText);
+                condition.Gold?.RemoveAction(UpdateGoldText);
+                condition.KillCnt?.RemoveAction(UpdateKullCntText);
+                condition.EvolutionPoint?.RemoveAction(ShowRemainingEvolutionPoint);
+            }
+
+            if (inputAction != null)
+            {
+                inputAction.started -= OnPauseUI;
+            }
+        }
     }
 }
