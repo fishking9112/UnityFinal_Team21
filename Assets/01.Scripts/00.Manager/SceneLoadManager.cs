@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.SceneManagement;
 using static GameLog;
+using Steamworks;
 
 public enum LoadSceneEnum
 {
@@ -74,6 +75,8 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 if (QueenAbilityUpgradeManager.Instance.ShouldRestoreAbilityMonsterValues) { QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues(); }
                 await UGSManager.Instance.LoadLeaderboardTop10Async();
                 await UGSManager.Instance.LoadMyRankAsync();
+                SteamUserStats.SetAchievement("HELLOWORLD_1");
+                SteamUserStats.StoreStats();
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
                 Time.timeScale = 1;
