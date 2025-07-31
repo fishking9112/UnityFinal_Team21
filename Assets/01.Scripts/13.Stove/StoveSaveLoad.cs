@@ -12,7 +12,7 @@ using UnityEngine;
 
 public class StoveSaveLoad : MonoBehaviour
 {
-    private const int CurrentVersion = 4; // 최신 데이터 버전
+    private const int CurrentVersion = 5; // 최신 데이터 버전
 
     private const string SaveKey = "PlayerSaveData";
     private const string RankDataKey = "PlayerRankDataKey";
