@@ -17,6 +17,7 @@ public class StoveGameServiceManager : MonoSingleton<StoveGameServiceManager>
 
     private UniTaskCompletionSource<bool> nicknameRegisterTCS;
 
+    public bool IsLoaded;
 
     protected override void Awake()
     {
@@ -63,6 +64,7 @@ public class StoveGameServiceManager : MonoSingleton<StoveGameServiceManager>
     public async UniTask LoadPlayerDataAsync()
     {
         await SaveLoad.LoadAsync();
+        IsLoaded = true;
     }
 
     /// <summary>

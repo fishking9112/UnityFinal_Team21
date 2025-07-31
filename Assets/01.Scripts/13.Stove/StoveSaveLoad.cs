@@ -14,7 +14,7 @@ public class StoveSaveLoad : MonoBehaviour
 {
     private const int CurrentVersion = 4; // 최신 데이터 버전
 
-    private const string SaveKey = "PlayerSaveData"; 
+    private const string SaveKey = "PlayerSaveData";
     private const string RankDataKey = "PlayerRankDataKey";
     private const string SaveFileName = "PlayerSaveData.json";
 
@@ -69,6 +69,7 @@ public class StoveSaveLoad : MonoBehaviour
             player = CollectPlayerData(),
             settings = CollectSettingsData(),
             queenUpgrades = CollectQueenAbilityUpgradeData(),
+            trophies = CollectTrophyData(),
             extraRootFields = new Dictionary<string, JToken>()
         };
 
@@ -97,6 +98,16 @@ public class StoveSaveLoad : MonoBehaviour
         var data = QueenAbilityUpgradeManager.Instance.SetSaveData();
         data.extraQueenUpgradeFields = new Dictionary<string, JToken>();
         return data;
+    }
+    private TrophySaveData CollectTrophyData()
+    {
+        return new TrophySaveData
+        {
+            trophyClear = TrophyManager.Instance.trophyClear,
+            trophyCount = TrophyManager.Instance.trophyCount,
+            unlockIdToTrophyIds = TrophyManager.Instance.unlockIdToTrophyIds,
+            extraTrophyFields = new Dictionary<string, JToken>()
+        };
     }
 
     /// <summary>
@@ -214,6 +225,18 @@ public class StoveSaveLoad : MonoBehaviour
             data.version = 4;
         }
 
+        if (data.version == 4)
+        {
+            data.trophies = new TrophySaveData
+            {
+                trophyClear = new Dictionary<int, bool>(),
+                trophyCount = new Dictionary<int, int>(),
+                unlockIdToTrophyIds = new Dictionary<int, int>(),
+                extraTrophyFields = new Dictionary<string, JToken>()
+            };
+            data.version = 5;
+        }
+
         // 추가 버전 마이그레이션은 여기에 구현
         return data;
     }
@@ -226,14 +249,32 @@ public class StoveSaveLoad : MonoBehaviour
         return new SaveData
         {
             version = CurrentVersion,
-            player = new PlayerData { gold = 0, extraPlayerFields = new() },
-            settings = new SettingsData { extraSettingsFields = new() },
+            player = new PlayerData
+            {
+                gold = 0,
+                extraPlayerFields = new Dictionary<string, JToken>()
+            },
+            settings = new SettingsData
+            {
+                // bgmVolume = 0.1f,
+                // sfxVolume = 0.1f,
+                // 언어 부분 추가
+                extraSettingsFields = new Dictionary<string, JToken>()
+            },
             queenUpgrades = new QueenAbilityUpgradeData
             {
-                upgrades = new(),
-                extraQueenUpgradeFields = new()
+                upgrades = new List<QueenAbilityUpgradeInfo>(),
+                extraQueenUpgradeFields = new Dictionary<string, JToken>()
             },
-            extraRootFields = new()
+            trophies = new TrophySaveData
+            {
+                trophyClear = new Dictionary<int, bool>(),
+                trophyCount = new Dictionary<int, int>(),
+                unlockIdToTrophyIds = new Dictionary<int, int>(),
+                extraTrophyFields = new Dictionary<string, JToken>()
+            },
+
+            extraRootFields = new Dictionary<string, JToken>()
         };
     }
 
@@ -242,6 +283,8 @@ public class StoveSaveLoad : MonoBehaviour
         try
         {
             GameManager.Instance.SetGold(saveData.player.gold);
+
+            // 어빌리티
             QueenAbilityUpgradeManager.Instance.ApplyUpgradeData(saveData.queenUpgrades);
             Debug.Log("저장 데이터 적용 완료");
         }
@@ -249,9 +292,22 @@ public class StoveSaveLoad : MonoBehaviour
         {
             Debug.LogWarning($"저장 데이터 적용 실패: {e.Message}");
         }
+
+        // 업적
+        try
+        {
+            TrophyManager.Instance.trophyClear = saveData.trophies.trophyClear;
+            TrophyManager.Instance.trophyCount = saveData.trophies.trophyCount;
+            TrophyManager.Instance.unlockIdToTrophyIds = saveData.trophies.unlockIdToTrophyIds;
+            Utils.Log("업적 적용 완료");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"업적 적용 실패: {e.Message}");
+        }
     }
 
-    
+
     /// <summary>
     /// playerId에 해당하는 공개 데이터를 읽어 nickname과 queenID를 반환합니다.
     /// </summary>
