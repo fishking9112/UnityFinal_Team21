@@ -37,6 +37,12 @@ public class ParticleUI : MonoBehaviour
         transform.localScale = Vector2.one;
     }
 
+    public void ForceEnd()
+    {
+        endAction?.Invoke();
+        owner.ReturnToPool(this);
+    }
+
     void Update()
     {
         elapsed += Time.deltaTime;
