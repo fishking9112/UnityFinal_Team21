@@ -16,6 +16,7 @@ public class ParticleUI : MonoBehaviour
     private Vector2 startPos;
     private Vector2 randomTargetPos;  // startPos + 랜덤 offset
     private Vector2 endPos;
+    private Vector2 controlPos; // 베지어 곡선 제어점
     private Action endAction;
 
     public void Init(string imgName, UIParticleLayer owner, Vector2 endPos, Action callback)
@@ -27,14 +28,21 @@ public class ParticleUI : MonoBehaviour
         iconImg.sprite = DataManager.Instance.iconAtlas.GetSprite(imgName);
         elapsed = 0f;
 
-        // 현재 위치를 시작점으로 삼음
         startPos = transform.localPosition;
 
-        // 원형 범위 내 랜덤 위치 생성
         Vector2 randomDirection = new Vector2(UnityEngine.Random.Range(-randomPosRange, randomPosRange), UnityEngine.Random.Range(-randomPosRange, randomPosRange));
         randomTargetPos = startPos + randomDirection;
 
+        // 제어점을 (시작점의 X, 도착점의 Y)로 설정하여 코너를 도는 듯한 곡선 생성
+        controlPos = new Vector2(startPos.x, endPos.y);
+
         transform.localScale = Vector2.one;
+    }
+
+    public void ForceEnd()
+    {
+        endAction?.Invoke();
+        owner.ReturnToPool(this);
     }
 
     void Update()
@@ -48,12 +56,17 @@ public class ParticleUI : MonoBehaviour
         }
         else if (elapsed < stopTime)
         {
-            // transform.localPosition = randomTargetPos;
+            // 멈춤
         }
         else if (elapsed < endTime)
         {
             float t = (elapsed - stopTime) / (endTime - stopTime);
-            transform.localPosition = Vector2.Lerp(randomTargetPos, endPos, t);
+
+            // 2차 베지어 곡선 계산
+            Vector2 newPos = (1 - t) * (1 - t) * randomTargetPos +
+                             2 * (1 - t) * t * controlPos +
+                             t * t * endPos;
+            transform.localPosition = newPos;
         }
         else
         {
