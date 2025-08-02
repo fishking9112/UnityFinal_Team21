@@ -22,7 +22,7 @@ public class QueenEnhanceUI : SingleUI
     [HideInInspector] public bool isOpen = false;
 
     private const int initRerollCost = 1000;
-    private const int increaseRerollCost = 100;
+    private const int increaseRerollCost = 500;
     private int useRerollCount = 0;
 
     private void Awake()
