@@ -118,8 +118,17 @@ public class TrophyManager : MonoSingleton<TrophyManager>
                 Vector2 moneyPos = new Vector2(-865, 488);
                 StaticUIManager.Instance.uiParticleLayer.ShowParticle("gameicon_tilemap-Sheet_1179", buttonPos, moneyPos, () =>
                 {
-                    GameManager.Instance.AddGold(amount);
-                    StaticUIManager.Instance.hudLayer.GetHUD<MenuHUD>().GoldTextScaleUpAndDown();
+                    int money = amount;
+                    // 골드 획득
+                    GameManager.Instance.AddGold(money);
+                    if (StaticUIManager.Instance != null && StaticUIManager.Instance.hudLayer != null)
+                    {
+                        var menuHUD = StaticUIManager.Instance.hudLayer.GetHUD<MenuHUD>();
+                        if (menuHUD != null)
+                        {
+                            menuHUD.GoldTextScaleUpAndDown();
+                        }
+                    }
                 });
             }
             Invoke(nameof(DelayedStart), 2.3f);

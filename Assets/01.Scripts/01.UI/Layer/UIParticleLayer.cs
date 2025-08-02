@@ -47,4 +47,15 @@ public class UIParticleLayer : MonoBehaviour
     {
         ui.gameObject.SetActive(false);
     }
+
+    private void OnDestroy()
+    {
+        foreach (var item in poolList)
+        {
+            if (item.gameObject.activeInHierarchy)
+            {
+                item.ForceEnd();
+            }
+        }
+    }
 }
