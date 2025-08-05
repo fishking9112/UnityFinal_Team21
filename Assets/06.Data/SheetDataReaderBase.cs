@@ -2,6 +2,7 @@ using GoogleSheetsToUnity;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public abstract class SheetDataReaderBase : ScriptableObject
 {
     [Header("Sheet URL")]
@@ -17,4 +18,5 @@ public abstract class SheetDataReaderBase : ScriptableObject
     public int endRowIndex;
 
     public abstract void UpdateStat(List<GSTU_Cell> list);
+    public abstract void ClearInfoList();
 }

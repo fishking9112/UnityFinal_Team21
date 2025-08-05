@@ -3,21 +3,35 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum StatModifierType
+{
+    Percent,
+    Value,
+}
+
 [Serializable]
 public class LevelInfo
 {
     public int cost;
-    public int eff;
+    public float eff;
 }
 
 [Serializable]
-public class QueenAbilityInfo
+public class QueenAbilityInfo : IInfo
 {
     public int id;
     public string name;
     public string description;
+    public string icon;
     public int maxLevel;
     public LevelInfo[] levelInfo;
+    public StatModifierType type;
+
+
+    public int ID => id;
+    public string Name => name;
+    public string Description => description;
+    public string Icon => icon;
 }
 
 [CreateAssetMenu(fileName = "QueenAbilityData", menuName = "Scriptable Object/New QueenAbilityData")]
@@ -31,13 +45,12 @@ public class QueenAbilityData : SheetDataReaderBase
     {
         queenAbilityInfo = new QueenAbilityInfo();
 
-        foreach(var cell in list)
+        foreach (var cell in list)
         {
-            
             switch (cell.columnId)
             {
                 case "id":
-                    queenAbilityInfo.id = int.Parse(cell.value);
+                    queenAbilityInfo.id = Utils.StringToInt(cell.value);
                     break;
                 case "name":
                     queenAbilityInfo.name = cell.value;
@@ -45,10 +58,13 @@ public class QueenAbilityData : SheetDataReaderBase
                 case "description":
                     queenAbilityInfo.description = cell.value;
                     break;
+                case "icon":
+                    queenAbilityInfo.icon = cell.value;
+                    break;
                 case "maxLevel":
-                    queenAbilityInfo.maxLevel = int.Parse(cell.value);
+                    queenAbilityInfo.maxLevel = Utils.StringToInt(cell.value);
                     queenAbilityInfo.levelInfo = new LevelInfo[queenAbilityInfo.maxLevel];
-                    for(int i = 0; i < queenAbilityInfo.maxLevel; i++)
+                    for (int i = 0; i < queenAbilityInfo.maxLevel; i++)
                     {
                         queenAbilityInfo.levelInfo[i] = new LevelInfo();
                     }
@@ -58,13 +74,10 @@ public class QueenAbilityData : SheetDataReaderBase
                 case "cost_3":
                 case "cost_4":
                 case "cost_5":
-                    int levelIndex = int.Parse(cell.columnId.Split('_')[1]) - 1;
+                    int levelIndex = Utils.StringToInt(cell.columnId.Split('_')[1]) - 1;
                     if (levelIndex < queenAbilityInfo.maxLevel)
                     {
-                        if (int.TryParse(cell.value, out int costValue))
-                        {
-                            queenAbilityInfo.levelInfo[levelIndex].cost = costValue;
-                        }
+                        queenAbilityInfo.levelInfo[levelIndex].cost = Utils.StringToInt(cell.value);
                     }
                     break;
                 case "eff_1":
@@ -72,17 +85,22 @@ public class QueenAbilityData : SheetDataReaderBase
                 case "eff_3":
                 case "eff_4":
                 case "eff_5":
-                    levelIndex = int.Parse(cell.columnId.Split('_')[1]) - 1;
+                    levelIndex = Utils.StringToInt(cell.columnId.Split('_')[1]) - 1;
                     if (levelIndex < queenAbilityInfo.maxLevel)
                     {
-                        if (int.TryParse(cell.value, out int effValue))
-                        {
-                            queenAbilityInfo.levelInfo[levelIndex].eff = effValue;
-                        }
+                        queenAbilityInfo.levelInfo[levelIndex].eff = Utils.StringToFloat(cell.value);
                     }
+                    break;
+                case "Type":
+                    queenAbilityInfo.type = Utils.StringToEnum<StatModifierType>(cell.value, StatModifierType.Percent);
                     break;
             }
         }
         infoList.Add(queenAbilityInfo);
+    }
+
+    public override void ClearInfoList()
+    {
+        infoList.Clear();
     }
 }

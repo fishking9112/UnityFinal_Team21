@@ -1,31 +1,3 @@
-<<<<<<< Updated upstream
-using System;
-using System.Collections.Generic;
-
-[Serializable]
-public struct SaveData
-{
-    public PlayerData player;
-    public SettingsData settings;
-}
-
-[Serializable]
-public struct PlayerData
-{
-    public string nickName;
-    public int level;
-    public int coin;
-}
-
-[Serializable]
-public struct SettingsData
-{
-    public float bgmVolume;
-    public float sfxVolume;
-   // public string language;
-}
-
-=======
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
@@ -45,6 +17,9 @@ public struct SaveData
 
     [JsonProperty("queenUpgrades")]
     public QueenAbilityUpgradeData queenUpgrades;
+
+    [JsonProperty("trophies")]
+    public TrophySaveData trophies;
 
     [JsonExtensionData]
     public Dictionary<string, JToken> extraRootFields;
@@ -86,7 +61,6 @@ public struct QueenAbilityUpgradeData
     public Dictionary<string, JToken> extraQueenUpgradeFields;
 }
 
-
 [Serializable]
 public struct LeaderBoardData
 {
@@ -97,5 +71,20 @@ public struct LeaderBoardData
     public Dictionary<string, JToken> extraLeaderboardResultFields;
 }
 
->>>>>>> Stashed changes
+[Serializable]
+public struct TrophySaveData
+{
+    [JsonProperty("trophyClear")]
+    public Dictionary<int, bool> trophyClear;
+
+    [JsonProperty("trophyCount")]
+    public Dictionary<int, int> trophyCount;
+
+    [JsonProperty("unlockIdToTrophyIds")]
+    public Dictionary<int, int> unlockIdToTrophyIds;
+
+    [JsonExtensionData]
+    public Dictionary<string, JToken> extraTrophyFields;
+}
+
 // 이후 필요한 데이터 구조체로 추가

@@ -1,57 +1,87 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
-using UnityEngine.AI;
 
-interface IHPHandler
+
+public abstract class BaseController : MonoBehaviour
 {
-    float CurrentHP { get; set; }
-    float maxHP { get; set; }
-    public void SetHP();
-}
+    [Header("현재 데이터")]
+    public LayerMask attackLayer; // 공격할 레이어 (적)
+    public LayerMask obstacleLayer; // 감지할 레이어 (장애물)
 
-public class BaseController : MonoBehaviour
-{
-    private string name;
-    private NavMeshAgent navMesh;
-    private GameObject target;
+    [Header("핸들러")]
+    [SerializeField] public HealthHandler healthHandler;
+    [SerializeField] public StatHandler statHandler;
 
-    private float attack;
-    public float Attack
+    public BuffController buffController;
+
+    protected virtual void Start()
     {
-        get { return attack; }
-        private set { attack = value; }
+
     }
 
-    private float def;
-    public float Def
+    /// <summary>
+    /// 최초 생성 시 한번만 실행(참조해서 수치 자동 수정)
+    /// </summary>
+    /// <param name="statInfo">참조 할 수치 데이터</param>
+    public void StatInit(BaseStatData statData, bool isHealthUI = false)
     {
-        get { return def; }
-        private set { def = value; }
+        healthHandler.Init(statData.health);
+
+        if (statData is MonsterInfo monsterStat)
+        {
+            statHandler.Init(monsterStat.health, monsterStat.moveSpeed, monsterStat.attack, monsterStat.attackRange, monsterStat.attackSpeed);
+        }
+        else
+        {
+            statHandler.Init(statData.health, statData.moveSpeed);
+        }
+
+        SetHealthUI(isHealthUI);
     }
 
-    private float moveSpeed;
-    public float MoveSpeed
+    public void SetHealthUI(bool isHealthUI)
     {
-        get { return moveSpeed; }
-        private set { moveSpeed = value; }
+        healthHandler.ActiveHealthUI(isHealthUI);
     }
 
-    private float attackDelay;
-    public float AttackDelay
+    /// <summary>
+    /// (중요) 체력이 늘어나면 늘어난 만큼 최대 체력 수정할 수 있게 실행 할 것
+    /// </summary>
+    /// <param name="statInfo">참조 할 수치 데이터</param>
+    protected void HealthStatUpdate()
     {
-        get { return attackDelay; }
-        private set { attackDelay = value; }
+        healthHandler.SetMaxPoint(statHandler.health.Value);
     }
 
-    protected void DetectEnemy() { }
+    /// <summary>
+    /// 데미지를 입음
+    /// </summary>
+    /// <param name="damage">공격 들어온 데미지 수치</param>
+    public virtual void TakeDamaged(float damage)
+    {
+        float finalDamage = damage + statHandler.addAttack.Value;//Mathf.Max(0, damage - statData.defence);
+        healthHandler.Damage(finalDamage);
 
-    protected void AttackTarget() { }
+        if (healthHandler.IsDie())
+        {
+            Die();
+        }
+    }
 
-    protected void OnDamaged() { }
+    /// <summary>
+    /// 현재 체력 회복
+    /// </summary>
+    public void Heal(float amount)
+    {
+        healthHandler.Heal(amount);
+    }
 
-    protected void Move() { }
-
-    protected void Die() { }
-
+    /// <summary>
+    /// 사망함
+    /// </summary>
+    public virtual void Die()
+    {
+        // Destroy(this.gameObject);
+        buffController.ClearAllBuff();
+    }
 }

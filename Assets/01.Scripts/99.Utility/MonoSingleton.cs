@@ -18,9 +18,18 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 
                     var mono = _instance as MonoSingleton<T>;
 
-                    if(mono != null && mono.isDontDestroy)
+                    if (mono != null && mono.isDontDestroy)
                     {
                         DontDestroyOnLoad(obj);
+                    }
+                }
+                else
+                {
+                    var mono = _instance as MonoSingleton<T>;
+
+                    if (mono != null && mono.isDontDestroy)
+                    {
+                        DontDestroyOnLoad(_instance);
                     }
                 }
             }
@@ -49,7 +58,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        if(_instance == this)
+        if (_instance == this)
         {
             _instance = null;
         }

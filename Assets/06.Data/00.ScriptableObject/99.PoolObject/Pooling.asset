@@ -1,0 +1,213 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ffddaca9493ff2489d98fd7fbb47814, type: 3}
+  m_Name: Pooling
+  m_EditorClassIdentifier: 
+  poolList:
+  - key: bullet
+    prefab: {fileID: 2231113967889475797, guid: b398365b77d238c4fa669b6ba63d6680, type: 3}
+    initSize: 5
+  - key: RewardBat
+    prefab: {fileID: 6830039048034344704, guid: 55abf016b0de03949948e96d483bcb95, type: 3}
+    initSize: 5
+  - key: AttackDMG_Light
+    prefab: {fileID: 1558332597376287026, guid: f96ebef09f4e3fe459c65c904c2d3138, type: 3}
+    initSize: 5
+  - key: AttackDMG_Sword
+    prefab: {fileID: 191492791035167447, guid: fb71bb35cedf9c540b061ec436f8c0de, type: 3}
+    initSize: 5
+  - key: Barrior
+    prefab: {fileID: 2813882291555832008, guid: c37445b91afee034eae65255aef00178, type: 3}
+    initSize: 5
+  - key: BloodRoar_Buff
+    prefab: {fileID: 6785772262510733928, guid: be389464b0552e748b275e257b257b9e, type: 3}
+    initSize: 5
+  - key: Burn
+    prefab: {fileID: 1952899563079697952, guid: 478cd47bf08986c49a6bd5e72215a490, type: 3}
+    initSize: 5
+  - key: DeathSymbol_Buff
+    prefab: {fileID: 8445811574547871231, guid: fd9259e9309894f4ca1df7bb512834ef, type: 3}
+    initSize: 5
+  - key: Decay_Buff
+    prefab: {fileID: 3189163135992822115, guid: bc57fd56551f77d419837fe7af414554, type: 3}
+    initSize: 5
+  - key: Decay_Skill
+    prefab: {fileID: 4537947546951756447, guid: 0d38be883cbd17a43b31e6dc789afde1, type: 3}
+    initSize: 5
+  - key: Explosion
+    prefab: {fileID: 9014491443340544526, guid: 5f53d2ddeb0b25247a3b4d2d2bfda09d, type: 3}
+    initSize: 5
+  - key: GravityBall
+    prefab: {fileID: 6661093504666543190, guid: ac4adeeeffcae75468937930e43f8a7f, type: 3}
+    initSize: 5
+  - key: Heal
+    prefab: {fileID: 5406767978647780191, guid: 300889fe5d538a743b3bc7e999afe516, type: 3}
+    initSize: 5
+  - key: HeroAbilityMeleeAttack
+    prefab: {fileID: 4438304891251975632, guid: ef00f136930ab7f4fb6c623cac573fe1, type: 3}
+    initSize: 5
+  - key: HeroFireball_Explode
+    prefab: {fileID: 3857440254077484886, guid: 778bee8cbcb9a78449d50a58338e9a54, type: 3}
+    initSize: 5
+  - key: Laser
+    prefab: {fileID: 750484047626512649, guid: 37387590b55eb1f4d87ce5214c8dcc92, type: 3}
+    initSize: 5
+  - key: LightningStorm
+    prefab: {fileID: 3950214905299764852, guid: ca45bbd6ef3f4f74ca72f6a2562a4fa0, type: 3}
+    initSize: 5
+  - key: LightningStorm_Range
+    prefab: {fileID: 9066269943565510331, guid: 942f4f4ebe846844295b537e2d8b87d7, type: 3}
+    initSize: 5
+  - key: ManaRecycle
+    prefab: {fileID: 81308183512584125, guid: f217c19e342104e4e8b9a670990bc565, type: 3}
+    initSize: 5
+  - key: Overwork
+    prefab: {fileID: 8544434443688463031, guid: 300c75e00e2e1af4d8b8d858a65dc8e0, type: 3}
+    initSize: 5
+  - key: Recall
+    prefab: {fileID: 5025927521102399134, guid: 060049d9adafcd9458ea9f7e459f188c, type: 3}
+    initSize: 5
+  - key: Sacrifice
+    prefab: {fileID: 8348337375524856937, guid: 4c36350fc546275478a871c5c8576af3, type: 3}
+    initSize: 5
+  - key: Slow
+    prefab: {fileID: 474255426502789903, guid: 453edef603d268147b5882efe2f6a398, type: 3}
+    initSize: 5
+  - key: Slow_Hit
+    prefab: {fileID: 5122536290671613064, guid: b5c8c094130714443925bf724808a5f0, type: 3}
+    initSize: 5
+  - key: Summon_Eff
+    prefab: {fileID: 5062031598457638954, guid: 328c4ba4b8672394294b6da223bac29d, type: 3}
+    initSize: 5
+  - key: Warcry_Buff
+    prefab: {fileID: 8907954381897146899, guid: bb011fa43b99e6b4cbfe7bbde300cabb, type: 3}
+    initSize: 5
+  - key: Zombie_Explosion
+    prefab: {fileID: 2430205674200673227, guid: e56057fbe058c8a4787a2f9467049898, type: 3}
+    initSize: 5
+  - key: Shuriken
+    prefab: {fileID: 7921550114630851673, guid: 8bcc7a9c000595848be3acaf4c78a138, type: 3}
+    initSize: 5
+  - key: Bible
+    prefab: {fileID: 6854478423553729202, guid: 93dee373ed3430d4dbde3d7d85765d71, type: 3}
+    initSize: 5
+  - key: axe
+    prefab: {fileID: 2859176462922836666, guid: 8adffa648546b0948b6621e954e7dad1, type: 3}
+    initSize: 5
+  - key: HeroFireball
+    prefab: {fileID: 2645190261532281579, guid: 7fd022df90cc0564fbebddf2b448dd37, type: 3}
+    initSize: 5
+  - key: Spear
+    prefab: {fileID: 2231113967889475797, guid: fa6325b6bbce0a6468862fce66e8aaf9, type: 3}
+    initSize: 5
+  - key: Orc_Normal
+    prefab: {fileID: 968675749530671982, guid: d3ff558c73679d44ea781b2b85dc098e, type: 3}
+    initSize: 5
+  - key: Orc_Warrior
+    prefab: {fileID: 968675749530671982, guid: 0e0f09d3c45fb0543b0457c222d86536, type: 3}
+    initSize: 5
+  - key: Orc_Shaman
+    prefab: {fileID: 968675749530671982, guid: df3ab720f86997e4a8613eee29e760b6, type: 3}
+    initSize: 5
+  - key: Orc_Warrior2
+    prefab: {fileID: 968675749530671982, guid: 4b546f3f0b740964bae4b166f453b8b6, type: 3}
+    initSize: 5
+  - key: Orc_Berserker
+    prefab: {fileID: 968675749530671982, guid: 6bca976831495994aa3ccc086688dddb, type: 3}
+    initSize: 5
+  - key: Orc_Shaman2
+    prefab: {fileID: 968675749530671982, guid: e288d780259d56d4ea7b311057d7b7f0, type: 3}
+    initSize: 5
+  - key: Skeleton_Normal
+    prefab: {fileID: 968675749530671982, guid: 8896a2b612a3b6c469d5e3ef2d191f3e, type: 3}
+    initSize: 5
+  - key: Skeleton_Warrior
+    prefab: {fileID: 968675749530671982, guid: 20f9a6cca407fdf4aae0c5c077dcc32f, type: 3}
+    initSize: 5
+  - key: Skeleton_Archer
+    prefab: {fileID: 968675749530671982, guid: 9c7b4952fa4a5444fbfc9ced975effa2, type: 3}
+    initSize: 5
+  - key: Skeleton_Mage
+    prefab: {fileID: 968675749530671982, guid: dd57783153cb90647a3f60aeb1d79d61, type: 3}
+    initSize: 5
+  - key: Skeleton_Knight
+    prefab: {fileID: 968675749530671982, guid: 880df1e55ff059246bf4cad6ab844032, type: 3}
+    initSize: 5
+  - key: Skeleton_Ranger
+    prefab: {fileID: 968675749530671982, guid: 5adcf3c9f458f404297999980db3621a, type: 3}
+    initSize: 5
+  - key: Skeleton_Wizard
+    prefab: {fileID: 968675749530671982, guid: 92f63e72ca039c04d8b555e80845ba93, type: 3}
+    initSize: 5
+  - key: Zombie_0
+    prefab: {fileID: 968675749530671982, guid: 8bf8ca1815615074ca44f974b51b97ce, type: 3}
+    initSize: 5
+  - key: Zombie_1
+    prefab: {fileID: 968675749530671982, guid: 7506a31918d92df45ba04e3caeb31862, type: 3}
+    initSize: 5
+  - key: Elf_Archer
+    prefab: {fileID: 968675749530671982, guid: 3271cde9e83b47049a2e118cc9e61218, type: 3}
+    initSize: 5
+  - key: Elf_Guardian
+    prefab: {fileID: 968675749530671982, guid: c0091756d4f921848a8471d25b3f05d2, type: 3}
+    initSize: 5
+  - key: Elf_Hunter
+    prefab: {fileID: 968675749530671982, guid: 005f4db294a49f745af6359c66ccd505, type: 3}
+    initSize: 5
+  - key: Elf_Scout
+    prefab: {fileID: 968675749530671982, guid: a9e0f9d426440d442bde98a0df060ff7, type: 3}
+    initSize: 5
+  - key: Elf_Sentinel
+    prefab: {fileID: 968675749530671982, guid: bf7f2ce16f1f3ff4ab4fe58b09e59afd, type: 3}
+    initSize: 5
+  - key: DarkElf_Assassin
+    prefab: {fileID: 968675749530671982, guid: 02d960458fe6878499783bd887335c27, type: 3}
+    initSize: 5
+  - key: DarkElf_DarkElf
+    prefab: {fileID: 968675749530671982, guid: 074966b6e0b7cb247ba36f196756624d, type: 3}
+    initSize: 5
+  - key: DarkElf_NightLoad
+    prefab: {fileID: 968675749530671982, guid: a9701597718daf84ca78b84ae7690826, type: 3}
+    initSize: 5
+  - key: DarkElf_Night
+    prefab: {fileID: 968675749530671982, guid: 2bb15cc1664631e46a6b9afe2094cf32, type: 3}
+    initSize: 5
+  - key: DarkElf_Thief
+    prefab: {fileID: 968675749530671982, guid: 49debd04ee80d5a4c954577a51286400, type: 3}
+    initSize: 5
+  - key: Arrow
+    prefab: {fileID: 7921550114630851673, guid: efaef637ac8b48942b4ddccf0a7a7ea4, type: 3}
+    initSize: 5
+  - key: Fireball
+    prefab: {fileID: 7921550114630851673, guid: af306f2630de24c4ab2b3671d192adf4, type: 3}
+    initSize: 5
+  - key: MagicMissile
+    prefab: {fileID: 7921550114630851673, guid: c965aab85ac1c974e90c5a7131ea735a, type: 3}
+    initSize: 5
+  - key: Kunai
+    prefab: {fileID: 7921550114630851673, guid: e11f3865167358c4dae80e35236865e5, type: 3}
+    initSize: 5
+  - key: HeroThunder
+    prefab: {fileID: 2842186078586182415, guid: 3466fe102ffe64943aad42908a179be7, type: 3}
+    initSize: 5
+  - key: HeroHold
+    prefab: {fileID: 1088506481845539241, guid: e1d4aa1f1da9feb49977372da6dbf80c, type: 3}
+    initSize: 5
+  - key: ExpReward
+    prefab: {fileID: 1175158903946714192, guid: 6678e225dad21634b8f48012e72a69cb, type: 3}
+    initSize: 5
+  - key: GoldReward
+    prefab: {fileID: 1175158903946714192, guid: fc0cfbf9b905e2947b2891933d7d4541, type: 3}
+    initSize: 5
+  - key: Chain
+    prefab: {fileID: 178460, guid: 3ed2f9d43d3fafe47a84d7550a527c67, type: 3}
+    initSize: 5

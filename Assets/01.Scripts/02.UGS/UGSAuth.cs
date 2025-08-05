@@ -1,5 +1,9 @@
 using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TinyJSON;
 using Unity.Services.Authentication;
 using Unity.Services.CloudSave;
 using Unity.Services.CloudSave.Models.Data.Player;
@@ -22,19 +26,53 @@ public class UGSAuth : MonoBehaviour
             return;
         }
 
+        // Unity Services 초기화 보장
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+            await UnityServices.InitializeAsync();
+
         try
         {
+            // 시도 1: 최초 로그인 시도
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            Utils.Log($"익명 로그인 성공 Player ID: {UGSManager.Instance.PlayerId}");
+            Utils.Log($"1차 로그인 성공: {UGSManager.Instance.PlayerId}");
         }
-        catch (AuthenticationException e)
+        catch (AuthenticationException authEx)
         {
-            Utils.Log($"로그인 실패 {e.Message}");
+            // 로그인 실패: 세션 토큰 문제일 수 있음
+            Utils.LogWarning($"1차 로그인 실패: {authEx.Message}");
+
+            // 세션 토큰이 존재하지만 유효하지 않음 → 로그아웃
+            if (AuthenticationService.Instance.SessionTokenExists)
+            {
+                Utils.Log("무효한 세션 토큰 존재 → 로그아웃 후 재시도");
+                AuthenticationService.Instance.SignOut();
+
+                try
+                {
+                    // 시도 2: 다시 로그인
+                    await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                    Utils.Log($"2차 로그인 성공(세션 탈출): {UGSManager.Instance.PlayerId}");
+                }
+                catch (Exception secondEx)
+                {
+                    Utils.LogError($"2차 로그인도 실패(세션 탈출): {secondEx.Message}");
+                }
+            }
+
+            Utils.LogWarning($"2차 로그인 시도(세션클리어): {authEx.Message}");
+            AuthenticationService.Instance.ClearSessionToken();
+            try
+            {
+                // 시도 2: 다시 로그인
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                Utils.Log($"2차 로그인 성공(세션클리어): {UGSManager.Instance.PlayerId}");
+            }
+            catch (Exception secondEx)
+            {
+                Utils.LogError($"2차 로그인도 실패(세션클리어): {secondEx.Message}");
+            }
         }
-        catch (RequestFailedException e)
-        {
-            Utils.Log($"로그인 요청 실패 {e.Message}");
-        }
+
     }
 
 
@@ -68,5 +106,4 @@ public class UGSAuth : MonoBehaviour
 
         return playerData.TryGetValue(NicknameKey, out var nickname) ? nickname.Value.GetAsString() : "Unknown";
     }
-
 }

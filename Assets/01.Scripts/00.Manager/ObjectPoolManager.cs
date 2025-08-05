@@ -1,6 +1,9 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 /// <summary>
 /// 오브젝트 풀을 사용할 클래스에 상속받아서 사용
@@ -12,141 +15,135 @@ public interface IPoolable
 
         -------------------------------------------------------------------------------------
 
-        private Action<GameObject> returnToPool;
+        private Action<Component> returnToPool;
 
-        public void Init(Action<GameObject> returnAction)
+        public void Init(Action<Component> returnAction)
         {
             returnToPool = returnAction;
         }
 
         public void OnDespawn()
         {
-            returnToPool?.Invoke(gameObject);
+            returnToPool?.Invoke(this);
         }
     */
 
-    void Init(Action<GameObject> returnAction);
+    void Init(Action<Component> returnAction);
     void OnSpawn();
     void OnDespawn();
 }
 
-[Serializable]
-public class PoolPrefab
-{
-    public string key;
-    public GameObject prefab;
-    public int initPoolSize;
-}
-
 public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
 {
-    [SerializeField] private PoolPrefab[] poolPrefabs;
+    private Dictionary<string, Stack<Component>> pools = new();
+    private Dictionary<string, GameObject> parentMap = new();
+    private Dictionary<string, PrefabType> prefabMap = new();
+    public bool InitComplete = false;
 
-    private Dictionary<string, Stack<GameObject>> pools = new Dictionary<string, Stack<GameObject>>();
-    private Dictionary<string, GameObject> parentPools= new Dictionary<string, GameObject>();
-    private Dictionary<string, GameObject> prefabList = new Dictionary<string, GameObject>();
-
-    protected override void Awake()
+    protected override async void Awake()
     {
         base.Awake();
-
-        InitPools();
+        await InitPoolsFromAddressables();
     }
 
-    // 지정해둔 프리팹 초기 풀 생성
-    private void InitPools()
+    public async UniTask InitPoolsFromAddressables()
     {
-        foreach(var prefab in poolPrefabs)
+        var loadedSettings = await AddressableManager.Instance.LoadDataAssetsAsync<GameObject>("poolObj");
+
+        foreach (var setting in loadedSettings)
         {
-            pools[prefab.key] = new Stack<GameObject>();
+            var p = setting.GetComponent<IPoolable>();
 
-            GameObject parentPool = new GameObject($"Pool_{prefab.key}");
-            parentPool.transform.SetParent(this.transform);
-            parentPools[prefab.key] = parentPool;
-            prefabList[prefab.key] = prefab.prefab;
+            RegisterPool(setting.name, p as Component, 5);
+        }
 
-            for(int i = 0; i < prefab.initPoolSize; i++)
-            {
-                GameObject obj = CreatePool(prefab.key);
-                obj.SetActive(false);
-                pools[prefab.key].Push(obj);
-            }
+        InitComplete = true;
+    }
+
+    protected override void OnDestroy()
+    {
+        AddressableManager.Instance.ReleaseAsset("poolObj");
+
+        base.OnDestroy();
+    }
+
+    public void RegisterPool<T>(string key, T prefab, int initPoolSize = 0) where T : Component
+    {
+        if (pools.ContainsKey(key))
+        {
+            Utils.LogWarning($"이미 등록되어 있음");
+            return;
+        }
+
+        pools[key] = new Stack<Component>();
+
+        GameObject parentPool = new GameObject($"Pool_{key}");
+        parentPool.transform.SetParent(this.transform);
+        prefabMap[key] = new PrefabType(key, prefab, initPoolSize);
+        parentMap[key] = parentPool;
+
+        for (int i = 0; i < initPoolSize; i++)
+        {
+            T comp = CreatePool<T>(key);
+            comp.gameObject.SetActive(false);
+            pools[key].Push(comp);
         }
     }
 
-    private GameObject CreatePool(string key)
+    private T CreatePool<T>(string key) where T : Component
     {
-        GameObject obj = Instantiate(prefabList[key], parentPools[key].transform);
-        obj.GetComponent<IPoolable>()?.Init(o => ReturnObject(key, o));
-        return obj;
+        var p = prefabMap[key];
+        T comp = Instantiate(p.prefab, parentMap[key].transform) as T;
+        comp.GetComponent<IPoolable>()?.Init(o => ReturnObject(key, o));
+        return comp;
     }
 
-    /// <summary>
-    /// 풀에서 오브젝트를 가져옴
-    /// </summary>
-    /// <param name="index"> 가져올 프리팹 인덱스 </param>
-    /// <param name="position"> 가져올 position </param>
-    /// <param name="rotation"> 가져올 rotation </param>
-    /// <returns></returns>
-    public GameObject GetObject(string key, Vector2 position)
+    public T GetObject<T>(string key, Vector2 position) where T : Component
     {
         if (!pools.ContainsKey(key))
         {
+            Utils.LogError($"해당 오브젝트 존재하지 않음");
             return null;
         }
 
-        GameObject obj;
-
-        if (!(pools[key].TryPop(out obj)))
+        Component comp;
+        if (!pools[key].TryPop(out comp))
         {
-            obj = CreatePool(key);
+            comp = CreatePool<T>(key);
         }
-        obj.transform.position = position;
-        obj.SetActive(true);
-        obj.GetComponent<IPoolable>()?.OnSpawn();
 
-        return obj;
+        comp.transform.position = position;
+        comp.gameObject.SetActive(true);
+        comp.GetComponent<IPoolable>()?.OnSpawn();
+        return comp as T;
     }
 
-    /// <summary>
-    /// 풀에 오브젝트를 반환함
-    /// </summary>
-    /// <param name="index"> 반환할 프리팹 인덱스 </param>
-    /// <param name="obj"> 반환할 오브젝트 </param>
-    public void ReturnObject(string key, GameObject obj)
+    private void ReturnObject(string key, Component comp)
     {
+        if (comp == null) return;
+
         if (!pools.ContainsKey(key))
         {
-            Destroy(obj);
+            Destroy(comp);
             return;
         }
 
-        obj.SetActive(false);
-        pools[key].Push(obj);
+        comp.gameObject.SetActive(false);
+        pools[key].Push(comp);
     }
+}
 
-    // key값에 대한 풀 초기화
-    public void ClearPool(string key)
+[Serializable]
+public class PrefabType
+{
+    public string key;
+    public Component prefab;
+    public int initPoolSize;
+
+    public PrefabType(string key, Component prefab, int initPoolSize)
     {
-        if (!pools.ContainsKey(key))
-        {
-            return;
-        }
-
-        while (pools[key].Count > 0)
-        {
-            Destroy(pools[key].Pop());
-        }
-
-        pools[key].Clear();
-    }
-
-    // 모든 풀 초기화
-    public void ClearAllPools()
-    {
-        foreach(var key in pools.Keys)
-        {
-            ClearPool(key);
-        }
+        this.key = key;
+        this.prefab = prefab;
+        this.initPoolSize = initPoolSize;
     }
 }

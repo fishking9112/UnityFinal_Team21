@@ -3,33 +3,88 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MonsterType
+public enum MonsterAttackType
 {
+    NULL,
     MELEE,
     RANGED,
+    MAGIC,
+    SHURIKEN
+}
+
+public enum MonsterBrood
+{
+    NULL,
+    None,
+    Elf,
+    Orc,
+    Skeleton,
+    DarkElf,
 }
 
 [Serializable]
-public class MonsterInfo
+public class MonsterInfo : BaseStatData, IInfo
 {
-    public int id;
-    public string name;
-    public string description;
-    public float health;
-    public float defence;
     public float cost;
-    public float moveSpeed;
+    public string outfit;
+    public string icon;
     public float attack;
     public float attackRange;
     public float attackSpeed;
-    public float reward;
-    public string outfit;
 
-    public MonsterType type;
+    public MonsterAttackType monsterAttackType;
+    public MonsterBrood monsterBrood;
     public string projectile;
+    public float projectile_size;
+    public float projectile_speed;
+    public int tire;
+    public int preNode;
+    public MonsterInfo() { }
+    public MonsterInfo(MonsterInfo other) : base(other)
+    {
+        cost = other.cost;
+        outfit = other.outfit;
+        icon = other.icon;
+        attack = other.attack;
+        attackRange = other.attackRange;
+        attackSpeed = other.attackSpeed;
+        monsterAttackType = other.monsterAttackType;
+        monsterBrood = other.monsterBrood;
+        projectile = other.projectile;
+        projectile_size = other.projectile_size;
+        projectile_speed = other.projectile_speed;
+        tire = other.tire;
+        preNode = other.preNode;
+    }
+    public void Copy(MonsterInfo other)
+    {
+
+        id = other.id;
+        name = other.name;
+        description = other.description;
+        health = other.health;
+        moveSpeed = other.moveSpeed;
+        reward = other.reward;
+
+        cost = other.cost;
+        outfit = other.outfit;
+        icon = other.icon;
+        attack = other.attack;
+        attackRange = other.attackRange;
+        attackSpeed = other.attackSpeed;
+        monsterAttackType = other.monsterAttackType;
+        monsterBrood = other.monsterBrood;
+        projectile = other.projectile;
+        tire = other.tire;
+        preNode = other.preNode;
+    }
+    public int ID => id;
+    public string Name => name;
+    public string Description => description;
+    public string Icon => icon;
 }
 
-[CreateAssetMenu(fileName ="MonsterData", menuName ="Scriptable Object/New MonsterData")]
+[CreateAssetMenu(fileName = "MonsterData", menuName = "Scriptable Object/New MonsterData")]
 public class MonsterData : SheetDataReaderBase
 {
     public List<MonsterInfo> infoList = new List<MonsterInfo>();
@@ -44,12 +99,12 @@ public class MonsterData : SheetDataReaderBase
     {
         monsterInfo = new MonsterInfo();
 
-        foreach(var cell in list)
+        foreach (var cell in list)
         {
             switch (cell.columnId)
             {
                 case "id":
-                    monsterInfo.id = int.Parse(cell.value);
+                    monsterInfo.id = Utils.StringToInt(cell.value);
                     break;
                 case "name":
                     monsterInfo.name = cell.value;
@@ -58,43 +113,60 @@ public class MonsterData : SheetDataReaderBase
                     monsterInfo.description = cell.value;
                     break;
                 case "health":
-                    monsterInfo.health = float.Parse(cell.value);
-                    break;
-                case "defence":
-                    monsterInfo.defence = float.Parse(cell.value);
+                    monsterInfo.health = Utils.StringToFloat(cell.value);
                     break;
                 case "cost":
-                    monsterInfo.cost = float.Parse(cell.value);
+                    monsterInfo.cost = Utils.StringToFloat(cell.value);
                     break;
                 case "moveSpeed":
-                    monsterInfo.moveSpeed = float.Parse(cell.value);
+                    monsterInfo.moveSpeed = Utils.StringToFloat(cell.value);
                     break;
                 case "attack":
-                    monsterInfo.attack = float.Parse(cell.value);
+                    monsterInfo.attack = Utils.StringToFloat(cell.value);
                     break;
                 case "attackRange":
-                    monsterInfo.attackRange = float.Parse(cell.value);
+                    monsterInfo.attackRange = Utils.StringToFloat(cell.value);
                     break;
                 case "attackSpeed":
-                    monsterInfo.attackSpeed = float.Parse(cell.value);
+                    monsterInfo.attackSpeed = Utils.StringToFloat(cell.value);
                     break;
                 case "reward":
-                    monsterInfo.reward = float.Parse(cell.value);
+                    monsterInfo.reward = Utils.StringToFloat(cell.value);
+                    break;
+                case "brood":
+                    monsterInfo.monsterBrood = Utils.StringToEnum<MonsterBrood>(cell.value, MonsterBrood.NULL);
                     break;
                 case "outfit":
                     monsterInfo.outfit = cell.value;
                     break;
+                case "icon":
+                    monsterInfo.icon = cell.value;
+                    break;
                 case "type":
-                    monsterInfo.type = (MonsterType)Enum.Parse(typeof(MonsterType), cell.value);
+                    monsterInfo.monsterAttackType = Utils.StringToEnum<MonsterAttackType>(cell.value, MonsterAttackType.NULL);
                     break;
                 case "projectile":
-                    if(monsterInfo.type == MonsterType.RANGED)
-                    {
-                        monsterInfo.projectile = cell.value;
-                    }
+                    monsterInfo.projectile = cell.value;
+                    break;
+                case "projectile_size":
+                    monsterInfo.projectile_size = Utils.StringToFloat(cell.value);
+                    break;
+                case "projectile_speed":
+                    monsterInfo.projectile_speed = Utils.StringToFloat(cell.value);
+                    break;
+                case "tire":
+                    monsterInfo.tire = Utils.StringToInt(cell.value);
+                    break;
+                case "preNode":
+                    monsterInfo.preNode = Utils.StringToInt(cell.value);
                     break;
             }
         }
         infoList.Add(monsterInfo);
+    }
+
+    public override void ClearInfoList()
+    {
+        infoList.Clear();
     }
 }

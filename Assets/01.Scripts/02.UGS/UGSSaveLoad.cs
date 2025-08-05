@@ -1,117 +1,3 @@
-<<<<<<< Updated upstream
-using Cysharp.Threading.Tasks;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Unity.Services.CloudSave;
-using Unity.Services.CloudSave.Models;
-using Unity.Services.CloudSave.Models.Data.Player;
-using UnityEngine;
-
-public class UGSSaveLoad : MonoBehaviour
-{
-    private const string SaveKey = "PlayerSaveData";
-
-
-    #region 저장
-
-    /// <summary>
-    /// 저장
-    /// </summary>
-    public async UniTask SaveAsync()
-    {
-        try
-        {
-            var saveData = Collect();
-            var saveJson = JsonConvert.SerializeObject(saveData);
-            var saveDict = new Dictionary<string, object> { { SaveKey, saveJson } };
-
-            await CloudSaveService.Instance.Data.Player.SaveAsync(saveDict, new Unity.Services.CloudSave.Models.Data.Player.SaveOptions(new PublicWriteAccessClassOptions()));
-            Utils.Log("저장 완료");
-        }
-        catch (Exception e)
-        {
-            Utils.Log($"저장 실패: {e.Message}");
-        }
-    }
-
-    /// <summary>
-    /// 저장할 변수를 SaveData에 입력
-    /// </summary>
-    private SaveData Collect()
-    {
-        SaveData data = new SaveData
-        {
-            player = CollectPlayerData(),
-            settings = CollectSettingsData()
-        };
-
-        return data;
-    }
-    private PlayerData CollectPlayerData()
-    {
-        return new PlayerData
-        {
-            // TODO: 실제 저장 내용 넣기
-            nickName = "GameManager.instance.playerName",
-            level = 151,
-            coin = 500
-        };
-    }
-    private SettingsData CollectSettingsData()
-    {
-        return new SettingsData
-        {
-            bgmVolume = SoundManager.Instance.BGMVolume,
-            sfxVolume = SoundManager.Instance.SFXVolume,
-            //  language = SettingsManager.Instance.CurrentLanguage
-        };
-    }
-
-    #endregion
-
-    #region 불러오기
-
-    /// <summary>
-    /// 저장된 내용 불러오기
-    /// </summary>
-    public async UniTask LoadAsync()
-    {
-        try
-        {
-            var playerData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { SaveKey }, new LoadOptions(new PublicReadAccessClassOptions()));
-
-            if (playerData.TryGetValue(SaveKey, out var savedValue))
-            {
-                var json = savedValue.Value.GetAsString();
-                var saveData = JsonConvert.DeserializeObject<SaveData>(json);
-
-                OnLoadComplete(saveData);
-            }
-            else
-            {
-                Utils.Log("저장된 데이터가 없음.");
-            }
-        }
-        catch (Exception e)
-        {
-            Utils.Log($"로드 실패: {e.Message}");
-        }
-    }
-
-    /// <summary>
-    /// 불러온 내용 실제 적용 시키는 함수
-    /// </summary>
-    private void OnLoadComplete(SaveData saveData)
-    {
-        SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
-        SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
-    }
-
-    #endregion
-}
-=======
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -124,7 +10,7 @@ using UnityEngine;
 
 public class UGSSaveLoad : MonoBehaviour
 {
-    private const int CurrentVersion = 4; // 최신 데이터 버전
+    private const int CurrentVersion = 5; // 최신 데이터 버전
 
     private const string SaveKey = "PlayerSaveData";
     private const string RankDataKey = "PlayerRankDataKey";
@@ -171,11 +57,7 @@ public class UGSSaveLoad : MonoBehaviour
     {
         try
         {
-            var leaderBoardData = new LeaderBoardData
-            {
-                queenID = QueenID
-            };
-
+            var leaderBoardData = new LeaderBoardData { queenID = QueenID };
             var saveJson = JsonConvert.SerializeObject(leaderBoardData);
             var saveDict = new Dictionary<string, object> { { RankDataKey, saveJson } };
 
@@ -202,6 +84,7 @@ public class UGSSaveLoad : MonoBehaviour
             player = CollectPlayerData(),
             settings = CollectSettingsData(),
             queenUpgrades = CollectQueenAbilityUpgradeData(),
+            trophies = CollectTrophyData(),
             extraRootFields = new Dictionary<string, JToken>()
         };
 
@@ -231,7 +114,16 @@ public class UGSSaveLoad : MonoBehaviour
         data.extraQueenUpgradeFields = new Dictionary<string, JToken>();
         return data;
     }
-
+    private TrophySaveData CollectTrophyData()
+    {
+        return new TrophySaveData
+        {
+            trophyClear = TrophyManager.Instance.trophyClear,
+            trophyCount = TrophyManager.Instance.trophyCount,
+            unlockIdToTrophyIds = TrophyManager.Instance.unlockIdToTrophyIds,
+            extraTrophyFields = new Dictionary<string, JToken>()
+        };
+    }
 
     /// <summary>
     /// 저장 데이터 유효성 검사
@@ -353,13 +245,28 @@ public class UGSSaveLoad : MonoBehaviour
             data.version = 3;
         }
 
-        // 버전 3 -> 버전 4 (bgmVolume/sfxVolume 제거)
-        if (data.settings.extraSettingsFields != null)
+        // 버전 3 -> 버전 4 ( bgmVolume/sfxVolume 제거)
+        if (data.version == 3)
         {
-            data.settings.extraSettingsFields.Remove("bgmVolume");
-            data.settings.extraSettingsFields.Remove("sfxVolume");
+            if(data.settings.extraSettingsFields != null)
+            {
+                data.settings.extraSettingsFields.Remove("bgmVolume");
+                data.settings.extraSettingsFields.Remove("sfxVolume");
+            }
 
             data.version = 4;
+        }
+
+        if (data.version == 4)
+        {
+            data.trophies = new TrophySaveData
+            {
+                trophyClear = new Dictionary<int, bool>(),
+                trophyCount = new Dictionary<int, int>(),
+                unlockIdToTrophyIds = new Dictionary<int, int>(),
+                extraTrophyFields = new Dictionary<string, JToken>()
+            };
+            data.version = 5;
         }
 
         // 추가 버전 마이그레이션은 여기에 구현
@@ -391,6 +298,14 @@ public class UGSSaveLoad : MonoBehaviour
                 upgrades = new List<QueenAbilityUpgradeInfo>(),
                 extraQueenUpgradeFields = new Dictionary<string, JToken>()
             },
+            trophies = new TrophySaveData
+            { 
+                trophyClear = new Dictionary<int, bool>(),
+                trophyCount = new Dictionary<int, int>(),
+                unlockIdToTrophyIds = new Dictionary<int, int>(),
+                extraTrophyFields = new Dictionary<string, JToken>()
+            },
+
             extraRootFields = new Dictionary<string, JToken>()
         };
     }
@@ -411,18 +326,18 @@ public class UGSSaveLoad : MonoBehaviour
             Utils.Log($"Gold 적용 실패: {e.Message}");
         }
 
-        // 옵션
-        // try
-        // {
-        //     SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
-        //     SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
-        //     // 언어 부분 추가
-        //     Utils.Log("사운드 및 언어 설정 적용 완료");
-        // }
-        // catch (Exception e)
-        // {
-        //     Utils.Log($"사운드/언어 설정 적용 실패: {e.Message}");
-        // }
+        // 설정
+        try
+        {
+            // SoundManager.Instance.SetBGMVolume(saveData.settings.bgmVolume);
+            // SoundManager.Instance.SetSFXVolume(saveData.settings.sfxVolume);
+            // 언어 부분 추가
+            Utils.Log("사운드 및 언어 설정 적용 완료");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"사운드/언어 설정 적용 실패: {e.Message}");
+        }
 
         // 어빌리티
         try
@@ -434,8 +349,20 @@ public class UGSSaveLoad : MonoBehaviour
         {
             Utils.Log($"여왕 강화 적용 실패: {e.Message}");
         }
-    }
 
+        // 업적
+        try
+        {
+            TrophyManager.Instance.trophyClear = saveData.trophies.trophyClear;
+            TrophyManager.Instance.trophyCount = saveData.trophies.trophyCount;
+            TrophyManager.Instance.unlockIdToTrophyIds = saveData.trophies.unlockIdToTrophyIds;
+            Utils.Log("업적 적용 완료");
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"업적 적용 실패: {e.Message}");
+        }
+    }
 
     /// <summary>
     /// playerId에 해당하는 공개 데이터를 읽어 nickname과 queenID를 반환합니다.
@@ -496,4 +423,3 @@ public class UGSSaveLoad : MonoBehaviour
     }
     #endregion
 }
->>>>>>> Stashed changes

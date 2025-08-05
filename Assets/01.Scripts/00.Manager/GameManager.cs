@@ -1,4 +1,9 @@
+using Cysharp.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+using static GameLog;
 
 public enum CursorState
 {
@@ -8,37 +13,87 @@ public enum CursorState
 
 public class GameManager : MonoSingleton<GameManager>
 {
+    public ReactiveProperty<int> Gold { get; private set; } = new();
+
+    public int QueenCharaterID;
     public Queen queen;
+    public Castle castle;
+    public Dictionary<GameObject, MiniCastle> miniCastles = new();
+    public Dictionary<GameObject, MiniBarrack> miniBarracks = new();
     private CursorState curCursorState;
+    public CameraController cameraController;
+    public GameResultController gameResultController;
+
+    // 게임 시작 시 시간에 관한 변수들
+    public float gameLimitTime = 1800f;
+    public bool isTimeOver = true;
+    public ReactiveProperty<float> curTime = new ReactiveProperty<float>();
+
+
+    // 게임 스테이지 레벨
+    public int stageLevel;
+    private CancellationTokenSource token;
+    private GameLog.FunnelType funnelType;
+
+    // 게임 트라이 횟수
+    private int tryCount;
+
+
+    // private PauseController pauseController;
+
 
     protected override void Awake()
     {
+        base.Awake();
+
         curCursorState = CursorState.CONFINED;
+        Time.timeScale = 1f;
+        tryCount = 0;
     }
 
     private void Update()
     {
         ApplyCursorState();
+        // 게임 패배 승리 테스트용 코드
+        /*
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            castle.TakeDamaged(1000f);
+        }
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            curTime.Value -= 1800f;
+        }
+        */
 
-        if (UnityEngine.Input.GetKeyDown(KeyCode.A))
+        /*
+        if (Input.GetKeyDown(KeyCode.H))
         {
-            _ = UGSManager.Instance.Leaderboard.UploadScoreAsync(50);
+            castle.TakeDamaged(100f);
         }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            _ = UGSManager.Instance.Leaderboard.UploadScoreAsync(100);
+            AddGold(100);
         }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.S))
         {
-            //_ = UGSManager.Instance.SaveLoad.LoadAsync();
-            _ = UGSManager.Instance.Leaderboard.GetMyRankAsync();
-        }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.T))
-        {
-            _ = UGSManager.Instance.Leaderboard.GetTop10ScoresAsync();
-        }
+            UGSManager.Instance.SaveLoad.SaveAsync().Forget();
+        }*/
+
+        OnTimer(); // TODO : 임시로 달아둠 나중에 반드시 옮기기
     }
 
+    private void OnTimer() // TODO : 임시로 달아둠 나중에 반드시 옮기기
+    {
+        if (isTimeOver) return;
+
+        curTime.Value -= Time.deltaTime;
+
+        if (curTime.Value <= 0f)
+        {
+            GameClear();
+        }
+    }
     private void ApplyCursorState()
     {
         switch (curCursorState)
@@ -52,17 +107,105 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-
+    /*
     private async void OnApplicationQuit()
     {
-        await UGSManager.Instance.SaveLoad.SaveAsync();
+       // await UGSManager.Instance.SaveLoad.SaveAsync();
     }
-
+    
     private void OnApplicationPause(bool pause)
     {
+        
         if (pause)
         {
-            _ = UGSManager.Instance.SaveLoad.SaveAsync();
+            // if (GameManager.Instance.IsPaused()) return;
+            
+            if (pauseController != null)
+            {
+                pauseController.ForcePause();
+            }
+            //_ = UGSManager.Instance.SaveLoad.SaveAsync();
         }
+    }*/
+
+    // 씬로드에서 불러내기?
+    public void GameStart()  // TODO : 임시로 달아둠 나중에 반드시 옮기기(?) 이건 미정
+    {
+        curTime.Value = gameLimitTime;
+        isTimeOver = false;
+        miniCastles.Clear();
+        miniBarracks.Clear();
+        stageLevel = 0;
+        token = new CancellationTokenSource();
+        tryCount = PlayerPrefs.GetInt("TryCount");
+        tryCount++;
+        PlayerPrefs.SetInt("TryCount", tryCount);
+        LogManager.Instance.PlayStartLog(tryCount);
+        funnelType = GameLog.FunnelType.Minite_1;
+        MiniteCount(token.Token).Forget();
+        TrophyManager.Instance.ResetNonStackTrophy();
+    }
+
+    private async UniTask MiniteCount(CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            stageLevel++;
+
+            await UniTask.Delay(TimeSpan.FromMinutes(1), cancellationToken: token);
+            LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)funnelType);
+            funnelType++;
+        }
+    }
+
+    public void GameClear()
+    {
+        SoundManager.Instance.ChangeBGM("xDeviruchi - 05 Take some rest and eat some food!");
+        // curTime.Value = 0f;
+        isTimeOver = true;
+        gameResultController.GameClear();
+        // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = true;
+        // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
+        // Time.timeScale = 0f;
+        token?.Cancel();
+        token?.Dispose();
+    }
+
+    public void GameOver()
+    {
+        SoundManager.Instance.ChangeBGM("1 are you gonna buy something... or... WAV");
+        // curTime.Value = 0f;
+        isTimeOver = true;
+        gameResultController.GameOver();
+        // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
+        // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
+        // Time.timeScale = 0f;
+        token?.Cancel();
+        token?.Dispose();
+    }
+
+    public bool TrySpendGold(int amount)
+    {
+        if (Gold.Value >= amount)
+        {
+            Gold.Value -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public void AddGold(int amount)
+    {
+        Gold.Value += amount;
+    }
+
+    public void SetGold(int amount)
+    {
+        Gold.Value = Mathf.Max(0, amount);
+    }
+
+    public int GetGold()
+    {
+        return Gold.Value;
     }
 }
