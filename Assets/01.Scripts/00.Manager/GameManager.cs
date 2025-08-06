@@ -146,6 +146,24 @@ public class GameManager : MonoSingleton<GameManager>
         TrophyManager.Instance.ResetNonStackTrophy();
     }
 
+    public void TestStart()
+    {
+        curTime.Value = 9999;
+        isTimeOver = false;
+        miniCastles.Clear();
+        miniBarracks.Clear();
+        stageLevel = 0;
+        //token = new CancellationTokenSource();
+        //tryCount = PlayerPrefs.GetInt("TryCount");
+        //tryCount++;
+        //PlayerPrefs.SetInt("TryCount", tryCount);
+        //LogManager.Instance.PlayStartLog(tryCount);
+        //funnelType = GameLog.FunnelType.Minite_1;
+        //MiniteCount(token.Token).Forget();
+        TrophyManager.Instance.ResetNonStackTrophy();
+
+    }
+
     private async UniTask MiniteCount(CancellationToken token)
     {
         while (!token.IsCancellationRequested)

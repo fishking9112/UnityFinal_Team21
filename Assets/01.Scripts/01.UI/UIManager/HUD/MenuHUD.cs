@@ -22,6 +22,7 @@ public class MenuHUD : HUDUI
     public Button startButton;
     public Button quitGameBtn;
     public Button qustionGameBtn;
+    public Button testBtn;
     public TextMeshProUGUI goldText;
     public GameObject buttonMenu;
     public GameObject uiMenu;
@@ -78,6 +79,11 @@ public class MenuHUD : HUDUI
         qustionGameBtn.onClick.AddListener(() => { UIManager.Instance.ShowTooltip((int)IDToolTip.MainMenu, true); });
         // 게임시작 버튼 누를 시 스타트 실행
         startButton.onClick.AddListener(OnClickGameStart);
+
+#if UNITY_EDITOR
+        testBtn.gameObject.SetActive(true);
+        testBtn.onClick.AddListener(OnClickTestStart);
+#endif
 
         // 씬에 들어 갈때 골드 업데이트
         goldText.text = Utils.GetThousandCommaText(GameManager.Instance.Gold.Value);
@@ -145,6 +151,11 @@ public class MenuHUD : HUDUI
 
         // TODO : 바뀐 스텟으로 시작(?)
         SceneLoadManager.Instance.LoadScene(LoadSceneEnum.GameScene).Forget();
+    }
+    public void OnClickTestStart()
+    {
+        SceneLoadManager.Instance.LoadScene(LoadSceneEnum.TestScene).Forget();
+
     }
 
     // 모든 창 닫기
