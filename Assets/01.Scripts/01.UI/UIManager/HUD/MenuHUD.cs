@@ -27,7 +27,7 @@ public class MenuHUD : HUDUI
     public GameObject uiMenu;
     public Transform BlackBackground;
     private GameObject activePanel;
-
+    public GameObject redDot_Notification;
     public QueenSelectUI queenSelectUI;
 
     private void Update()
