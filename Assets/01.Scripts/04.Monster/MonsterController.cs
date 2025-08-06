@@ -67,7 +67,7 @@ public class MonsterController : BaseController, IPoolable
 
     [Header("빨간색 점등 관련 데이터")]
     private CancellationTokenSource _takeDamagedRendererCts;
-    [SerializeField] private float takeDamagedRendererTimer = 0.5f;
+    private float takeDamagedRendererTimer => GameSettingManager.Instance?.takeDamagedRendererTimer ?? 0.5f;
 
     private SortingGroup group;
     private Vector3 lastPos = new();
