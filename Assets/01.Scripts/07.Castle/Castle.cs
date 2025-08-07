@@ -16,7 +16,7 @@ public class Castle : MonoBehaviour
 
     [Header("빨간색 점등 관련 데이터")]
     private CancellationTokenSource _takeDamagedRendererCts;
-    [SerializeField] private float takeDamagedRendererTimer = 0.5f;
+    [SerializeField] private float takeDamagedRendererTimer => GameSettingManager.Instance?.castleTakeDamagedRendererTimer ?? 0.5f;
 
     private void Awake()
     {
