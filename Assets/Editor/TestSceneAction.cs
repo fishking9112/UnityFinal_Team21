@@ -1,11 +1,12 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Localization;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.SceneManagement;
-using static Codice.Utils.Buffers.SizeBufferPool;
-using static PlasticGui.WorkspaceWindow.Merge.MergeInProgress;
+using UnityEngine.Localization.Tables;
+using UnityEngine.Localization.Settings;
 
 public class TestSceneAction : EditorWindow
 {
@@ -22,6 +23,8 @@ public class TestSceneAction : EditorWindow
 
     private Dictionary<int, int> heroWeapon = new Dictionary<int, int>();
 
+    private StringTableCollection stringTableCollection;
+    StringTable stringTable;
 
     [MenuItem("Window/TestScene")]
     public static void ShowEditor()
@@ -32,6 +35,7 @@ public class TestSceneAction : EditorWindow
 
     private void OnGUI()
     {
+        stringTable = GetFixedStringTable("ko");
         scroll = GUILayout.BeginScrollView(scroll);
 
         ShowAbility();
@@ -47,6 +51,7 @@ public class TestSceneAction : EditorWindow
 
     }
 
+    #region Func
     private void ShowAbility()
     {
         fold_abi = EditorGUILayout.Foldout(fold_abi, "QueenAbility");
@@ -57,9 +62,11 @@ public class TestSceneAction : EditorWindow
 
             foreach (var kvp in DataManager.Instance.queenAbilityDic)
             {
-                int currentValue = QueenAbilityUpgradeManager.Instance.GetLevel(kvp.Value.id);
 
-                currentValue = EditorGUILayout.IntField(kvp.Value.id.ToString(), currentValue);
+                int currentValue = QueenAbilityUpgradeManager.Instance.GetLevel(kvp.Value.id);
+                string value = stringTable[kvp.Value.name].Value;
+
+                currentValue = EditorGUILayout.IntField(value, currentValue);
 
                 QueenAbilityUpgradeManager.Instance.TrySetLevel(kvp.Value.id, currentValue);
             }
@@ -104,9 +111,10 @@ public class TestSceneAction : EditorWindow
             {
                 EditorGUILayout.BeginHorizontal();
                 int currentValue = gameHud.queenEnhanceUI.GetEnhanceLevel(key.Key);
+                string value = stringTable[key.Value.name].Value;
 
 
-                currentValue = EditorGUILayout.IntField(key.Value.id.ToString(), currentValue);
+                currentValue = EditorGUILayout.IntField(value, currentValue);
                 if (GUILayout.Button("+"))
                 {
                     
@@ -143,7 +151,9 @@ public class TestSceneAction : EditorWindow
                 {
                     heroWeapon.Add(ab.Key, 0);
                 }
-                heroWeapon[ab.Key] = (int)EditorGUILayout.Slider(ab.Key.ToString(), heroWeapon[ab.Key], 0, 8);
+                string value = stringTable[ab.Value.name].Value;
+
+                heroWeapon[ab.Key] = (int)EditorGUILayout.Slider(value, heroWeapon[ab.Key], 0, 8);
                 sum += heroWeapon[ab.Key];
                 if(sum>30)
                 {
@@ -170,6 +180,33 @@ public class TestSceneAction : EditorWindow
 
             }
         }
+    }
+
+
+    #endregion
+
+
+
+
+
+
+
+    private StringTable GetFixedStringTable(string localeCode)
+    {
+        StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollections().Count > 0
+            ? LocalizationEditorSettings.GetStringTableCollections()[0]
+            : null;
+
+        if (collection == null) return null;
+
+        Locale fixedLocale = LocalizationSettings.AvailableLocales.GetLocale(localeCode);
+
+        if (fixedLocale == null)
+        {
+            return null;
+        }
+
+        return (StringTable)collection.GetTable(fixedLocale.Identifier);
     }
 
 }
