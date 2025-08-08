@@ -120,7 +120,8 @@ public class DataManager : MonoSingleton<DataManager>
             toolTipData = Addressables.LoadAssetAsync<ToolTipData>("UIToolTipData").WaitForCompletion();
         }
 
-        Init<MonsterInfo>(monsterData.infoList, monsterDic);
+        //Init<MonsterInfo>(monsterData.infoList, monsterDic);
+        InitMonster(monsterData.infoList, monsterDic);
         Init<QueenAbilityInfo>(queenAbilityData.infoList, queenAbilityDic);
         Init<HeroAbilityInfo>(heroAbilityData.infoList, heroAbilityDic);
         Init<HeroAbilityLevelUpInfo>(heroAbilityLevelUpData.infoList, heroAbilityLevelUpDic);
@@ -154,4 +155,13 @@ public class DataManager : MonoSingleton<DataManager>
             }
         }
     }
+    private void InitMonster(List<MonsterInfo> list, Dictionary<int, MonsterInfo> dic)
+    {
+        dic.Clear();
+        foreach (var item in list)
+        {
+            dic[item.ID] = new MonsterInfo(item); // 깊은 복사
+        }
+    }
+
 }
