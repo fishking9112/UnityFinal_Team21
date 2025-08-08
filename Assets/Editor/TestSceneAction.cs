@@ -65,8 +65,8 @@ public class TestSceneAction : EditorWindow
 
                 int currentValue = QueenAbilityUpgradeManager.Instance.GetLevel(kvp.Value.id);
                 string value = stringTable[kvp.Value.name].Value;
-
-                currentValue = EditorGUILayout.IntField(value, currentValue);
+                int maxLv = DataManager.Instance.queenAbilityDic[kvp.Value.id].maxLevel;
+                currentValue = (int)EditorGUILayout.Slider(value, currentValue, 0, maxLv);
 
                 QueenAbilityUpgradeManager.Instance.TrySetLevel(kvp.Value.id, currentValue);
             }
