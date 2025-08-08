@@ -24,19 +24,6 @@ public class TestStart : MonoBehaviour
         await UniTask.Delay(1500);
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().canPause = true;
 
-        //foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
-        //{
-        //    var copy = new MonsterInfo(kvp.Value);
-        //    originMonsterStatDic.Add(kvp.Key, copy);
-
-        //    bool isSame = object.ReferenceEquals(kvp.Value, copy);
-        //    Debug.Log($"key: {kvp.Key}, 복사본과 원본이 같은 객체인가? → {isSame}");
-
-        //}
-        //foreach (var monsterData in DataManager.Instance.monsterDic.Values)
-        //{
-        //    originMonsterStatDic[monsterData.ID] = new MonsterInfo(monsterData);
-        //}
     }
 
     /// <summary>

@@ -160,7 +160,7 @@ public class DataManager : MonoSingleton<DataManager>
         dic.Clear();
         foreach (var item in list)
         {
-            dic[item.ID] = new MonsterInfo(item); // 깊은 복사
+            dic[item.ID] = new MonsterInfo(item);
         }
     }
 
