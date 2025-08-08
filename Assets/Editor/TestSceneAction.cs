@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Codice.Utils.Buffers.SizeBufferPool;
+using static PlasticGui.WorkspaceWindow.Merge.MergeInProgress;
 
 public class TestSceneAction : EditorWindow
 {
     private bool fold_abi;
     private bool fold_enh;
+    private bool fold_hero;
 
 
     private GameHUD gameHud;
@@ -16,6 +19,9 @@ public class TestSceneAction : EditorWindow
 
 
     private Vector2 scroll = Vector2.zero;
+
+    private Dictionary<int, int> heroWeapon = new Dictionary<int, int>();
+
 
     [MenuItem("Window/TestScene")]
     public static void ShowEditor()
@@ -30,7 +36,7 @@ public class TestSceneAction : EditorWindow
 
         ShowAbility();
         ShowEnhance();
-
+        ShowHeroSet();
 
         GUILayout.EndScrollView();
         if (Event.current.type == EventType.ScrollWheel)
@@ -119,6 +125,50 @@ public class TestSceneAction : EditorWindow
             EditorGUILayout.Space();
             EditorGUILayout.Space();
 
+        }
+    }
+
+    private void ShowHeroSet()
+    {
+        fold_hero = EditorGUILayout.Foldout(fold_hero, "HeroSetting");
+
+        var a =DataManager.Instance.heroAbilityDic;
+
+        if(fold_hero)
+        {
+            int sum = 0;
+            foreach(var ab in a)
+            {
+                if(!heroWeapon.ContainsKey(ab.Key))
+                {
+                    heroWeapon.Add(ab.Key, 0);
+                }
+                heroWeapon[ab.Key] = (int)EditorGUILayout.Slider(ab.Key.ToString(), heroWeapon[ab.Key], 0, 8);
+                sum += heroWeapon[ab.Key];
+                if(sum>30)
+                {
+                    heroWeapon[ab.Key] = (int)EditorGUILayout.Slider(ab.Key.ToString(), 0, 0, 8);
+
+                }
+            }
+            
+            EditorGUILayout.IntField("레벨", sum);
+            EditorGUILayout.HelpBox("최대레벨에 주의하세요, 현재 테이블상 최대레벨은 30입니다", MessageType.Warning);
+            if(GUILayout.Button("소환"))
+            {
+                if (SceneManager.GetActiveScene().name != "TestScene")
+                {
+                    return;
+                }
+                if(sum==0)
+                {
+                    return;
+                }
+                HeroStatusInfo statusInfo=HeroManager.Instance.SetTestHero(sum);
+                HeroController hero = HeroPoolManager.Instance.GetObject(SpawnPointManager.Instance.heroPoint.GetRandomPosition());
+                hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI,heroWeapon);
+
+            }
         }
     }
 
