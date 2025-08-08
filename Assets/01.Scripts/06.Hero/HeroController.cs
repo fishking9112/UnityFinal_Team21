@@ -35,7 +35,7 @@ public class HeroController : BaseController
     [NonSerialized] public List<SpriteRenderer> renderers = new();
     private List<Color> originalColors = new(); // 원본 색상 저장용
     private CancellationTokenSource _takeDamagedRendererCts;
-    [NonSerialized] private float takeDamagedRendererTimer = 0.5f;
+    private float takeDamagedRendererTimer => GameSettingManager.Instance?.unitTakeDamagedRendererTimer ?? 0.5f;
     private void Update()
     {
         if (transform.position != lastPos)

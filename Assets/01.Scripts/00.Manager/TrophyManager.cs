@@ -48,6 +48,37 @@ public class TrophyManager : MonoSingleton<TrophyManager>
         Utils.Log("TrophyManager 초기화 완료");
     }
 
+    public void UpdateTrophyRedDotUI()
+    {
+        if (StaticUIManager.Instance == null || StaticUIManager.Instance.hudLayer == null)
+            return;
+
+        var menuHUD = StaticUIManager.Instance.hudLayer.GetHUD<MenuHUD>();
+        if (menuHUD != null)
+        {
+            bool showRedDot = HasRewardableTrophy();
+            menuHUD.redDot_Notification.SetActive(showRedDot);
+        }
+    }
+
+    public bool HasRewardableTrophy()
+    {
+        foreach (var kvp in trophyCount)
+        {
+            int trophyId = kvp.Key;
+            int count = kvp.Value;
+
+            if (DataManager.Instance.trophyDic.TryGetValue(trophyId, out var trophyInfo))
+            {
+                if (!trophyClear[trophyId] && count >= trophyInfo.maxCount)
+                {
+                    return true; // 아직 수령하지 않았고 조건도 만족한 업적이 있음
+                }
+            }
+        }
+
+        return false;
+    }
 
     /// <summary>
     /// 해금되어있다면 true 반환

@@ -20,7 +20,7 @@ public class GameManager : MonoSingleton<GameManager>
     public Castle castle;
     public Dictionary<GameObject, MiniCastle> miniCastles = new();
     public Dictionary<GameObject, MiniBarrack> miniBarracks = new();
-    private CursorState curCursorState;
+    public CursorState curCursorState;
     public CameraController cameraController;
     public GameResultController gameResultController;
 
@@ -96,6 +96,7 @@ public class GameManager : MonoSingleton<GameManager>
     }
     private void ApplyCursorState()
     {
+#if !UNITY_EDITOR
         switch (curCursorState)
         {
             case CursorState.CONFINED:
@@ -105,6 +106,7 @@ public class GameManager : MonoSingleton<GameManager>
                 Cursor.lockState = CursorLockMode.None;
                 break;
         }
+#endif
     }
 
     /*
@@ -189,12 +191,12 @@ public class GameManager : MonoSingleton<GameManager>
         token?.Dispose();
     }
 
-    public void GameOver()
+    public void GameOver(bool isAttackDie = true)
     {
         SoundManager.Instance.ChangeBGM("1 are you gonna buy something... or... WAV");
         // curTime.Value = 0f;
         isTimeOver = true;
-        gameResultController.GameOver();
+        gameResultController.GameOver(isAttackDie);
         // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
         // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;
