@@ -105,7 +105,12 @@ public class TestSceneAction : EditorWindow
                 {
                     
                     QueenEnhanceInfo info = (DataManager.Instance.queenEnhanceDic[key.Value.id]);
-                    gameHud.queenEnhanceUI.ApplyInhance(info);
+
+                    if (info.maxLevel > currentValue)
+                    {
+                        gameHud.queenEnhanceUI.ApplyInhance(info);
+                        return;
+                    }
                 }
                 EditorGUILayout.EndHorizontal();
 
