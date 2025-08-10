@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static UnityEngine.UI.Image;
 
 public class TestStart : MonoBehaviour
@@ -20,7 +21,9 @@ public class TestStart : MonoBehaviour
         await UniTask.DelayFrame(4);
         EvolutionTreeUI evolutionTreeUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().evolutionTreeUI;
         evolutionTreeUI.SetQueenController();
+        QueenEnhanceInfo info = (DataManager.Instance.queenEnhanceDic[15010]);
 
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.ApplyInhance(info);
         await UniTask.Delay(1500);
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().canPause = true;
 

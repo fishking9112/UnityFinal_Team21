@@ -13,7 +13,7 @@ public class TestSceneAction : EditorWindow
     private bool fold_abi;
     private bool fold_enh;
     private bool fold_hero;
-
+    private bool fold_kill;
 
     private GameHUD gameHud;
     private TestStart tStart;
@@ -41,6 +41,7 @@ public class TestSceneAction : EditorWindow
         ShowAbility();
         ShowEnhance();
         ShowHeroSet();
+        KillAllUnit();
 
         GUILayout.EndScrollView();
         if (Event.current.type == EventType.ScrollWheel)
@@ -56,10 +57,14 @@ public class TestSceneAction : EditorWindow
     {
         fold_abi = EditorGUILayout.Foldout(fold_abi, "QueenAbility");
 
-
+        if (SceneManager.GetActiveScene().name != "TestScene")
+        {
+            fold_abi = false;
+            return;
+        }
         if (fold_abi)
         {
-
+            EditorGUILayout.BeginVertical("box");
             foreach (var kvp in DataManager.Instance.queenAbilityDic)
             {
 
@@ -71,14 +76,13 @@ public class TestSceneAction : EditorWindow
                 QueenAbilityUpgradeManager.Instance.TrySetLevel(kvp.Value.id, currentValue);
             }
 
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
             if (GUILayout.Button("어빌리티 적용"))
             {
                 ResetStat();
                 QueenAbilityUpgradeManager.Instance.ApplyAllEffects();
                 MonsterManager.Instance.WaitUntilInitCompleteAndSetup().Forget();
             }
+            EditorGUILayout.EndVertical();
         }
     }
 
@@ -103,16 +107,16 @@ public class TestSceneAction : EditorWindow
 
         if (fold_enh)
         {
+            EditorGUILayout.BeginVertical("box");
             if (gameHud == null)
             {
                 gameHud = GameObject.Find("GameHUD(Clone)")?.GetComponent<GameHUD>();
             }
+
             foreach (var key in DataManager.Instance.queenEnhanceDic)
             {
-                EditorGUILayout.BeginHorizontal();
                 int currentValue = gameHud.queenEnhanceUI.GetEnhanceLevel(key.Key);
                 string value = stringTable[key.Value.name].Value;
-
 
                 currentValue = EditorGUILayout.IntField(value, currentValue);
                 if (GUILayout.Button("+"))
@@ -123,15 +127,12 @@ public class TestSceneAction : EditorWindow
                     if (info.maxLevel > currentValue)
                     {
                         gameHud.queenEnhanceUI.ApplyInhance(info);
-                        return;
                     }
                 }
-                EditorGUILayout.EndHorizontal();
 
             }
+            EditorGUILayout.EndVertical();
 
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
 
         }
     }
@@ -139,11 +140,17 @@ public class TestSceneAction : EditorWindow
     private void ShowHeroSet()
     {
         fold_hero = EditorGUILayout.Foldout(fold_hero, "HeroSetting");
-
+        if (SceneManager.GetActiveScene().name != "TestScene")
+        {
+            fold_hero = false;
+            return;
+        }
         var a =DataManager.Instance.heroAbilityDic;
 
         if(fold_hero)
         {
+            EditorGUILayout.BeginVertical("box");
+
             int sum = 0;
             foreach(var ab in a)
             {
@@ -168,20 +175,52 @@ public class TestSceneAction : EditorWindow
             {
                 if (SceneManager.GetActiveScene().name != "TestScene")
                 {
-                    return;
+
                 }
-                if(sum==0)
+                else if(sum==0)
                 {
-                    return;
+
                 }
-                HeroStatusInfo statusInfo=HeroManager.Instance.SetTestHero(sum);
-                HeroController hero = HeroPoolManager.Instance.GetObject(SpawnPointManager.Instance.heroPoint.GetRandomPosition());
-                hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI,heroWeapon);
+                else
+                {
+
+                    HeroStatusInfo statusInfo=HeroManager.Instance.SetTestHero(sum);
+                    HeroController hero = HeroPoolManager.Instance.GetObject(SpawnPointManager.Instance.heroPoint.GetRandomPosition());
+                    hero?.StatInit(statusInfo, HeroManager.Instance.isHealthUI,heroWeapon);
+                }
 
             }
+            EditorGUILayout.EndVertical();
+
         }
     }
 
+
+    private void KillAllUnit()
+    {
+
+        fold_kill = EditorGUILayout.Foldout(fold_kill, "Kill");
+
+        if (SceneManager.GetActiveScene().name != "TestScene")
+        {
+            fold_kill = false;
+            return;
+        }
+
+        if (fold_kill)
+        {
+            EditorGUILayout.BeginVertical("box");
+
+            if (GUILayout.Button("Kill All Hero"))
+            {
+                foreach (var h in HeroManager.Instance.hero)
+                {
+                    h.Value.Die();
+                }
+            }
+            EditorGUILayout.EndVertical();
+        }
+    }
 
     #endregion
 
