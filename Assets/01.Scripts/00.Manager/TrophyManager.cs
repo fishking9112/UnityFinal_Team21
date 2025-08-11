@@ -166,6 +166,7 @@ public class TrophyManager : MonoSingleton<TrophyManager>
             // UGSManager.Instance.SaveLoad.SaveAsync().Forget();
         }
 
+        UpdateTrophyRedDotUI();
         return true;
     }
 
