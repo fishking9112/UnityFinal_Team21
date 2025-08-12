@@ -16,7 +16,7 @@ public class Castle : MonoBehaviour
 
     [Header("빨간색 점등 관련 데이터")]
     private CancellationTokenSource _takeDamagedRendererCts;
-    [SerializeField] private float takeDamagedRendererTimer = 0.5f;
+    [SerializeField] private float takeDamagedRendererTimer => GameSettingManager.Instance?.castleTakeDamagedRendererTimer ?? 0.5f;
 
     private void Awake()
     {
@@ -54,6 +54,8 @@ public class Castle : MonoBehaviour
     /// <param name="amount"> 입힐 데미지 양 </param>
     public virtual void TakeDamaged(float amount)
     {
+        if (GameManager.Instance.isTimeOver) return;
+
         Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
         Vector3 worldPos = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
         if (condition.IsInvincible)

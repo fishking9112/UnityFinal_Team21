@@ -18,6 +18,9 @@ public struct SaveData
     [JsonProperty("queenUpgrades")]
     public QueenAbilityUpgradeData queenUpgrades;
 
+    [JsonProperty("trophies")]
+    public TrophySaveData trophies;
+
     [JsonExtensionData]
     public Dictionary<string, JToken> extraRootFields;
 }
@@ -36,11 +39,11 @@ public struct PlayerData
 [Serializable]
 public struct SettingsData
 {
-    [JsonProperty("bgmVolume")]
-    public float bgmVolume;
-
-    [JsonProperty("sfxVolume")]
-    public float sfxVolume;
+    // [JsonProperty("bgmVolume")]
+    // public float bgmVolume;
+    // 
+    // [JsonProperty("sfxVolume")]
+    // public float sfxVolume;
     // public string language;
 
 
@@ -56,6 +59,32 @@ public struct QueenAbilityUpgradeData
 
     [JsonExtensionData]
     public Dictionary<string, JToken> extraQueenUpgradeFields;
+}
+
+[Serializable]
+public struct LeaderBoardData
+{
+    [JsonProperty("leaderboardQueenID")]
+    public int queenID;
+
+    [JsonExtensionData]
+    public Dictionary<string, JToken> extraLeaderboardResultFields;
+}
+
+[Serializable]
+public struct TrophySaveData
+{
+    [JsonProperty("trophyClear")]
+    public Dictionary<int, bool> trophyClear;
+
+    [JsonProperty("trophyCount")]
+    public Dictionary<int, int> trophyCount;
+
+    [JsonProperty("unlockIdToTrophyIds")]
+    public Dictionary<int, int> unlockIdToTrophyIds;
+
+    [JsonExtensionData]
+    public Dictionary<string, JToken> extraTrophyFields;
 }
 
 // 이후 필요한 데이터 구조체로 추가

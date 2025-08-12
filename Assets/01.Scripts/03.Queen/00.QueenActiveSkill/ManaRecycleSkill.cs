@@ -16,8 +16,7 @@ public class ManaRecycleSkill : QueenActiveSkillBase
         Vector3 particleScale = targetScale * 1.5f;
 
         ParticleManager.Instance.SpawnParticle("ManaRecycle", particlePos, particleScale);
-        condition.AdjustCurQueenActiveSkillGauge(-30f);
-        condition.AdjustCurSummonGauge(50f);
+        condition.AdjustCurSummonGauge(info.value);
     }
 
     protected override bool RangeCheck()

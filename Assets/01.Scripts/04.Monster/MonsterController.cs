@@ -27,6 +27,14 @@ public class MonsterController : BaseController, IPoolable
 
     public virtual void OnDespawn() // 실행하면 자동으로 반환
     {
+        if (this == null)
+            return;
+
+        if (gameObject == null)
+            return;
+
+        stateMachine?.currentState?.Exit();
+
         transform.localScale = originScale;
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
@@ -59,7 +67,7 @@ public class MonsterController : BaseController, IPoolable
 
     [Header("빨간색 점등 관련 데이터")]
     private CancellationTokenSource _takeDamagedRendererCts;
-    [SerializeField] private float takeDamagedRendererTimer = 0.5f;
+    private float takeDamagedRendererTimer => GameSettingManager.Instance?.unitTakeDamagedRendererTimer ?? 0.5f;
 
     private SortingGroup group;
     private Vector3 lastPos = new();
@@ -181,7 +189,7 @@ public class MonsterController : BaseController, IPoolable
         }
 
         // 소환될 때 겹치지 않도록 살짝 움직여주는 코드
-        navMeshAgent.SetDestination(navMeshAgent.transform.position + navMeshAgent.transform.right * -10f);
+        navMeshAgent.SetDestination(navMeshAgent.transform.position + new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)));
 
         stateMachine.ChangeState(stateMachine.Tracking); // 할 일 찾기
 

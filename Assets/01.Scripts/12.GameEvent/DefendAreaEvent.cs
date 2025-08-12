@@ -15,7 +15,7 @@ public class DefendAreaEvent : GameEventBase
         this.defendDuration = defendDuration;
         this.contextUI = contextUI;
         tableInfo = eventTableInfo;
-        this.contextUI.titleText.text = $"◆ {eventTableInfo.name}";
+        StringManager.Instance.SetString(tableInfo.name, contextUI.titleLocalize);
         UpdateText();
     }
 
@@ -63,6 +63,7 @@ public class DefendAreaEvent : GameEventBase
         GameManager.Instance.queen.condition.QuestLevelUp(tableInfo.reward);
         GameObject.Destroy(castleInstance.gameObject);
         GameObject.Destroy(contextUI.gameObject);
+        TrophyManager.Instance.ClearGameEventId(tableInfo.id);
         // 보상 지급 로직 추가 가능
     }
 
@@ -75,8 +76,6 @@ public class DefendAreaEvent : GameEventBase
 
     private void UpdateText()
     {
-        string tmp = DataManager.Instance.eventDic[tableInfo.ID].description;
-        string result = string.Format(tmp, Mathf.CeilToInt(defendDuration));
-        contextUI.SetText(result);
+        contextUI.SetText(DataManager.Instance.eventDic[tableInfo.ID].description, Mathf.CeilToInt(defendDuration).ToString());
     }
 }

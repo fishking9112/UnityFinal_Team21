@@ -5,6 +5,7 @@ using UnityEngine;
 public class HUDLayer : MonoBehaviour
 {
     [NonSerialized] private HUDUI currentHUD; // 인스턴스화된 HUD (HUDUI를 부모로 둔 자식 인스턴스)
+    private string currentPrefabString = "";
 
     public async UniTask LoadHUD(LoadSceneEnum sceneEnum)
     {
@@ -21,6 +22,7 @@ public class HUDLayer : MonoBehaviour
 
                 break;
             case LoadSceneEnum.GameScene: // 게임 씬 일 경우
+            case LoadSceneEnum.TestScene: // 테스트 씬 일 경우
                 GameHUD gameHUD = await LoadCurrentHUD("GameHUD") as GameHUD;
 
                 break;
@@ -35,6 +37,7 @@ public class HUDLayer : MonoBehaviour
         if (hudPrefab != null)
         {
             currentHUD = Instantiate(hudPrefab, this.transform);
+            currentPrefabString = $"{hudName}.prefab";
             await currentHUD.Initialize();
         }
         else
@@ -49,6 +52,7 @@ public class HUDLayer : MonoBehaviour
     {
         if (currentHUD != null)
         {
+            AddressableManager.Instance.ReleaseAsset($"{currentPrefabString}");
             Destroy(currentHUD.gameObject);
             currentHUD = null;
         }

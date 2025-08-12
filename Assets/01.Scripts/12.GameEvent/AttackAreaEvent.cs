@@ -19,7 +19,7 @@ public class AttackAreaEvent : GameEventBase
         this.spawnCurrentDuration = spawnDuration;
         this.contextUI = contextUI;
         tableInfo = eventTableInfo;
-        this.contextUI.titleText.text = $"◆ {tableInfo.name}";
+        StringManager.Instance.SetString(tableInfo.name, contextUI.titleLocalize);
         UpdateText();
     }
 
@@ -63,8 +63,10 @@ public class AttackAreaEvent : GameEventBase
     {
         Utils.Log("배럭을 성공적으로 부셨습니다! 보상 지급!");
         // GameManager.Instance.queen.condition.AdjustCurExpGauge(tableInfo.reward);
+        SoundManager.Instance.bgmController.StopOneShotBGM();
         GameManager.Instance.queen.condition.QuestLevelUp(tableInfo.reward);
         GameObject.Destroy(contextUI.gameObject);
+        TrophyManager.Instance.ClearGameEventId(tableInfo.id);
         // 보상 지급 로직 추가 가능
     }
 
@@ -77,8 +79,6 @@ public class AttackAreaEvent : GameEventBase
 
     private void UpdateText()
     {
-        string tmp = DataManager.Instance.eventDic[tableInfo.ID].description;
-        string result = string.Format(tmp, Mathf.CeilToInt(spawnCurrentDuration));
-        contextUI.SetText(result);
+        contextUI.SetText(DataManager.Instance.eventDic[tableInfo.ID].description, Mathf.CeilToInt(spawnCurrentDuration).ToString());
     }
 }

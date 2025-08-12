@@ -48,6 +48,8 @@ public class HeroAbilityHold : HeroAbilitySystem
 
     private async UniTask SetHolding(CancellationToken tk)
     {
+        if (this == null) return;
+
         if (hero == null || token == null)
         {
             return;
@@ -67,7 +69,7 @@ public class HeroAbilityHold : HeroAbilitySystem
 
             Vector2 randomPos = center + new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * distance;
 
-            var hold = objectPoolManager.GetObject<HoldObject>("HoldObject", randomPos);
+            var hold = objectPoolManager.GetObject<HoldObject>("HeroHold", randomPos);
             hold.SetData(duration,damage, knockback, size.x, damage_Range, damage_Delay);
 
             await UniTask.Delay(TimeSpan.FromSeconds(countDelay),cancellationToken:tk);
@@ -83,6 +85,8 @@ public class HeroAbilityHold : HeroAbilitySystem
     {
         token?.Cancel();
         token?.Dispose();
+        tk?.Cancel();
+        tk?.Dispose();
     }
     public override void SetAbilityLevel(int level)
     {

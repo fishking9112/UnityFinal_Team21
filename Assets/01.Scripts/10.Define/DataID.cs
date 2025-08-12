@@ -1,9 +1,10 @@
 public enum IDQueenStatus
 {
     NORMAL = 11,
-    SLIME,
     ORC,
     SKELETON,
+    ELF,
+    DARKELF,
 }
 
 public enum IDHeroAbility

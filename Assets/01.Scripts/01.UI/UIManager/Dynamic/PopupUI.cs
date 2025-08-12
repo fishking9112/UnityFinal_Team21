@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using UnityEngine.Localization.Components;
 
 /// <summary>
 /// 제목, 설명, 확인, 취소 버튼이 있는 팝업UI
@@ -10,6 +11,8 @@ public class PopupUI : BaseUI
 {
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI messageText;
+    [SerializeField] private LocalizeStringEvent titleLocalize;
+    [SerializeField] private LocalizeStringEvent messageLocalize;
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
 
@@ -24,14 +27,14 @@ public class PopupUI : BaseUI
         base.Initialize();
 
         if (confirmButton != null)
-            confirmButton.onClick.AddListener(() => Confirm());
+            confirmButton.onClick.AddListener(Confirm);
 
         if (cancelButton != null)
-            cancelButton.onClick.AddListener(() => Cancel());
+            cancelButton.onClick.AddListener(Cancel);
     }
 
     /// <summary>
-    /// 팝업 설정
+    /// 팝업 설정 (일반 텍스트용)
     /// </summary>
     public void Setup(string title, string message, Action onConfirmAction, Action onCancelAction = null)
     {
@@ -41,12 +44,42 @@ public class PopupUI : BaseUI
         if (messageText != null)
             messageText.text = message;
 
+        ConfigureButtons(onConfirmAction, onCancelAction);
+    }
+
+    /// <summary>
+    /// 팝업 설정 (현지화 텍스트용)
+    /// </summary>
+    public void SetupLocalization(string titleID, string messageID, Action onConfirmAction, Action onCancelAction = null)
+    {
+        StringManager.Instance.SetString(titleID, titleLocalize);
+        StringManager.Instance.SetString(messageID, messageLocalize);
+
+        ConfigureButtons(onConfirmAction, onCancelAction);
+    }
+
+    /// <summary>
+    /// 버튼의 상태와 액션을 설정
+    /// </summary>
+    private void ConfigureButtons(Action onConfirmAction, Action onCancelAction)
+    {
         onConfirm = onConfirmAction;
         onCancel = onCancelAction;
 
-        // 만약 취소버튼이 없다면 자동으로 취소 버튼을 숨긴 뒤 확인버튼만 활성화 됨
-        if (onCancel == null)
-            cancelButton.gameObject.SetActive(false);
+        // 팝업이 재사용될 경우를 대비해 항상 버튼 상태를 초기화
+        if (cancelButton != null)
+        {
+            cancelButton.gameObject.SetActive(true);
+        }
+
+        // 취소 액션이 제공되지 않으면 취소 버튼을 숨김
+        if (onCancelAction == null)
+        {
+            if (cancelButton != null)
+            {
+                cancelButton.gameObject.SetActive(false);
+            }
+        }
     }
 
     /// <summary>

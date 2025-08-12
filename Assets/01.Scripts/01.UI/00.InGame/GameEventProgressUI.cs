@@ -97,9 +97,10 @@ public class GameEventProgressUI : MonoBehaviour
     /// 이벤트 실행
     /// </summary>
     /// <param name="eventTableInfo"></param>
-    private void RunEvent(EventInfo eventTableInfo)
+    private async void RunEvent(EventInfo eventTableInfo)
     {
         Utils.Log($"{eventTableInfo.ID} 이벤트 실행!");
+        _ = SoundManager.Instance.bgmController.PlayOneShotBGM("xDeviruchi - 06 Minigame");
 
         GameEventBase eventInstance = null;
 

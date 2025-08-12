@@ -3,11 +3,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Localization.Components;
 
 public class GameEventContextUI : MonoBehaviour
 {
     public TextMeshProUGUI titleText;
+    public LocalizeStringEvent titleLocalize;
     [SerializeField] private TMP_Text contentText; // 말풍선 텍스트
+    [SerializeField] private LocalizeStringEvent contentLocalize;
     [SerializeField] private RectTransform bubbleRect; // 말풍선 배경
     [SerializeField] private Vector2 maxSize = new Vector2(270f, 120f); // 최대 크기
     [SerializeField] private Vector2 minSize = new Vector2(270f, 40f); // 최소 크기
@@ -23,9 +26,20 @@ public class GameEventContextUI : MonoBehaviour
     /// <summary>
     /// 텍스트 내용을 변경하고 말풍선 크기를 자동 조절하는 함수
     /// </summary>
-    public void SetText(string message)
+    public void SetText(string contentID, string arg)
     {
-        contentText.SetText(message);
+        // contentText.SetText(message);
+        StringManager.Instance.SetString(contentID, contentLocalize, arg);
+        ResizeBubble();
+    }
+
+    /// <summary>
+    /// 텍스트 내용을 변경하고 말풍선 크기를 자동 조절하는 함수
+    /// </summary>
+    public void SetText(string contentID, string arg, string arg2)
+    {
+        // contentText.SetText(message);
+        StringManager.Instance.SetString(contentID, contentLocalize, arg, arg2);
         ResizeBubble();
     }
 

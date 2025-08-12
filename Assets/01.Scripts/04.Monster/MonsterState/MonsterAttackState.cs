@@ -124,48 +124,57 @@ public class MonsterAttackState : MonsterBaseState
     private void MeleeAttack()
     {
         cts?.Cancel();
-        cts?.Dispose(); // 메모리 누수 방지
+        cts?.Dispose();
         cts = new CancellationTokenSource();
 
+        _ = MeleeAttackAsync(cts.Token);
+    }
+
+    private async UniTaskVoid MeleeAttackAsync(CancellationToken token)
+    {
         try
         {
-            // 1초 프레임에서 0.55때 공격됨
-            UniTask.Delay((int)(550 * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed))), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
+            float waitTime = 550f * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed));
+            await UniTask.Delay((int)waitTime, false, PlayerLoopTiming.Update, cancellationToken: token);
+
+            if (token.IsCancellationRequested || navMeshAgent == null || target == null || stateMachine.Controller == null)
             {
-                float minDist = float.MaxValue;
-                Vector2 origin = navMeshAgent.transform.position + ((target.transform.position - navMeshAgent.transform.position).normalized * stat.attackRange.Value / 2f);
-                Collider2D[] hits = Physics2D.OverlapCircleAll(origin, stat.attackRange.Value, stateMachine.Controller.attackLayer);
-                Utils.DrawOverlapCircle(origin, stat.attackRange.Value, Color.red, 0.1f);
-                Collider2D nearHit = null;
+                return;
+            }
 
-                foreach (var hit in hits)
-                {
-                    float dist = Vector2.Distance(origin, hit.transform.position);
-                    if (dist < minDist)
-                    {
-                        minDist = dist;
-                        nearHit = hit;
-                    }
-                }
+            float minDist = float.MaxValue;
+            Vector2 origin = navMeshAgent.transform.position + ((target.transform.position - navMeshAgent.transform.position).normalized * stat.attackRange.Value / 2f);
+            Collider2D[] hits = Physics2D.OverlapCircleAll(origin, stat.attackRange.Value, stateMachine.Controller.attackLayer);
+            Utils.DrawOverlapCircle(origin, stat.attackRange.Value, Color.red, 0.1f);
+            Collider2D nearHit = null;
 
-                if (nearHit != null)
+            foreach (var hit in hits)
+            {
+                float dist = Vector2.Distance(origin, hit.transform.position);
+                if (dist < minDist)
                 {
-                    if (HeroManager.Instance.hero.ContainsKey(nearHit.gameObject))
-                    {
-                        HeroManager.Instance.hero[nearHit.gameObject].TakeDamaged(stat.attack.Value);
-                        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += stat.attack.Value;
-                    }
-                    else if (GameManager.Instance.miniBarracks.ContainsKey(nearHit.gameObject))
-                    {
-                        GameManager.Instance.miniBarracks[nearHit.gameObject].TakeDamaged(stat.attack.Value);
-                        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += stat.attack.Value;
-                    }
+                    minDist = dist;
+                    nearHit = hit;
                 }
-            });
+            }
+
+            if (nearHit != null)
+            {
+                if (HeroManager.Instance.hero.ContainsKey(nearHit.gameObject))
+                {
+                    HeroManager.Instance.hero[nearHit.gameObject].TakeDamaged(stat.attack.Value);
+                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += stat.attack.Value;
+                }
+                else if (GameManager.Instance.miniBarracks.ContainsKey(nearHit.gameObject))
+                {
+                    GameManager.Instance.miniBarracks[nearHit.gameObject].TakeDamaged(stat.attack.Value);
+                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += stat.attack.Value;
+                }
+            }
         }
         catch (OperationCanceledException)
         {
-
+            // Do nothing - 정상 취소
         }
     }
 
@@ -175,15 +184,31 @@ public class MonsterAttackState : MonsterBaseState
     private void RangedAttack()
     {
         cts?.Cancel();
-        cts?.Dispose(); // 메모리 누수 방지
+        cts?.Dispose();
         cts = new CancellationTokenSource();
 
-        // 1초 프레임에서 0.65때 발사
-        UniTask.Delay((int)(600 * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed))), false, PlayerLoopTiming.Update, cts.Token).ContinueWith(() =>
+        _ = RangedAttackAsync(cts.Token);
+    }
+
+    private async UniTaskVoid RangedAttackAsync(CancellationToken token)
+    {
+        try
         {
+            float waitTime = 600f * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed));
+            await UniTask.Delay((int)waitTime, false, PlayerLoopTiming.Update, cancellationToken: token);
+
+            if (token.IsCancellationRequested || navMeshAgent == null || target == null || stateMachine.Controller == null)
+            {
+                return;
+            }
+
             var projectileObject = ObjectPoolManager.Instance.GetObject<MonsterProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
             projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);
-        });
+        }
+        catch (OperationCanceledException)
+        {
+            // 정상 취소
+        }
     }
 
 }

@@ -36,7 +36,17 @@ public class RecallSkill : QueenActiveSkillBase
     private async UniTask RecallAfterDelay(MonsterController monster, float delaySeconds, Vector3 targetPosition)
     {
         await UniTask.Delay((int)(delaySeconds * 1000), false, PlayerLoopTiming.Update);
-        monster.transform.position = targetPosition;
+
+        float minRadius = 5f;
+        float maxRadius = 7f;
+
+        float angle = Random.Range(0f, Mathf.PI * 2f);
+        float radius = Random.Range(minRadius, maxRadius);
+
+        Vector3 offset = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
+        Vector3 newPosition = targetPosition + offset;
+
+        monster.transform.position = newPosition;
     }
 
     protected override bool RangeCheck()

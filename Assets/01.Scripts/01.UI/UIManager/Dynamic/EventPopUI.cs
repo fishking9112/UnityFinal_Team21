@@ -4,10 +4,12 @@ using System;
 using TMPro;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using UnityEngine.Localization.Components;
 
 public class EventPopUI : BaseUI
 {
     [SerializeField] private TextMeshProUGUI titleText;
+    public LocalizeStringEvent titleLocalize;
     [SerializeField] private Image iconImg;
 
     [SerializeField] private CanvasGroup canvasGroup; // 반드시 할당
@@ -27,8 +29,7 @@ public class EventPopUI : BaseUI
     /// </summary>
     public void Setup(string title, string icon)
     {
-        if (titleText != null)
-            titleText.text = title;
+        StringManager.Instance.SetString(title, titleLocalize);
 
         var iconSprite = DataManager.Instance.iconAtlas.GetSprite(icon);
         if (iconSprite != null)
@@ -52,11 +53,11 @@ public class EventPopUI : BaseUI
     /// <summary>
     /// 비동기 FadeIn → 대기 → FadeOut 시퀀스
     /// </summary>
-    public async UniTask ShowSequenceAsync(float fadeDuration = 0.5f, float holdDuration = 1.5f)
+    public async UniTask ShowSequenceAsync(float fadeDuration = 0.5f, float holdDuration = 2f)
     {
         await FadeInAsync(fadeDuration, fadeCts.Token);
         await UniTask.Delay(TimeSpan.FromSeconds(holdDuration), cancellationToken: fadeCts.Token, ignoreTimeScale: true);
-        await FadeOutAsync(fadeDuration, fadeCts.Token);
+        await FadeOutAsync(1.5f, fadeCts.Token);
 
         OnHide();
     }

@@ -31,7 +31,7 @@ public class QueenEnhanceInfo : IInfo
     public string icon;
     public int maxLevel;
     public float state_Base;
-    public int state_LevelUp;
+    public float state_LevelUp;
     public QueenEnhanceType type;
     public MonsterBrood brood;
     public ValueType valueType;
@@ -78,7 +78,7 @@ public class QueenEnhanceData : SheetDataReaderBase
                     queenEnhanceInfo.state_Base = Utils.StringToFloat(cell.value);
                     break;
                 case "state_LevelUp":
-                    queenEnhanceInfo.state_LevelUp = Utils.StringToInt(cell.value);
+                    queenEnhanceInfo.state_LevelUp = Utils.StringToFloat(cell.value);
                     break;
                 case "type":
                     queenEnhanceInfo.type = Utils.StringToEnum<QueenEnhanceType>(cell.value, QueenEnhanceType.NULL);

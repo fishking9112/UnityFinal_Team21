@@ -1,10 +1,11 @@
-using Cysharp.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
+using System.Linq;
+using System.Text.RegularExpressions;
+using UnityEngine.InputSystem;
+using UnityEngine.Localization.Components;
 
 public class CollectionUI : MonoBehaviour
 {
@@ -30,12 +31,17 @@ public class CollectionUI : MonoBehaviour
     public Dictionary<int, CollectionIcon> queenIcons = new();
     public Dictionary<int, CollectionIcon> enhanceIcons = new();
     public Dictionary<int, CollectionIcon> activeSkillIcons = new();
-    public Dictionary<int, CollectionIcon> heroIcons = new();
+    //public Dictionary<int, CollectionIcon> heroIcons = new();
     public Dictionary<int, CollectionIcon> heroAbilityIcons = new();
     public List<Dictionary<int, CollectionIcon>> iconList = new();
 
 
-    public void Start()
+    [Header("Localize용 텍스트")]
+    [SerializeField] LocalizeStringEvent ItemName;
+    [SerializeField] LocalizeStringEvent ItemDesc;
+
+
+    public void Awake()
     {
         // 게임 시작 버튼 초기화
         for (int i = 0; i < toggleList.Count; i++)
@@ -50,19 +56,12 @@ public class CollectionUI : MonoBehaviour
             });
         }
 
-        // 첫번째 무조건 선택
-        toggleList[0].isOn = true;
-
-        // 도감 설명 초기화
-        title.text = "";
-        desc.text = "";
-
         // 아이콘 초기화
         CreateIcons(DataManager.Instance.monsterDic, monsterIcons, contentTransform);
         CreateIcons(DataManager.Instance.queenAbilityDic, queenIcons, contentTransform);
         CreateIcons(DataManager.Instance.queenEnhanceDic, enhanceIcons, contentTransform);
         CreateIcons(DataManager.Instance.queenActiveSkillDic, activeSkillIcons, contentTransform);
-        CreateIcons(DataManager.Instance.heroStatusDic, heroIcons, contentTransform);
+        //CreateIcons(DataManager.Instance.heroStatusDic, heroIcons, contentTransform);
         CreateIcons(DataManager.Instance.heroAbilityDic, heroAbilityIcons, contentTransform);
 
         iconList.Add(allIcons);
@@ -70,10 +69,26 @@ public class CollectionUI : MonoBehaviour
         iconList.Add(queenIcons);
         iconList.Add(enhanceIcons);
         iconList.Add(activeSkillIcons);
-        iconList.Add(heroIcons);
+        //iconList.Add(heroIcons);
         iconList.Add(heroAbilityIcons);
 
         closeButton.onClick.AddListener(() => gameObject.SetActive(false));
+
+        //toggleList[0].isOn = true;
+        //SelectToggle(0);
+
+        //var firstIcon = DataManager.Instance.monsterDic[(int)IDMonster.ORC_NORMAL];
+        //OnClickDetail(DataManager.Instance.iconAtlas.GetSprite(firstIcon.icon), firstIcon.name, firstIcon.description, true);
+    }
+
+    private void OnEnable()
+    {
+        for (int i = 0; i < toggleList.Count; i++)
+        {
+            toggleList[i].isOn = false;
+        }
+
+        toggleList[0].isOn = true;
     }
 
     /// <summary>
@@ -83,8 +98,11 @@ public class CollectionUI : MonoBehaviour
     public void SelectToggle(int index)
     {
         toggleIndex = index;
-        ClearDetail();
+        //ClearDetail();
+        HideIcons();
         ShowDetail(toggleIndex);
+
+        iconList[index].First().Value.OnClickIcon();
     }
 
     /// <summary>
@@ -98,6 +116,9 @@ public class CollectionUI : MonoBehaviour
     {
         foreach (var pair in dataDic)
         {
+            if (1001 <= pair.Value.ID && pair.Value.ID <= 1006) {
+                continue; // 슬라임은 아이콘 생성 안하게 만들기
+            }
             var tempPrefab = Instantiate(iconPrefab, parent);
             IInfo info = pair.Value;
             tempPrefab.Init(info, OnClickDetail);
@@ -106,14 +127,22 @@ public class CollectionUI : MonoBehaviour
         }
     }
 
+   
     /// <summary>
     /// 아이콘 클릭 시 디테일 보여주기 allIcons들에게 Action으로 callback함수로 넘김
     /// </summary>
     public void OnClickDetail(Sprite sprite, string _name, string _description, bool _isActive)
     {
         descIcon.sprite = sprite;
-        title.text = _name;
-        desc.text = _description;
+
+        StringManager.Instance.SetString(_name, ItemName);
+
+        StringManager.Instance.SetString(_description, ItemDesc);
+        string localized = ItemDesc.GetComponent<TMP_Text>().text;
+        string cleanedEn = Regex.Replace(localized, @" by <color=.*?>\{0\}</color>\s*", ""); // 영어 필터
+        string cleanedKr = Regex.Replace(cleanedEn, @"<color=.*?>\{0\}</color>\s*", ""); // 한국어 필터
+        ItemDesc.GetComponent<TMP_Text>().text = cleanedKr;
+
         if (_isActive)
         {
             lockImg.gameObject.SetActive(false);
@@ -133,10 +162,8 @@ public class CollectionUI : MonoBehaviour
         title.text = "";
         desc.text = "";
         lockImg.gameObject.SetActive(false);
-        foreach (var icon in allIcons)
-        {
-            icon.Value.gameObject.SetActive(false);
-        }
+
+        HideIcons();
     }
 
     /// <summary>
@@ -148,6 +175,14 @@ public class CollectionUI : MonoBehaviour
         foreach (var icon in iconList[index])
         {
             icon.Value.gameObject.SetActive(true);
+        }
+    }
+
+    public void HideIcons()
+    {
+        foreach (var icon in allIcons)
+        {
+            icon.Value.gameObject.SetActive(false);
         }
     }
 }

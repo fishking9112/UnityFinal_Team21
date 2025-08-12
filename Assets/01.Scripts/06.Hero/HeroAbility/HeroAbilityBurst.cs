@@ -50,6 +50,8 @@ public class HeroAbilityBurst : HeroAbilitySystem
 
     private async UniTask ShootBullet(CancellationToken tk)
     {
+        if (this == null) return;
+
         if (hero == null || token == null)
         {
             return;
@@ -74,7 +76,7 @@ public class HeroAbilityBurst : HeroAbilitySystem
                 return;
             }
 
-            var bullet = objectPoolManager.GetObject<HeroBullet>("Bullet", hero.transform.position);
+            var bullet = objectPoolManager.GetObject<HeroBullet>("bullet", hero.transform.position);
             bullet.SetBullet(duration, pierce, damage, speed, 0,size, knockback);
             bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
 
@@ -92,6 +94,8 @@ public class HeroAbilityBurst : HeroAbilitySystem
     {
         token?.Cancel();
         token?.Dispose();
+        tk?.Cancel();
+        tk?.Dispose();
     }
     public override void SetAbilityLevel(int level)
     {

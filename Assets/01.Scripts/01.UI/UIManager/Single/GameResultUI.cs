@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 public class GameResultUnitData
@@ -19,6 +20,8 @@ public class GameResultUI : SingleUI
     [Header("UI Components")]
     public GameObject resultWindow;
     public GameObject dpsPopupUI;
+    public GameObject leaderboardUI;
+    public GameObject bestUI;
     public Transform unitListParent;
     public GameUnitResultUI gameUnitResultUIPrefab;
     public Image titleImg;
@@ -33,7 +36,9 @@ public class GameResultUI : SingleUI
     public GameObject DescriptionPopupUI => descriptionPopupUI.gameObject;
     public Image popupUIAbilityImage;
     public TextMeshProUGUI popupUIAbilityName;
+    [SerializeField] private LocalizeStringEvent abilityNameLocalize;
     public TextMeshProUGUI popupUIAbilityDec;
+    [SerializeField] private LocalizeStringEvent abilityDecLocalize;
     public TextMeshProUGUI popupUIAbilityLevel;
 
     [Header("Enhance/Skill Item Prefabs")]
@@ -46,6 +51,7 @@ public class GameResultUI : SingleUI
     public TextMeshProUGUI resourceText;
 
     [Header("Button Components")]
+    public Button leaderboardBtn;
     public Button titleMenuBtn;
     public Button dpsPopupBtn;
     public Button closePopupBtn;
@@ -59,6 +65,7 @@ public class GameResultUI : SingleUI
 
     private void Start()
     {
+        leaderboardBtn.onClick.AddListener(() => leaderboardUI.SetActive(true));
         titleMenuBtn.onClick.AddListener(ReturnToTitle);
         dpsPopupBtn.onClick.AddListener(() => DpsPopup(true));
         closePopupBtn.onClick.AddListener(() => DpsPopup(false));
@@ -76,7 +83,7 @@ public class GameResultUI : SingleUI
         int mvpID = SetMonsterMVP();
 
         DescriptionPopupUI.SetActive(false);
-        QueenAbilityUpgradeManager.Instance.ResetQueenAbilityMonsterValues();
+        leaderboardUI.SetActive(false);
 
         int queenid = GameManager.Instance.QueenCharaterID;
         int time = (int)(GameManager.Instance.gameLimitTime - GameManager.Instance.curTime.Value);
@@ -174,7 +181,8 @@ public class GameResultUI : SingleUI
     private void ApplyStageGold()
     {
         int goldToAdd = Mathf.FloorToInt(GameManager.Instance.queen.condition.Gold.Value);
-        GameManager.Instance.AddGold(goldToAdd);
+        GameManager.Instance.SetGold(goldToAdd);
+        // GameManager.Instance.AddGold(goldToAdd);
     }
 
     private int SetMonsterMVP()
@@ -226,13 +234,14 @@ public class GameResultUI : SingleUI
         int currentLevel = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
 
         popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
-        popupUIAbilityName.text = info.name;
+        // popupUIAbilityName.text = info.name;
+        StringManager.Instance.SetString(info.name, abilityNameLocalize);
 
         float previewValue = (currentLevel / 2f) * (2 * info.state_Base + (currentLevel - 1) * info.state_LevelUp);
 
         string formattedValue = $"{previewValue * 100:F0}%";
 
-        popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
+        SetAbilityDecText(info, formattedValue).Forget();
 
         if (info.type != QueenEnhanceType.AddSkill)
         {
@@ -242,5 +251,11 @@ public class GameResultUI : SingleUI
         {
             popupUIAbilityLevel.text = "-";
         }
+    }
+
+    public async UniTask SetAbilityDecText(QueenEnhanceInfo info, string formattedValue)
+    {
+        var description = await StringManager.Instance.GetString(info.description);
+        popupUIAbilityDec.text = string.Format(description, formattedValue);
     }
 }

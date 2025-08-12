@@ -164,29 +164,29 @@ public class Utils
     /// <param name="duration"></param>
     public static void DrawBoxCast(Vector2 center, Vector2 size, float angleDeg, Color color, float duration = 0.1f)
     {
-        // 회전값을 라디안으로 변환
-        float angleRad = angleDeg * Mathf.Deg2Rad;
-        Quaternion rotation = Quaternion.Euler(0, 0, angleDeg);
+        // // 회전값을 라디안으로 변환
+        // float angleRad = angleDeg * Mathf.Deg2Rad;
+        // Quaternion rotation = Quaternion.Euler(0, 0, angleDeg);
 
-        // 박스의 4개 꼭짓점 구하기 (기준은 중심에서 오프셋)
-        Vector2 halfSize = size * 0.5f;
+        // // 박스의 4개 꼭짓점 구하기 (기준은 중심에서 오프셋)
+        // Vector2 halfSize = size * 0.5f;
 
-        Vector2 topRight = new Vector2(halfSize.x, halfSize.y);
-        Vector2 topLeft = new Vector2(-halfSize.x, halfSize.y);
-        Vector2 bottomLeft = new Vector2(-halfSize.x, -halfSize.y);
-        Vector2 bottomRight = new Vector2(halfSize.x, -halfSize.y);
+        // Vector2 topRight = new Vector2(halfSize.x, halfSize.y);
+        // Vector2 topLeft = new Vector2(-halfSize.x, halfSize.y);
+        // Vector2 bottomLeft = new Vector2(-halfSize.x, -halfSize.y);
+        // Vector2 bottomRight = new Vector2(halfSize.x, -halfSize.y);
 
-        // 회전 적용 후 월드 좌표로 변환
-        topRight = center + (Vector2)(rotation * topRight);
-        topLeft = center + (Vector2)(rotation * topLeft);
-        bottomLeft = center + (Vector2)(rotation * bottomLeft);
-        bottomRight = center + (Vector2)(rotation * bottomRight);
+        // // 회전 적용 후 월드 좌표로 변환
+        // topRight = center + (Vector2)(rotation * topRight);
+        // topLeft = center + (Vector2)(rotation * topLeft);
+        // bottomLeft = center + (Vector2)(rotation * bottomLeft);
+        // bottomRight = center + (Vector2)(rotation * bottomRight);
 
-        // 박스 테두리 그리기
-        Debug.DrawLine(topRight, topLeft, color, duration);
-        Debug.DrawLine(topLeft, bottomLeft, color, duration);
-        Debug.DrawLine(bottomLeft, bottomRight, color, duration);
-        Debug.DrawLine(bottomRight, topRight, color, duration);
+        // // 박스 테두리 그리기
+        // Debug.DrawLine(topRight, topLeft, color, duration);
+        // Debug.DrawLine(topLeft, bottomLeft, color, duration);
+        // Debug.DrawLine(bottomLeft, bottomRight, color, duration);
+        // Debug.DrawLine(bottomRight, topRight, color, duration);
     }
 
     /// <summary>
@@ -198,23 +198,23 @@ public class Utils
     /// <param name="duration"></param>
     public static void DrawOverlapCircle(Vector2 origin, float radius, Color color, float duration = 0.1f)
     {
-        // 원을 그리기 위한 360도 각도
-        int segments = 36; // 원을 그릴 때 사용할 점의 수
-        float angleStep = 360f / segments;
+        // // 원을 그리기 위한 360도 각도
+        // int segments = 36; // 원을 그릴 때 사용할 점의 수
+        // float angleStep = 360f / segments;
 
-        Vector2 previousPoint = origin + new Vector2(radius, 0); // 처음 점
+        // Vector2 previousPoint = origin + new Vector2(radius, 0); // 처음 점
 
-        for (int i = 1; i <= segments; i++)
-        {
-            // 현재 각도를 구하고, 해당 각도로 벡터 계산
-            float angle = angleStep * i;
-            Vector2 newPoint = origin + new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad) * radius, Mathf.Sin(angle * Mathf.Deg2Rad) * radius);
+        // for (int i = 1; i <= segments; i++)
+        // {
+        //     // 현재 각도를 구하고, 해당 각도로 벡터 계산
+        //     float angle = angleStep * i;
+        //     Vector2 newPoint = origin + new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad) * radius, Mathf.Sin(angle * Mathf.Deg2Rad) * radius);
 
-            // 원을 이루는 점을 그리기
-            Debug.DrawLine(previousPoint, newPoint, color, duration);
+        //     // 원을 이루는 점을 그리기
+        //     Debug.DrawLine(previousPoint, newPoint, color, duration);
 
-            // 이전 점을 현재 점으로 갱신
-            previousPoint = newPoint;
-        }
+        //     // 이전 점을 현재 점으로 갱신
+        //     previousPoint = newPoint;
+        // }
     }
 }

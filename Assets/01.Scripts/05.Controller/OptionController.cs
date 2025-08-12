@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class OptionController : MonoBehaviour
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Button saveButton;
     [SerializeField] private Button cancelButton;
+    [SerializeField] private TMP_Dropdown languageDropdown;
 
     private float tempBGMVolume;
     private float tempSFXVolume;
@@ -33,6 +35,10 @@ public class OptionController : MonoBehaviour
         // 버튼 이벤트 연결
         saveButton.onClick.AddListener(SaveOptions);
         cancelButton.onClick.AddListener(CancelOptions);
+
+        // 언어 드롭다운 연결
+        languageDropdown.onValueChanged.AddListener(OnLanguageChanged);
+        languageDropdown.value = StringManager.Instance.SelectLang;
     }
 
     /// <summary>
@@ -75,5 +81,15 @@ public class OptionController : MonoBehaviour
         sfxSlider.value = tempSFXVolume;
 
         OptionPanelUI.SetActive(false);
+    }
+
+    /// <summary>
+    /// 변경된 언어 드롭다운의 인덱스 받기
+    /// </summary>
+    /// <param name="index"></param>
+
+    public void OnLanguageChanged(int index)
+    {
+        StringManager.Instance.ChangeLocale(index);
     }
 }

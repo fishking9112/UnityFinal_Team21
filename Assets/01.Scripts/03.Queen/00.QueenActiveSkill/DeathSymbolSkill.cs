@@ -29,6 +29,11 @@ public class DeathSybolSkill : QueenActiveSkillBase
                 continue;
             }
 
+            if (hit.CompareTag("Boss"))
+            {
+                continue;
+            }
+
             float distance = Vector2.Distance(mousePos, hit.transform.position);
 
             if (distance < minDistance)
@@ -61,6 +66,15 @@ public class DeathSybolSkill : QueenActiveSkillBase
     {
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
-        return hits.Length > 0;
+
+        foreach (var hit in hits)
+        {
+            if (hit != null && hit.gameObject != null && !hit.CompareTag("Boss"))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -41,15 +42,33 @@ public class MonsterDieState : MonsterBaseState
     }
     private async UniTask DieProccess()
     {
-        List<SpriteRenderer> renderers = stateMachine.Controller.renderers;
-        float time = 2f;
-
-        // 2초 동안 alpha 0로 FadeOut
-        while (time > 0f)
+        try
         {
-            time -= Time.deltaTime;
+            List<SpriteRenderer> renderers = stateMachine.Controller.renderers;
+            float time = 2f;
 
-            float alpha = time / 2f;
+            // 2초 동안 alpha 0로 FadeOut
+            while (time > 0f)
+            {
+                time -= Time.deltaTime;
+
+                float alpha = time / 2f;
+                foreach (var renderer in renderers)
+                {
+                    if (renderer == null)
+                    {
+                        continue;
+                    }
+
+                    Color color = renderer.color;
+                    color.a = alpha;
+                    renderer.color = color;
+                }
+
+                await UniTask.Yield(PlayerLoopTiming.Update, cts.Token);
+            }
+
+            // 마지막에 확실히 0으로
             foreach (var renderer in renderers)
             {
                 if (renderer == null)
@@ -58,27 +77,17 @@ public class MonsterDieState : MonsterBaseState
                 }
 
                 Color color = renderer.color;
-                color.a = alpha;
+                color.a = 0f;
                 renderer.color = color;
             }
 
-            await UniTask.Yield();
-        }
+            // 이후 ObjectPool에서 Release
+            stateMachine.Controller?.OnDespawn();
 
-        // 마지막에 확실히 0으로
-        foreach (var renderer in renderers)
+        }
+        catch (OperationCanceledException)
         {
-            if (renderer == null)
-            {
-                continue;
-            }
-
-            Color color = renderer.color;
-            color.a = 0f;
-            renderer.color = color;
+            // 정상 취소
         }
-
-        // 이후 ObjectPool에서 Release
-        stateMachine.Controller.OnDespawn();
     }
 }

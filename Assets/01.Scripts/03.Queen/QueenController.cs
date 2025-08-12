@@ -79,11 +79,11 @@ public class QueenController : MonoBehaviour
             SummonMonster();
         }
 
-        // 테스트 코드
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            RewardManager.Instance.SpawnRewardBat(5f);
-        }
+        // // 테스트 코드
+        // if (Input.GetKeyDown(KeyCode.P))
+        // {
+        //     RewardManager.Instance.SpawnRewardBat(5f);
+        // }
     }
 
     private async UniTask GameHuDInit()
@@ -295,14 +295,25 @@ public class QueenController : MonoBehaviour
 
         if (!SpawnPointManager.Instance.MonsterPoint.IsAreaIn(worldMousePos))
         {
+            ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
+            msg.SetText("9902419"); // 소환가능 범위를 벗어났습니다.
             SpawnPointManager.Instance.MonsterPoint.ShowAndHideAreas();
             return;
         }
+
         if (condition.CurSummonGauge.Value < tempMonster.cost)
         {
             // 테이블 나오면 적용 필요
             ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
-            msg.SetText("<color=red>소환 게이지가 부족합니다.</color>");
+            msg.SetText("9902418");// 소환 게이지가 부족합니다.
+
+            return;
+        }
+
+        if (MonsterManager.Instance.GetMonsterCount() >= condition.MaxPopulation.Value)
+        {
+            ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
+            msg.SetText("9902420"); //인구수가 가득 찼습니다.
 
             return;
         }
@@ -324,6 +335,8 @@ public class QueenController : MonoBehaviour
         condition.AdjustCurSummonGauge(-tempMonster.cost);
         var monster = objectPoolManager.GetObject<MonsterController>(tempMonster.outfit, worldMousePos);
         monster.StatInit(tempMonster, MonsterManager.Instance.isHealthUI);
+
+        TrophyManager.Instance.SummonMonsterId(tempMonster.id);
 
         Vector3 targetScale = monster.transform.localScale;
         Vector3 particlePos = monster.transform.position + new Vector3(0, targetScale.y * 0.25f, 0);
@@ -350,7 +363,7 @@ public class QueenController : MonoBehaviour
         {
             // 테이블 나오면 적용 필요
             ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
-            msg.SetText("<color=red>마나가 부족합니다.</color>");
+            msg.SetText("9902424"); // 마나가 부족합니다
             return;
         }
         if (selectedQueenActiveSkill.info.range != -1f)

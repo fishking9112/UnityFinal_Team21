@@ -12,7 +12,7 @@ public class HeroDeadStete : HeroBaseState
 
         // 사망 애니메이션, 사운드
         state.controller.SetDead(true);
-
+        state.hero.target = null;
         DeathAnim().Forget();
 
         // 보상 떨구기/획득하기

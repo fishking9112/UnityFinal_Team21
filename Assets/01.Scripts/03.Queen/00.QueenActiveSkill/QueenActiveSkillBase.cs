@@ -39,12 +39,16 @@ public abstract class QueenActiveSkillBase : MonoBehaviour
 
         condition.AdjustCurQueenActiveSkillGauge(-value);
         UseSkill();
+        UseSkillAfter();
         controller.selectedQueenActiveSkill = null;
         await ApplyCooltimeSkill();
         return;
     }
 
     public abstract void UseSkill();
-
+    public void UseSkillAfter()
+    {
+        TrophyManager.Instance.UseSkillId(info.id);
+    }
     protected abstract bool RangeCheck();
 }

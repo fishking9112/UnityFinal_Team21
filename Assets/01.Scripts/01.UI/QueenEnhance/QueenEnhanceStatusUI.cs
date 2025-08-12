@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 public class QueenEnhanceStatusUI : MonoBehaviour
@@ -12,11 +13,17 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     [SerializeField] private QueenCondition queenCondition;
     [SerializeField] private Transform descriptionPopupUI;
     public GameObject DescriptionPopupUI => descriptionPopupUI.gameObject;
-    [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private LocalizeStringEvent statusManaLocalize;
+    [SerializeField] private LocalizeStringEvent statusManaRegenLocalize;
+    [SerializeField] private LocalizeStringEvent statusSummonLocalize;
+    [SerializeField] private LocalizeStringEvent statusSummonRegenLocalize;
+    [SerializeField] private LocalizeStringEvent statusCastleHpLocalize;
+    [SerializeField] private LocalizeStringEvent statusCastleHpRegenLocalize;
 
     [Header("DescriptionPopupUI")]
     [SerializeField] private Image popupUIAbilityImage;
     [SerializeField] private TextMeshProUGUI popupUIAbilityName;
+    [SerializeField] private LocalizeStringEvent abilityNameLocalize;
     [SerializeField] private TextMeshProUGUI popupUIAbilityDec;
     [SerializeField] private TextMeshProUGUI popupUIAbilityLevel;
 
@@ -62,13 +69,14 @@ public class QueenEnhanceStatusUI : MonoBehaviour
 
         // 마나, 게이지, 체력 상태
         AppendManaStatus(statusBuilder);
+        AppendManaRegenStatus(statusBuilder);
         AppendSummonGaugeStatus(statusBuilder);
         AppendSummonRegenStatus(statusBuilder);
         AppendCastleHpStatus(statusBuilder);
         AppendCastleHpRegenStatus(statusBuilder);
 
         // 텍스트 UI에 각각 설정
-        statusText.text = statusBuilder.ToString();
+        // statusText.text = statusBuilder.ToString();
 
         descriptionPopupUI.gameObject.SetActive(false);
 
@@ -99,12 +107,21 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     {
         float curMana = queenCondition.CurQueenActiveSkillGauge.Value;
         float maxMana = queenCondition.MaxQueenActiveSkillGauge.Value;
-        builder.AppendLine($"마나 : {(int)curMana} / {(int)maxMana}");
+        // builder.AppendLine($"마나 : {(int)curMana} / {(int)maxMana}");
+        StringManager.Instance.SetString("9902402", statusManaLocalize, ((int)curMana).ToString(), ((int)maxMana).ToString());
 
+    }
+
+    /// <summary>
+    /// 마나 상태를 문자열로 추가합니다.
+    /// </summary>
+    private void AppendManaRegenStatus(StringBuilder builder)
+    {
         // 마나 회복량 = 기본 회복량 + 강화 효과
         float manaRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].mana_Recorvery + GameManager.Instance.queen.condition.AbilityUpgrade_QueenActiveSkillGaugeRecoverySpeed;
         float manaRegenEnhance = queenCondition.QueenActiveSkillGaugeRecoverySpeed - manaRegenBase;
-        builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / s");
+        // builder.AppendLine($"마나 회복량 : {FormatNumber(manaRegenBase)} + {FormatNumber(manaRegenEnhance)} / s");
+        StringManager.Instance.SetString("9902403", statusManaRegenLocalize, FormatNumber(manaRegenBase).ToString(), FormatNumber(manaRegenEnhance).ToString());
     }
 
     /// <summary>
@@ -114,7 +131,8 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     {
         float curSummongauge = queenCondition.CurSummonGauge.Value;
         float maxSummonGauge = queenCondition.MaxSummonGauge.Value;
-        builder.AppendLine($"소환 게이지 : {FormatNumber(curSummongauge)} / {FormatNumber(maxSummonGauge)}");
+        // builder.AppendLine($"소환 게이지 : {FormatNumber(curSummongauge)} / {FormatNumber(maxSummonGauge)}");
+        StringManager.Instance.SetString("9902404", statusSummonLocalize, FormatNumber(curSummongauge).ToString(), FormatNumber(maxSummonGauge).ToString());
     }
 
     /// <summary>
@@ -124,7 +142,8 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     {
         float summonRegenBase = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].summon_Recorvery + GameManager.Instance.queen.condition.AbilityUpgrade_SummonGaugeRecoverySpeed;
         float summonRegenEnhance = queenCondition.SummonGaugeRecoverySpeed - summonRegenBase;
-        builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / s");
+        // builder.AppendLine($"소환 회복량 : {FormatNumber(summonRegenBase)} + {FormatNumber(summonRegenEnhance)} / s");
+        StringManager.Instance.SetString("9902405", statusSummonRegenLocalize, FormatNumber(summonRegenBase).ToString(), FormatNumber(summonRegenEnhance).ToString());
     }
 
     /// <summary>
@@ -134,7 +153,8 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     {
         float curCastleHp = GameManager.Instance.castle.condition.CurCastleHealth.Value;
         float maxCastleHp = GameManager.Instance.castle.condition.MaxCastleHealth.Value;
-        builder.AppendLine($"캐슬 체력 : {FormatNumber(curCastleHp)} / {FormatNumber(maxCastleHp)}");
+        // builder.AppendLine($"캐슬 체력 : {FormatNumber(curCastleHp)} / {FormatNumber(maxCastleHp)}");
+        StringManager.Instance.SetString("9902406", statusCastleHpLocalize, FormatNumber(curCastleHp).ToString(), FormatNumber(maxCastleHp).ToString());
     }
 
     /// <summary>
@@ -144,7 +164,8 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     {
         float castleHpRegenBase = GameManager.Instance.castle.condition.initCastleHealthRecoverySpeed + GameManager.Instance.castle.condition.AbilityUpgrade_CastleHealthRecoverySpeed;
         float castleHpRegenEnhance = GameManager.Instance.castle.condition.CastleHealthRecoverySpeed - castleHpRegenBase;
-        builder.AppendLine($"캐슬 회복량 : {FormatNumber(castleHpRegenBase)} + {FormatNumber(castleHpRegenEnhance)} / s");
+        // builder.AppendLine($"캐슬 회복량 : {FormatNumber(castleHpRegenBase)} + {FormatNumber(castleHpRegenEnhance)} / s");
+        StringManager.Instance.SetString("9902407", statusCastleHpRegenLocalize, FormatNumber(castleHpRegenBase).ToString(), FormatNumber(castleHpRegenEnhance).ToString());
     }
 
     /// <summary>
@@ -166,14 +187,14 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         int currentLevel = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.GetEnhanceLevel(info.ID);
 
         popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
-        popupUIAbilityName.text = info.name;
+        // popupUIAbilityName.text = info.name;
+        StringManager.Instance.SetString(info.name, abilityNameLocalize);
 
         float previewValue = (currentLevel / 2f) * (2 * info.state_Base + (currentLevel - 1) * info.state_LevelUp);
 
         string formattedValue = $"{previewValue * 100:F0}%";
 
-
-        popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
+        SetAbilityDecText(info, formattedValue).Forget();
 
         if (info.type != QueenEnhanceType.AddSkill)
         {
@@ -183,5 +204,11 @@ public class QueenEnhanceStatusUI : MonoBehaviour
         {
             popupUIAbilityLevel.text = "-";
         }
+    }
+
+    public async UniTask SetAbilityDecText(QueenEnhanceInfo info, string formattedValue)
+    {
+        var description = await StringManager.Instance.GetString(info.description);
+        popupUIAbilityDec.text = string.Format(description, formattedValue);
     }
 }

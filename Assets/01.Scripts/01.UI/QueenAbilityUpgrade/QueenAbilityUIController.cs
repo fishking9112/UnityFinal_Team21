@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 public class QueenAbilityUIController : MonoBehaviour
@@ -27,6 +28,9 @@ public class QueenAbilityUIController : MonoBehaviour
 
     private bool isFollowingMouse = false;
 
+    [Header("Localize용 텍스트")]
+    [SerializeField] LocalizeStringEvent LocalizePopupUIAbilityName;
+    [SerializeField] LocalizeStringEvent LocalizePopupUIAbilityDec;
 
     /// <summary>
     /// 에디터에서 참조값을 자동으로 할당합니다.
@@ -96,7 +100,8 @@ public class QueenAbilityUIController : MonoBehaviour
     /// <param name="currentLevel">현재 업그레이드 레벨</param>
     public void SetPopupQueenAbilityInfo(QueenAbilityInfo info, int currentLevel)
     {
-        popupUIAbilityName.text = info.name;
+        StringManager.Instance.SetString(info.Name, LocalizePopupUIAbilityName);
+
         string formattedValue = "";
         if (currentLevel <= 0)
         {
@@ -110,7 +115,10 @@ public class QueenAbilityUIController : MonoBehaviour
                 : $"{value}";
         }
 
-        popupUIAbilityDec.text = info.description.Replace("n", formattedValue);
+        StringManager.Instance.SetString(info.Name, LocalizePopupUIAbilityName);
+
+        StringManager.Instance.SetString(info.description, LocalizePopupUIAbilityDec, formattedValue);
+
         popupUIAbilityCost.text = currentLevel >= info.maxLevel ? "MAX" : info.levelInfo[currentLevel].cost.ToString();
         popupUIAbilityImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
 
@@ -134,6 +142,6 @@ public class QueenAbilityUIController : MonoBehaviour
     /// </summary>
     private void OnClickResetButton()
     {
-        UIManager.Instance.ShowPopup("알림", "모든 업그레이드 사항을 초기화 시키겠습니까?", () => QueenAbilityUpgradeManager.Instance.ResetAllAbilities(), () => { Utils.Log("취소."); });
+        UIManager.Instance.ShowPopup("9900048", "9900051", () => QueenAbilityUpgradeManager.Instance.ResetAllAbilities(), () => { Utils.Log("취소."); });
     }
 }
