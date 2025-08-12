@@ -78,6 +78,11 @@ public class Castle : MonoBehaviour
     // 성이 죽었을 때 처리
     private void Die()
     {
+        if(GameManager.Instance.isMortal)
+        {
+            return;
+        }
+
         GameManager.Instance.GameOver();
     }
 

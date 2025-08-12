@@ -191,6 +191,11 @@ public class QueenCondition : MonoBehaviour
     /// </summary>
     private void LevelUp()
     {
+        if (GameManager.Instance.isTest == true)
+        {
+            return;
+        }
+
         Level.Value++;
         EnhancePoint++;
         ExpIncrease();

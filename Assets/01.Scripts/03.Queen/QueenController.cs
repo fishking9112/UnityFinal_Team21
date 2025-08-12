@@ -303,11 +303,18 @@ public class QueenController : MonoBehaviour
 
         if (condition.CurSummonGauge.Value < tempMonster.cost)
         {
-            // 테이블 나오면 적용 필요
-            ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
-            msg.SetText("9902418");// 소환 게이지가 부족합니다.
+            if(GameManager.Instance.isInf)
+            {
+                
+            }
+            else
+            {
+                // 테이블 나오면 적용 필요
+                ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
+                msg.SetText("9902418");// 소환 게이지가 부족합니다.
 
-            return;
+                return;
+            }
         }
 
         if (MonsterManager.Instance.GetMonsterCount() >= condition.MaxPopulation.Value)

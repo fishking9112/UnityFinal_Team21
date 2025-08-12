@@ -15,6 +15,12 @@ public class TestSceneAction : EditorWindow
     private bool fold_hero;
     private bool fold_kill;
 
+    private bool fold_etc;
+    private bool isMortal=false;
+    private bool isInfinity=false;
+    private bool prevMortal=false;
+    private bool prevInfinity=false;
+
     private GameHUD gameHud;
     private TestStart tStart;
 
@@ -32,6 +38,14 @@ public class TestSceneAction : EditorWindow
         GetWindow<TestSceneAction>("TestFunc");
     }
 
+    public void OnEnable()
+    {
+
+        isMortal = false;
+        isInfinity = false;
+        prevMortal = false;
+        prevInfinity = false;
+    }
 
     private void OnGUI()
     {
@@ -42,6 +56,8 @@ public class TestSceneAction : EditorWindow
         ShowEnhance();
         ShowHeroSet();
         KillAllUnit();
+
+        ShowETC();
 
         GUILayout.EndScrollView();
         if (Event.current.type == EventType.ScrollWheel)
@@ -57,7 +73,8 @@ public class TestSceneAction : EditorWindow
     {
         fold_abi = EditorGUILayout.Foldout(fold_abi, "QueenAbility");
 
-        if (SceneManager.GetActiveScene().name != "TestScene")
+        //if (SceneManager.GetActiveScene().name != "TestScene")
+        if(GameManager.Instance.isTest==false)
         {
             fold_abi = false;
             return;
@@ -97,7 +114,7 @@ public class TestSceneAction : EditorWindow
     {
         fold_enh = EditorGUILayout.Foldout(fold_enh, "Enhance");
 
-        if (SceneManager.GetActiveScene().name != "TestScene")
+        if (GameManager.Instance.isTest == false)
         {
             fold_enh = false;
             return;
@@ -140,7 +157,7 @@ public class TestSceneAction : EditorWindow
     private void ShowHeroSet()
     {
         fold_hero = EditorGUILayout.Foldout(fold_hero, "HeroSetting");
-        if (SceneManager.GetActiveScene().name != "TestScene")
+        if (GameManager.Instance.isTest == false)
         {
             fold_hero = false;
             return;
@@ -173,7 +190,7 @@ public class TestSceneAction : EditorWindow
             EditorGUILayout.HelpBox("최대레벨에 주의하세요, 현재 테이블상 최대레벨은 30입니다", MessageType.Warning);
             if(GUILayout.Button("소환"))
             {
-                if (SceneManager.GetActiveScene().name != "TestScene")
+                if (GameManager.Instance.isTest == false)
                 {
 
                 }
@@ -201,7 +218,7 @@ public class TestSceneAction : EditorWindow
 
         fold_kill = EditorGUILayout.Foldout(fold_kill, "Kill");
 
-        if (SceneManager.GetActiveScene().name != "TestScene")
+        if (GameManager.Instance.isTest == false)
         {
             fold_kill = false;
             return;
@@ -221,6 +238,41 @@ public class TestSceneAction : EditorWindow
             EditorGUILayout.EndVertical();
         }
     }
+
+    private void ShowETC()
+    {
+        fold_etc= EditorGUILayout.Foldout(fold_etc, "ETC");
+
+        if(GameManager.Instance.isTest==false)
+        {
+            fold_etc = false;
+            return;
+        }
+
+        if(fold_etc)
+        {
+            EditorGUILayout.BeginVertical("box");
+
+            isMortal = EditorGUILayout.Toggle("성채 무적", isMortal);
+            isInfinity = EditorGUILayout.Toggle("소환 무한", isInfinity);
+
+            if(prevMortal!=isMortal)
+            {
+                prevMortal = isMortal;
+                GameManager.Instance.isMortal = isMortal;
+            }
+
+            if(prevInfinity!=isInfinity)
+            {
+                prevInfinity = isInfinity;
+                GameManager.Instance.isInf=isInfinity;
+            }
+            EditorGUILayout.EndVertical();
+        }
+
+    }
+
+
 
     #endregion
 
@@ -247,5 +299,6 @@ public class TestSceneAction : EditorWindow
 
         return (StringTable)collection.GetTable(fixedLocale.Identifier);
     }
+
 
 }

@@ -42,6 +42,11 @@ public class GameManager : MonoSingleton<GameManager>
     // private PauseController pauseController;
 
 
+    // 테스트 씬 기능
+    public bool isTest=false;
+    public bool isMortal=false;
+    public bool isInf = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -162,8 +167,8 @@ public class GameManager : MonoSingleton<GameManager>
         //LogManager.Instance.PlayStartLog(tryCount);
         //funnelType = GameLog.FunnelType.Minite_1;
         //MiniteCount(token.Token).Forget();
-        TrophyManager.Instance.ResetNonStackTrophy();
-
+        //TrophyManager.Instance.ResetNonStackTrophy();
+        isTest = true;
     }
 
     private async UniTask MiniteCount(CancellationToken token)

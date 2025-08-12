@@ -108,7 +108,9 @@ public class GameResultController : MonoBehaviour
             goDefeat.Play("Defeat");
             yield return waitSec2;
         }
-
+        GameManager.Instance.isTest = false;
+        GameManager.Instance.isMortal = false;
+        GameManager.Instance.isInf = false;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>(isTimeOverOpen: true);
     }
