@@ -50,7 +50,12 @@ public class QueenCondition : MonoBehaviour
         CurExpGauge.Value = initCurExpGauge;
         MaxExpGauge.Value = initMaxExpGauge;
         EvolutionPoint.Value = initEvolutionPoint;
-        Gold.Value = initGold;
+
+        // GameManager의 골드를 게임 세션의 골드로 설정
+        int startingGold = GameManager.Instance.GetGold();
+        Gold.Value = startingGold;
+        // Gold.Value = initGold;
+
         MaxPopulation.Value = initPopulation;
         EnhancePoint = initEnhnacePoint;
     }

@@ -246,19 +246,20 @@ public class TrophyManager : MonoSingleton<TrophyManager>
     /// </summary>
     public void ResetNonStackTrophy()
     {
-
         foreach (var trophydic in DataManager.Instance.trophyDic)
         {
             if (trophydic.Value.type == TrophyType.Stack) continue;
 
-            // Stack이 아니라면 누적이 아니기 때문에 매판 초기화
-            if (trophyCount.ContainsKey(trophydic.Value.ID))
+            int trophyId = trophydic.Value.ID;
+
+            if (trophyCount.ContainsKey(trophyId))
             {
-                // 도달하지 못했다면 0으로 초기화
-                if (trophydic.Value.maxCount > trophyCount[trophydic.Value.ID])
-                {
-                    trophyCount[trophydic.Value.ID] = 0;
-                }
+                // 1. 이미 달성 조건을 만족했으면(보상 수령 여부와 무관) 초기화하지 않음
+                if (trophyCount[trophyId] >= trophydic.Value.maxCount)
+                    continue;
+
+                // 2. 달성하지 못했으면 초기화
+                trophyCount[trophyId] = 0;
             }
         }
     }
