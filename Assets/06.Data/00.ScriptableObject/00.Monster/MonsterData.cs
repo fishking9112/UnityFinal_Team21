@@ -39,6 +39,8 @@ public class MonsterInfo : BaseStatData, IInfo
     public float projectile_speed;
     public int tire;
     public int preNode;
+    public int maxSummonStack;
+    public int stackRegenSpeed;
     public MonsterInfo() { }
     public MonsterInfo(MonsterInfo other) : base(other)
     {
@@ -55,6 +57,8 @@ public class MonsterInfo : BaseStatData, IInfo
         projectile_speed = other.projectile_speed;
         tire = other.tire;
         preNode = other.preNode;
+        maxSummonStack = other.maxSummonStack;
+        stackRegenSpeed = other.stackRegenSpeed;
     }
     public void Copy(MonsterInfo other)
     {
@@ -77,6 +81,8 @@ public class MonsterInfo : BaseStatData, IInfo
         projectile = other.projectile;
         tire = other.tire;
         preNode = other.preNode;
+        maxSummonStack = other.maxSummonStack;
+        stackRegenSpeed = other.stackRegenSpeed;
     }
     public int ID => id;
     public string Name => name;
