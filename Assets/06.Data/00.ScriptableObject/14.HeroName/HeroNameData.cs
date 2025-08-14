@@ -6,15 +6,14 @@ using UnityEngine;
 [Serializable]
 public class HeroNameInfo : IInfo
 {
+    public int id;
     public string name;    // 닉네임 문자열
-
+    public string description;
+    public string icon;
+    public int ID => id;
     public string Name => name;
-
-    public int ID => throw new NotImplementedException();
-
-    public string Description => throw new NotImplementedException();
-
-    public string Icon => throw new NotImplementedException();
+    public string Description => description;
+    public string Icon => icon;
 }
 
 [CreateAssetMenu(fileName = "HeroNameData", menuName = "Scriptable Object/New HeroNameData")]
@@ -32,6 +31,10 @@ public class HeroNameData : SheetDataReaderBase
         {
             switch (cell.columnId)
             {
+                case "id":
+                    heronameInfo.id = Utils.StringToInt(cell.value);
+                    break;
+
                 case "name":
                     heronameInfo.name = cell.value;
                     break;
