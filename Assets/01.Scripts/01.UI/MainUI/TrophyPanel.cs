@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Localization.Components;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 
 public class TrophyPanel : MonoBehaviour
 {
