@@ -12,6 +12,7 @@ public class GameSceneStartFlow : MonoBehaviour
         await WaitForInitComplete();
         QueenAbilityUpgradeManager.Instance.ApplyAllEffects();
         MonsterManager.Instance.InitComplete = true;
+        HeroManager.Instance.GameStart();
 
         // 약간의 프레임 딜레이 후 기본 유닛 장착
         await UniTask.DelayFrame(4);

@@ -241,7 +241,7 @@ public class GameHUD : HUDUI
         openWindow.SetActive(true);
         Time.timeScale = 0f; // 시간 멈춤
         isPaused = true;
-        Cursor.lockState = CursorLockMode.None;
+        GameManager.Instance.curCursorState = CursorState.NONE;
     }
 
     public void HideWindow()
@@ -267,7 +267,7 @@ public class GameHUD : HUDUI
         Time.timeScale = 1f; // 시간 흐름
         isPaused = false;
         GameManager.Instance.cameraController.miniMapRect = miniMap.transform as RectTransform;
-        Cursor.lockState = CursorLockMode.Confined;
+        GameManager.Instance.curCursorState = CursorState.CONFINED;
     }
 
     private void OnApplicationPause(bool pause)
@@ -347,7 +347,7 @@ public class GameHUD : HUDUI
 
     private void ShowRemainingEvolutionPoint(float value)
     {
-        if(value > 0)
+        if (value > 0)
         {
             RemainingEvolutionPointGroup.SetActive(true);
             return;
