@@ -33,8 +33,8 @@ public class MonsterSummonManager : MonoSingleton<MonsterSummonManager>
             monsterStacks[monsterData.ID] = new MonsterStackInfo
             {
                 ID = monsterData.ID,
-                MaxStacks = monsterData.maxSummonStack, // 예시: 최대 3스택
-                CurrentStacks = monsterData.maxSummonStack,
+                MaxStacks = monsterData.maxMonsterStack, // 예시: 최대 3스택
+                CurrentStacks = monsterData.maxMonsterStack,
                 StackRegenSpeed = monsterData.stackRegenSpeed, // 예시: 10을 기준으로 회복됨
                 CurrentCooldown = 0
             };

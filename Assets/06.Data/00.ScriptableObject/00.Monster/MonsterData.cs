@@ -40,7 +40,7 @@ public class MonsterInfo : BaseStatData, IInfo
     public float projectile_time;
     public int tire;
     public int preNode;
-    public int maxSummonStack;
+    public int maxMonsterStack;
     public int stackRegenSpeed;
     public MonsterInfo() { }
     public MonsterInfo(MonsterInfo other) : base(other)
@@ -59,7 +59,7 @@ public class MonsterInfo : BaseStatData, IInfo
         projectile_time = other.projectile_time;
         tire = other.tire;
         preNode = other.preNode;
-        maxSummonStack = other.maxSummonStack;
+        maxMonsterStack = other.maxMonsterStack;
         stackRegenSpeed = other.stackRegenSpeed;
     }
     public void Copy(MonsterInfo other)
@@ -86,7 +86,7 @@ public class MonsterInfo : BaseStatData, IInfo
         projectile_time = other.projectile_time;
         tire = other.tire;
         preNode = other.preNode;
-        maxSummonStack = other.maxSummonStack;
+        maxMonsterStack = other.maxMonsterStack;
         stackRegenSpeed = other.stackRegenSpeed;
     }
     public int ID => id;
@@ -174,8 +174,8 @@ public class MonsterData : SheetDataReaderBase
                 case "preNode":
                     monsterInfo.preNode = Utils.StringToInt(cell.value);
                     break;
-                case "maxSummonStack":
-                    monsterInfo.maxSummonStack = Utils.StringToInt(cell.value);
+                case "maxMonsterStack":
+                    monsterInfo.maxMonsterStack = Utils.StringToInt(cell.value);
                     break;
                 case "stackRegenSpeed":
                     monsterInfo.stackRegenSpeed = Utils.StringToInt(cell.value);
