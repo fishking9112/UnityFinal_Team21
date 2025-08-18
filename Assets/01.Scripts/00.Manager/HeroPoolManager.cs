@@ -149,7 +149,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
                     string heroName = DataManager.Instance.heroNameDic[randomKey].Name;
 
                     int heroLevel = HeroManager.Instance.Level;
-                    string displayText = $"Lv.{heroLevel} {heroName}";
+                    string displayText = $"Lv.[ {heroLevel} ] {heroName}";
 
                     ShowNameTag(obj.transform, displayText);
                 }
