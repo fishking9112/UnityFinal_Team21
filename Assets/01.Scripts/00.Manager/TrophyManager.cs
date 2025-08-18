@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -183,8 +182,22 @@ public class TrophyManager : MonoSingleton<TrophyManager>
 
     public void Levelup(int level)
     {
-        RecordTrophyId(1000002, level);
-        RecordTrophyId(1000003, level);
+        UpdateProgressIfNotCleared(1000002, level);
+        UpdateProgressIfNotCleared(1000003, level);
+    }
+
+    private void UpdateProgressIfNotCleared(int trophyId, int value)
+    {
+        if (!trophyCount.ContainsKey(trophyId)) return;
+
+        var trophyInfo = DataManager.Instance.trophyDic[trophyId];
+
+        // 이미 달성 조건을 만족했다면 갱신하지 않음
+        if (trophyCount[trophyId] >= trophyInfo.maxCount)
+            return;
+
+        // 아직 달성 조건을 만족하지 않았다면 갱신
+        RecordTrophyId(trophyId, value);
     }
 
     public void SummonMonsterId(int monsterId)
