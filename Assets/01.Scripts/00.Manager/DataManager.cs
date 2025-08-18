@@ -32,7 +32,6 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private QueenPassiveSkillData queenPassiveSkillData;
     [SerializeField] private ToolTipData toolTipData;
     [SerializeField] private UIToolTipData uiToolTipData;
-    [SerializeField] private HeroNameData heroNameData;
 
     // iconData는 id값으로 초기화 하지 않으므로, iconData 안에 Dictionary 존재
     public SpriteAtlas iconAtlas;
@@ -53,7 +52,6 @@ public class DataManager : MonoSingleton<DataManager>
     public Dictionary<int, QueenPassiveSkillInfo> queenPassiveSkillDic = new Dictionary<int, QueenPassiveSkillInfo>();
     public Dictionary<int, ToolTipInfo> toolTipDic = new Dictionary<int, ToolTipInfo>();
     public Dictionary<int, UIToolTipInfo> uiToolTipDic = new Dictionary<int, UIToolTipInfo>();
-    public Dictionary<int, HeroNameInfo> heroNameDic = new Dictionary<int, HeroNameInfo>();
 
     public Dictionary<int, MonsterInfo> queenAbilityMonsterStatDic = new Dictionary<int, MonsterInfo>();
 
@@ -121,13 +119,8 @@ public class DataManager : MonoSingleton<DataManager>
         {
             toolTipData = Addressables.LoadAssetAsync<ToolTipData>("UIToolTipData").WaitForCompletion();
         }
-        if (heroNameData == null)
-        {
-            heroNameData = await Addressables.LoadAssetAsync<HeroNameData>("HeroNameData");
-        }
 
-        //Init<MonsterInfo>(monsterData.infoList, monsterDic);
-        InitMonster(monsterData.infoList, monsterDic);
+        Init<MonsterInfo>(monsterData.infoList, monsterDic);
         Init<QueenAbilityInfo>(queenAbilityData.infoList, queenAbilityDic);
         Init<HeroAbilityInfo>(heroAbilityData.infoList, heroAbilityDic);
         Init<HeroAbilityLevelUpInfo>(heroAbilityLevelUpData.infoList, heroAbilityLevelUpDic);
@@ -141,7 +134,6 @@ public class DataManager : MonoSingleton<DataManager>
         Init<QueenPassiveSkillInfo>(queenPassiveSkillData.infoList, queenPassiveSkillDic);
         Init<ToolTipInfo>(toolTipData.infoList, toolTipDic);
         Init<UIToolTipInfo>(uiToolTipData.infoList, uiToolTipDic);
-        Init<HeroNameInfo>(heroNameData.infoList, heroNameDic);
 
         foreach (var monsterData in monsterDic.Values)
         {
@@ -162,13 +154,4 @@ public class DataManager : MonoSingleton<DataManager>
             }
         }
     }
-    private void InitMonster(List<MonsterInfo> list, Dictionary<int, MonsterInfo> dic)
-    {
-        dic.Clear();
-        foreach (var item in list)
-        {
-            dic[item.ID] = new MonsterInfo(item);
-        }
-    }
-
 }

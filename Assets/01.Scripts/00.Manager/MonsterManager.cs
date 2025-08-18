@@ -24,7 +24,7 @@ public class MonsterManager : MonoSingleton<MonsterManager>
         await WaitUntilInitCompleteAndSetup();
     }
 
-    public async UniTask WaitUntilInitCompleteAndSetup()
+    private async UniTask WaitUntilInitCompleteAndSetup()
     {
         await UniTask.WaitUntil(() => InitComplete);
 
@@ -37,8 +37,6 @@ public class MonsterManager : MonoSingleton<MonsterManager>
         gameHUD = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>();
         queenCondition = GameManager.Instance.queen.condition;
     }
-
-
 
     private void Update()
     {

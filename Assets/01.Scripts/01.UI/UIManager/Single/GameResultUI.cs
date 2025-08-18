@@ -181,8 +181,7 @@ public class GameResultUI : SingleUI
     private void ApplyStageGold()
     {
         int goldToAdd = Mathf.FloorToInt(GameManager.Instance.queen.condition.Gold.Value);
-        GameManager.Instance.SetGold(goldToAdd);
-        // GameManager.Instance.AddGold(goldToAdd);
+        GameManager.Instance.AddGold(goldToAdd);
     }
 
     private int SetMonsterMVP()

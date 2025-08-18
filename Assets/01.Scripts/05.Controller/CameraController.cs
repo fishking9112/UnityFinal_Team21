@@ -41,8 +41,6 @@ public class CameraController : MonoBehaviour
     [Header("컷 씬")]
     private bool isCutScene = false;
 
-    private bool isCameraMoveLocked = false; // 카메라 이동 잠금 상태
-
     private void Awake()
     {
         GameManager.Instance.cameraController = this;
@@ -55,21 +53,9 @@ public class CameraController : MonoBehaviour
         targetZoom = virtualCamera.m_Lens.OrthographicSize;
     }
 
-#if UNITY_EDITOR
-    private void Update()
-    {
-        // L키를 누르면 카메라 이동 잠금/해제
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            isCameraMoveLocked = !isCameraMoveLocked;
-        }
-    }
-#endif
-
     private void LateUpdate()
     {
         if (isCutScene) return;
-
         MoveCamera();
         ZoomCamera();
         ClampCameraPosition();
@@ -88,27 +74,24 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            if (!isCameraMoveLocked)
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+
+            if (mousePos.x <= cameraEdge)
             {
-                Vector2 mousePos = Mouse.current.position.ReadValue();
+                moveDir.x = -1;
+            }
+            else if (mousePos.x >= Screen.width - cameraEdge)
+            {
+                moveDir.x = 1;
+            }
 
-                if (mousePos.x <= cameraEdge)
-                {
-                    moveDir.x = -1;
-                }
-                else if (mousePos.x >= Screen.width - cameraEdge)
-                {
-                    moveDir.x = 1;
-                }
-
-                if (mousePos.y <= cameraEdge)
-                {
-                    moveDir.y = -1;
-                }
-                else if (mousePos.y >= Screen.height - cameraEdge)
-                {
-                    moveDir.y = 1;
-                }
+            if (mousePos.y <= cameraEdge)
+            {
+                moveDir.y = -1;
+            }
+            else if (mousePos.y >= Screen.height - cameraEdge)
+            {
+                moveDir.y = 1;
             }
         }
 
