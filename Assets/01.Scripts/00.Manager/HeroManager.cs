@@ -18,13 +18,14 @@ public class HeroManager : MonoSingleton<HeroManager>
     private CancellationTokenSource token2;
 
     private float time;
-    private int level;
+    private int level; 
+    public int Level => level;
 
     [SerializeField]private int heroCnt;
 
     private List<GameObject> heroList = new();
 
-    private void Start()
+    public void GameStart()
     {
         time = 10;
         level = 1;
@@ -116,6 +117,14 @@ public class HeroManager : MonoSingleton<HeroManager>
 
         return boss.gameObject;
 
+    }
+
+    public HeroStatusInfo SetTestHero(int sum)
+    {
+        var value = DataManager.Instance.heroStatusDic.Where(x => x.Value.heroType == HeroType.NORMAL).Select(x => x.Value)
+            .Where(x => x.startLevel == sum).First();
+
+        return value;
     }
 
     private Vector2 GetRandomPos(Vector2 pos, float radius = 3f)

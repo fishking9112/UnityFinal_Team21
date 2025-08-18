@@ -14,6 +14,7 @@ public class TrophyPanel : MonoBehaviour
     public LocalizeStringEvent nameLocalize;
     public LocalizeStringEvent descLocalize;
     public TextMeshProUGUI countTxt;
+    public GameObject nonStackGroup;
     public GameObject countGroup;
     public GameObject completeGroup;
     public Image rewardImg;
@@ -48,10 +49,22 @@ public class TrophyPanel : MonoBehaviour
         // nameTxt.text = name;
         StringManager.Instance.SetString(name, nameLocalize);
         StringManager.Instance.SetString(desc, descLocalize);
-        countTxt.text = $"{countCur} / {countMax}";
+
+        if (trophyInfo.type == TrophyType.Stack)
+        {
+            nonStackGroup.SetActive(false);
+            countGroup.SetActive(true);
+            countTxt.text = $"{countCur} / {countMax}";
+        }
+        else
+        {
+            nonStackGroup.SetActive(true);
+            countGroup.SetActive(false);
+        }
 
         if (countMax <= countCur) // 완료 버튼 활성화
         {
+            nonStackGroup.SetActive(false);
             countGroup.SetActive(false);
             if (TrophyManager.Instance.IsRewardTrophy(trophyInfo.id))
             {

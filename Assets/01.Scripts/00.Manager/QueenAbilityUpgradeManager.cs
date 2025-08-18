@@ -142,6 +142,36 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
 
     }
 
+    public void TrySetLevel(int id, int level)
+    {
+        int _level=GetLevel(id);
+
+        if(level==_level)
+        {
+            return;
+        }
+
+        SetLevel(id,level);
+    }
+
+    private void SetLevel(int id,int l)
+    {
+        if (!IsValidAbility(id, out var ability)) return;
+
+        int currentLevel = upgradeLevels[id];
+
+        if (l >= ability.maxLevel)
+        {
+            l = ability.maxLevel;
+        } 
+        else if(l<0)
+        {
+            l = 0;
+        }
+
+        upgradeLevels[id] = l;
+    }
+
     #endregion
 
     #region 효과 적용 
