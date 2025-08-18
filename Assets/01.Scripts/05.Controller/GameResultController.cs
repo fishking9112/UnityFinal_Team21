@@ -46,7 +46,7 @@ public class GameResultController : MonoBehaviour
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>(isTimeOverOpen: true);
     }
 
-    public void GameOver()
+    public void GameOver(bool isAttackDie)
     {
         gameEnd = true;
 
@@ -55,50 +55,60 @@ public class GameResultController : MonoBehaviour
         StartCoroutine(GameOverProcess());
     }
 
-    public IEnumerator GameOverProcess()
+    public IEnumerator GameOverProcess(bool isAttackDie)
     {
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().HideWindow();
 
-        List<Vector3> usedPositions = new List<Vector3>();
-        float minimumDistance = 1.0f; // 최소 거리 조건
-
-        for (int i = 0; i < 10; i++)
+        if (isAttackDie) // 만약 공격으로 성이 부서진 것이라면 애니메이션 재생
         {
-            Vector3 spawnPos = GetNonOverlappingPosition(usedPositions, -4f, 4f, minimumDistance);
-            usedPositions.Add(spawnPos);
+            List<Vector3> usedPositions = new List<Vector3>();
+            float minimumDistance = 1.0f; // 최소 거리 조건
 
-            Transform tf = ParticleManager.Instance.SpawnParticle("Burn", spawnPos, Vector3.one, Quaternion.identity).transform;
-            tf.localScale = new Vector3(0.5f, 0.5f);
-
-            yield return waitHalfHalf;
-        }
-
-        GameManager.Instance.cameraController.StartCutScene(new Vector2(0f, -2f), 1.5f);
-
-        yield return waitSec2;
-
-
-        usedPositions.Clear(); // 다시 초기화
-
-        for (int i = 0; i < 20; i++)
-        {
-            int index = i;
-            Vector3 spawnPos = GetNonOverlappingPosition(usedPositions, -4f, 4f, minimumDistance);
-            usedPositions.Add(spawnPos);
-
-            Transform tf = ParticleManager.Instance.SpawnParticle("HeroFireball_Explode", spawnPos, Vector3.one, Quaternion.identity).transform;
-            tf.localScale = new Vector3(0.65f, 0.65f);
-
-            if(index == 10)
+            for (int i = 0; i < 10; i++)
             {
-                StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().HUDGroup.SetActive(false);
-                goDefeat.gameObject.SetActive(true);
-                goDefeat.Play("Defeat");
+                Vector3 spawnPos = GetNonOverlappingPosition(usedPositions, -4f, 4f, minimumDistance);
+                usedPositions.Add(spawnPos);
+
+                Transform tf = ParticleManager.Instance.SpawnParticle("Burn", spawnPos, Vector3.one, Quaternion.identity).transform;
+                tf.localScale = new Vector3(0.5f, 0.5f);
+
+                yield return waitHalfHalf;
             }
 
-            yield return waitHalfHalf;
+            GameManager.Instance.cameraController.StartCutScene(new Vector2(0f, -2f), 1.5f);
+
+            yield return waitSec2;
+
+
+            usedPositions.Clear(); // 다시 초기화
+
+            for (int i = 0; i < 20; i++)
+            {
+                int index = i;
+                Vector3 spawnPos = GetNonOverlappingPosition(usedPositions, -4f, 4f, minimumDistance);
+                usedPositions.Add(spawnPos);
+
+                Transform tf = ParticleManager.Instance.SpawnParticle("HeroFireball_Explode", spawnPos, Vector3.one, Quaternion.identity).transform;
+                tf.localScale = new Vector3(0.65f, 0.65f);
+
+                if (index == 10)
+                {
+                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().HUDGroup.SetActive(false);
+                    goDefeat.gameObject.SetActive(true);
+                    goDefeat.Play("Defeat");
+                }
+
+                yield return waitHalfHalf;
+            }
+            yield return waitSec2;
         }
-        yield return waitSec2;
+        else
+        {
+            StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().HUDGroup.SetActive(false);
+            goDefeat.gameObject.SetActive(true);
+            goDefeat.Play("Defeat");
+            yield return waitSec2;
+        }
 
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>(isTimeOverOpen: true);
