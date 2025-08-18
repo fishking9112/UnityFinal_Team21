@@ -34,6 +34,7 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 0
     preNode: -1
     maxSummonStack: 0
@@ -55,6 +56,7 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 1
     preNode: 1001
     maxSummonStack: 0
@@ -76,6 +78,7 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 2
     preNode: 1002
     maxSummonStack: 0
@@ -97,6 +100,7 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 2
     preNode: 1002
     maxSummonStack: 0
@@ -118,6 +122,7 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 1
     preNode: 1001
     maxSummonStack: 0
@@ -139,6 +144,7 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 2
     preNode: 1005
     maxSummonStack: 0
@@ -160,10 +166,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 0
     preNode: -1
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 7
   - id: 1102
     name: 9900102
     description: 9900202
@@ -181,10 +188,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 1
     preNode: 1101
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 5
   - id: 1103
     name: 9900103
     description: 9900203
@@ -202,10 +210,11 @@ MonoBehaviour:
     projectile: Fireball
     projectile_size: 2
     projectile_speed: 3
+    projectile_time: 2
     tire: 1
     preNode: 1101
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 5
   - id: 1104
     name: 9900104
     description: 9900204
@@ -223,10 +232,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 2
     preNode: 1102
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 5
   - id: 1105
     name: 9900105
     description: 9900205
@@ -244,10 +254,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 2
     preNode: 1102
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 3
   - id: 1106
     name: 9900106
     description: 9900206
@@ -265,10 +276,11 @@ MonoBehaviour:
     projectile: Fireball
     projectile_size: 2
     projectile_speed: 3
+    projectile_time: 2
     tire: 2
     preNode: 1103
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 3
   - id: 1201
     name: 9900107
     description: 9900207
@@ -286,10 +298,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 0
     preNode: -1
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 7
   - id: 1202
     name: 9900108
     description: 9900208
@@ -307,10 +320,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 1
     preNode: 1201
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 5
   - id: 1203
     name: 9900109
     description: 9900209
@@ -328,10 +342,11 @@ MonoBehaviour:
     projectile: Arrow
     projectile_size: 2
     projectile_speed: 3
+    projectile_time: 2
     tire: 1
     preNode: 1201
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 5
   - id: 1204
     name: 9900110
     description: 9900210
@@ -349,10 +364,11 @@ MonoBehaviour:
     projectile: MagicMissile
     projectile_size: 2
     projectile_speed: 3
+    projectile_time: 2
     tire: 1
     preNode: 1201
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 5
   - id: 1205
     name: 9900111
     description: 9900211
@@ -370,10 +386,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 2
     preNode: 1202
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 3
   - id: 1206
     name: 9900112
     description: 9900212
@@ -391,10 +408,11 @@ MonoBehaviour:
     projectile: Arrow
     projectile_size: 2
     projectile_speed: 3
+    projectile_time: 2
     tire: 2
     preNode: 1203
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 3
   - id: 1207
     name: 9900113
     description: 9900213
@@ -412,10 +430,11 @@ MonoBehaviour:
     projectile: MagicMissile
     projectile_size: 2
     projectile_speed: 3
+    projectile_time: 2
     tire: 2
     preNode: 1204
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 3
   - id: 1401
     name: 9900114
     description: 9900214
@@ -433,10 +452,11 @@ MonoBehaviour:
     projectile: Arrow
     projectile_size: 2
     projectile_speed: 3
+    projectile_time: 2
     tire: 0
     preNode: -1
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 7
   - id: 1402
     name: 9900115
     description: 9900215
@@ -454,10 +474,11 @@ MonoBehaviour:
     projectile: Arrow
     projectile_size: 2
     projectile_speed: 5
+    projectile_time: 2
     tire: 1
     preNode: 1401
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 5
   - id: 1403
     name: 9900117
     description: 9900217
@@ -475,10 +496,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 1
     preNode: 1401
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 5
   - id: 1404
     name: 9900116
     description: 9900216
@@ -496,10 +518,11 @@ MonoBehaviour:
     projectile: Arrow
     projectile_size: 2
     projectile_speed: 7
+    projectile_time: 2
     tire: 2
     preNode: 1402
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 3
   - id: 1405
     name: 9900118
     description: 9900218
@@ -517,10 +540,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 2
     preNode: 1403
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 3
   - id: 1501
     name: 9900119
     description: 9900219
@@ -538,10 +562,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 0
     preNode: -1
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 7
   - id: 1502
     name: 9900120
     description: 9900220
@@ -559,10 +584,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 1
     preNode: 1501
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 5
   - id: 1503
     name: 9900122
     description: 9900222
@@ -580,10 +606,11 @@ MonoBehaviour:
     projectile: Kunai
     projectile_size: 2
     projectile_speed: 3
+    projectile_time: 2
     tire: 1
     preNode: 1501
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 5
   - id: 1504
     name: 9900121
     description: 9900221
@@ -601,10 +628,11 @@ MonoBehaviour:
     projectile: 
     projectile_size: 0
     projectile_speed: 0
+    projectile_time: 0
     tire: 2
     preNode: 1502
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 3
   - id: 1505
     name: 9900123
     description: 9900223
@@ -622,7 +650,8 @@ MonoBehaviour:
     projectile: Shuriken
     projectile_size: 2
     projectile_speed: 3
+    projectile_time: 2
     tire: 2
     preNode: 1503
     maxSummonStack: 0
-    stackRegenSpeed: 0
+    stackRegenSpeed: 3
