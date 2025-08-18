@@ -65,8 +65,6 @@ public class QueenController : MonoBehaviour
         lastSummon = Time.time;
         cooldown = 0.1f;
 
-        // MonsterSummonManager 초기화
-        MonsterSummonManager.Instance.Initialize();
 
         await GameHuDInit();
     }

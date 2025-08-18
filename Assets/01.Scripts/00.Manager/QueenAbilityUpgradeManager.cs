@@ -59,6 +59,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             value => RewardManager.Instance.initBatCount += (int)value,
             value => RewardManager.Instance.initBatMoveSpeed +=  RewardManager.Instance.initBatMoveSpeed * value,
             value => GameManager.Instance.queen.condition.AdjustMaxPopulation(value),
+            value => ApplyMonsterMaxSummonStackBuff((int)value),
         };
 
         int index = 0;
@@ -224,6 +225,14 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             ApplyMoveSpeedBuff(1 / (1 + speedValue), true); // 곱셈 기반 복원
         }
 
+        // 몬스터 소환 스택 최대량 증가 복원
+        if (upgradeLevels.TryGetValue((int)IDQueenAbility.MAX_SUMMONSTCK_UP, out int summonStack) && summonStack > 0)
+        {
+            var summonStackAbility = GetAbilityById((int)IDQueenAbility.MAX_SUMMONSTCK_UP);
+            float summonStackValue = summonStackAbility.levelInfo[summonStack - 1].eff;
+            ApplyMonsterMaxSummonStackBuff(summonStackValue, true); // 복원
+        }
+
         ShouldRestoreAbilityMonsterValues = false;
     }
 
@@ -256,6 +265,16 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
                 kvp.Value.health *= value;
             else
                 kvp.Value.health *= 1 + value;
+        }
+    }
+    private void ApplyMonsterMaxSummonStackBuff(float value, bool reset = false)
+    {
+        foreach (var kvp in DataManager.Instance.queenAbilityMonsterStatDic)
+        {
+            if (reset)
+                kvp.Value.maxMonsterStack -= (int)value;
+            else
+                kvp.Value.maxMonsterStack += (int)value;
         }
     }
 
