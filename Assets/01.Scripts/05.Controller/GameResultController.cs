@@ -52,7 +52,7 @@ public class GameResultController : MonoBehaviour
 
         if (GameManager.Instance.queen.condition.KillCnt.Value > StoveGameServiceManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
 
-        StartCoroutine(GameOverProcess());
+        StartCoroutine(GameOverProcess(isAttackDie));
     }
 
     public IEnumerator GameOverProcess(bool isAttackDie)
