@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,6 +47,37 @@ public class TrophyManager : MonoSingleton<TrophyManager>
         Utils.Log("TrophyManager 초기화 완료");
     }
 
+    public void UpdateTrophyRedDotUI()
+    {
+        if (StaticUIManager.Instance == null || StaticUIManager.Instance.hudLayer == null)
+            return;
+
+        var menuHUD = StaticUIManager.Instance.hudLayer.GetHUD<MenuHUD>();
+        if (menuHUD != null)
+        {
+            bool showRedDot = HasRewardableTrophy();
+            menuHUD.redDot_Notification.SetActive(showRedDot);
+        }
+    }
+
+    public bool HasRewardableTrophy()
+    {
+        foreach (var kvp in trophyCount)
+        {
+            int trophyId = kvp.Key;
+            int count = kvp.Value;
+
+            if (DataManager.Instance.trophyDic.TryGetValue(trophyId, out var trophyInfo))
+            {
+                if (!trophyClear[trophyId] && count >= trophyInfo.maxCount)
+                {
+                    return true; // 아직 수령하지 않았고 조건도 만족한 업적이 있음
+                }
+            }
+        }
+
+        return false;
+    }
 
     /// <summary>
     /// 해금되어있다면 true 반환
@@ -135,6 +165,7 @@ public class TrophyManager : MonoSingleton<TrophyManager>
             // UGSManager.Instance.SaveLoad.SaveAsync().Forget();
         }
 
+        UpdateTrophyRedDotUI();
         return true;
     }
 
@@ -151,8 +182,22 @@ public class TrophyManager : MonoSingleton<TrophyManager>
 
     public void Levelup(int level)
     {
-        RecordTrophyId(1000002, level);
-        RecordTrophyId(1000003, level);
+        UpdateProgressIfNotCleared(1000002, level);
+        UpdateProgressIfNotCleared(1000003, level);
+    }
+
+    private void UpdateProgressIfNotCleared(int trophyId, int value)
+    {
+        if (!trophyCount.ContainsKey(trophyId)) return;
+
+        var trophyInfo = DataManager.Instance.trophyDic[trophyId];
+
+        // 이미 달성 조건을 만족했다면 갱신하지 않음
+        if (trophyCount[trophyId] >= trophyInfo.maxCount)
+            return;
+
+        // 아직 달성 조건을 만족하지 않았다면 갱신
+        RecordTrophyId(trophyId, value);
     }
 
     public void SummonMonsterId(int monsterId)
@@ -214,19 +259,20 @@ public class TrophyManager : MonoSingleton<TrophyManager>
     /// </summary>
     public void ResetNonStackTrophy()
     {
-
         foreach (var trophydic in DataManager.Instance.trophyDic)
         {
             if (trophydic.Value.type == TrophyType.Stack) continue;
 
-            // Stack이 아니라면 누적이 아니기 때문에 매판 초기화
-            if (trophyCount.ContainsKey(trophydic.Value.ID))
+            int trophyId = trophydic.Value.ID;
+
+            if (trophyCount.ContainsKey(trophyId))
             {
-                // 도달하지 못했다면 0으로 초기화
-                if (trophydic.Value.maxCount > trophyCount[trophydic.Value.ID])
-                {
-                    trophyCount[trophydic.Value.ID] = 0;
-                }
+                // 1. 이미 달성 조건을 만족했으면(보상 수령 여부와 무관) 초기화하지 않음
+                if (trophyCount[trophyId] >= trophydic.Value.maxCount)
+                    continue;
+
+                // 2. 달성하지 못했으면 초기화
+                trophyCount[trophyId] = 0;
             }
         }
     }

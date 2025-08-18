@@ -285,7 +285,8 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void SetBGMVolume(float volume)
     {
         bgmVolume = Mathf.Clamp01(volume);
-        float dB = Mathf.Lerp(-80f, 0f, bgmVolume); // -80dB ~ 0dB 범위로 변환
+        float dB = Mathf.Log10(Mathf.Clamp(bgmVolume, 0.0001f, 1f)) * 20f;
+       // float dB = Mathf.Lerp(-80f, 0f, bgmVolume); // -80dB ~ 0dB 범위로 변환
         audioMixer.SetFloat(bgmVolumeParam, dB);
     }
 
@@ -296,7 +297,8 @@ public class SoundManager : MonoSingleton<SoundManager>
     public void SetSFXVolume(float volume)
     {
         sfxVolume = Mathf.Clamp01(volume);
-        float dB = Mathf.Lerp(-80f, 0f, sfxVolume);
+        float dB = Mathf.Log10(Mathf.Clamp(sfxVolume, 0.0001f, 1f)) * 20f;
+       // float dB = Mathf.Lerp(-80f, 0f, sfxVolume);
         audioMixer.SetFloat(sfxVolumeParam, dB);
     }
 
