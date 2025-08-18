@@ -35,7 +35,7 @@ public class HeroController : BaseController
     [NonSerialized] public List<SpriteRenderer> renderers = new();
     private List<Color> originalColors = new(); // 원본 색상 저장용
     private CancellationTokenSource _takeDamagedRendererCts;
-    private float takeDamagedRendererTimer => GameSettingManager.Instance?.unitTakeDamagedRendererTimer ?? 0.5f;
+    [NonSerialized] private float takeDamagedRendererTimer = 0.5f;
     private void Update()
     {
         if (transform.position != lastPos)
@@ -129,67 +129,6 @@ public class HeroController : BaseController
         {
             originalColors.Add(renderer.color);
         }
-    }
-
-    public void StatInit(HeroStatusInfo stat,bool isHealthUI,Dictionary<int,int> weapon,bool isEventMark=false)
-    {
-        stateMachine.animator = GetComponentInChildren<Animator>();
-
-        pivot = transform.GetChild(2);
-        hero.Init(stat.detectedRange);
-
-        if (_collider == null)
-        {
-            _collider = GetComponent<Collider2D>();
-        }
-        _collider.enabled = true;
-
-        navMeshAgent.enabled = true;
-        navMeshAgent.speed = stat.moveSpeed;
-
-        isDead = false;
-        stateMachine.animator.SetBool("isDeath", false);
-        base.StatInit(stat, isHealthUI);
-        this.statusInfo.Copy(stat);
-
-        hero.ResetAbility();
-
-        eventMark.SetActive(isEventMark);
-
-        weaponDic.Clear();
-        var a = Enum.GetValues(typeof(IDHeroAbility));
-
-        foreach(var w in weapon)
-        {
-            if (w.Value == 0)
-                continue;
-            weaponDic[w.Key] = w.Value;
-        }
-
-        foreach (var data in weaponDic)
-        {
-            hero.SetAbilityLevel(data.Key, data.Value);
-        }
-
-
-        stateMachine.ChangeState(stateMachine.moveState);
-
-        token?.Cancel();
-        token?.Dispose();
-        token = new CancellationTokenSource();
-        CheckFlip(token.Token).Forget();
-
-        // IF문 탈출
-        renderers.Clear();
-        renderers = pivot.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.gameObject.name != "Shadow").ToList();
-        originalColors.Clear();
-
-        // 각 renderer의 현재 색상 저장
-        foreach (var renderer in renderers)
-        {
-            originalColors.Add(renderer.color);
-        }
-
     }
 
     public override void TakeDamaged(float damage)

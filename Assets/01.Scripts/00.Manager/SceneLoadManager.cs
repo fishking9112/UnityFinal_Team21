@@ -9,7 +9,6 @@ public enum LoadSceneEnum
     AppScene,
     MenuScene,
     GameScene,
-    TestScene,
 }
 
 public class SceneLoadManager : MonoSingleton<SceneLoadManager>
@@ -83,11 +82,6 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 //  await UGSManager.Instance.LoadMyRankAsync();
                 await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
-
-
-
-                // 업적 UI 빨간점 갱신
-                TrophyManager.Instance.UpdateTrophyRedDotUI();
                 Time.timeScale = 1;
                 break;
             case LoadSceneEnum.GameScene: // 게임 씬 일 경우
@@ -109,26 +103,6 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 TrophyManager.Instance.StartQueenId(GameManager.Instance.QueenCharaterID);
 
                 break;
-            case LoadSceneEnum.TestScene:
-                await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
-                await LoadSceneAsync("TestScene");
-                //await ObjectPoolManager.Instance.InitPoolsFromAddressables();
-                await StaticUIManager.Instance.LoadUI(LoadSceneEnum.TestScene);
-
-                // 만약 OpenWindow가 없다면 시간 흐르게 하기
-                //await UIManager.Instance.ShowTooltipAsync((int)IDToolTip.InGame, false, onFinishAction: () =>
-                //{
-                //    // 여기서 뜬 Tooltip만 Funnel로 Tutorial보내기
-                //    LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Tutorial);
-                //});
-                await UniTask.Delay(1000, DelayType.UnscaledDeltaTime); // 1초 기다리기
-                await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
-                //LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.EnterInGame);
-                GameManager.Instance.TestStart(); // 테스트 스타트
-                //TrophyManager.Instance.StartQueenId(GameManager.Instance.QueenCharaterID);
-
-                break;
-
             default:
                 // await LoadSceneAsync("Error"); // 에러씬으로 이동(?)
                 Utils.LogError($"해당 이름을 가진 씬은 없습니다");

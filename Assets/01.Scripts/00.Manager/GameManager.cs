@@ -20,7 +20,7 @@ public class GameManager : MonoSingleton<GameManager>
     public Castle castle;
     public Dictionary<GameObject, MiniCastle> miniCastles = new();
     public Dictionary<GameObject, MiniBarrack> miniBarracks = new();
-    public CursorState curCursorState;
+    private CursorState curCursorState;
     public CameraController cameraController;
     public GameResultController gameResultController;
 
@@ -96,7 +96,6 @@ public class GameManager : MonoSingleton<GameManager>
     }
     private void ApplyCursorState()
     {
-#if !UNITY_EDITOR
         switch (curCursorState)
         {
             case CursorState.CONFINED:
@@ -106,7 +105,6 @@ public class GameManager : MonoSingleton<GameManager>
                 Cursor.lockState = CursorLockMode.None;
                 break;
         }
-#endif
     }
 
     /*
@@ -148,24 +146,6 @@ public class GameManager : MonoSingleton<GameManager>
         TrophyManager.Instance.ResetNonStackTrophy();
     }
 
-    public void TestStart()
-    {
-        curTime.Value = 9999;
-        isTimeOver = false;
-        miniCastles.Clear();
-        miniBarracks.Clear();
-        stageLevel = 0;
-        //token = new CancellationTokenSource();
-        //tryCount = PlayerPrefs.GetInt("TryCount");
-        //tryCount++;
-        //PlayerPrefs.SetInt("TryCount", tryCount);
-        //LogManager.Instance.PlayStartLog(tryCount);
-        //funnelType = GameLog.FunnelType.Minite_1;
-        //MiniteCount(token.Token).Forget();
-        TrophyManager.Instance.ResetNonStackTrophy();
-
-    }
-
     private async UniTask MiniteCount(CancellationToken token)
     {
         while (!token.IsCancellationRequested)
@@ -191,12 +171,12 @@ public class GameManager : MonoSingleton<GameManager>
         token?.Dispose();
     }
 
-    public void GameOver(bool isAttackDie = true)
+    public void GameOver()
     {
         SoundManager.Instance.ChangeBGM("1 are you gonna buy something... or... WAV");
         // curTime.Value = 0f;
         isTimeOver = true;
-        gameResultController.GameOver(isAttackDie);
+        gameResultController.GameOver();
         // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
         // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
         // Time.timeScale = 0f;

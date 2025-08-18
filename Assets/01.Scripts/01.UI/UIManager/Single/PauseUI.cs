@@ -43,7 +43,7 @@ public class PauseUI : SingleUI
                                         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().HideWindow();
 
                                         // 게임 종료 처리
-                                        GameManager.Instance.GameOver(isAttackDie: false);
+                                        GameManager.Instance.GameOver();
                                     }, () => { Utils.Log("취소."); });
     }
 

@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [Serializable]
@@ -16,15 +16,6 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
 {
     [SerializeField] private HeroObj heroObj;
     [SerializeField] private HeroController bossObj;
-
-    // UI 관련
-    [Header("Name Tag Settings")]
-    [SerializeField] private Camera mainCam;
-    [SerializeField] private Canvas worldCanvas;
-    [SerializeField] private TextMeshProUGUI nameTagPrefab;
-
-    private readonly Queue<TextMeshProUGUI> nameTagPool = new Queue<TextMeshProUGUI>();
-    private readonly List<(TextMeshProUGUI ui, Transform target)> activeNameTags = new List<(TextMeshProUGUI, Transform)>();
 
     private List<GameObject> list;
     private List<GameObject> bossList;
@@ -51,11 +42,11 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         bossList = await AddressableManager.Instance.LoadDataAssetsAsync<GameObject>("BossHero");
         System.Random rand = new System.Random();
         list = list.OrderBy(x => rand.Next()).ToList();
+        int min = Mathf.Min(list.Count, heroObj.poolSize);
 
         GameObject heroP = new GameObject();
         heroParent = heroP.transform;
         heroParent.SetParent(transform);
-
         GameObject heroDP = new GameObject();
         heroDeleteParent = heroDP.transform;
         heroDeleteParent.SetParent(transform);
@@ -74,8 +65,10 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
             obj.SetActive(false);
             heroList.Add(obj);
         }
+
     }
 
+    // Start is called before the first frame update
     void Start()
     {
         if (heroObj == null)
@@ -115,6 +108,7 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
             hObj.gameObject.SetActive(false);
         }
 
+
         foreach (var obj in poolList)
         {
             if (!obj.gameObject.activeSelf)
@@ -136,59 +130,24 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
                     hPrefab.transform.localScale = Vector3.one;
                 }
 
+                // 세팅은 받은 쪽에서 하기
                 obj.transform.position = pos;
                 obj.gameObject.SetActive(true);
                 HeroManager.Instance.hero[obj.gameObject] = obj;
                 heroDic[obj] = hPrefab;
-
-                // 10% 확률로 이름/레벨 표기
-                if (UnityEngine.Random.value <= 0.1f && DataManager.Instance.heroNameDic.Count > 0)
-                {
-                    var keys = new List<int>(DataManager.Instance.heroNameDic.Keys);
-                    int randomKey = keys[UnityEngine.Random.Range(0, keys.Count)];
-                    string heroName = DataManager.Instance.heroNameDic[randomKey].Name;
-
-                    int heroLevel = HeroManager.Instance.Level;
-                    string displayText = $"Lv.[ {heroLevel} ] {heroName}";
-
-                    ShowNameTag(obj.transform, displayText);
-                }
-
                 return obj;
             }
         }
+
         return null;
-    }
-
-    private void ShowNameTag(Transform target, string text)
-    {
-        TextMeshProUGUI ui = nameTagPool.Count > 0 ? nameTagPool.Dequeue() : Instantiate(nameTagPrefab, worldCanvas.transform);
-        ui.text = text;
-        ui.gameObject.SetActive(true);
-        activeNameTags.Add((ui, target));
-    }
-
-    void LateUpdate()
-    {
-        for (int i = activeNameTags.Count - 1; i >= 0; i--)
-        {
-            var (ui, target) = activeNameTags[i];
-            if (target == null || !target.gameObject.activeInHierarchy)
-            {
-                ui.gameObject.SetActive(false);
-                nameTagPool.Enqueue(ui);
-                activeNameTags.RemoveAt(i);
-                continue;
-            }
-
-            Vector3 worldPos = target.position + new Vector3(0, 2f, 0);
-            ui.transform.position = worldPos;
-        }
     }
 
     public void ReturnObject(HeroController obj)
     {
-        if (obj == null || obj.gameObject == null) return;
+        if (obj == null || obj.gameObject == null)
+        {
+            return;
+        }
 
         HeroManager.Instance.hero.Remove(obj.gameObject);
 
@@ -207,15 +166,12 @@ public class HeroPoolManager : MonoSingleton<HeroPoolManager>
         // 풀링으로 생성된 히어로일경우
         else
         {
-            heroDic[obj].transform.SetParent(heroDeleteParent);
+            heroDic[obj].transform.SetParent(heroDeleteParent); // 1프레임 안기다리고 바로 이동
             Destroy(heroDic[obj]);
             heroDic.Remove(obj);
         }
 
-        if (!GameManager.Instance.gameResultController.gameEnd)
-        {
-            condition.KillCnt.Value++;
-        }
+        if (!GameManager.Instance.gameResultController.gameEnd) { condition.KillCnt.Value++; }
 
         obj.gameObject.SetActive(false);
     }

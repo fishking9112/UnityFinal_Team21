@@ -80,7 +80,7 @@ public class StringManager : MonoSingleton<StringManager>
         else
         {
             SelectLang = (int)Application.systemLanguage;
-            SelectLang = LocalizationSettings.AvailableLocales.Locales.Count < SelectLang ? 0 : SelectLang;
+            SelectLang = LocalizationSettings.AvailableLocales.Locales.Count < SelectLang ? 1 : SelectLang;
         }
 
         ChangeLocale(SelectLang);

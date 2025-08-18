@@ -22,7 +22,6 @@ public class HUDLayer : MonoBehaviour
 
                 break;
             case LoadSceneEnum.GameScene: // 게임 씬 일 경우
-            case LoadSceneEnum.TestScene: // 테스트 씬 일 경우
                 GameHUD gameHUD = await LoadCurrentHUD("GameHUD") as GameHUD;
 
                 break;
