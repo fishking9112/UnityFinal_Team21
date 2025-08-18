@@ -183,7 +183,7 @@ public class QueenEnhanceUI : SingleUI
     {
         var queenCondition = GameManager.Instance.queen.condition;
         var castleCondition = GameManager.Instance.castle.condition;
-        var setset = MonsterSummonManager.Instance.monsterStacks;
+        var monsterStacks = MonsterSummonManager.Instance.monsterStacks;
 
         float amount = 0;
 
@@ -221,7 +221,7 @@ public class QueenEnhanceUI : SingleUI
 
             case (int)IDQueenEnhance.MONSTER_SUMMONSTACK_RECOVERY_SPEED_UP: // 몬스터 소환 스택 회복 속도 증가
 
-                foreach (var monsterData in setset.Values)
+                foreach (var monsterData in monsterStacks.Values)
                 {
                     monsterData.StackRegenSpeed += (monsterData.StackRegenSpeed * value);
                 }
