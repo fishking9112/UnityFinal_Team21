@@ -18,7 +18,8 @@ public class HeroManager : MonoSingleton<HeroManager>
     private CancellationTokenSource token2;
 
     private float time;
-    private int level;
+    private int level; 
+    public int Level => level;
 
     [SerializeField]private int heroCnt;
 
