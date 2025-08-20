@@ -28,6 +28,7 @@ public class QueenActiveSkillInfo : IInfo
     public int buff_ID;
     public int buff_Level;
     public int monster_ID;
+    public int summon_Time;
 
     public int ID => id;
     public string Name => name;
@@ -91,6 +92,9 @@ public class QueenActiveSkillData : SheetDataReaderBase
                     break;
                 case "monster_ID":
                     queenActiveSkillInfo.monster_ID = Utils.StringToInt(cell.value);
+                    break;
+                case "summon_time":
+                    queenActiveSkillInfo.summon_Time = Utils.StringToInt(cell.value);
                     break;
             }
         }
