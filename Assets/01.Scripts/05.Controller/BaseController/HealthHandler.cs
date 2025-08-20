@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -11,9 +12,23 @@ public class HealthHandler : MonoBehaviour
     float maxPoint;
     ReactiveProperty<float> currentPoint = new();
 
+
+    public float time;
+    public float damage;
+    public float dps;
+    private bool isCheck;
+
     void Start()
     {
         currentPoint.AddAction(_ => RefrashUI());
+
+#if UNITY_EDITOR
+        isCheck = false;
+        time = 0;
+        damage = 0;
+        dps = 0;
+        DPSCheck().Forget();
+#endif
     }
     public void ActiveHealthUI(bool isFlag)
     {
@@ -39,6 +54,11 @@ public class HealthHandler : MonoBehaviour
     {
         if (currentPoint.Value - damage <= 0f) currentPoint.Value = 0f;
         else currentPoint.Value -= damage;
+
+#if UNITY_EDITOR
+        isCheck = true;
+        this.damage += damage;
+#endif
     }
 
     public bool IsDie()
@@ -61,5 +81,17 @@ public class HealthHandler : MonoBehaviour
     public float GetCurHP()
     {
         return currentPoint.Value;
+    }
+
+    public async UniTask DPSCheck()
+    {
+        await UniTask.WaitUntil(() => isCheck);
+
+        while(isCheck)
+        {
+            time += Time.deltaTime;
+            dps = damage / time;
+            await UniTask.Yield();
+        }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
 using UnityEngine.Localization.Settings;
+using static Codice.Utils.Buffers.SizeBufferPool;
 
 public class TestSceneAction : EditorWindow
 {
@@ -205,6 +206,36 @@ public class TestSceneAction : EditorWindow
 
             bool newMortal = EditorGUILayout.Toggle("성채 무적", isMortal);
             bool newInfinity = EditorGUILayout.Toggle("소환 무한", isInfinity);
+
+            if (GUILayout.Button("Moster Dummy"))
+            {
+                var tempMonster = MonsterManager.Instance.monsterInfoList[1001];
+                var m = new MonsterInfo(tempMonster);
+
+                m.attackRange = 0;
+                m.health = 100000;
+                m.attackSpeed = 0;
+                m.moveSpeed = 0;
+
+
+                var monster = ObjectPoolManager.Instance.GetObject<MonsterController>(m.outfit, SpawnPointManager.Instance.heroPoint.GetRandomPosition(true));
+                monster.StatInit(m, MonsterManager.Instance.isHealthUI);
+
+            }
+            if (GUILayout.Button("Hero Dummy"))
+            {
+                HeroController hero = HeroPoolManager.Instance.GetObject(SpawnPointManager.Instance.heroPoint.GetRandomPosition(true));
+                var value = DataManager.Instance.heroStatusDic[301];
+
+                var v = new HeroStatusInfo(value);
+                v.health = 100000;
+                v.moveSpeed = 0;
+                v.weaponCount = 0;
+                v.startLevel = 0;
+                hero?.StatInit(v, HeroManager.Instance.isHealthUI);
+
+            }
+
 
             if (newMortal != isMortal)
             {

@@ -19,11 +19,9 @@ public class TestStart : MonoBehaviour
 
         // 약간의 프레임 딜레이 후 기본 유닛 장착
         await UniTask.DelayFrame(4);
-        EvolutionTreeUI evolutionTreeUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().evolutionTreeUI;
-        evolutionTreeUI.SetQueenController();
-        QueenEnhanceInfo info = (DataManager.Instance.queenEnhanceDic[15010]);
 
-        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.ApplyInhance(info);
+        SetSlot();
+
         await UniTask.Delay(1500);
         StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().canPause = true;
 
@@ -39,6 +37,14 @@ public class TestStart : MonoBehaviour
 
         await UniTask.WaitUntil(() =>
             ObjectPoolManager.Instance?.InitComplete == true);
+    }
+
+    public void SetSlot()
+    {
+        EvolutionTreeUI evolutionTreeUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().evolutionTreeUI;
+        evolutionTreeUI.SetQueenController();
+        QueenEnhanceInfo info = (DataManager.Instance.queenEnhanceDic[15010]);
+        StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.ApplyInhance(info);
     }
 
     public void ResetAllMonsterStats()
