@@ -1,5 +1,5 @@
 using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using TMPro;
@@ -67,6 +67,9 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     {
         if (queenCondition == null)
             SetQueenCondition(GameManager.Instance.queen.condition);
+
+        if(GameManager.Instance.QueenCharaterID == 0)
+            GameManager.Instance.QueenCharaterID = DataManager.Instance.queenStatusDic.First().Key;
 
         var statusBuilder = new StringBuilder();
 
