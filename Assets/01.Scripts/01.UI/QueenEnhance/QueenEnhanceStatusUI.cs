@@ -1,5 +1,5 @@
 using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using TMPro;
@@ -40,14 +40,17 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     /// <summary>
     /// 팝업 UI가 마우스를 따라다니도록 위치를 계속 갱신합니다.
     /// </summary>
+    /// 
     public async UniTaskVoid FollowMouse(CancellationToken token)
     {
-        while (DescriptionPopupUI.activeSelf)
+        while (descriptionPopupUI != null
+               && descriptionPopupUI.gameObject.activeInHierarchy)
         {
             descriptionPopupUI.position = Input.mousePosition;
             await UniTask.Yield();
         }
     }
+
 
     /// <summary>
     /// 퀸의 상태 정보를 설정합니다.
@@ -64,6 +67,9 @@ public class QueenEnhanceStatusUI : MonoBehaviour
     {
         if (queenCondition == null)
             SetQueenCondition(GameManager.Instance.queen.condition);
+
+        if(GameManager.Instance.QueenCharaterID == 0)
+            GameManager.Instance.QueenCharaterID = DataManager.Instance.queenStatusDic.First().Key;
 
         var statusBuilder = new StringBuilder();
 
