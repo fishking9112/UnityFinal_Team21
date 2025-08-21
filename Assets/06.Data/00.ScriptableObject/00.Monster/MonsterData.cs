@@ -37,8 +37,11 @@ public class MonsterInfo : BaseStatData, IInfo
     public string projectile;
     public float projectile_size;
     public float projectile_speed;
+    public float projectile_time;
     public int tire;
     public int preNode;
+    public int maxMonsterStack;
+    public int stackRegenSpeed;
     public MonsterInfo() { }
     public MonsterInfo(MonsterInfo other) : base(other)
     {
@@ -53,8 +56,11 @@ public class MonsterInfo : BaseStatData, IInfo
         projectile = other.projectile;
         projectile_size = other.projectile_size;
         projectile_speed = other.projectile_speed;
+        projectile_time = other.projectile_time;
         tire = other.tire;
         preNode = other.preNode;
+        maxMonsterStack = other.maxMonsterStack;
+        stackRegenSpeed = other.stackRegenSpeed;
     }
     public void Copy(MonsterInfo other)
     {
@@ -75,8 +81,13 @@ public class MonsterInfo : BaseStatData, IInfo
         monsterAttackType = other.monsterAttackType;
         monsterBrood = other.monsterBrood;
         projectile = other.projectile;
+        projectile_size = other.projectile_size;
+        projectile_speed = other.projectile_speed;
+        projectile_time = other.projectile_time;
         tire = other.tire;
         preNode = other.preNode;
+        maxMonsterStack = other.maxMonsterStack;
+        stackRegenSpeed = other.stackRegenSpeed;
     }
     public int ID => id;
     public string Name => name;
@@ -154,11 +165,20 @@ public class MonsterData : SheetDataReaderBase
                 case "projectile_speed":
                     monsterInfo.projectile_speed = Utils.StringToFloat(cell.value);
                     break;
+                case "projectile_time":
+                    monsterInfo.projectile_time = Utils.StringToFloat(cell.value);
+                    break;
                 case "tire":
                     monsterInfo.tire = Utils.StringToInt(cell.value);
                     break;
                 case "preNode":
                     monsterInfo.preNode = Utils.StringToInt(cell.value);
+                    break;
+                case "maxMonsterStack":
+                    monsterInfo.maxMonsterStack = Utils.StringToInt(cell.value);
+                    break;
+                case "stackRegenSpeed":
+                    monsterInfo.stackRegenSpeed = Utils.StringToInt(cell.value);
                     break;
             }
         }

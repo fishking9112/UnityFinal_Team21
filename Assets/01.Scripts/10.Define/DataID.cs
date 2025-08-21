@@ -101,7 +101,7 @@ public enum IDQueenEnhance
     QUEEN_MAX_SUMMON_GAUGE_UP,              // 여왕 최대 소환 게이지 증가
     CASTLE_HEALTH_RECOVERY_SPEED_UP,         // 성벽 체력 회복 속도
     CASTLE_MAX_HEALTH_UP,                    // 성벽 최대 체력
-
+    MONSTER_SUMMONSTACK_RECOVERY_SPEED_UP,   // 몬스터 소환 스택 회복 속도 증가
 
     ELF_MAXHEALTH_UP = 11001,
     ELF_ATTACKDAMAGE_UP,
@@ -171,6 +171,8 @@ public enum IDQueenAbility
     EVOLUTION_POINT_START_AMOUNT_UP,
     BAT_COUNT_UP,
     BAT_MOVE_SPEED_UP,
+    MAX_POPULATION_UP,
+    MAX_SUMMONSTCK_UP,
 }
 
 public enum IDBuff
