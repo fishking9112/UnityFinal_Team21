@@ -183,6 +183,7 @@ public class GameManager : MonoSingleton<GameManager>
         SoundManager.Instance.ChangeBGM("xDeviruchi - 05 Take some rest and eat some food!");
         // curTime.Value = 0f;
         isTimeOver = true;
+        HeroManager.Instance.GameEnd();
         gameResultController.GameClear();
         // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = true;
         // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();
@@ -196,6 +197,7 @@ public class GameManager : MonoSingleton<GameManager>
         SoundManager.Instance.ChangeBGM("1 are you gonna buy something... or... WAV");
         // curTime.Value = 0f;
         isTimeOver = true;
+        HeroManager.Instance.GameEnd();
         gameResultController.GameOver(isAttackDie);
         // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.isClear = false;
         // StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().ShowWindow<GameResultUI>();

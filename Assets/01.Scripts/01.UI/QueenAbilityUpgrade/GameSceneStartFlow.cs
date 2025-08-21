@@ -14,6 +14,9 @@ public class GameSceneStartFlow : MonoBehaviour
         MonsterManager.Instance.InitComplete = true;
         HeroManager.Instance.GameStart();
 
+        // MonsterSummonManager 초기화
+        MonsterSummonManager.Instance.Initialize();
+
         // 약간의 프레임 딜레이 후 기본 유닛 장착
         await UniTask.DelayFrame(4);
         EquipDefaultUnitToQuickSlot();
