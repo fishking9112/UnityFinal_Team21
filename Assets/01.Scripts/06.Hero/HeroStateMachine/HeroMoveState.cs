@@ -16,7 +16,7 @@ public class HeroMoveState : HeroBaseState
     public override void Enter()
     {
         base.Enter();
-        
+
         // 필수 컴포넌트가 없으면, 오류를 기록하고 히어로를 비활성화하여 게임이 멈추는 것을 방지
         if (state?.controller == null || state.hero == null || state.controller.statusInfo == null)
         {
@@ -38,7 +38,7 @@ public class HeroMoveState : HeroBaseState
 
     private async UniTask MoveAndSearch(CancellationToken tk)
     {
-        MoveHero().Forget();
+        MoveHero(tk).Forget();
         while (isMove && !tk.IsCancellationRequested)
         {
             if (state.hero == null)
@@ -59,11 +59,17 @@ public class HeroMoveState : HeroBaseState
         isMove = false;
         token?.Cancel();
         token?.Dispose();
+        token = null;
     }
 
-    private async UniTask MoveHero()
+    private async UniTask MoveHero(CancellationToken tk)
     {
-        await UniTask.Yield();
+        await UniTask.Yield(cancellationToken: tk);
+        if (state.navMeshAgent == null)
+        {
+            Utils.LogError("NavMeshAgent가 없습니다!");
+            return;
+        }
         state.navMeshAgent.enabled = true;
         state.navMeshAgent.SetDestination(state.dir);
         //state.hero.transform.Translate(state.moveSpeed * Time.deltaTime * state.dir);

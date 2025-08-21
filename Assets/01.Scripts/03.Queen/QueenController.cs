@@ -65,6 +65,7 @@ public class QueenController : MonoBehaviour
         lastSummon = Time.time;
         cooldown = 0.1f;
 
+
         await GameHuDInit();
     }
 
@@ -301,6 +302,13 @@ public class QueenController : MonoBehaviour
             return;
         }
 
+        if (!MonsterSummonManager.Instance.CanSummon(selectedMonsterId))
+        {
+            ToastMessage msg = Instantiate(toastMessage, gameHUD.HUDGroup.transform);
+            msg.SetText("9902425"); // 소환 스택이 부족합니다.
+            return;
+        }
+
         if (condition.CurSummonGauge.Value < tempMonster.cost)
         {
             // 테이블 나오면 적용 필요
@@ -333,6 +341,7 @@ public class QueenController : MonoBehaviour
         //}
 
         condition.AdjustCurSummonGauge(-tempMonster.cost);
+        MonsterSummonManager.Instance.ConsumeStack(selectedMonsterId); // 소환 스택 감소
         var monster = objectPoolManager.GetObject<MonsterController>(tempMonster.outfit, worldMousePos);
         monster.StatInit(tempMonster, MonsterManager.Instance.isHealthUI);
 
