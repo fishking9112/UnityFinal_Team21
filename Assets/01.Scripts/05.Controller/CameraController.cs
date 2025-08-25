@@ -138,7 +138,9 @@ public class CameraController : MonoBehaviour
     {
         if (isCutScene) return;
 
-        if (StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().isPaused)
+        // CameraController.OnZoomCamera에 대한 방어 코드 작성
+        var gameHUD = StaticUIManager.Instance?.hudLayer?.GetHUD<GameHUD>();
+        if (gameHUD == null || gameHUD.isPaused)
         {
             return;
         }
@@ -174,6 +176,12 @@ public class CameraController : MonoBehaviour
 
         if (context.phase == InputActionPhase.Started)
         {
+            // CameraController.OnCameraMoveToCastle 에 대한 방어코드 작성 2가지
+            if (cameraTransform == null || castleTransform == null)
+            {
+                return;
+            }
+
             cameraTransform.position = castleTransform.position;
             cameraTransform.position += new Vector3(0, 0, -10);
         }
