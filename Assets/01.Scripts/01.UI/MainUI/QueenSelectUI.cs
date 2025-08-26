@@ -78,6 +78,8 @@ public class QueenSelectUI : MonoBehaviour
         {
             InitQueen(GameManager.Instance.QueenCharaterID);
         }
+
+        selcetedQueenID = GameManager.Instance.QueenCharaterID;
     }
 
     private void InitQueen(int queenID)
