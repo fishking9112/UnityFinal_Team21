@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,6 +31,9 @@ public class MenuHUD : HUDUI
     private GameObject activePanel;
     public GameObject redDot_Notification;
     public QueenSelectUI queenSelectUI;
+
+    // 단계별 UI 큐
+    private Queue<GameObject> startFlowQueue = new Queue<GameObject>();
 
     private void Update()
     {
@@ -77,8 +81,13 @@ public class MenuHUD : HUDUI
         });
 
         qustionGameBtn.onClick.AddListener(() => { UIManager.Instance.ShowTooltip((int)IDToolTip.MainMenu, true); });
-        // 게임시작 버튼 누를 시 스타트 실행
+        // 게임시작 버튼 누를 시 스타트를 위한 과정 진행
         startButton.onClick.AddListener(OnClickGameStart);
+
+        // 여왕 선택 UI가 끝나면 다음 단계로 진행하도록 이벤트 연결
+        // QueenSelectUI 안에 "OnComplete" 같은 이벤트를 추가한다고 가정
+        queenSelectUI.gameObject.SetActive(false);
+        queenSelectUI.OnComplete += ShowNextPanel;
 
 #if UNITY_EDITOR
         testBtn.gameObject.SetActive(true);
@@ -149,9 +158,31 @@ public class MenuHUD : HUDUI
     {
         LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.TouchPlay);
 
-        // TODO : 바뀐 스텟으로 시작(?)
-        SceneLoadManager.Instance.LoadScene(LoadSceneEnum.GameScene).Forget();
+        // 시작 순서를 큐에 쌓기
+        startFlowQueue.Clear();
+        startFlowQueue.Enqueue(queenSelectUI.gameObject);
+        // TODO: 필요하면 다른 설정창도 Enqueue
+        // startFlowQueue.Enqueue(otherSettingUI);
+
+        ShowNextPanel();
     }
+
+    // 큐에서 하나 꺼내서 보여주기
+    private void ShowNextPanel()
+    {
+        if (startFlowQueue.Count > 0)
+        {
+            var nextUI = startFlowQueue.Dequeue();
+            nextUI.SetActive(true);
+            activePanel = nextUI;
+        }
+        else
+        {
+            // 더 이상 UI가 없으면 게임 시작
+            SceneLoadManager.Instance.LoadScene(LoadSceneEnum.GameScene).Forget();
+        }
+    }
+
     public void OnClickTestStart()
     {
         SceneLoadManager.Instance.LoadScene(LoadSceneEnum.TestScene).Forget();
