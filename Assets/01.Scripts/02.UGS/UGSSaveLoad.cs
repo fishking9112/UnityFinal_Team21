@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class UGSSaveLoad : MonoBehaviour
 {
-    private const int CurrentVersion = 5; // 최신 데이터 버전
+    private const int CurrentVersion = 6; // 최신 데이터 버전
 
     private const string SaveKey = "PlayerSaveData";
     private const string RankDataKey = "PlayerRankDataKey";
@@ -267,6 +267,46 @@ public class UGSSaveLoad : MonoBehaviour
                 extraTrophyFields = new Dictionary<string, JToken>()
             };
             data.version = 5;
+        }
+
+        if (data.version == 5)
+        {
+            if (data.queenUpgrades.upgrades != null)
+            {
+                // 1) ID 30012 보상 처리
+                var upgrade30012 = data.queenUpgrades.upgrades.Find(u => u.id == 30012);
+                if (upgrade30012 != null)
+                {
+                    int refundGold = 0;
+                    switch (upgrade30012.level)
+                    {
+                        case 1: refundGold = 10000; break;
+                        case 2: refundGold = 30000; break;
+                        case 3: refundGold = 60000; break;
+                    }
+
+                    if (refundGold > 0)
+                    {
+                        data.player.gold += refundGold;
+                        Utils.Log($"마이그레이션: ID 30012 보상 {refundGold} 골드 지급 (총 골드 {data.player.gold})");
+                    }
+
+                    // 30012 항목 제거
+                    data.queenUpgrades.upgrades.Remove(upgrade30012);
+                }
+
+                // 2) ID 30013~30016 -> 각각 -1 시프트
+                foreach (var upgrade in data.queenUpgrades.upgrades)
+                {
+                    if (upgrade.id >= 30013 && upgrade.id <= 30016)
+                    {
+                        upgrade.id -= 1;
+                        Utils.Log($"마이그레이션: 강화 ID {upgrade.id + 1} -> {upgrade.id} 로 조정");
+                    }
+                }
+            }
+
+            data.version = 6;
         }
 
         // 추가 버전 마이그레이션은 여기에 구현
