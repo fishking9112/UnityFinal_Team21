@@ -55,7 +55,7 @@ public class QueenAbilityUpgradeManager : MonoSingleton<QueenAbilityUpgradeManag
             value => GameManager.Instance.queen.condition.AbilityMaxSummonGauge(value),
             value => GameManager.Instance.queen.condition.AbilityQueenActiveSkillGaugeRecoverySpeed(value),
             value => GameManager.Instance.queen.condition.AbilityMaxQueenActiveSkillGauge(value),
-            value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value),
+            //value => GameManager.Instance.queen.condition.AdjustEvolutionPoint(value), 진화 포인트 삭제
             value => RewardManager.Instance.initBatCount += (int)value,
             value => RewardManager.Instance.initBatMoveSpeed +=  RewardManager.Instance.initBatMoveSpeed * value,
             value => GameManager.Instance.queen.condition.AdjustMaxPopulation(value),

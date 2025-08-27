@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
@@ -39,6 +40,9 @@ public class MonsterController : BaseController, IPoolable
         _takeDamagedRendererCts?.Cancel();
         _takeDamagedRendererCts?.Dispose();
         _takeDamagedRendererCts = null;
+        summonCts?.Cancel();
+        summonCts?.Dispose();
+        summonCts = null;
         returnToPool?.Invoke(this);
     }
     #endregion
@@ -74,6 +78,9 @@ public class MonsterController : BaseController, IPoolable
 
     public Vector3 originScale;
 
+    public bool isBySkill;
+    private CancellationTokenSource summonCts;
+
     private void Update()
     {
         stateMachine.Update();
@@ -100,7 +107,7 @@ public class MonsterController : BaseController, IPoolable
     /// 최초 생성 시 한번만 실행(참조해서 수치 자동 수정)
     /// </summary>
     /// <param name="monsterInfo">참조 할 수치 데이터</param>
-    public void StatInit(MonsterInfo monsterInfo, bool isHealthUI)
+    public void StatInit(MonsterInfo monsterInfo, bool isHealthUI, int bySkill=-1)
     {
         if (!StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas.ContainsKey(monsterInfo.id))
         {
@@ -118,6 +125,8 @@ public class MonsterController : BaseController, IPoolable
         }
 
         base.StatInit(this.monsterInfo, isHealthUI);
+
+        isBySkill= bySkill==-1? false:true;
 
         if (navMeshAgent == null)
             navMeshAgent = GetComponent<NavMeshAgent>();
@@ -187,6 +196,16 @@ public class MonsterController : BaseController, IPoolable
                 }
             }
         }
+
+        if(isBySkill)
+        {
+            summonCts?.Cancel();
+            summonCts?.Dispose();
+
+            summonCts = new CancellationTokenSource();
+            SetDieBySummonMonster(bySkill,summonCts.Token).Forget();
+        }
+
 
         // 소환될 때 겹치지 않도록 살짝 움직여주는 코드
         navMeshAgent.SetDestination(navMeshAgent.transform.position + new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)));
@@ -299,5 +318,14 @@ public class MonsterController : BaseController, IPoolable
     public void UpgradeMoveSpeed(float amount)
     {
         statHandler.moveSpeed.AddOrigin(amount);
+    }
+
+    public async UniTask SetDieBySummonMonster(int delay,CancellationToken tk)
+    {
+        var destroyToken = this.GetCancellationTokenOnDestroy();
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(destroyToken, tk);
+
+        await UniTask.Delay(TimeSpan.FromSeconds(delay),cancellationToken : linked.Token);
+        this?.Die();
     }
 }
