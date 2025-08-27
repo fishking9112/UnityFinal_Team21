@@ -15,7 +15,7 @@ public class ZombieController : MonsterController
         base.OnSpawn();
 
         isDie = false;
-        Invoke(die, lifeTime);
+        //Invoke(die, lifeTime);
     }
 
 

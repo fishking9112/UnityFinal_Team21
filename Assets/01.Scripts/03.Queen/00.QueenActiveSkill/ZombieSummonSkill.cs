@@ -15,7 +15,7 @@ public class ZombieSummonSkill : QueenActiveSkillBase
         string randZombie = Random.Range(0, 2) == 1 ? "Zombie_0" : "Zombie_1";
 
         var zombie = ObjectPoolManager.Instance.GetObject<MonsterController>(randZombie, mousePos);
-        zombie.StatInit(MonsterManager.Instance.monsterInfoList[(int)IDMonster.SKELETON_NORMAL], MonsterManager.Instance.isHealthUI);
+        zombie.StatInit(MonsterManager.Instance.monsterInfoList[(int)IDMonster.SKELETON_NORMAL], MonsterManager.Instance.isHealthUI,info.summon_Time);
     }
 
     protected override bool RangeCheck()

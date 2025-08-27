@@ -20,7 +20,7 @@ public class SkeletonLegionSkill : QueenActiveSkillBase
 
             MonsterInfo monsterInfo = MonsterManager.Instance.monsterInfoList[info.monster_ID];
             var summonMonster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfo.outfit, spawnPos);
-            summonMonster.StatInit(monsterInfo, MonsterManager.Instance.isHealthUI);
+            summonMonster.StatInit(monsterInfo, MonsterManager.Instance.isHealthUI,info.summon_Time);
         }
     }
 
