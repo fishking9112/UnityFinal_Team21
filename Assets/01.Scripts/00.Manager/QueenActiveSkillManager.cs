@@ -15,6 +15,7 @@ public class QueenActiveSkillManager : MonoSingleton<QueenActiveSkillManager>
 
     private async UniTask Init()
     {
+        await UniTask.DelayFrame(2);
         await UniTask.WaitUntil(() => GameManager.Instance.queen.controller.queenActiveSkillSlot != null);
 
         skillSlot = GameManager.Instance.queen.controller.queenActiveSkillSlot;

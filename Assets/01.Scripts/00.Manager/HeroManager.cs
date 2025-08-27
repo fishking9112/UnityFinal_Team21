@@ -18,10 +18,10 @@ public class HeroManager : MonoSingleton<HeroManager>
     private CancellationTokenSource token2;
 
     private float time;
-    private int level; 
+    private int level;
     public int Level => level;
 
-    [SerializeField]private int heroCnt;
+    [SerializeField] private int heroCnt;
 
     private List<GameObject> heroList = new();
 
@@ -35,11 +35,17 @@ public class HeroManager : MonoSingleton<HeroManager>
         IncreaseCnt(token2.Token).Forget();
     }
 
+    public void GameEnd()
+    {
+        token?.Cancel();
+        token2?.Cancel();
+    }
+
     private void Update()
     {
-        foreach(var h in hero)
+        foreach (var h in hero)
         {
-            if(h.Value.healthHandler.IsDie())
+            if (h.Value.healthHandler.IsDie())
             {
                 h.Value.Die();
             }
@@ -59,7 +65,7 @@ public class HeroManager : MonoSingleton<HeroManager>
     {
         while (!tk.IsCancellationRequested) // 게임 끝나기 전까지
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(time), cancellationToken: this.GetCancellationTokenOnDestroy()); //매 10초마다
+            await UniTask.Delay(TimeSpan.FromSeconds(time), cancellationToken: tk); //매 10초마다
 
             int cnt = heroCnt + level;
             for (int i = 0; i < cnt; i++)
@@ -72,8 +78,8 @@ public class HeroManager : MonoSingleton<HeroManager>
 
     private void SetNextHero()
     {
-        var value = DataManager.Instance.heroStatusDic.Where(x => x.Value.heroType == HeroType.NORMAL).Select(x=>x.Value)
-            .Where(x=>x.startLevel==level).First();
+        var value = DataManager.Instance.heroStatusDic.Where(x => x.Value.heroType == HeroType.NORMAL).Select(x => x.Value)
+            .Where(x => x.startLevel == level).First();
 
         statusInfo = value;
 

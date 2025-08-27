@@ -28,7 +28,7 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
     public bool fxOnDestory = true;
 
     [HideInInspector] public MonsterController baseController;
-    private float currentDuration;
+    private float currentDuration; // 지속시간
     private Vector2 direction;
     private bool isReady;
     private Transform pivot;
@@ -52,7 +52,7 @@ public class MonsterProjectileObject : MonoBehaviour, IPoolable
 
         currentDuration += Time.deltaTime;
 
-        if (currentDuration > 5f)
+        if (currentDuration > this.baseController.monsterInfo.projectile_time)
         {
             DestroyProjectile(transform.position, false);
         }
