@@ -248,7 +248,7 @@ public class UGSSaveLoad : MonoBehaviour
         // 버전 3 -> 버전 4 ( bgmVolume/sfxVolume 제거)
         if (data.version == 3)
         {
-            if(data.settings.extraSettingsFields != null)
+            if (data.settings.extraSettingsFields != null)
             {
                 data.settings.extraSettingsFields.Remove("bgmVolume");
                 data.settings.extraSettingsFields.Remove("sfxVolume");
@@ -339,7 +339,7 @@ public class UGSSaveLoad : MonoBehaviour
                 extraQueenUpgradeFields = new Dictionary<string, JToken>()
             },
             trophies = new TrophySaveData
-            { 
+            {
                 trophyClear = new Dictionary<int, bool>(),
                 trophyCount = new Dictionary<int, int>(),
                 unlockIdToTrophyIds = new Dictionary<int, int>(),
