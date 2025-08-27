@@ -168,10 +168,9 @@ public class QueenEnhanceUI : SingleUI
                 ApplyMonsterPassive(info.brood, info.name, value, info.valueType);
                 break;
 
-            // 진화 포인트 삭제
-            /*case QueenEnhanceType.Point:
+            case QueenEnhanceType.Point:
                 GameManager.Instance.queen.condition.AdjustEvolutionPoint(1f);
-                break;*/
+                break;
         }
 
         return result;
