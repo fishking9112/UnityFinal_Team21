@@ -23,12 +23,12 @@ public class MilitiaSummonSkill : QueenActiveSkillBase
 
             MonsterInfo monsterInfo = MonsterManager.Instance.monsterInfoList[info.monster_ID];
             var summonMonster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfo.outfit, spawnPos);
-            summonMonster.StatInit(monsterInfo, MonsterManager.Instance.isHealthUI);
+            summonMonster.StatInit(monsterInfo, MonsterManager.Instance.isHealthUI,info.summon_Time);
 
-            if (MonsterManager.Instance.monsters.TryGetValue(summonMonster.gameObject, out var monster))
-            {
-                _ = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level);
-            }
+            //if (MonsterManager.Instance.monsters.TryGetValue(summonMonster.gameObject, out var monster))
+            //{
+            //    _ = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level);
+            //}
         }
     }
 

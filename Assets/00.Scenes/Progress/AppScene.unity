@@ -1036,6 +1036,7 @@ GameObject:
   - component: {fileID: 379365628}
   - component: {fileID: 379365630}
   - component: {fileID: 379365629}
+  - component: {fileID: 379365631}
   m_Layer: 5
   m_Name: TitleText
   m_TagString: Untagged
@@ -1100,6 +1101,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 379365627}
   m_CullTransparentMesh: 1
+--- !u!114 &379365631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379365627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f55fcc3768689a4f9cf863b8c11c618, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_LocalizedAssetReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:9234d15555f103741aa78c1faa046d7d
+    m_TableEntryReference:
+      m_KeyId: 586485477376
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+  m_UpdateAsset:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 379365629}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
+        m_MethodName: set_sprite
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!1 &422169819
 GameObject:
   m_ObjectHideFlags: 0
@@ -2466,6 +2502,7 @@ MonoBehaviour:
   QueenCharaterID: 0
   queen: {fileID: 0}
   castle: {fileID: 0}
+  curCursorState: 0
   cameraController: {fileID: 0}
   gameResultController: {fileID: 0}
   gameLimitTime: 1800
