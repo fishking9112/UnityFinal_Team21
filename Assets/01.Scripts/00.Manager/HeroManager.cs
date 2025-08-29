@@ -79,7 +79,10 @@ public class HeroManager : MonoSingleton<HeroManager>
     private void SetNextHero()
     {
         var value = DataManager.Instance.heroStatusDic.Where(x => x.Value.heroType == HeroType.NORMAL).Select(x => x.Value)
-            .Where(x => x.startLevel == level).First();
+            .Where(x => x.startLevel == level).FirstOrDefault();
+
+        if (value == null)
+            return;
 
         statusInfo = value;
 
