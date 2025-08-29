@@ -29,7 +29,9 @@ public class MonsterDieState : MonsterBaseState
         DieProccess().Forget();
 
         // TODO : 죽을 때 크리스탈 반환?
-        RewardManager.Instance.SpawnReward("ExpReward", stateMachine.Controller.gameObject.transform.position, stateMachine.Controller.monsterInfo.reward);
+        MonsterController controller = stateMachine.Controller;
+        if (controller.isBySkill) return;
+        RewardManager.Instance.SpawnReward("ExpReward", controller.transform.position, controller.monsterInfo.reward);
         //RewardExp gainCristal = ObjectPoolManager.Instance.GetObject<RewardExp>("ExpReward", stateMachine.Controller.gameObject.transform.position);
     }
 
