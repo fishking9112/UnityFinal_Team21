@@ -85,7 +85,7 @@ public class MenuHUD : HUDUI
         startButton.onClick.AddListener(OnClickGameStart);
 
         // 여왕 선택 UI가 끝나면 다음 단계로 진행하도록 이벤트 연결
-        // QueenSelectUI 안에 "OnComplete" 같은 이벤트를 추가한다고 가정
+        // 다음 추가 단계가 있으면 queenSelectUI처럼 밑에 똑같이 추가
         queenSelectUI.gameObject.SetActive(false);
         queenSelectUI.OnComplete += ShowNextPanel;
 

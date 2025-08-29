@@ -33,6 +33,8 @@ public class QueenSelectUI : MonoBehaviour
     public QueenBasicSkillDescription[] ArrayQueenPassiveSkillDescription;
     public TextMeshProUGUI queenNameText;
 
+    public event Action OnComplete;
+
     private int selcetedQueenID;
 
     [Header("Localize용 텍스트")]
@@ -61,6 +63,7 @@ public class QueenSelectUI : MonoBehaviour
         {
             GameManager.Instance.QueenCharaterID = selcetedQueenID;
             gameObject.SetActive(false);
+            OnComplete?.Invoke();
         });
 
         CloseBtn.onClick.AddListener(() => gameObject.SetActive(false));
@@ -186,5 +189,4 @@ public class QueenSelectUI : MonoBehaviour
         float percentValue = skill.value * 100f;
         StringManager.Instance.SetString(skill.Description, ui.LocalizeSkillDescription, percentValue.ToString("0"));
     }
-
 }
