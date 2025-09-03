@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class QueenEnhanceUI : SingleUI
 {
@@ -127,6 +128,11 @@ public class QueenEnhanceUI : SingleUI
     /// </summary>
     private void CloseSkillSwapPopupUI()
     {
+        if (acquiredEnhanceLevels.ContainsKey(tmpQueenEnhanceInfo.ID))
+        {
+            acquiredEnhanceLevels.Remove(tmpQueenEnhanceInfo.ID);
+        }
+
         for (int i = 0; i < itemSlots.Length; i++)
         {
             itemSlots[i].ResetButton();
@@ -150,7 +156,7 @@ public class QueenEnhanceUI : SingleUI
 
         int level = acquiredEnhanceLevels[id];
 
-        Utils.Log($"{info.name} 강화 적용, 현재 레벨: {level}");
+        Utils.Log($"ID: {id} 강화 적용, 현재 레벨: {level}");
 
         float value = info.state_Base + (info.state_LevelUp * (level - 1));
 
@@ -405,7 +411,8 @@ public class QueenEnhanceUI : SingleUI
 
         if (acquiredEnhanceLevels.ContainsKey(tmp))
         {
-            acquiredEnhanceLevels[tmp]--;
+            acquiredEnhanceLevels.Remove(tmp);
+           // acquiredEnhanceLevels[tmp]--;
 
             return;
         }
