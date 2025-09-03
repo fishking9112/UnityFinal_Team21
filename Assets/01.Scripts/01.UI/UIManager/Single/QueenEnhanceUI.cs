@@ -412,7 +412,6 @@ public class QueenEnhanceUI : SingleUI
         if (acquiredEnhanceLevels.ContainsKey(tmp))
         {
             acquiredEnhanceLevels.Remove(tmp);
-           // acquiredEnhanceLevels[tmp]--;
 
             return;
         }
