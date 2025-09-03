@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class SacrificeSkill : QueenActiveSkillBase
@@ -8,14 +9,14 @@ public class SacrificeSkill : QueenActiveSkillBase
 
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.SACRIFICE];
     }
-    public override void UseSkill()
+    public override UniTask UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
         if (hits.Length == 0)
         {
-            return;
+            return UniTask.CompletedTask;
         }
 
         GameObject targetMonster = null;
@@ -39,17 +40,17 @@ public class SacrificeSkill : QueenActiveSkillBase
 
         if(targetMonster == null)
         {
-            return;
+            return UniTask.CompletedTask;
         }
 
         if(!MonsterManager.Instance.monsters.TryGetValue(targetMonster,out var monster) || monster == null)
         {
-            return;
+            return UniTask.CompletedTask;
         }
 
         if (monster.healthHandler.IsDie())
         {
-            return;
+            return UniTask.CompletedTask;
         }
 
 
@@ -61,6 +62,8 @@ public class SacrificeSkill : QueenActiveSkillBase
         monster.Die();
 
         condition.AdjustCurSummonGauge(info.value);
+
+        return UniTask.CompletedTask;
     }
 
     protected override bool RangeCheck()

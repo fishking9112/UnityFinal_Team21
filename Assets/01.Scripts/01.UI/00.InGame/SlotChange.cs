@@ -74,8 +74,8 @@ public class SlotChange : MonoBehaviour
             Vector3 queenActiveSkillPos = queenActiveSkillGroupTransform.anchoredPosition;
             Vector3 monsterPos = monsterGroupTransform.anchoredPosition;
 
-            Vector3[] queenActiveSkillPath = CreateArc(queenActiveSkillPos, monsterPos, controller.curSlot == QueenSlot.MONSTER ? arcHeight : -arcHeight);
-            Vector3[] monsterPath = CreateArc(monsterPos, queenActiveSkillPos, controller.curSlot == QueenSlot.MONSTER ? -arcHeight : arcHeight);
+            Vector3[] queenActiveSkillPath = CreateArc(queenActiveSkillPos, monsterPos, controller.curSlot == QueenSlot.Monster ? arcHeight : -arcHeight);
+            Vector3[] monsterPath = CreateArc(monsterPos, queenActiveSkillPos, controller.curSlot == QueenSlot.Monster ? -arcHeight : arcHeight);
 
             Sequence seq = DOTween.Sequence();
 
@@ -94,7 +94,7 @@ public class SlotChange : MonoBehaviour
     // 슬롯의 순서를 바꿈. 현재 선택된 슬롯이 아니면 반 투명해지면서 현재슬롯에 가려지도록 렌더링 순서 변경
     private void SetOrder()
     {
-        if (controller.curSlot == QueenSlot.MONSTER)
+        if (controller.curSlot == QueenSlot.Monster)
         {
             monsterGroupTransform.SetAsFirstSibling();
             panelTransform.SetAsFirstSibling();
@@ -122,7 +122,7 @@ public class SlotChange : MonoBehaviour
     private void CheangeEnd()
     {
         // 슬롯 변경전 이전 값 저장
-        if (controller.curSlot == QueenSlot.MONSTER)
+        if (controller.curSlot == QueenSlot.Monster)
         {
             saveMonster = controller.selectedMonsterId;
         }
@@ -132,10 +132,10 @@ public class SlotChange : MonoBehaviour
         }
 
         // 슬롯 변경
-        controller.curSlot = controller.curSlot == QueenSlot.MONSTER ? QueenSlot.QueenActiveSkill : QueenSlot.MONSTER;
+        controller.curSlot = controller.curSlot == QueenSlot.Monster ? QueenSlot.QueenActiveSkill : QueenSlot.Monster;
 
         // 이전 값 불러오기
-        if (controller.curSlot == QueenSlot.MONSTER)
+        if (controller.curSlot == QueenSlot.Monster)
         {
             controller.selectedMonsterId = saveMonster;
 

@@ -12,7 +12,7 @@ public class AttackDamageBuffSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.ATTACK_DAMAGE_UP];
     }
 
-    public override async void UseSkill()
+    public override async UniTask UseSkill()
     {
         // 마우스 위치를 기준으로 size만큼 충돌 검사
         Vector3 mousePos = controller.worldMousePos;

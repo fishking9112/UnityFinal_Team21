@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class HealRainSkill : QueenActiveSkillBase
@@ -9,7 +10,7 @@ public class HealRainSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.HEAL_RAIN];
     }
 
-    public override void UseSkill()
+    public override UniTask UseSkill()
     {
         foreach (var monster in MonsterManager.Instance.monsters)
         {
@@ -21,6 +22,8 @@ public class HealRainSkill : QueenActiveSkillBase
 
             ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", particlePos, particleScale, Quaternion.identity, monster.Value.transform);
         }
+
+        return UniTask.CompletedTask;
     }
 
     protected override bool RangeCheck()

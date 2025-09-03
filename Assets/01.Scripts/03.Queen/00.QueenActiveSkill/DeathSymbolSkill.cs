@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class DeathSybolSkill : QueenActiveSkillBase
@@ -9,7 +10,7 @@ public class DeathSybolSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.DEATH_SYMBOL];
     }
 
-    public override async void UseSkill()
+    public override async UniTask UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);

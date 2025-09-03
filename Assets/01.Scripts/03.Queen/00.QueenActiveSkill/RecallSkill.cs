@@ -11,7 +11,7 @@ public class RecallSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.RECALL];
     }
 
-    public override async void UseSkill()
+    public override async UniTask UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
