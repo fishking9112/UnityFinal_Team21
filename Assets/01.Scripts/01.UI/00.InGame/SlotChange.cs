@@ -21,16 +21,22 @@ public class SlotChange : MonoBehaviour
     private bool isChange = false;
 
     private QueenController controller;
-    private InputAction inputAction;
+    private InputAction tapAction;
+    private InputAction rightClickAction;
 
     private int saveMonster = -1;
     private QueenActiveSkillBase saveSkill = null;
 
-    public void Init(QueenController queenController, InputAction slotChangeAction)
+    public void Init(QueenController queenController, InputAction _tapAction,InputAction _rightClickAction)
     {
         controller = queenController;
-        inputAction = slotChangeAction;
-        inputAction.started += OnChangeSlots;
+
+        tapAction = _tapAction;
+        rightClickAction = _rightClickAction;
+
+        tapAction.started += OnChangeSlots;
+        rightClickAction.started += OnChangeSlots;
+
         InitOrder();
     }
 
@@ -180,9 +186,9 @@ public class SlotChange : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (inputAction != null)
+        if (tapAction != null)
         {
-            inputAction.started -= OnChangeSlots;
+            tapAction.started -= OnChangeSlots;
         }
     }
 }
