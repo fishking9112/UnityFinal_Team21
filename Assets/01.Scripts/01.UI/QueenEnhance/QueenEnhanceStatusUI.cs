@@ -204,7 +204,8 @@ public class QueenEnhanceStatusUI : MonoBehaviour
 
         if (info.type != QueenEnhanceType.AddSkill)
         {
-            popupUIAbilityLevel.text = "Lv. " + StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.AcquiredEnhanceLevels[enhanceID].ToString();
+            int curLevel = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().queenEnhanceUI.AcquiredEnhanceLevels[enhanceID];
+            popupUIAbilityLevel.text = curLevel >= info.maxLevel ? $"Lv. {curLevel} (Max)" : $"Lv. {curLevel}";
         }
         else
         {
