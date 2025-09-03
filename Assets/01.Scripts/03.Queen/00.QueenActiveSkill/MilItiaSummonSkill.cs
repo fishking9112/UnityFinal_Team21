@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class MilitiaSummonSkill : QueenActiveSkillBase
@@ -11,7 +12,7 @@ public class MilitiaSummonSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.SUMMON_MILITIA];
     }
 
-    public override void UseSkill()
+    public override UniTask UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
 
@@ -24,12 +25,9 @@ public class MilitiaSummonSkill : QueenActiveSkillBase
             MonsterInfo monsterInfo = MonsterManager.Instance.monsterInfoList[info.monster_ID];
             var summonMonster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfo.outfit, spawnPos);
             summonMonster.StatInit(monsterInfo, MonsterManager.Instance.isHealthUI,info.summon_Time);
-
-            //if (MonsterManager.Instance.monsters.TryGetValue(summonMonster.gameObject, out var monster))
-            //{
-            //    _ = BuffManager.Instance.ApplyBuff(monster, info.buff_ID, info.buff_Level);
-            //}
         }
+
+        return UniTask.CompletedTask;
     }
 
     protected override bool RangeCheck()

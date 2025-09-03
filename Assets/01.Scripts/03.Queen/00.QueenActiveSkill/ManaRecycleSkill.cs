@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class ManaRecycleSkill : QueenActiveSkillBase
@@ -9,7 +10,7 @@ public class ManaRecycleSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.MANA_RECYCLE];
     }
 
-    public override void UseSkill()
+    public override UniTask UseSkill()
     {
         Vector3 targetScale = GameManager.Instance.castle.transform.localScale;
         Vector3 particlePos = GameManager.Instance.castle.transform.position;
@@ -17,6 +18,8 @@ public class ManaRecycleSkill : QueenActiveSkillBase
 
         ParticleManager.Instance.SpawnParticle("ManaRecycle", particlePos, particleScale);
         condition.AdjustCurSummonGauge(info.value);
+
+        return UniTask.CompletedTask;
     }
 
     protected override bool RangeCheck()

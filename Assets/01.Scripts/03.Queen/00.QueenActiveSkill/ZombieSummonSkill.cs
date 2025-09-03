@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class ZombieSummonSkill : QueenActiveSkillBase
@@ -9,13 +10,15 @@ public class ZombieSummonSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.SUMMON_ZOMBIE];
     }
 
-    public override void UseSkill()
+    public override UniTask UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
         string randZombie = Random.Range(0, 2) == 1 ? "Zombie_0" : "Zombie_1";
 
         var zombie = ObjectPoolManager.Instance.GetObject<MonsterController>(randZombie, mousePos);
         zombie.StatInit(MonsterManager.Instance.monsterInfoList[(int)IDMonster.SKELETON_NORMAL], MonsterManager.Instance.isHealthUI,info.summon_Time);
+
+        return UniTask.CompletedTask;
     }
 
     protected override bool RangeCheck()

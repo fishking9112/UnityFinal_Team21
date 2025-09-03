@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using System;
 
 public class GravityBallSkill : QueenActiveSkillBase
 {
@@ -15,21 +16,40 @@ public class GravityBallSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.GRAVITYBALL];
     }
 
-    public override async void UseSkill()
+    public override async UniTask UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
 
         Vector3 scale = new Vector3(info.size / 4, info.size / 4, 1f);
         skillParticle = ParticleManager.Instance.SpawnParticle("GravityBall", mousePos, scale, Quaternion.identity);
-        Invoke("ParticleDespawn", info.value);
 
         float time = 0f;
 
-        while(time < info.value)
+        try
         {
-            PullHero(mousePos);
-            await UniTask.Delay((int)(pullTime * 1000), false, PlayerLoopTiming.Update, cancellationToken: this.GetCancellationTokenOnDestroy());
-            time += pullTime;
+            while (time < info.value)
+            {
+                PullHero(mousePos);
+                await UniTask.Delay(
+                    (int)(pullTime * 1000),
+                    false,
+                    PlayerLoopTiming.Update,
+                    cancellationToken: this.GetCancellationTokenOnDestroy()
+                );
+                time += pullTime;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // 중간에 취소 됨
+        }
+        finally
+        {
+            // 반드시 파티클 정리
+            if (skillParticle != null)
+            {
+                skillParticle.OnDespawn();
+            }
         }
     }
 
@@ -45,11 +65,6 @@ public class GravityBallSkill : QueenActiveSkillBase
                 hero.transform.position += dir * pullPower * pullTime;
             }
         }
-    }
-
-    private void ParticleDespawn()
-    {
-        skillParticle.OnDespawn();
     }
 
     protected override bool RangeCheck()

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class SkeletonLegionSkill : QueenActiveSkillBase
@@ -9,7 +10,7 @@ public class SkeletonLegionSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.SKELETON_LEGION];
     }
 
-    public override void UseSkill()
+    public override UniTask UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
 
@@ -22,6 +23,8 @@ public class SkeletonLegionSkill : QueenActiveSkillBase
             var summonMonster = ObjectPoolManager.Instance.GetObject<MonsterController>(monsterInfo.outfit, spawnPos);
             summonMonster.StatInit(monsterInfo, MonsterManager.Instance.isHealthUI,info.summon_Time);
         }
+
+        return UniTask.CompletedTask;
     }
 
     protected override bool RangeCheck()
