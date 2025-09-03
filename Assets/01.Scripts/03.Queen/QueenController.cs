@@ -196,7 +196,7 @@ public class QueenController : MonoBehaviour
 
             if (selectedQueenActiveSkill.info.size == -1)
             {
-                UseQueenActiveSkill();
+                UseQueenActiveSkill().Forget();
                 selectedQueenActiveSkill = null;
                 return;
             }
@@ -224,7 +224,7 @@ public class QueenController : MonoBehaviour
             case QueenSlot.QueenActiveSkill:
                 if (context.phase == InputActionPhase.Started)
                 {
-                    UseQueenActiveSkill();
+                    UseQueenActiveSkill().Forget();
                 }
                 break;
         }
@@ -305,7 +305,7 @@ public class QueenController : MonoBehaviour
     }
 
     // 퀸의 액티브 스킬 사용
-    private async void UseQueenActiveSkill()
+    private async UniTask UseQueenActiveSkill()
     {
         if (selectedQueenActiveSkill == null)
         {
