@@ -107,7 +107,7 @@ public class MonsterController : BaseController, IPoolable
     /// 최초 생성 시 한번만 실행(참조해서 수치 자동 수정)
     /// </summary>
     /// <param name="monsterInfo">참조 할 수치 데이터</param>
-    public void StatInit(MonsterInfo monsterInfo, bool isHealthUI, int bySkill=-1)
+    public void StatInit(MonsterInfo monsterInfo, bool isHealthUI, int bySkill = -1)
     {
         if (!StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas.ContainsKey(monsterInfo.id))
         {
@@ -126,7 +126,7 @@ public class MonsterController : BaseController, IPoolable
 
         base.StatInit(this.monsterInfo, isHealthUI);
 
-        isBySkill= bySkill==-1? false:true;
+        isBySkill = bySkill == -1 ? false : true;
 
         if (navMeshAgent == null)
             navMeshAgent = GetComponent<NavMeshAgent>();
@@ -197,13 +197,13 @@ public class MonsterController : BaseController, IPoolable
             }
         }
 
-        if(isBySkill)
+        if (isBySkill)
         {
             summonCts?.Cancel();
             summonCts?.Dispose();
 
             summonCts = new CancellationTokenSource();
-            SetDieBySummonMonster(bySkill,summonCts.Token).Forget();
+            SetDieBySummonMonster(bySkill, summonCts.Token).Forget();
         }
 
 
@@ -288,7 +288,16 @@ public class MonsterController : BaseController, IPoolable
         base.Die();
 
         MonsterManager.Instance.monsters.Remove(gameObject);
-        MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Remove(this);
+
+        // 딕셔너리에 키가 존재하는지 확인
+        if (MonsterManager.Instance.idByMonsters.ContainsKey(this.monsterInfo.id))
+        {
+            MonsterManager.Instance.idByMonsters[this.monsterInfo.id].Remove(this);
+        }
+        else // 없으면 종료
+        {
+            return;
+        }
 
         stateMachine.ChangeState(stateMachine.Die); // 사망
         // OnDespawn();
@@ -320,12 +329,12 @@ public class MonsterController : BaseController, IPoolable
         statHandler.moveSpeed.AddOrigin(amount);
     }
 
-    public async UniTask SetDieBySummonMonster(int delay,CancellationToken tk)
+    public async UniTask SetDieBySummonMonster(int delay, CancellationToken tk)
     {
         var destroyToken = this.GetCancellationTokenOnDestroy();
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(destroyToken, tk);
 
-        await UniTask.Delay(TimeSpan.FromSeconds(delay),cancellationToken : linked.Token);
+        await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: linked.Token);
         this?.Die();
     }
 }
