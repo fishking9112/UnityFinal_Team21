@@ -67,13 +67,11 @@ public class SelectInhanceItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
         int nextLevel = currentLevel + 1;
 
         iconImage.sprite = DataManager.Instance.iconAtlas.GetSprite(info.Icon);
-        // enhanceNameText.text = info.name;
 
         StringManager.Instance.SetString(info.name, enhanceNameLocalize);
 
         enhanceNextLevelText.text = info.type == QueenEnhanceType.AddSkill ? string.Empty : (nextLevel >= info.maxLevel ? $"Lv. {nextLevel}(Max)" : $"Lv. {nextLevel}");
 
-        // enhanceTypeText.text = GetEnhanceTypeText(info.type);
         StringManager.Instance.SetString(GetEnhanceTypeText(info.type), enhanceTypeLocalize);
 
         SetEnhanceDecText(info, currentLevel).Forget();
