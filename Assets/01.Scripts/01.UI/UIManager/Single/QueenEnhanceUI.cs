@@ -26,6 +26,11 @@ public class QueenEnhanceUI : SingleUI
     private const int increaseRerollCost = 500;
     private int useRerollCount = 0;
 
+    // 가중치 설정값
+    private float ownedEnhanceWeight = 5f;   // 이미 보유한 경우 가중치
+    private float defaultWeight = 1f;        // 보유하지 않은 경우 가중치
+
+
     private void Awake()
     {
         skillSwapPopupExitBtn.onClick.AddListener(CloseSkillSwapPopupUI);
@@ -286,7 +291,7 @@ public class QueenEnhanceUI : SingleUI
     }
 
     /// <summary>
-    /// 강화할 수 있는 옵션을 무작위로 3개 뽑는다.
+    /// 강화할 수 있는 옵션을 무작위로 3개 뽑는다. (가중치 적용)
     /// </summary>
     private List<QueenEnhanceInfo> GetRandomInhanceOptions()
     {
@@ -304,6 +309,7 @@ public class QueenEnhanceUI : SingleUI
             {
                 if (info.type == QueenEnhanceType.AddSkill)
                 {
+                    // 스킬은 가중치 제외 (기존처럼 처리)
                     addSkillList.Add(info);
                 }
                 else
@@ -315,21 +321,57 @@ public class QueenEnhanceUI : SingleUI
 
         List<QueenEnhanceInfo> result = new List<QueenEnhanceInfo>();
 
+        // 스킬 하나는 기존 로직대로 처리
         if (addSkillList.Count > 0)
         {
             int index = UnityEngine.Random.Range(0, addSkillList.Count);
             result.Add(addSkillList[index]);
-            otherList.RemoveAt(index);
+            addSkillList.RemoveAt(index);
         }
 
+        // 나머지 2개는 가중치 기반 뽑기
         while (result.Count < 3 && otherList.Count > 0)
         {
-            int index = UnityEngine.Random.Range(0, otherList.Count);
-            result.Add(otherList[index]);
-            otherList.RemoveAt(index);
+            QueenEnhanceInfo chosen = GetWeightedRandom(otherList);
+            result.Add(chosen);
+            otherList.Remove(chosen);
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// 가중치 기반 랜덤 뽑기
+    /// </summary>
+    private QueenEnhanceInfo GetWeightedRandom(List<QueenEnhanceInfo> list)
+    {
+        float totalWeight = 0f;
+        List<float> weights = new List<float>();
+
+        foreach (var info in list)
+        {
+            float weight = defaultWeight;
+
+            if (acquiredEnhanceLevels.ContainsKey(info.ID) && info.type != QueenEnhanceType.AddSkill)
+            {
+                weight = ownedEnhanceWeight;
+            }
+
+            weights.Add(weight);
+            totalWeight += weight;
+        }
+
+        float r = UnityEngine.Random.Range(0f, totalWeight);
+        float cumulative = 0f;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            cumulative += weights[i];
+            if (r <= cumulative)
+                return list[i];
+        }
+
+        return list[0];
     }
 
     /// <summary>
