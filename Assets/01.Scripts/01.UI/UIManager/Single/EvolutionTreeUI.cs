@@ -210,6 +210,29 @@ public class EvolutionTreeUI : SingleUI
         }
     }
 
+    public void TryRegisterToEmptySlot(EvolutionNode node)
+    {
+        // 방금 클릭한 몬스터가 이미 슬롯에 등록되어 있을 경우 무시
+        foreach (var slot in SlotList)
+        {
+            if (slot.slotMonsterInfoData == node.monsterInfo)
+            {
+                return;
+            }
+        }
+
+        // 빈 슬롯 찾기
+        foreach (var slot in SlotList)
+        {
+            if (slot.slotMonsterInfoData == null)
+            {
+                slot.SetSlot(node);
+                AddQueenSlot(node.monsterInfo, slot.slotIndex);
+                return;
+            }
+        }
+    }
+
     // 진화 트리 슬롯에 등록한 몬스터를 퀸 슬롯에도 등록
     public void AddQueenSlot(MonsterInfo monster, int index)
     {
