@@ -8,7 +8,7 @@ public class MonsterDescriptionTrigger : MonoBehaviour, IPointerEnterHandler, IP
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (GameManager.Instance.queen.controller.curSlot == QueenSlot.MONSTER)
+        if (GameManager.Instance.queen.controller.curSlot == QueenSlot.Monster)
         {
             if (monster != null)
             {

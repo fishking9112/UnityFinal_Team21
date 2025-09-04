@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,9 +13,14 @@ public class OptionController : MonoBehaviour
     [SerializeField] private Button saveButton;
     [SerializeField] private Button cancelButton;
     [SerializeField] private TMP_Dropdown languageDropdown;
+    [SerializeField] private TMP_Dropdown resolutionDropdown;
 
     private float tempBGMVolume;
     private float tempSFXVolume;
+    private float currentScreenRatio;
+
+    private List<Resolution> resolutions = new List<Resolution>();
+    private Resolution currentFullScreenResolution;
 
     /// <summary>
     /// 초기 슬라이더 값 설정 및 이벤트 연결
@@ -39,6 +45,12 @@ public class OptionController : MonoBehaviour
         // 언어 드롭다운 연결
         languageDropdown.onValueChanged.AddListener(OnLanguageChanged);
         languageDropdown.value = StringManager.Instance.SelectLang;
+
+        // 해상도 드롭다운 초기화
+        currentFullScreenResolution = Screen.currentResolution;
+        currentScreenRatio = (float)currentFullScreenResolution.width / currentFullScreenResolution.height;
+        resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
+        InitResolutionDropdown();
     }
 
     /// <summary>
@@ -91,5 +103,59 @@ public class OptionController : MonoBehaviour
     public void OnLanguageChanged(int index)
     {
         StringManager.Instance.ChangeLocale(index);
+    }
+
+    private void InitResolutionDropdown()
+    {
+        resolutions.Clear();
+
+        foreach (Resolution res in Screen.resolutions)
+        {
+            float ratio = (float)res.width / res.height;
+
+            // 현재 모니터 비율과 유사한 해상도만 추가 + 폭 1280이상 해상도만 지원 (너무 작아서 생기는 문제가 있을수도 있어서 미리 방지)
+            if (Mathf.Abs(ratio - currentScreenRatio) < 0.01f && res.width >= 1280)
+            {
+                resolutions.Add(res);
+            }
+        }
+
+        resolutionDropdown.ClearOptions();
+        List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
+        int currentIndex = 0;
+
+        for (int i = 0; i < resolutions.Count; i++)
+        {
+            Resolution res = resolutions[i];
+            TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData
+            {
+                text = $"{res.width} x {res.height}"
+            };
+            options.Add(option);
+
+            if (res.width == Screen.width && res.height == Screen.height)
+            {
+                currentIndex = i;
+            }
+        }
+
+        resolutionDropdown.AddOptions(options);
+        resolutionDropdown.value = currentIndex;
+        resolutionDropdown.RefreshShownValue();
+    }
+
+    private void OnResolutionChanged(int index)
+    {
+        if (index < 0 || index >= resolutions.Count)
+        {
+            return;
+        }
+
+        Resolution selectedRes = resolutions[index];
+
+        // 선택 해상도가 현재 디스플레이보다 크면 전체화면 유지
+        bool fullscreen = selectedRes.width >= currentFullScreenResolution.width && selectedRes.height >= currentFullScreenResolution.height;
+
+        Screen.SetResolution(selectedRes.width, selectedRes.height, fullscreen);
     }
 }

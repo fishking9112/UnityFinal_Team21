@@ -18,7 +18,7 @@ public class ObstacleSummonSkill : QueenActiveSkillBase
         castlePos = GameManager.Instance.castle.transform.position;
     }
 
-    public override void UseSkill()
+    public override async UniTask UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
         Vector3 dir = (mousePos - castlePos).normalized;
@@ -39,14 +39,15 @@ public class ObstacleSummonSkill : QueenActiveSkillBase
             GameObject obstacle = Instantiate(obstaclePrefab, mousePos + offset, rotation, obstacleGroup.transform);
         }
 
-        EndSKill(obstacleGroup, info.value).Forget();
-    }
-
-    private async UniTaskVoid EndSKill(GameObject obstacleGroup, float delay)
-    {
         try
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(delay), false, PlayerLoopTiming.Update, cancellationToken: obstacleGroup.GetCancellationTokenOnDestroy());
+            // 스킬 지속 시간 대기
+            await UniTask.Delay(
+                TimeSpan.FromSeconds(info.value),
+                false,
+                PlayerLoopTiming.Update,
+                cancellationToken: obstacleGroup.GetCancellationTokenOnDestroy()
+            );
 
             if (obstacleGroup != null)
             {
@@ -55,7 +56,7 @@ public class ObstacleSummonSkill : QueenActiveSkillBase
         }
         catch (OperationCanceledException)
         {
-            
+            // 스킬이 중간에 끊겼을 때 예외. 무시해도 됨
         }
     }
 

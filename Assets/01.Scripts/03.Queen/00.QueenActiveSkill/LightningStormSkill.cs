@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
+using System.Threading;
 using UnityEngine;
+using System;
 
 public class LightingStormSkill : QueenActiveSkillBase
 {
@@ -12,46 +14,54 @@ public class LightingStormSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.LIGHTNING_STORM];
     }
 
-    public override async void UseSkill()
+    public override async UniTask UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
         float tickCount = 10;
 
-        LightningStormEffect(mousePos, info.size, tickCount).Forget();
-
+        // 스킬 범위 파티클
         skillParticle = ParticleManager.Instance.SpawnParticle("LightningStorm_Range", mousePos, Vector3.one, Quaternion.identity);
-        Invoke("ParticleDespawn", 3f);
 
-        for (int i = 0; i < tickCount; i++)
+        try
         {
-            Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
+            // 라이트닝 효과 실행
+            await LightningStormEffect(mousePos, info.size, tickCount, this.GetCancellationTokenOnDestroy());
 
-            foreach (var hit in hits)
+            // 피해 처리
+            for (int i = 0; i < tickCount; i++)
             {
-                if (HeroManager.Instance.hero.TryGetValue(hit.gameObject, out var hero))
-                {
-                    hero.TakeDamaged(info.value);
-                }
-            }
+                Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
 
-            await UniTask.Delay(300, false, PlayerLoopTiming.Update);
+                foreach (var hit in hits)
+                {
+                    if (HeroManager.Instance.hero.TryGetValue(hit.gameObject, out var hero))
+                    {
+                        hero.TakeDamaged(info.value);
+                    }
+                }
+
+                await UniTask.Delay(300, false, PlayerLoopTiming.Update, cancellationToken: this.GetCancellationTokenOnDestroy());
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // 중간에 취소 됨.
+        }
+        finally
+        {
+            skillParticle?.OnDespawn();
         }
     }
 
-    private async UniTaskVoid LightningStormEffect(Vector3 pos, float size, float count)
+    private async UniTask LightningStormEffect(Vector3 pos, float size, float count, CancellationToken token)
     {
         for (int i = 0; i < count; i++)
         {
-            Vector3 randomPos = pos + (Vector3)Random.insideUnitCircle * size;
+            Vector3 randomPos = pos + (Vector3)UnityEngine.Random.insideUnitCircle * size;
             ParticleManager.Instance.SpawnParticle("LightningStorm", randomPos, Vector3.one, Quaternion.identity);
 
-            await UniTask.Delay(300, false, PlayerLoopTiming.Update);
+            await UniTask.Delay(300, false, PlayerLoopTiming.Update, cancellationToken: token);
         }
-    }
-
-    private void ParticleDespawn()
-    {
-        skillParticle.OnDespawn();
     }
 
     protected override bool RangeCheck()

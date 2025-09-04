@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class HealWaveSkill : QueenActiveSkillBase
@@ -9,7 +10,7 @@ public class HealWaveSkill : QueenActiveSkillBase
         info = DataManager.Instance.queenActiveSkillDic[(int)IDQueenActiveSkill.HEAL_WAVE];
     }
 
-    public override void UseSkill()
+    public override UniTask UseSkill()
     {
         Vector3 mousePos = controller.worldMousePos;
         Collider2D[] hits = Physics2D.OverlapCircleAll(mousePos, info.size, info.target);
@@ -27,6 +28,8 @@ public class HealWaveSkill : QueenActiveSkillBase
                 ParticleObject particle = ParticleManager.Instance.SpawnParticle("Heal", particlePos, particleScale, Quaternion.identity, monster.transform);
             }
         }
+
+        return UniTask.CompletedTask;
     }
 
     protected override bool RangeCheck()

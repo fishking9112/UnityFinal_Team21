@@ -87,9 +87,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SlotChange",
+                    "name": "SlotChange1",
                     "type": "Button",
                     "id": "17d85296-8826-45fd-aacf-1886a24ccfbb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SlotChange2",
+                    "type": "Button",
+                    "id": "e114bb7d-b256-4eba-a2af-e3162bdc0299",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -291,7 +300,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SlotChange",
+                    "action": "SlotChange1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -303,6 +312,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "CloseWindow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aae53c2c-2d9a-4c70-9153-4c16a21487a0",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SlotChange2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

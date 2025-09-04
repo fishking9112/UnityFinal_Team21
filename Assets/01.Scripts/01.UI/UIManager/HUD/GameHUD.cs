@@ -150,7 +150,7 @@ public class GameHUD : HUDUI
         // 여분 진화포인트 표기UI 연결
         condition.EvolutionPoint.AddAction(ShowRemainingEvolutionPoint);
 
-        slot.Init(GameManager.Instance.queen.controller, GameManager.Instance.queen.input.actions["SlotChange"]);
+        slot.Init(GameManager.Instance.queen.controller, GameManager.Instance.queen.input.actions["SlotChange1"], GameManager.Instance.queen.input.actions["SlotChange2"]);
 
         RemainingEvolutionPointGroup.SetActive(false);
         queenEnhanceUI.gameObject.SetActive(false);
@@ -331,7 +331,7 @@ public class GameHUD : HUDUI
             int index = i;
             monsterSlot.slotButtonList[i].onClick.AddListener(() =>
             {
-                GameManager.Instance.queen.controller.OnClickSlotButton(index, QueenSlot.MONSTER);
+                GameManager.Instance.queen.controller.OnClickSlotButton(index, QueenSlot.Monster);
             });
         }
 
