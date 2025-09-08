@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
-public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     [Header("UI")]
     public Image image;
@@ -79,12 +79,16 @@ public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
-
-
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (isUnlock)
-            evolutionTreeUI.EvolutionDragIcon.OnBeginDrag();
+        {
+            var dragIcon = evolutionTreeUI.EvolutionDragIcon;
+
+            dragIcon.node = this;
+            dragIcon.SlotNode = this.monsterInfo;
+            dragIcon.OnBeginDrag();
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -118,5 +122,14 @@ public class EvolutionNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (isUnlock)
             selectedUI.SetActive(false);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (isUnlock && eventData.button == PointerEventData.InputButton.Right)
+        {
+
+            evolutionTreeUI.TryRegisterToEmptySlot(this);
+        }
     }
 }

@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,8 @@ public class OptionController : MonoBehaviour
 
     private List<Resolution> resolutions = new List<Resolution>();
     private Resolution currentFullScreenResolution;
+    private Resolution lastResolution;
+    private bool lastFullScreen;
 
     /// <summary>
     /// 초기 슬라이더 값 설정 및 이벤트 연결
@@ -51,6 +54,11 @@ public class OptionController : MonoBehaviour
         currentScreenRatio = (float)currentFullScreenResolution.width / currentFullScreenResolution.height;
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
         InitResolutionDropdown();
+
+        lastResolution = new Resolution { width = Screen.width, height = Screen.height };
+        lastFullScreen = Screen.fullScreen;
+        WatchResolutionChangeAsync(this.GetCancellationTokenOnDestroy()).Forget();
+
     }
 
     /// <summary>
@@ -109,12 +117,24 @@ public class OptionController : MonoBehaviour
     {
         resolutions.Clear();
 
+        // 모니터에서 지원하는 최대 주사율 찾기
+        int maxRefreshRate = 0;
+        foreach (Resolution res in Screen.resolutions)
+        {
+            if (res.refreshRate > maxRefreshRate)
+            {
+                maxRefreshRate = res.refreshRate;
+            }
+        }
+
         foreach (Resolution res in Screen.resolutions)
         {
             float ratio = (float)res.width / res.height;
 
             // 현재 모니터 비율과 유사한 해상도만 추가 + 폭 1280이상 해상도만 지원 (너무 작아서 생기는 문제가 있을수도 있어서 미리 방지)
-            if (Mathf.Abs(ratio - currentScreenRatio) < 0.01f && res.width >= 1280)
+            if (Mathf.Abs(ratio - currentScreenRatio) < 0.01f &&
+                res.width >= 1280 &&
+                res.refreshRate == maxRefreshRate)
             {
                 resolutions.Add(res);
             }
@@ -157,5 +177,24 @@ public class OptionController : MonoBehaviour
         bool fullscreen = selectedRes.width >= currentFullScreenResolution.width && selectedRes.height >= currentFullScreenResolution.height;
 
         Screen.SetResolution(selectedRes.width, selectedRes.height, fullscreen);
+    }
+
+    private async UniTaskVoid WatchResolutionChangeAsync(CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            await UniTask.Delay(1000, cancellationToken: token);
+
+            if (Screen.width != lastResolution.width ||
+                Screen.height != lastResolution.height ||
+                Screen.fullScreen != lastFullScreen)
+            {
+                InitResolutionDropdown();
+
+                lastResolution.width = Screen.width;
+                lastResolution.height = Screen.height;
+                lastFullScreen = Screen.fullScreen;
+            }
+        }
     }
 }

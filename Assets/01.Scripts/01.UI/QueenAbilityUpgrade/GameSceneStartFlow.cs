@@ -43,15 +43,26 @@ public class GameSceneStartFlow : MonoBehaviour
         EvolutionTreeUI evolutionTreeUI = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().evolutionTreeUI;
         evolutionTreeUI.SetQueenController();
 
-        for (int i = 0; i < monsterInfoIds.Length; i++)
+        for (int i = 0; i < evolutionTreeUI.SlotList.Count; i++)
         {
-            int index = i;
-
-            if (DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoIds[i], out var info))
+            if (i < monsterInfoIds.Length)
             {
-                MonsterInfo monsterInfo = info;
-                evolutionTreeUI.SlotList[i].SetSlot(monsterInfo);
-                evolutionTreeUI.AddQueenSlot(monsterInfo, index);
+                if (DataManager.Instance.monsterDic.TryGetValue((int)monsterInfoIds[i], out var info))
+                {
+                    MonsterInfo monsterInfo = info;
+                    evolutionTreeUI.SlotList[i].SetSlot(monsterInfo);
+                    evolutionTreeUI.AddQueenSlot(monsterInfo, i);
+                }
+                else
+                {
+                    evolutionTreeUI.SlotList[i].ClearSlot();
+                    evolutionTreeUI.AddQueenSlot(null, i);
+                }
+            }
+            else
+            {
+                evolutionTreeUI.SlotList[i].ClearSlot();
+                evolutionTreeUI.AddQueenSlot(null, i);
             }
         }
     }

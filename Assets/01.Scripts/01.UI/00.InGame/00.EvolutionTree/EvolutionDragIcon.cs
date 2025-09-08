@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -7,6 +5,7 @@ using UnityEngine.EventSystems;
 public class EvolutionDragIcon : MonoBehaviour
 {
     public EvolutionNode node;
+    public MonsterInfo SlotNode;
     [SerializeField] private Image dragImage;
 
     private void Awake()
@@ -22,7 +21,14 @@ public class EvolutionDragIcon : MonoBehaviour
 
     public void OnBeginDrag()
     {
-        dragImage.sprite = node.image.sprite;
+        if (node != null) // 진화 트리에서 드래그
+        {
+            dragImage.sprite = node.image.sprite;
+        }
+        else if (SlotNode != null) // 슬롯에서 드래그
+        {
+            dragImage.sprite = DataManager.Instance.iconAtlas.GetSprite(SlotNode.icon);
+        }
         dragImage.enabled = true;
     }
 

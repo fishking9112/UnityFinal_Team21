@@ -20,6 +20,15 @@ public class MonsterSlot : BaseSlot<MonsterInfo>
             return;
         }
 
+        if (monster == null)
+        {
+            slotIconList[index].sprite = null;
+            slotIconList[index].enabled = false;
+            slotCostTextList[index].text = "";
+            monsterIdList[index] = 0;
+            return;
+        }
+
         slotIconList[index].sprite = DataManager.Instance.iconAtlas.GetSprite(monster.outfit);
         slotIconList[index].enabled = true;
         slotIconList[index].preserveAspect = true;

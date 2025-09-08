@@ -1,9 +1,8 @@
-using Google.GData.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler, IPointerClickHandler
+public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public EvolutionTree evolutionTree;
 
@@ -17,24 +16,6 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private void OnEnable()
     {
         SelectedUI.SetActive(false);
-    }
-
-    public void OnDrop(PointerEventData eventData)
-    {
-        var dragged = evolutionTree.EvolutionTreeUI.EvolutionDragIcon.GetComponent<EvolutionDragIcon>();
-        var evolutionTreeUI = evolutionTree.EvolutionTreeUI;
-
-        if (dragged != null)
-        {
-            EvolutionNode node = dragged.node;
-
-            if (node != null && node.isUnlock)
-            {
-                evolutionTreeUI.RemovePreSlotData(node);
-                SetSlot(node);
-                evolutionTreeUI.AddQueenSlot(node.monsterInfo, slotIndex);
-            }
-        }
     }
 
     // 슬롯에 정보를 넣어주는 함수
@@ -64,6 +45,7 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void ClearSlot()
     {
         slotMonsterInfoData = null;
+        slotIcon.sprite = null;
         slotIcon.enabled = false;
     }
 
@@ -85,9 +67,9 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button == PointerEventData.InputButton.Right)
         {
-            if(slotMonsterInfoData != null)
+            if (slotMonsterInfoData != null)
             {
                 if (slotMonsterInfoData != null)
                 {
@@ -95,6 +77,100 @@ public class EvolutionSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                     evolutionTree.EvolutionTreeUI.RemoveQueenSlot(slotIndex);
                 }
             }
+        }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (slotMonsterInfoData != null)
+        {
+            EvolutionDragIcon dragIcon = evolutionTree.EvolutionTreeUI.EvolutionDragIcon;
+            dragIcon.node = null;
+            dragIcon.SlotNode = this.slotMonsterInfoData;
+            dragIcon.OnBeginDrag();
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        EvolutionDragIcon dragIcon = evolutionTree.EvolutionTreeUI.EvolutionDragIcon;
+        dragIcon.OnDrag(eventData);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        EvolutionDragIcon dragIcon = evolutionTree.EvolutionTreeUI.EvolutionDragIcon;
+        dragIcon.SlotNode = null;
+        dragIcon.OnEndDrag();
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        EvolutionDragIcon dragIcon = evolutionTree.EvolutionTreeUI.EvolutionDragIcon;
+        MonsterInfo draggedMonster = dragIcon.SlotNode;
+
+        if (draggedMonster == null)
+        {
+            return;
+        }
+
+        // 드래그한 몬스터가 슬롯에 이미 있는지 확인
+        EvolutionSlot sourceSlot = null;
+        foreach (var slot in evolutionTree.EvolutionTreeUI.SlotList)
+        {
+            if (slot.slotMonsterInfoData == draggedMonster)
+            {
+                sourceSlot = slot;
+                break;
+            }
+        }
+
+        if (slotMonsterInfoData == null)
+        {
+            // 진화 노드에서 드래그한 경우 슬롯에 등록
+            slotMonsterInfoData = draggedMonster;
+            slotIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(slotMonsterInfoData.icon);
+            slotIcon.enabled = true;
+
+            if (sourceSlot != null)
+            {
+                sourceSlot.ClearSlot();
+                evolutionTree.EvolutionTreeUI.RemoveQueenSlot(sourceSlot.slotIndex);
+            }
+
+            evolutionTree.EvolutionTreeUI.AddQueenSlot(slotMonsterInfoData, slotIndex);
+
+            dragIcon.SlotNode = null;
+            dragIcon.OnEndDrag();
+            return;
+        }
+
+        // 이미 등록되어 있으면 스왑
+        if (sourceSlot != null)
+        {
+            MonsterInfo temp = slotMonsterInfoData;
+
+            slotMonsterInfoData = sourceSlot.slotMonsterInfoData;
+            slotIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(slotMonsterInfoData.icon);
+            slotIcon.enabled = true;
+
+            sourceSlot.slotMonsterInfoData = temp;
+            if (temp != null)
+            {
+                sourceSlot.slotIcon.sprite = DataManager.Instance.iconAtlas.GetSprite(temp.icon);
+                sourceSlot.slotIcon.enabled = true;
+            }
+            else
+            {
+                sourceSlot.ClearSlot();
+            }
+
+            // 퀸 슬롯에도 등록
+            evolutionTree.EvolutionTreeUI.AddQueenSlot(slotMonsterInfoData, slotIndex);
+            evolutionTree.EvolutionTreeUI.AddQueenSlot(sourceSlot.slotMonsterInfoData, sourceSlot.slotIndex);
+
+            dragIcon.SlotNode = null;
+            dragIcon.OnEndDrag();
         }
     }
 }
