@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static Unity.Burst.Intrinsics.X86.Avx;
+
 
 public class QueenEnhanceUI : SingleUI
 {
@@ -458,4 +458,44 @@ public class QueenEnhanceUI : SingleUI
             return;
         }
     }
+
+
+#if UNITY_EDITOR
+
+    // enhance 10,000번 테스트
+    [ContextMenu("Test Random 10000 Times")]
+    private void TestWeightedRandom()
+    {
+        List<QueenEnhanceInfo> otherList = new List<QueenEnhanceInfo>();
+        foreach (var pair in DataManager.Instance.queenEnhanceDic)
+        {
+            int id = pair.Key;
+            QueenEnhanceInfo info = pair.Value;
+
+            acquiredEnhanceLevels.TryGetValue(id, out int currentLevel);
+
+            if (currentLevel < info.maxLevel && info.type != QueenEnhanceType.AddSkill)
+            {
+                otherList.Add(info);
+            }
+        }
+
+        int trials = 10000;
+        Dictionary<int, int> count = new Dictionary<int, int>();
+
+        for (int t = 0; t < trials; t++)
+        {
+            var chosen = GetWeightedRandom(otherList);
+            if (!count.ContainsKey(chosen.ID)) count[chosen.ID] = 0;
+            count[chosen.ID]++;
+        }
+        
+        foreach (var kv in count)
+        {
+            float rate = (float)kv.Value / trials * 100f;
+            Utils.Log($"ID {kv.Key} -> {rate:F2}%");
+        }
+    }
+
+#endif
 }
