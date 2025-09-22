@@ -19,40 +19,11 @@ public class MonsterAttackState : MonsterBaseState
         float animationSpeed = Mathf.Clamp(stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed, 0.1f, float.MaxValue);
         spum.SetAttackSpeed(animationSpeed);
 
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = new CancellationTokenSource();
 
-        var attackType = stateMachine.Controller.monsterInfo.monsterAttackType;
-
-        switch (attackType)
-        {
-            case MonsterAttackType.MELEE:
-                spum.PlayAnimation(PlayerState.ATTACK, 0);
-                break;
-            case MonsterAttackType.RANGED:
-                spum.PlayAnimation(PlayerState.ATTACK, 2);
-                break;
-            case MonsterAttackType.MAGIC:
-                spum.PlayAnimation(PlayerState.ATTACK, 4);
-                break;
-            case MonsterAttackType.SHURIKEN:
-                spum.PlayAnimation(PlayerState.ATTACK, 0);
-                break;
-        }
-
-
-        // 원거리 공격은 projectile 생성
-        if (attackType == MonsterAttackType.RANGED || attackType == MonsterAttackType.MAGIC || attackType == MonsterAttackType.SHURIKEN)
-        {
-            RangedAttack();
-            return;
-        }
-
-        // 근거리 공격
-        if (attackType == MonsterAttackType.MELEE)
-        {
-            spum.PlayAnimation(PlayerState.ATTACK, 0);
-            MeleeAttack();
-            return;
-        }
+        stateMachine.Controller.AttackStrategy.Attack(stateMachine, cts);
     }
 
     public override void Exit()
@@ -117,98 +88,4 @@ public class MonsterAttackState : MonsterBaseState
             pivot.localScale = new Vector3(navMeshAgent.transform.position.x < target.position.x ? -1 : 1, pivot.localScale.y, pivot.localScale.z);
         }
     }
-
-    /// <summary>
-    /// 근거리 공격
-    /// </summary>
-    private void MeleeAttack()
-    {
-        cts?.Cancel();
-        cts?.Dispose();
-        cts = new CancellationTokenSource();
-
-        _ = MeleeAttackAsync(cts.Token);
-    }
-
-    private async UniTaskVoid MeleeAttackAsync(CancellationToken token)
-    {
-        try
-        {
-            float waitTime = 550f * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed));
-            await UniTask.Delay((int)waitTime, false, PlayerLoopTiming.Update, cancellationToken: token);
-
-            if (token.IsCancellationRequested || navMeshAgent == null || target == null || stateMachine.Controller == null)
-            {
-                return;
-            }
-
-            float minDist = float.MaxValue;
-            Vector2 origin = navMeshAgent.transform.position + ((target.transform.position - navMeshAgent.transform.position).normalized * stat.attackRange.Value / 2f);
-            Collider2D[] hits = Physics2D.OverlapCircleAll(origin, stat.attackRange.Value, stateMachine.Controller.attackLayer);
-            Utils.DrawOverlapCircle(origin, stat.attackRange.Value, Color.red, 0.1f);
-            Collider2D nearHit = null;
-
-            foreach (var hit in hits)
-            {
-                float dist = Vector2.Distance(origin, hit.transform.position);
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    nearHit = hit;
-                }
-            }
-
-            if (nearHit != null)
-            {
-                if (HeroManager.Instance.hero.ContainsKey(nearHit.gameObject))
-                {
-                    HeroManager.Instance.hero[nearHit.gameObject].TakeDamaged(stat.attack.Value);
-                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += stat.attack.Value;
-                }
-                else if (GameManager.Instance.miniBarracks.ContainsKey(nearHit.gameObject))
-                {
-                    GameManager.Instance.miniBarracks[nearHit.gameObject].TakeDamaged(stat.attack.Value);
-                    StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>().gameResultUI.resultDatas[stateMachine.Controller.monsterInfo.id].allDamage += stat.attack.Value;
-                }
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            // Do nothing - 정상 취소
-        }
-    }
-
-    /// <summary>
-    /// 원거리 공격
-    /// </summary>
-    private void RangedAttack()
-    {
-        cts?.Cancel();
-        cts?.Dispose();
-        cts = new CancellationTokenSource();
-
-        _ = RangedAttackAsync(cts.Token);
-    }
-
-    private async UniTaskVoid RangedAttackAsync(CancellationToken token)
-    {
-        try
-        {
-            float waitTime = 600f * (1f / (stat.attackSpeed.Value * stateMachine.Controller.attackAnimSpeed));
-            await UniTask.Delay((int)waitTime, false, PlayerLoopTiming.Update, cancellationToken: token);
-
-            if (token.IsCancellationRequested || navMeshAgent == null || target == null || stateMachine.Controller == null)
-            {
-                return;
-            }
-
-            var projectileObject = ObjectPoolManager.Instance.GetObject<MonsterProjectileObject>(stateMachine.Controller.monsterInfo.projectile, navMeshAgent.transform.position);
-            projectileObject.Set((target.position - navMeshAgent.transform.position).normalized, stateMachine.Controller);
-        }
-        catch (OperationCanceledException)
-        {
-            // 정상 취소
-        }
-    }
-
 }

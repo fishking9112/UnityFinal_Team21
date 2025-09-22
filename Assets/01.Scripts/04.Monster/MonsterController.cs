@@ -51,6 +51,7 @@ public class MonsterController : BaseController, IPoolable
     [NonSerialized] public MonsterInfo monsterInfo;
     [NonSerialized] public Transform pivot;
     [NonSerialized] public SPUM_Prefabs spum;
+    [NonSerialized] public IAttackStrategy AttackStrategy;
 
     [NonSerialized] public Transform target;
     [NonSerialized] public NavMeshAgent navMeshAgent;
@@ -156,6 +157,22 @@ public class MonsterController : BaseController, IPoolable
                 spum.PopulateAnimationLists();
             }
             spum.OverrideControllerInit();
+        }
+
+        switch (monsterInfo.monsterAttackType)
+        {
+            case MonsterAttackType.MELEE:
+                AttackStrategy = new MeleeAttackStrategy(0);
+                break;
+            case MonsterAttackType.RANGED:
+                AttackStrategy = new RangedAttackStrategy(2);
+                break;
+            case MonsterAttackType.MAGIC:
+                AttackStrategy = new RangedAttackStrategy(4);
+                break;
+            case MonsterAttackType.SHURIKEN:
+                AttackStrategy = new RangedAttackStrategy(0);
+                break;
         }
 
         // projectileObject의 XY값 가져오기
