@@ -147,19 +147,35 @@ public class MonsterTrackingState : MonsterBaseState
     public bool IsObstacleBetween(Vector2 from, Vector2 to)
     {
         Vector2 direction = to - from;
-        Vector2 center = (to + from) * 0.5f;
         float distance = direction.magnitude;
 
-        boxSize.x = distance;
-        boxSize.y = stateMachine.Controller.projectileSize.y * stateMachine.Controller.monsterInfo.projectile_size;
+        // 'from'에서 'to' 방향으로 'distance' 만큼 선을 쏘아 장애물 레이어와 충돌하는지 확인합니다.
+        RaycastHit2D hit = Physics2D.Raycast(
+            from,
+            direction,
+            distance,
+            stateMachine.Controller.obstacleLayer
+        );
 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        // 디버그용으로 선을 그립니다. 충돌 시 빨간색, 아닐 시 녹색으로 표시됩니다.
+        // Debug.DrawRay(from, direction.normalized * distance, hit.collider != null ? Color.red : Color.green, 0.1f);
 
-        Collider2D hit = Physics2D.OverlapBox(center, boxSize, angle, stateMachine.Controller.obstacleLayer);
-        Utils.DrawBoxCast(center, boxSize, angle, Color.red, 0.1f);
-        return hit != null;
+        // 충돌체가 없으면 false를 반환합니다.
+        if (hit.collider != null) return true;
+        else return false;
+
+        // float boxDistance = Mathf.Max(0f, distance - stateMachine.Controller.projectileSize.y * 2); // 정사각형 만큼 뒤로
+        // float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        // Vector2 center = (to + from) * 0.5f;
+
+        // boxSize.x = boxDistance;
+        // boxSize.y = stateMachine.Controller.projectileSize.y * stateMachine.Controller.monsterInfo.projectile_size;
+
+        // Collider2D hitBox = Physics2D.OverlapBox(center, boxSize, angle, stateMachine.Controller.obstacleLayer);
+
+        // Utils.DrawBoxCast(center, boxSize, angle, Color.red, 0.1f);
+        // return hitBox != null;
     }
-
     /// <summary>
     /// 지역에서 타겟 찾기
     /// </summary>

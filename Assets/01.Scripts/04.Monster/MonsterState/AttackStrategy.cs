@@ -103,9 +103,10 @@ public class RangedAttackStrategy : IAttackStrategy
             {
                 return;
             }
-
-            var projectileObject = ObjectPoolManager.Instance.GetObject<MonsterProjectileObject>(stateMachine.Controller.monsterInfo.projectile, stateMachine.Controller.navMeshAgent.transform.position);
-            projectileObject.Set((stateMachine.Controller.target.position - stateMachine.Controller.navMeshAgent.transform.position).normalized, stateMachine.Controller);
+            Vector2 direction = (stateMachine.Controller.target.position - stateMachine.Controller.navMeshAgent.transform.position).normalized;
+            Vector2 projectilePosition = (Vector2)stateMachine.Controller.navMeshAgent.transform.position + direction * stateMachine.Controller.projectileSize.x;
+            var projectileObject = ObjectPoolManager.Instance.GetObject<MonsterProjectileObject>(stateMachine.Controller.monsterInfo.projectile, projectilePosition);
+            projectileObject.Set(direction, stateMachine.Controller);
         }
         catch (OperationCanceledException)
         {
