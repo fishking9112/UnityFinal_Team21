@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 
 
@@ -13,6 +12,9 @@ public abstract class BaseController : MonoBehaviour
     [SerializeField] public StatHandler statHandler;
 
     public BuffController buffController;
+
+    [SerializeField] private GameObject timerUIObject;
+    public ReactiveProperty<float> deathTimer = new ReactiveProperty<float>();
 
     protected virtual void Start()
     {
@@ -83,5 +85,35 @@ public abstract class BaseController : MonoBehaviour
     {
         // Destroy(this.gameObject);
         buffController.ClearAllBuff();
+        HideTimerUI();
+    }
+
+    /// <summary>
+    /// 타이머 UI 활성화
+    /// </summary>
+    public void ShowTimerUI()
+    {
+        if (timerUIObject != null)
+        {
+            timerUIObject.SetActive(true);
+            deathTimer.Value = 1f;
+
+            var timerUI = timerUIObject.GetComponent<TimerUI>();
+            if (timerUI != null)
+            {
+                timerUI.Init(this);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 타이머 UI 비활성화
+    /// </summary>
+    public void HideTimerUI()
+    {
+        if (timerUIObject != null)
+        {
+            timerUIObject.SetActive(false);
+        }
     }
 }

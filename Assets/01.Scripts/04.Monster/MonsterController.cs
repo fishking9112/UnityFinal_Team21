@@ -351,7 +351,24 @@ public class MonsterController : BaseController, IPoolable
         var destroyToken = this.GetCancellationTokenOnDestroy();
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(destroyToken, tk);
 
-        await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: linked.Token);
-        this?.Die();
+        ShowTimerUI();
+        deathTimer.Value = 1f;
+
+        float elapsed = 0f;
+        while (elapsed < delay)
+        {
+            await UniTask.Yield(PlayerLoopTiming.Update, linked.Token);
+            elapsed += Time.deltaTime;
+
+            if (this != null)
+            {
+                deathTimer.Value = Mathf.Clamp01(1 - (elapsed / delay));
+            }
+        }
+
+        if (this != null)
+        {
+            Die();
+        }
     }
 }

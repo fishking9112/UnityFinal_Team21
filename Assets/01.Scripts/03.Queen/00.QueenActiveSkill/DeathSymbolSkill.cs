@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class DeathSybolSkill : QueenActiveSkillBase
+public class DeathSymbolSkill : QueenActiveSkillBase
 {
     public override void Init()
     {
