@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
 public class OptionController : MonoBehaviour
@@ -14,6 +16,7 @@ public class OptionController : MonoBehaviour
     [SerializeField] private Button saveButton;
     [SerializeField] private Button cancelButton;
     [SerializeField] private TMP_Dropdown languageDropdown;
+    [SerializeField] private TMP_Dropdown modeDropdown;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
 
     private float tempBGMVolume;
@@ -49,12 +52,26 @@ public class OptionController : MonoBehaviour
         languageDropdown.onValueChanged.AddListener(OnLanguageChanged);
         languageDropdown.value = StringManager.Instance.SelectLang;
 
-        // 해상도 드롭다운 초기화
+        // 모드 관련 초기화
+        modeDropdown.ClearOptions();
+        modeDropdown.AddOptions(new List<TMP_Dropdown.OptionData> {
+            new TMP_Dropdown.OptionData(),
+            new TMP_Dropdown.OptionData()
+        });
+        modeDropdown.value = Screen.fullScreen ? 0 : 1;
+        modeDropdown.onValueChanged.AddListener(OnModeChanged);
+        LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+        RefreshModeDropdown().Forget();
+
+        // 해상도 관련 초기화
         currentFullScreenResolution = Screen.currentResolution;
         currentScreenRatio = (float)currentFullScreenResolution.width / currentFullScreenResolution.height;
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
-        InitResolutionDropdown();
 
+        BuildResolutionOptions();
+        SyncResolutionDropdown();
+
+        // 변경 감시
         lastResolution = new Resolution { width = Screen.width, height = Screen.height };
         lastFullScreen = Screen.fullScreen;
         WatchResolutionChangeAsync(this.GetCancellationTokenOnDestroy()).Forget();
@@ -113,55 +130,64 @@ public class OptionController : MonoBehaviour
         StringManager.Instance.ChangeLocale(index);
     }
 
-    private void InitResolutionDropdown()
+    private void BuildResolutionOptions()
     {
         resolutions.Clear();
-
-        // 모니터에서 지원하는 최대 주사율 찾기
-        int maxRefreshRate = 0;
-        foreach (Resolution res in Screen.resolutions)
-        {
-            if (res.refreshRate > maxRefreshRate)
-            {
-                maxRefreshRate = res.refreshRate;
-            }
-        }
 
         foreach (Resolution res in Screen.resolutions)
         {
             float ratio = (float)res.width / res.height;
 
-            // 현재 모니터 비율과 유사한 해상도만 추가 + 폭 1280이상 해상도만 지원 (너무 작아서 생기는 문제가 있을수도 있어서 미리 방지)
-            if (Mathf.Abs(ratio - currentScreenRatio) < 0.01f &&
-                res.width >= 1280 &&
-                res.refreshRate == maxRefreshRate)
+            if (Mathf.Abs(ratio - currentScreenRatio) < 0.05f && res.width >= 1280)
             {
-                resolutions.Add(res);
+                if (!resolutions.Exists(r => r.width == res.width && r.height == res.height))
+                    resolutions.Add(res);
             }
         }
 
         resolutionDropdown.ClearOptions();
+
         List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
-        int currentIndex = 0;
 
         for (int i = 0; i < resolutions.Count; i++)
         {
-            Resolution res = resolutions[i];
-            TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData
-            {
-                text = $"{res.width} x {res.height}"
-            };
-            options.Add(option);
-
-            if (res.width == Screen.width && res.height == Screen.height)
-            {
-                currentIndex = i;
-            }
+            options.Add(new TMP_Dropdown.OptionData($"{resolutions[i].width} x {resolutions[i].height}"));
         }
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentIndex;
-        resolutionDropdown.RefreshShownValue();
+    }
+
+    private void UpdateCurrentFullScreenResolution()
+    {
+        currentFullScreenResolution = Screen.currentResolution;
+    }
+
+    private void OnModeChanged(int index)
+    {
+        UpdateCurrentFullScreenResolution();
+        int refreshRate = currentFullScreenResolution.refreshRate;
+
+        if (index == 0) // 전체화면
+        {
+            Resolution res = currentFullScreenResolution;
+            Screen.SetResolution(res.width, res.height, true, refreshRate);
+        }
+        else if (index == 1) // 창모드
+        {
+            resolutions.Sort((a, b) => a.width.CompareTo(b.width));
+            Resolution lowerRes = resolutions.FindLast(r => r.width < currentFullScreenResolution.width);
+
+            if (lowerRes.width > 0)
+            {
+                Screen.SetResolution(lowerRes.width, lowerRes.height, false, refreshRate);
+            }
+            else
+            {
+                Screen.SetResolution(currentFullScreenResolution.width, currentFullScreenResolution.height, false, refreshRate);
+            }
+        }
+
+        SyncResolutionDropdown();
     }
 
     private void OnResolutionChanged(int index)
@@ -172,29 +198,78 @@ public class OptionController : MonoBehaviour
         }
 
         Resolution selectedRes = resolutions[index];
+        UpdateCurrentFullScreenResolution();
+        int refreshRate = currentFullScreenResolution.refreshRate;
 
-        // 선택 해상도가 현재 디스플레이보다 크면 전체화면 유지
-        bool fullscreen = selectedRes.width >= currentFullScreenResolution.width && selectedRes.height >= currentFullScreenResolution.height;
+        // 모니터 기본보다 작으면 창모드
+        bool fullscreen = selectedRes.width >= currentFullScreenResolution.width &&
+                          selectedRes.height >= currentFullScreenResolution.height;
 
-        Screen.SetResolution(selectedRes.width, selectedRes.height, fullscreen);
+        // 모드 드롭다운 동기화
+        modeDropdown.onValueChanged.RemoveListener(OnModeChanged);
+        modeDropdown.value = fullscreen ? 0 : 1;
+        modeDropdown.RefreshShownValue();
+        modeDropdown.onValueChanged.AddListener(OnModeChanged);
+
+        Screen.SetResolution(selectedRes.width, selectedRes.height, fullscreen, refreshRate);
+
+        SyncResolutionDropdown();
+    }
+
+    private void SyncResolutionDropdown()
+    {
+        for (int i = 0; i < resolutions.Count; i++)
+        {
+            if (resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
+            {
+                resolutionDropdown.onValueChanged.RemoveListener(OnResolutionChanged);
+                resolutionDropdown.value = i;
+                resolutionDropdown.RefreshShownValue();
+                resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
+                return;
+            }
+        }
     }
 
     private async UniTaskVoid WatchResolutionChangeAsync(CancellationToken token)
     {
         while (!token.IsCancellationRequested)
         {
-            await UniTask.Delay(1000, cancellationToken: token);
+            await UniTask.Delay(100, cancellationToken: token);
 
             if (Screen.width != lastResolution.width ||
                 Screen.height != lastResolution.height ||
                 Screen.fullScreen != lastFullScreen)
             {
-                InitResolutionDropdown();
+                UpdateCurrentFullScreenResolution();
+                SyncResolutionDropdown();
 
                 lastResolution.width = Screen.width;
                 lastResolution.height = Screen.height;
                 lastFullScreen = Screen.fullScreen;
             }
         }
+    }
+
+    // 언어 변경 이벤트 발생 시 호출
+    private void OnLocaleChanged(Locale locale)
+    {
+        RefreshModeDropdown().Forget();
+    }
+
+    // 모드 드롭다운 텍스트 갱신
+    private async UniTaskVoid RefreshModeDropdown()
+    {
+        string fullscreen = await StringManager.Instance.GetString("9902402");
+        string windowed = await StringManager.Instance.GetString("9902403");
+
+        modeDropdown.options[0].text = fullscreen;
+        modeDropdown.options[1].text = windowed;
+        modeDropdown.RefreshShownValue();
+    }
+
+    private void OnDestroy()
+    {
+        LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
     }
 }
