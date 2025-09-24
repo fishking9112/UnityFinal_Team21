@@ -38,6 +38,8 @@ public class RewardBat : MonoBehaviour, IPoolable
     }
     #endregion
 
+    [SerializeField] SpriteRenderer expRewardSpriteRenderer;
+
     private QueenCondition queenCondition;
     private CancellationTokenSource token;
 
@@ -229,6 +231,19 @@ public class RewardBat : MonoBehaviour, IPoolable
             else if (curTarget.type == RewardType.EXP)
             {
                 expRewardImage.SetActive(true);
+
+                if (curTarget.rewardAmount >= (int)ExpType.RED)
+                {
+                    expRewardSpriteRenderer.sprite = DataManager.Instance.iconAtlas.GetSprite("gameicon_tilemap-Sheet_1326");
+                }
+                else if (curTarget.rewardAmount >= (int)ExpType.GREEN)
+                {
+                    expRewardSpriteRenderer.sprite = DataManager.Instance.iconAtlas.GetSprite("gameicon_tilemap-Sheet_1277");
+                }
+                else
+                {
+                    expRewardSpriteRenderer.sprite = DataManager.Instance.iconAtlas.GetSprite("gameicon_tilemap-Sheet_1228");
+                }
             }
 
             rewardType = curTarget.type;
