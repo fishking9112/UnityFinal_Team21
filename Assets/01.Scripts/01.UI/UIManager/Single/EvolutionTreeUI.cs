@@ -4,7 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
-using static System.Net.Mime.MediaTypeNames;
 
 [Serializable]
 public class Page
@@ -63,6 +62,9 @@ public class EvolutionTreeUI : SingleUI
     public EvolutionDragIcon EvolutionDragIcon => evolutionDragIcon;
     public Transform tfEvolutionDragIcon => evolutionDragIcon.transform;
 
+    [Header("SwapPopup")]
+    [SerializeField] private MonsterSwapPopup monsterSwapPopup;
+
     private int curIndex;
     private EvolutionTree currentTreePage;
     private QueenController queenController;
@@ -78,6 +80,7 @@ public class EvolutionTreeUI : SingleUI
     private void Start()
     {
         SetButtonCallbacks();
+        monsterSwapPopup?.Init(this);
     }
 
     private void SetButtonCallbacks()
@@ -150,7 +153,13 @@ public class EvolutionTreeUI : SingleUI
             UIManager.Instance.ShowPopup("9900048", "9902313", () => { Utils.Log("확인."); });
             return;
         }
+
         currentTreePage?.OnClickEvolutionButton();
+
+        if (currentTreePage?.selectedNode != null && currentTreePage.selectedNode.isUnlock)
+        {
+            monsterSwapPopup.OpenPopup(currentTreePage.selectedNode.monsterInfo);
+        }
     }
 
     public void SetEvolutionButtonState(bool state)

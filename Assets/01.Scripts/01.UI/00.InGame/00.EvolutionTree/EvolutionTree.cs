@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 public class EvolutionTree : MonoBehaviour
@@ -53,23 +52,11 @@ public class EvolutionTree : MonoBehaviour
 
         if (queenCondition.EvolutionPoint.Value <= 0)
         {
-            // 진화 포인트가 부족하다는 팝업창 있으면 좋을 것 같음 <= 부족시 진화 버튼 텍스트 변경
             return;
         }
 
         selectedNode.isUnlock = true;
         queenCondition.AdjustEvolutionPoint(-1f);
-
-        // 한쪽 노드를 진화시키면 다른 쪽 노드 잠금
-        //int parentNodeId = selectedNode.monsterInfo.preNode;
-
-        //foreach (EvolutionNode node in evolutionNodeList)
-        //{
-        //    if (node.monsterInfo.preNode == parentNodeId && node != selectedNode)
-        //    {
-        //        node.nodeLock = true;
-        //    }
-        //}
 
         UpdateAllNode();
         evolutionTreeUI.UpdateDescriptionWindow(selectedNode);
