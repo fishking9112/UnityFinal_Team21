@@ -10,6 +10,7 @@ public enum LoadSceneEnum
     MenuScene,
     GameScene,
     TestScene,
+    CreditsScene,
 }
 
 public class SceneLoadManager : MonoSingleton<SceneLoadManager>
@@ -121,6 +122,10 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 GameManager.Instance.TestStart(); // 테스트 스타트
                 //TrophyManager.Instance.StartQueenId(GameManager.Instance.QueenCharaterID);
 
+                break;
+            case LoadSceneEnum.CreditsScene:
+                await LoadSceneAsync("CreditsScene");
+                await StaticUIManager.Instance.LoadUI(LoadSceneEnum.CreditsScene);
                 break;
 
             default:

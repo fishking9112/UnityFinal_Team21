@@ -18,6 +18,7 @@ public class OptionController : MonoBehaviour
     [SerializeField] private TMP_Dropdown languageDropdown;
     [SerializeField] private TMP_Dropdown modeDropdown;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
+    [SerializeField] private Button showCredits;
 
     private float tempBGMVolume;
     private float tempSFXVolume;
@@ -76,6 +77,7 @@ public class OptionController : MonoBehaviour
         lastFullScreen = Screen.fullScreen;
         WatchResolutionChangeAsync(this.GetCancellationTokenOnDestroy()).Forget();
 
+        showCredits.onClick.AddListener(() => SceneLoadManager.Instance.LoadScene(LoadSceneEnum.CreditsScene).Forget());
     }
 
     /// <summary>
