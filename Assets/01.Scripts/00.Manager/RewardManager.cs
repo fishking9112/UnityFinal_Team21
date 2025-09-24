@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+public enum ExpType
+{
+    BLUE = 0,
+    GREEN = 5,
+    RED = 10
+}
 public class RewardManager : MonoSingleton<RewardManager>
 {
     public Dictionary<GameObject, RewardBase> rewards = new Dictionary<GameObject, RewardBase>();
@@ -26,7 +31,21 @@ public class RewardManager : MonoSingleton<RewardManager>
     public void SpawnReward(string key, Vector3 position, float amount)
     {
         RewardBase reward = ObjectPoolManager.Instance.GetObject<RewardBase>(key, position);
+
         reward.rewardAmount = amount;
+
+        if (reward == null)
+            return;
+
+        if(reward.type == RewardType.EXP)
+        {
+            if (amount >= (int)ExpType.RED)
+                reward.SetRewardSprite("gameicon_tilemap-Sheet_1326"); 
+            else if (amount >= (int)ExpType.GREEN)
+                reward.SetRewardSprite("gameicon_tilemap-Sheet_1277");
+            else if (amount >= (int)ExpType.BLUE)
+                reward.SetRewardSprite("gameicon_tilemap-Sheet_1228");
+        }
     }
 
     public RewardBat SpawnRewardBat(float moveSpeed)

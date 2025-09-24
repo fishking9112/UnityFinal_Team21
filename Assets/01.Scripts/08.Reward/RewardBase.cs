@@ -46,9 +46,12 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
     public bool isBatTarget;
     public RewardType type;
 
+    public SpriteRenderer spriteRenderer;
+
     private void Start()
     {
         condition = GameManager.Instance.queen.condition;
+        //spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -98,5 +101,10 @@ public abstract class RewardBase : MonoBehaviour, IPoolable
                 OnDespawn();
             }
         }
+    }
+
+    public void SetRewardSprite(string spriteName)
+    {
+        spriteRenderer.sprite = DataManager.Instance.iconAtlas.GetSprite(spriteName);
     }
 }
