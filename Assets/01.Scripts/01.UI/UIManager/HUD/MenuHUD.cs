@@ -31,6 +31,7 @@ public class MenuHUD : HUDUI
     private GameObject activePanel;
     public GameObject redDot_Notification;
     public QueenSelectUI queenSelectUI;
+    public SelectGameLevelUI selectGameLevelUI;
 
     // 단계별 UI 큐
     private Queue<GameObject> startFlowQueue = new Queue<GameObject>();
@@ -88,6 +89,8 @@ public class MenuHUD : HUDUI
         // 다음 추가 단계가 있으면 queenSelectUI처럼 밑에 똑같이 추가
         queenSelectUI.gameObject.SetActive(false);
         queenSelectUI.OnComplete += ShowNextPanel;
+        selectGameLevelUI.gameObject.SetActive(false);
+        selectGameLevelUI.OnComplete += ShowNextPanel;
 
 #if UNITY_EDITOR
         testBtn.gameObject.SetActive(true);
@@ -163,6 +166,7 @@ public class MenuHUD : HUDUI
         startFlowQueue.Enqueue(queenSelectUI.gameObject);
         // TODO: 필요하면 다른 설정창도 Enqueue
         // startFlowQueue.Enqueue(otherSettingUI);
+        startFlowQueue.Enqueue(selectGameLevelUI.gameObject);
 
         ShowNextPanel();
     }

@@ -23,6 +23,7 @@ public class GameManager : MonoSingleton<GameManager>
     public CursorState curCursorState;
     public CameraController cameraController;
     public GameResultController gameResultController;
+    public GameLevel SelectedLevel;
 
     // 게임 시작 시 시간에 관한 변수들
     public float gameLimitTime = 1800f;

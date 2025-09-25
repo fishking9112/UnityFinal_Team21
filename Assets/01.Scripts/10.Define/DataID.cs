@@ -309,4 +309,12 @@ public class GameLog
         Minite_29,
         Minite_30,
     }
+
+    public enum GameLevel
+    {
+        Easy,
+        Normal,
+        Hard,
+        Endless
+    }
 }
