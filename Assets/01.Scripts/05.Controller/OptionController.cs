@@ -262,11 +262,11 @@ public class OptionController : MonoBehaviour
     // 모드 드롭다운 텍스트 갱신
     private async UniTaskVoid RefreshModeDropdown()
     {
-        string fullscreen = await StringManager.Instance.GetString("9902402");
-        string windowed = await StringManager.Instance.GetString("9902403");
+        string fullscreen = await StringManager.Instance.GetString("9900067");
+        string window = await StringManager.Instance.GetString("9900068");
 
         modeDropdown.options[0].text = fullscreen;
-        modeDropdown.options[1].text = windowed;
+        modeDropdown.options[1].text = window;
         modeDropdown.RefreshShownValue();
     }
 
