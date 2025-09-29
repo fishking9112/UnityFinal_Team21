@@ -36,6 +36,8 @@ public class MonsterManager : MonoSingleton<MonsterManager>
 
         gameHUD = StaticUIManager.Instance.hudLayer.GetHUD<GameHUD>();
         queenCondition = GameManager.Instance.queen.condition;
+
+        QueenPassiveSkillManager.Instance.ApplyMonsterPassives();
     }
 
 
