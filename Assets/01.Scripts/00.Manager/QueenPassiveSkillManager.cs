@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 public class QueenPassiveSkillManager : MonoSingleton<QueenPassiveSkillManager>
 {
     public Dictionary<int, QueenPassiveSkillInfo> queenPassiveSkillDic;
+    private List<int> _monsterPassiveSkillIDs = new List<int>();
 
     private async void Start()
     {
@@ -19,6 +20,17 @@ public class QueenPassiveSkillManager : MonoSingleton<QueenPassiveSkillManager>
     }
     public void AddSkill(int id)
     {
+        switch (id)
+        {
+            case (int)IDQueenPassiveSkill.SKELETON_ATTACK_UP:
+            case (int)IDQueenPassiveSkill.ORC_HEALTH_UP:
+                if (!_monsterPassiveSkillIDs.Contains(id))
+                {
+                    _monsterPassiveSkillIDs.Add(id);
+                }
+                return; // 몬스터 관련 패시브는 바로 적용하지 않음
+        }
+
         float value = queenPassiveSkillDic[id].value;
         float amount = 0;
 
@@ -44,26 +56,39 @@ public class QueenPassiveSkillManager : MonoSingleton<QueenPassiveSkillManager>
                 amount = DataManager.Instance.queenStatusDic[GameManager.Instance.QueenCharaterID].summon_Recorvery * value;
                 GameManager.Instance.queen.condition.AdjustSummonGaugeRecoverySpeed(amount);
                 break;
-            case (int)IDQueenPassiveSkill.SKELETON_ATTACK_UP:
-                foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
-                {
-                    if (monster.monsterBrood == MonsterBrood.Skeleton)
+        }
+    }
+
+    public void ApplyMonsterPassives()
+    {
+        foreach (int id in _monsterPassiveSkillIDs)
+        {
+            float value = queenPassiveSkillDic[id].value;
+            float amount = 0;
+
+            switch (id)
+            {
+                case (int)IDQueenPassiveSkill.SKELETON_ATTACK_UP:
+                    foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
                     {
-                        amount = DataManager.Instance.monsterDic[monster.id].attack * value;
-                        monster.attack += amount;
+                        if (monster.monsterBrood == MonsterBrood.Skeleton)
+                        {
+                            amount = DataManager.Instance.monsterDic[monster.id].attack * value;
+                            monster.attack += amount;
+                        }
                     }
-                }
-                break;
-            case (int)IDQueenPassiveSkill.ORC_HEALTH_UP:
-                foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
-                {
-                    if (monster.monsterBrood == MonsterBrood.Orc)
+                    break;
+                case (int)IDQueenPassiveSkill.ORC_HEALTH_UP:
+                    foreach (var monster in MonsterManager.Instance.monsterInfoList.Values)
                     {
-                        amount = DataManager.Instance.monsterDic[monster.id].health * value;
-                        monster.health += amount;
+                        if (monster.monsterBrood == MonsterBrood.Orc)
+                        {
+                            amount = DataManager.Instance.monsterDic[monster.id].health * value;
+                            monster.health += amount;
+                        }
                     }
-                }
-                break;
+                    break;
+            }
         }
     }
 }
