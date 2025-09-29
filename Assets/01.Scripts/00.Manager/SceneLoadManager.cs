@@ -19,6 +19,8 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
     public TitleProgressText titleProgressText;
     private LoadingUI loadingUI => StaticUIManager.Instance.loadingUI;
     private bool isSceneLoading = false;
+    public GameSceneStartFlow gameSceneStartFlow;
+
     void Start()
     {
         LoadScene(LoadSceneEnum.AppScene).Forget();
@@ -69,6 +71,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 break;
             case LoadSceneEnum.MenuScene: // 메뉴 씬 일 경우
                 await loadingUI.Show(); // 로딩창 나타내기 (기본 값 0.5초)
+                if (gameSceneStartFlow != null && gameSceneStartFlow.ShouldRestoreDifficulty) { gameSceneStartFlow.ResetDifficulty(); }
                 await LoadSceneAsync("MenuScene"); // 메뉴 씬으로 이동
                 await StaticUIManager.Instance.LoadUI(LoadSceneEnum.MenuScene);
                 LogManager.Instance.LogEvent(GameLog.Contents.Funnel, (int)GameLog.FunnelType.Lobby);
@@ -80,7 +83,7 @@ public class SceneLoadManager : MonoSingleton<SceneLoadManager>
                 await loadingUI.Hide(); // 로딩창 사라지기 (기본 값 0.5초)
 
 
-
+                GameManager.Instance.SelectedLevel = GameLevel.None;
                 // 업적 UI 빨간점 갱신
                 TrophyManager.Instance.UpdateTrophyRedDotUI();
                 Time.timeScale = 1;

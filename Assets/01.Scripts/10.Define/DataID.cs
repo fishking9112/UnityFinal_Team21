@@ -312,6 +312,7 @@ public class GameLog
 
     public enum GameLevel
     {
+        None,
         Easy,
         Normal,
         Hard,
