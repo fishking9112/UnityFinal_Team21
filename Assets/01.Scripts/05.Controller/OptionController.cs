@@ -22,7 +22,6 @@ public class OptionController : MonoBehaviour
 
     private float tempBGMVolume;
     private float tempSFXVolume;
-    private float currentScreenRatio;
 
     private List<Resolution> resolutions = new List<Resolution>();
     private Resolution currentFullScreenResolution;
@@ -66,7 +65,6 @@ public class OptionController : MonoBehaviour
 
         // 해상도 관련 초기화
         currentFullScreenResolution = Screen.currentResolution;
-        currentScreenRatio = (float)currentFullScreenResolution.width / currentFullScreenResolution.height;
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
 
         BuildResolutionOptions();
@@ -138,22 +136,24 @@ public class OptionController : MonoBehaviour
 
         foreach (Resolution res in Screen.resolutions)
         {
-            float ratio = (float)res.width / res.height;
-
-            if (Mathf.Abs(ratio - currentScreenRatio) < 0.05f && res.width >= 1280)
+            if (res.width >= 1280)
             {
                 if (!resolutions.Exists(r => r.width == res.width && r.height == res.height))
+                {
                     resolutions.Add(res);
+                }
             }
         }
 
-        resolutionDropdown.ClearOptions();
+        resolutions.Sort((a, b) => a.width.CompareTo(b.width));
 
+        resolutionDropdown.ClearOptions();
         List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
 
-        for (int i = 0; i < resolutions.Count; i++)
+        foreach (var res in resolutions)
         {
-            options.Add(new TMP_Dropdown.OptionData($"{resolutions[i].width} x {resolutions[i].height}"));
+            string aspectRatio = GetRatioString(res.width, res.height);
+            options.Add(new TMP_Dropdown.OptionData($"{res.width} x {res.height} ({aspectRatio})"));
         }
 
         resolutionDropdown.AddOptions(options);
@@ -268,6 +268,46 @@ public class OptionController : MonoBehaviour
         modeDropdown.options[0].text = fullscreen;
         modeDropdown.options[1].text = window;
         modeDropdown.RefreshShownValue();
+    }
+
+
+    // 가로세로 비율 문자열 반환
+    private string GetRatioString(int width, int height)
+    {
+        float ratio = (float)width / height;
+
+        // 어느정도 오차 허용을 통해 대표적인 비율로 매칭
+        if (Mathf.Abs(ratio - 16f / 9f) < 0.01f)
+        {
+            return "16:9";
+        }
+        if (Mathf.Abs(ratio - 4f / 3f) < 0.01f)
+        {
+            return "4:3";
+        }
+        if (Mathf.Abs(ratio - 21f / 9f) < 0.01f)
+        {
+            return "21:9";
+        }
+        if (Mathf.Abs(ratio - 16f / 10f) < 0.01f)
+        {
+            return "16:10";
+        }
+
+        int gcd = GCD(width, height);
+        return $"{width / gcd}:{height / gcd}";
+    }
+
+    // 비율 계산을 위한 최대공약수
+    private int GCD(int a, int b)
+    {
+        while (b != 0)
+        {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
     }
 
     private void OnDestroy()
