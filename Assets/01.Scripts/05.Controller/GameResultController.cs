@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GameLog;
 
 public class GameResultController : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class GameResultController : MonoBehaviour
     public void GameClear()
     {
         gameEnd = true;
-        if (GameManager.Instance.queen.condition.KillCnt.Value > UGSManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
+        if (GameManager.Instance.SelectedLevel == GameLevel.Endless && GameManager.Instance.queen.condition.KillCnt.Value > UGSManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
 
         StartCoroutine(GameClearProcess());
     }
@@ -49,7 +50,7 @@ public class GameResultController : MonoBehaviour
     public void GameOver(bool isAttackDie)
     {
         gameEnd = true;
-        if (GameManager.Instance.queen.condition.KillCnt.Value > UGSManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
+        if (GameManager.Instance.SelectedLevel == GameLevel.Endless && GameManager.Instance.queen.condition.KillCnt.Value > UGSManager.Instance.Leaderboard.myRankerInfo.Score) { UpdateLeaderBoard().Forget(); }
 
         StartCoroutine(GameOverProcess(isAttackDie));
     }

@@ -22,7 +22,8 @@ public class SelectGameLevelUI : MonoBehaviour
     [SerializeField] private LocalizeStringEvent selectedTextUI;
 
     [Header("설명 표시용 텍스트")]
-    [SerializeField] private TextMeshProUGUI descriptionText;
+    [SerializeField] private TextMeshProUGUI descriptionTMPText;
+    [SerializeField] private LocalizeStringEvent descriptionText;
 
     private void Awake()
     {
@@ -34,7 +35,7 @@ public class SelectGameLevelUI : MonoBehaviour
 
     private void OnEnable()
     {
-        descriptionText.text = "-";
+        descriptionTMPText.text = "-";
         selectedUIGroup.gameObject.SetActive(false);
 
         if(GameManager.Instance.SelectedLevel != GameLevel.None)
@@ -63,33 +64,25 @@ public class SelectGameLevelUI : MonoBehaviour
             case GameLevel.Easy:
                 selectedUIGroup.SetParent(easyButton.transform.parent);
                 StringManager.Instance.SetString("9900069", selectedTextUI);
-                descriptionText.text =
-                    "<size=25><color=#FF9600>쉬움</color></size>\n" +
-                    "<size=20>용사 체력 <color=#FFFF00>-30%</color>, 몬스터 체력 <color=#FFFF00>+30%</color>";
+                StringManager.Instance.SetString("9900074", descriptionText, "-30", "+30");
                 break;
 
             case GameLevel.Normal:
                 selectedUIGroup.SetParent(normalButton.transform.parent);
                 StringManager.Instance.SetString("9900070", selectedTextUI);
-                descriptionText.text =
-                    "<size=25><color=#FF9600>보통</color></size>\n" +
-                    "<size=20>용사 체력 <color=#FFFF00>-10%</color>, 몬스터 체력 <color=#FFFF00>+10%</color>";
+                StringManager.Instance.SetString("9900074", descriptionText, "-10", "+10");
                 break;
 
             case GameLevel.Hard:
                 selectedUIGroup.SetParent(hardButton.transform.parent);
                 StringManager.Instance.SetString("9900071", selectedTextUI);
-                descriptionText.text =
-                    "<size=25><color=#FF9600>어려움</color></size>\n" +
-                    "<size=20>용사 체력 <color=#FFFF00>+10%</color>, 몬스터 체력 <color=#FFFF00>-10%</color>";
+                StringManager.Instance.SetString("9900074", descriptionText, "+10", "-10");
                 break;
 
             case GameLevel.Endless:
                 selectedUIGroup.SetParent(endlessButton.transform.parent);
                 StringManager.Instance.SetString("9900072", selectedTextUI);
-                descriptionText.text =
-                    "<size=25><color=#FF9600>무한모드</color></size>\n" +
-                    "<size=20>어려움과 동일, 끝없이 진행\n";
+                StringManager.Instance.SetString("9900075", descriptionText);
                 break;
         }
         selectedUIGroup.transform.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;

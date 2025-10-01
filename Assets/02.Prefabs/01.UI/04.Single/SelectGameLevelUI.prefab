@@ -1046,6 +1046,7 @@ GameObject:
   - component: {fileID: 2080372861686601016}
   - component: {fileID: 2922166569033166744}
   - component: {fileID: 5353457859394034027}
+  - component: {fileID: 7782995974242932987}
   m_Layer: 5
   m_Name: DescriptionText
   m_TagString: Untagged
@@ -1127,8 +1128,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1169,6 +1170,46 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7782995974242932987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2651536762370844485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:77afc9de253d3594dafedafcb44696a1
+    m_TableEntryReference:
+      m_KeyId: 35565068204531717
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5353457859394034027}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &2736982749589444194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,7 +1268,8 @@ MonoBehaviour:
   endlessButton: {fileID: 1675065483188803550}
   selectedUIGroup: {fileID: 6520070783728233118}
   selectedTextUI: {fileID: 8876187699743647840}
-  descriptionText: {fileID: 5353457859394034027}
+  descriptionTMPText: {fileID: 5353457859394034027}
+  descriptionText: {fileID: 7782995974242932987}
 --- !u!1 &3475502546610880789
 GameObject:
   m_ObjectHideFlags: 0
