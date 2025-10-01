@@ -33,6 +33,7 @@ public class DataManager : MonoSingleton<DataManager>
     [SerializeField] private ToolTipData toolTipData;
     [SerializeField] private UIToolTipData uiToolTipData;
     [SerializeField] private HeroNameData heroNameData;
+    [SerializeField] private GameLevelStatData gameLevelStatData;
 
     // iconData는 id값으로 초기화 하지 않으므로, iconData 안에 Dictionary 존재
     public SpriteAtlas iconAtlas;
@@ -54,6 +55,7 @@ public class DataManager : MonoSingleton<DataManager>
     public Dictionary<int, ToolTipInfo> toolTipDic = new Dictionary<int, ToolTipInfo>();
     public Dictionary<int, UIToolTipInfo> uiToolTipDic = new Dictionary<int, UIToolTipInfo>();
     public Dictionary<int, HeroNameInfo> heroNameDic = new Dictionary<int, HeroNameInfo>();
+    public Dictionary<int, GameLevelStatInfo> gameLevelStatDic = new Dictionary<int, GameLevelStatInfo>();
 
     public Dictionary<int, MonsterInfo> queenAbilityMonsterStatDic = new Dictionary<int, MonsterInfo>();
 
@@ -125,6 +127,10 @@ public class DataManager : MonoSingleton<DataManager>
         {
             heroNameData = await Addressables.LoadAssetAsync<HeroNameData>("HeroNameData");
         }
+        if (gameLevelStatData == null)
+        {
+            gameLevelStatData = await Addressables.LoadAssetAsync<GameLevelStatData>("GameLevelStatData");
+        }
 
         //Init<MonsterInfo>(monsterData.infoList, monsterDic);
         InitMonster(monsterData.infoList, monsterDic);
@@ -142,6 +148,7 @@ public class DataManager : MonoSingleton<DataManager>
         Init<ToolTipInfo>(toolTipData.infoList, toolTipDic);
         Init<UIToolTipInfo>(uiToolTipData.infoList, uiToolTipDic);
         Init<HeroNameInfo>(heroNameData.infoList, heroNameDic);
+        Init<GameLevelStatInfo>(gameLevelStatData.infoList, gameLevelStatDic);
 
         foreach (var monsterData in monsterDic.Values)
         {

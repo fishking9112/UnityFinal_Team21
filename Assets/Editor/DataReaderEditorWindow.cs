@@ -49,6 +49,7 @@ public class DataReaderEditorWindow : EditorWindow
             new DataInfo("ToolTip 데이터", "ToolTipData"),
             new DataInfo("UIToolTip 데이터", "UIToolTipData"),
             new DataInfo("HeroName 데이터", "HeroNameData"),
+            new DataInfo("GameLevelStat 데이터", "GameLevelStatData"),
         };
 
         foreach (var info in dataInfo)
