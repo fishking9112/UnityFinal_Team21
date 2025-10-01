@@ -65,19 +65,19 @@ public class SelectGameLevelUI : MonoBehaviour
             case GameLevel.Easy:
                 selectedUIGroup.SetParent(easyButton.transform.parent);
                 StringManager.Instance.SetString("9900069", selectedTextUI);
-                StringManager.Instance.SetString("9900074", descriptionText, "-30", "+30");
+                StringManager.Instance.SetString("9900074", descriptionText, DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Easy].heroHealthStat.ToString(), "+"+DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Easy].monsterHealthStat.ToString());
                 break;
 
             case GameLevel.Normal:
                 selectedUIGroup.SetParent(normalButton.transform.parent);
                 StringManager.Instance.SetString("9900070", selectedTextUI);
-                StringManager.Instance.SetString("9900074", descriptionText, "-10", "+10");
+                StringManager.Instance.SetString("9900074", descriptionText, DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Normal].heroHealthStat.ToString(), "+" + DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Normal].monsterHealthStat.ToString());
                 break;
 
             case GameLevel.Hard:
                 selectedUIGroup.SetParent(hardButton.transform.parent);
                 StringManager.Instance.SetString("9900071", selectedTextUI);
-                StringManager.Instance.SetString("9900074", descriptionText, "+10", "-10");
+                StringManager.Instance.SetString("9900074", descriptionText, DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Hard].heroHealthStat.ToString(), "+" + DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Hard].monsterHealthStat.ToString());
                 break;
 
             case GameLevel.Endless:

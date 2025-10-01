@@ -76,36 +76,33 @@ public class GameSceneStartFlow : MonoBehaviour
 
     private void ApplyDifficulty()
     {
+
         var heroStats = DataManager.Instance.heroStatusDic.Values;
         var monsterStats = DataManager.Instance.queenAbilityMonsterStatDic.Values;
 
-        switch (GameManager.Instance.SelectedLevel)
+        GameLevelStatInfo levelStat = GameManager.Instance.SelectedLevel switch
         {
-            case GameLevel.Easy:
-                foreach (var stat in heroStats)
-                    stat.health *= 0.7f; // 용사 체력 -30%
+            GameLevel.Easy => DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Easy],
+            GameLevel.Normal => DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Normal],
+            GameLevel.Hard => DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Hard],
+            GameLevel.Endless => DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Endless],
+            _ => null
+        };
 
-                foreach (var stat in monsterStats)
-                    stat.health *= 1.3f; // 몬스터 체력 +30%
-                break;
-
-            case GameLevel.Normal:
-                foreach (var stat in heroStats)
-                    stat.health *= 0.9f; // 용사 체력 -10%
-
-                foreach (var stat in monsterStats)
-                    stat.health *= 1.1f; // 몬스터 체력 +10%
-                break;
-
-            case GameLevel.Hard:
-            case GameLevel.Endless: // 무한모드 = 어려움
-                foreach (var stat in heroStats)
-                    stat.health *= 1.1f; // 용사 체력 +10%
-
-                foreach (var stat in monsterStats)
-                    stat.health *= 0.9f; // 몬스터 체력 -10%
-                break;
+        if (levelStat == null)
+        {
+            Debug.LogError("선택된 난이도의 GameLevelStatInfo가 없습니다!");
+            return;
         }
+
+        float heroMultiplier = 1f + levelStat.heroHealthStat / 100f;
+        float monsterMultiplier = 1f + levelStat.monsterHealthStat / 100f;
+
+        foreach (var stat in heroStats)
+            stat.health *= heroMultiplier;
+
+        foreach (var stat in monsterStats)
+            stat.health *= monsterMultiplier;
 
         ShouldRestoreDifficulty = true;
     }
@@ -117,33 +114,25 @@ public class GameSceneStartFlow : MonoBehaviour
         var heroStats = DataManager.Instance.heroStatusDic.Values;
         var monsterStats = DataManager.Instance.queenAbilityMonsterStatDic.Values;
 
-        switch (GameManager.Instance.SelectedLevel)
+        GameLevelStatInfo levelStat = GameManager.Instance.SelectedLevel switch
         {
-            case GameLevel.Easy:
-                foreach (var stat in heroStats)
-                    stat.health /= 0.7f;
+            GameLevel.Easy => DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Easy],
+            GameLevel.Normal => DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Normal],
+            GameLevel.Hard => DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Hard],
+            GameLevel.Endless => DataManager.Instance.gameLevelStatDic[(int)GameLevelStat.Endless],
+            _ => null
+        };
 
-                foreach (var stat in monsterStats)
-                    stat.health /= 1.3f;
-                break;
+        if (levelStat == null) return;
 
-            case GameLevel.Normal:
-                foreach (var stat in heroStats)
-                    stat.health /= 0.9f;
+        float heroMultiplier = 1f + levelStat.heroHealthStat / 100f;
+        float monsterMultiplier = 1f + levelStat.monsterHealthStat / 100f;
 
-                foreach (var stat in monsterStats)
-                    stat.health /= 1.1f;
-                break;
+        foreach (var stat in heroStats)
+            stat.health /= heroMultiplier;
 
-            case GameLevel.Hard:
-            case GameLevel.Endless:
-                foreach (var stat in heroStats)
-                    stat.health /= 1.1f;
-
-                foreach (var stat in monsterStats)
-                    stat.health /= 0.9f;
-                break;
-        }
+        foreach (var stat in monsterStats)
+            stat.health /= monsterMultiplier;
 
         ShouldRestoreDifficulty = false;
         SceneLoadManager.Instance.gameSceneStartFlow = null;

@@ -217,6 +217,14 @@ public enum IDUIToolTip
     INGAMETOOLTIP_BUTTON,
 }
 
+public enum GameLevelStat
+{
+    Easy = 6000001,
+    Normal,
+    Hard,
+    Endless,
+}
+
 public class GameLog
 {
     public const string funnel = "Funnel_Step";
