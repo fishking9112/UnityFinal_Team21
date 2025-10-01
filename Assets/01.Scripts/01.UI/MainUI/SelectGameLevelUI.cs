@@ -22,7 +22,7 @@ public class SelectGameLevelUI : MonoBehaviour
     [SerializeField] private LocalizeStringEvent selectedTextUI;
 
     [Header("설명 표시용 텍스트")]
-    [SerializeField] private TextMeshProUGUI descriptionTMPText;
+    [SerializeField] private GameObject descriptionTMPText;
     [SerializeField] private LocalizeStringEvent descriptionText;
 
     private void Awake()
@@ -35,7 +35,7 @@ public class SelectGameLevelUI : MonoBehaviour
 
     private void OnEnable()
     {
-        descriptionTMPText.text = "-";
+        descriptionTMPText.SetActive(false);
         selectedUIGroup.gameObject.SetActive(false);
 
         if(GameManager.Instance.SelectedLevel != GameLevel.None)
@@ -58,6 +58,7 @@ public class SelectGameLevelUI : MonoBehaviour
     // 난이도별 설명 출력
     private void SelectLevel(GameLevel level)
     {
+        descriptionTMPText.SetActive(true);
         selectedUIGroup.gameObject.SetActive(true);
         switch (level)
         {
